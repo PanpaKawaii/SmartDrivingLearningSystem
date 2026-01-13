@@ -3,9 +3,18 @@ import './Answer.css';
 
 export default function Answer({
     QuestionsAnswers = [],
+    myAnswers = [],
     setSelectedQuestionId = () => { },
     selectedQuestionId = '',
+    handleSelectAnswer = () => { },
 }) {
+    const isAnswerSelected = (questionId, answerId) => {
+        const item = myAnswers.find(i => i.questionId === questionId);
+        return item
+            ? item.answers.some(a => a.answerId === answerId)
+            : false;
+    };
+
     return (
         <div className='answer-container'>
             <div className='content'>
@@ -31,8 +40,8 @@ export default function Answer({
                             <div className='index'>{qIndex + 1}</div>
                             <div className='answers'>
                                 {question.answers?.map((answer, aIndex) => (
-                                    <div key={answer.id} className='answer-item'>
-                                        <button className={`btn ${false ? 'btn-yellow' : ''}`}>{aIndex + 1}</button>
+                                    <div key={answer.id} className={`answer-item`}>
+                                        <button className={`btn ${isAnswerSelected(question.id, answer.id) ? 'selected' : ''}`} onClick={() => handleSelectAnswer(question.id, answer.id)}>{aIndex + 1}</button>
                                     </div>
                                 ))}
                             </div>
