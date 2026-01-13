@@ -65,13 +65,14 @@ export default function ExamTemp() {
         const relatedAnswers = ANSWERs.filter(a => a.questionId === q.id);
         return { ...q, answers: relatedAnswers, index: i + 1 };
     })
-    // console.log('QuestionsAnswers', QuestionsAnswers);
+    console.log('QuestionsAnswers', QuestionsAnswers);
     const selectedQuestion = QuestionsAnswers.find(q => q.id === selectedQuestionId);
     // console.log('selectedQuestion', selectedQuestion);
 
     return (
         <div className='exam-temp-container'>
             <Question
+                QuestionsAnswers={QuestionsAnswers}
                 selectedQuestion={selectedQuestion}
                 myAnswers={myAnswers}
             />

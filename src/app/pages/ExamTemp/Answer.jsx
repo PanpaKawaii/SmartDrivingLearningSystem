@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Timer from '../../components/Timer';
 import './Answer.css';
 
@@ -8,6 +9,12 @@ export default function Answer({
     selectedQuestionId = '',
     handleSelectAnswer = () => { },
 }) {
+    const [result, setResult] = useState({
+        correctCount: 0,
+        totalCount: 0,
+        skippedCount: 0,
+        details: [],
+    })
     const isAnswerSelected = (questionId, answerId) => {
         const item = myAnswers.find(i => i.questionId === questionId);
         return item
@@ -28,6 +35,83 @@ export default function Answer({
         }
 
         return 'answered';
+    };
+
+    const checkAnswersResult = (questionsAnswers, myAnswers) => {
+        let correctCount = 0;
+        let skippedCount = 0;
+
+        const details = [];
+
+        questionsAnswers.forEach(question => {
+            const userAnswer = myAnswers.find(
+                a => a.questionId === question.id
+            );
+
+            const correctAnswers = question.answers.filter(
+                a => a.isCorrect
+            );
+
+            // ❌ Không chọn đáp án nào hoặc chọn chưa đủ
+            if (
+                !userAnswer ||
+                userAnswer.answers.length !== correctAnswers.length
+            ) {
+                skippedCount++;
+                return;
+            }
+
+            const selectedAnswerIds = userAnswer.answers.map(
+                a => a.answerId
+            );
+
+            const correctAnswerIds = correctAnswers.map(
+                a => a.id
+            );
+
+            // ✅ So sánh đúng / sai (phải khớp hoàn toàn)
+            const isCorrect =
+                selectedAnswerIds.length === correctAnswerIds.length &&
+                selectedAnswerIds.every(id =>
+                    correctAnswerIds.includes(id)
+                );
+
+            if (isCorrect) {
+                correctCount++;
+            }
+
+            // 🔍 Ghi chi tiết
+            correctAnswers.forEach(correct => {
+                const selected = question.answers.find(a =>
+                    selectedAnswerIds.includes(a.id)
+                );
+
+                details.push({
+                    questionId: question.id,
+                    questionContent: question.content,
+
+                    answerId: correct.id,
+                    answerContent: correct.content,
+
+                    selectedAnswerId: selected?.id || null,
+                    selectedAnswerContent: selected?.content || null
+                });
+            });
+        });
+
+        setResult({
+            correctCount: correctCount,
+            totalCount: questionsAnswers.length,
+            skippedCount: skippedCount,
+            details: details,
+        });
+
+        // return {
+        //     correctCount,
+        //     totalCount: questionsAnswers.length,
+        //     skippedCount,
+        //     details
+        // };
     };
 
     return (
@@ -63,7 +147,28 @@ export default function Answer({
                         </div>
                     ))}
                 </div>
-                <button className='btn btn-end'>KẾT THÚC</button>
+                <button className='btn btn-end' onClick={() => checkAnswersResult(QuestionsAnswers, myAnswers)}>KẾT THÚC</button>
+                <div>
+                    <hr />
+                    <div>Correct: {result.correctCount}</div>
+                    <div>Total: {result.totalCount}</div>
+                    <div>Skipped: {result.skippedCount}</div>
+                    <hr />
+                    <hr />
+                    <div>
+                        {result?.details?.map((d, index) => (
+                            <div key={index}>
+                                {/* <div>{d.questionContent}</div>
+                                <div>{d.answerContent}</div>
+                                <div>{d.selectedAnswerContent}</div> */}
+                                <div>Question: {d.questionId}</div>
+                                <div style={{ backgroundColor: d.answerId === d.selectedAnswerId ? '#28a745' : '#fff' }}>Correct: {d.answerId}</div>
+                                <div>Selected: {d.selectedAnswerId}</div>
+                                <hr />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     )

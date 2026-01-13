@@ -1,12 +1,13 @@
-import { useState } from 'react';
 import ProgressBar from '../../components/ProgressBar';
 import './Question.css';
 
 export default function Question({
+    QuestionsAnswers = [],
     selectedQuestion = {},
     myAnswers = [],
 }) {
-    const [count, setCount] = useState(0);
+    const answeredQuestions = myAnswers?.filter(q => q.answers)?.length || 0;
+    console.log('answeredQuestions', answeredQuestions);
 
     return (
         <div className='question-container'>
@@ -22,10 +23,7 @@ export default function Question({
                     </div>
                 </div>
             </div>
-            <ProgressBar current={count} total={15} />
-            <button onClick={() => setCount(p => p + 1)}>UP</button>
-            <button onClick={() => setCount(p => p - 1)}>DOWN</button>
-
+            <ProgressBar current={myAnswers?.filter(q => q.answers)?.length || 0} total={QuestionsAnswers?.length || 1} />
             <div className='my-answers'>
                 {myAnswers.map((question, qIndex) => (
                     <div key={question.id} className='question-item'>
