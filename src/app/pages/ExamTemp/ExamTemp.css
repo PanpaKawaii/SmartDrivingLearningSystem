@@ -1,0 +1,6 @@
+.exam-temp-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+}

@@ -2,10 +2,21 @@
   width: 100%;
 }
 
+:root {
+  --font:
+    'Inter',
+    Consolas,
+    Menlo,
+    Monaco,
+    monospace,
+    Arial;
+}
+
 body {
+  /* background-color: var(--gray-1); */
   margin: 0;
   padding: 0;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: var(--font);
 }
 
 a {
@@ -24,17 +35,21 @@ select {
   outline: none;
   height: 100%;
   padding: 8px 12px;
-  border: 2px solid #ccc;
+  /* border: 2px solid var(--text-secondary); */
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 16px;
   font-weight: 500;
   transition: all 0.15s ease;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: var(--font);
+
+  &:disabled {
+    opacity: 0.4;
+  }
 }
 
 input::placeholder {
-  color: #aaa;
+  /* color: var(--text-primary); */
 }
 
 select {
@@ -53,7 +68,7 @@ button {
   font-size: 16px;
   font-weight: 500;
   transition: all 0.15s ease;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: var(--font);
 
   &:disabled {
     opacity: 0.4;
@@ -96,16 +111,23 @@ input[type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
 
+input[type='color']::-webkit-color-swatch-wrapper,
+input[type='color']::-webkit-color-swatch {
+  -webkit-appearance: none;
+  padding: 0;
+  border: none;
+}
+
 input[type='file']::-webkit-file-upload-button {
   background: #007bff;
-  color: white;
+  color: #fff;
   border: none;
   padding: 6px 12px;
   cursor: pointer;
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
   -webkit-text-fill-color: #000 !important;
 }
 
@@ -119,7 +141,7 @@ progress::-webkit-progress-value {
 
 ::selection {
   background: #007bff;
-  color: white;
+  color: #fff;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -132,4 +154,133 @@ input[type='range']::-webkit-slider-thumb {
 
 video::-webkit-media-controls-play-button {
   display: none;
+}
+
+.glow {
+  /* color: var(--accent); */
+  text-shadow: 0 0 8px #38bdf8cc, 0 0 20px #22d3ee99;
+}
+
+.btn {
+  /* color: var(--accent); */
+  background: #ccc;
+  /* border: 2px solid var(--border); */
+  /* box-shadow: 0 0 6px var(--border-glow); */
+
+  &.btn-green {
+    background: #28a845;
+  }
+
+  &.btn-yellow {
+    background: #ffc107;
+  }
+
+  &.btn-red {
+    background: #dc3545;
+  }
+
+  &:hover {
+    background: #38BDF8;
+    box-shadow: 0 0 12px #0EA5E9;
+  }
+
+  &.off {
+    opacity: 0.4;
+  }
+}
+
+.card {
+  /* background: var(--background-1-trans); */
+  backdrop-filter: blur(4px);
+  /* border: 2px solid var(--border); */
+  /* box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow); */
+  /* text-shadow: 0 0 8px var(--border-glow); */
+}
+
+.input {
+  /* color: var(--primary); */
+  background: transparent;
+  /* border: 2px solid var(--border); */
+  /* box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow); */
+  /* text-shadow: 0 0 4px var(--border-glow); */
+
+  &:focus {
+    /* box-shadow: 0 0 6px var(--border-glow), 0 0 0 4px #38BDF866, inset 0 0 6px var(--border-glow); */
+  }
+}
+
+.color-input {
+  appearance: none;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.select {
+  /* color: var(--primary); */
+  background: transparent;
+  /* border: 2px solid var(--border); */
+  /* box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow); */
+  /* text-shadow: 0 0 4px var(--border-glow); */
+}
+
+.option {
+  /* color: var(--accent); */
+  /* background: var(--background-1); */
+}
+
+.invisible {
+  opacity: 0.4;
+}
+
+.dashoffset {
+  animation: dash 3s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.dash-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(90deg, cyan 50%, transparent 0) repeat-x,
+    linear-gradient(180deg, cyan 50%, transparent 0) repeat-y,
+    linear-gradient(90deg, cyan 50%, transparent 0) repeat-x,
+    linear-gradient(180deg, cyan 50%, transparent 0) repeat-y;
+
+  background-size:
+    20px 2px,
+    2px 20px,
+    20px 2px,
+    2px 20px;
+
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+
+  animation: dashdiv 1.5s linear infinite;
+}
+
+@keyframes dashdiv {
+  to {
+    background-position:
+      40px 0,
+      100% 40px,
+      -40px 100%,
+      0 -40px;
+  }
 }

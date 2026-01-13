@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
+import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 
 export default function MainRoutes() {
     return (
         <BrowserRouter>
             <ScrollToTop />
-            <div>Hello World!</div>
             <></>
             <Routes>
-                <Route path='/' element={<></>} />
+                <Route path='/' element={<ExamTemp />} />
                 <Route path='*' element={<></>} />
             </Routes>
             <></>
