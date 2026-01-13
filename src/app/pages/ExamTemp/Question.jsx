@@ -32,7 +32,7 @@ export default function Question({
                         <div>QID: {question.questionId}</div>
                         <div className='answers'>
                             {question.answers?.map((a, aIndex) => (
-                                <div key={a.id} className='answer-item'>
+                                <div key={a.answerId} className='answer-item'>
                                     <div>---AID: {a.answerId}</div>
                                 </div>
                             ))}

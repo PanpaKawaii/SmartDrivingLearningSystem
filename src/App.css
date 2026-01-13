@@ -10,6 +10,22 @@
     Monaco,
     monospace,
     Arial;
+
+  --green: #52c41a;
+  --green-light: #9fed78;
+  --green-dark: #398712;
+
+  --yellow: #faad14;
+  --yellow-light: #fccb69;
+  --yellow-dark: #966503;
+
+  --red: #ff4d4f;
+  --red-light: #ff8082;
+  --red-dark: #cc0003;
+
+  --blue: #007bff;
+  --blue-light: #007bff;
+  --blue-dark: #007bff;
 }
 
 body {

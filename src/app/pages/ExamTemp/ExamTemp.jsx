@@ -16,7 +16,6 @@ export default function ExamTemp() {
             const question = questions.find(q => q.id === questionId);
             const index = prev.findIndex(item => item.questionId === questionId);
 
-            // Chưa tồn tại câu hỏi → thêm mới
             if (index === -1) {
                 return [
                     ...prev,
@@ -34,28 +33,22 @@ export default function ExamTemp() {
             );
 
             let newAnswers = [];
-
-            // Nếu đã chọn → bỏ
             if (isSelected) {
                 newAnswers = current.answers.filter(
                     a => a.answerId !== answerId
                 );
             } else {
-                // Nếu chưa chọn
                 if (question?.type === 'multiple') {
                     newAnswers = [...current.answers, { answerId }];
                 } else {
-                    // single → chỉ giữ 1 đáp án
                     newAnswers = [{ answerId }];
                 }
             }
 
-            // Nếu không còn đáp án → xóa luôn question khỏi myAnswers
             if (newAnswers.length === 0) {
                 return prev.filter((_, i) => i !== index);
             }
 
-            // Update lại question
             const newItem = {
                 ...current,
                 answers: newAnswers

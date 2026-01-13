@@ -15,6 +15,21 @@ export default function Answer({
             : false;
     };
 
+    const getQuestionAnswerStatus = (questionId) => {
+        const question = QuestionsAnswers.find(q => q.id === questionId);
+        const item = myAnswers.find(a => a.questionId === questionId);
+
+        if (!item || item.answers.length === 0) {
+            return 'none';
+        }
+
+        if (item.answers.length == (Number(question.correctAnswer) || 1)) {
+            return 'full';
+        }
+
+        return 'answered';
+    };
+
     return (
         <div className='answer-container'>
             <div className='content'>
@@ -36,7 +51,7 @@ export default function Answer({
 
                 <div className='questions'>
                     {QuestionsAnswers.map((question, qIndex) => (
-                        <div key={question.id} className={`question-item ${selectedQuestionId === question.id ? 'selected' : ''}`} onClick={() => setSelectedQuestionId(question.id)}>
+                        <div key={question.id} className={`question-item ${selectedQuestionId === question.id ? 'selected' : ''} ${getQuestionAnswerStatus(question.id)}`} onClick={() => setSelectedQuestionId(question.id)}>
                             <div className='index'>{qIndex + 1}</div>
                             <div className='answers'>
                                 {question.answers?.map((answer, aIndex) => (
