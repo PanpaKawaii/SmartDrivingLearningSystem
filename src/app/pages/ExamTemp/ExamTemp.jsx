@@ -67,7 +67,7 @@ export default function ExamTemp() {
     })
     console.log('QuestionsAnswers', QuestionsAnswers);
     const selectedQuestion = QuestionsAnswers.find(q => q.id === selectedQuestionId);
-    // console.log('selectedQuestion', selectedQuestion);
+    console.log('selectedQuestion', selectedQuestion);
 
     return (
         <div className='exam-temp-container'>

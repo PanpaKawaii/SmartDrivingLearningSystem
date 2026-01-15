@@ -33,7 +33,7 @@ export const questions = [
     { id: 27, content: 'Biển báo hình chữ nhật thường dùng để làm gì?', type: 'multiple', correctAnswer: 2 },
     { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'multiple', correctAnswer: 2 },
     { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'multiple', correctAnswer: 2 },
-    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'multiple', correctAnswer: 3 }
+    // { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'multiple', correctAnswer: 3 }
 ];
 
 export const answers = [
