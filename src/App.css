@@ -156,7 +156,7 @@ progress::-webkit-progress-value {
 }
 
 ::selection {
-  background: var(--green);
+  background: #007bff;
   color: white;
 }
 

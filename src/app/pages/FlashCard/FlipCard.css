@@ -1,0 +1,102 @@
+.flip-card-container {
+    display: flex;
+    justify-content: space-between;
+    width: 600px;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+
+    .card {
+        width: 500px;
+        height: 400px;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        border: 2px solid red;
+        transition: all 0.6s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s;
+        }
+
+        .front {
+            background: lightblue;
+
+            &.flipped {
+                transform: rotateX(180deg);
+            }
+        }
+
+        .back {
+            background: lightcoral;
+            transform: rotateX(180deg);
+
+            &.flipped {
+                transform: rotateX(360deg);
+            }
+        }
+
+        &.left {
+            transform: translate(-150%, -50%);
+
+            .face {
+
+                .front,
+                .back {
+                    background-color: yellow;
+                }
+            }
+        }
+
+        &.right {
+            transform: translate(50%, -50%);
+
+            .face {
+
+                .front,
+                .back {
+                    background-color: yellow;
+                }
+            }
+        }
+    }
+
+    .btn {
+        z-index: 1;
+    }
+}
+
+@keyframes flip_card_appear {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+@keyframes flip_card_faded {
+    0% {
+        opacity: 0;
+        transform: rotateX(90deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotateX(0deg);
+    }
+}

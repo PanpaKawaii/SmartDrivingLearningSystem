@@ -13,8 +13,16 @@ export default function FlashCard({
 
     return (
         <div className='flash-card-container'>
-            <ListGridButton list={list} setSelectedQuestionId={setSelectedQuestionId} />
-            <FlipCard list={list} selectedQuestion={selectedQuestion} />
+            <ListGridButton
+                list={list}
+                setSelectedQuestionId={setSelectedQuestionId}
+            />
+            <FlipCard
+                list={list}
+                selectedQuestionId={selectedQuestionId}
+                setSelectedQuestionId={setSelectedQuestionId}
+                selectedQuestion={selectedQuestion}
+            />
         </div>
     )
 }
