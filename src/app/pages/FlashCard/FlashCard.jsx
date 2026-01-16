@@ -15,6 +15,7 @@ export default function FlashCard({
         <div className='flash-card-container'>
             <ListGridButton
                 list={list}
+                selectedQuestionId={selectedQuestionId}
                 setSelectedQuestionId={setSelectedQuestionId}
             />
             <FlipCard

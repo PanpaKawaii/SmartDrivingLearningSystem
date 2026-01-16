@@ -12,38 +12,42 @@ export default function FlipCard({
             return prev === cardId ? '' : cardId;
         });
     };
+
     const handleMoveCard = (direction) => {
         setSelectedQuestionId(direction == 'left' ? firstThreeWithIndexMiddle?.[0]?.id : firstThreeWithIndexMiddle?.[firstThreeWithIndexMiddle.length - 1]?.id);
         setSelectedCardId('');
     };
+
     const index = list.findIndex(q => q.id === selectedQuestionId);
     const firstThreeWithIndexMiddle = list.slice(Math.max(0, index - 1), Math.min(list.length, index + 2));
     // console.log('firstThreeWithIndexMiddle', firstThreeWithIndexMiddle);
 
     return (
         <div className='flip-card-container'>
-            <button className='btn' onClick={() => handleMoveCard('left')}>LEFT</button>
-            {list.map((question, qIndex) => {
-                return (qIndex <= index + 1 && qIndex >= index - 1) && (
-                    <div key={question.id} className={`card ${question.id == selectedQuestionId ? 'middle' : (qIndex > index ? 'right' : 'left')}`} onClick={() => handleSelectCardId(question.id)}>
-                        <div className={`face front ${question.id == selectedCardId ? 'flipped' : ''}`}>
-                            <div className='content'>
-                                {question?.content}
+            <button className='btn btn-left' onClick={() => handleMoveCard('left')}>LEFT</button>
+            <div className='cards'>
+                {list.map((question, qIndex) => {
+                    return (qIndex <= index + 1 && qIndex >= index - 1) && (
+                        <div key={question.id} className={`card ${question.id == selectedQuestionId ? 'middle' : (qIndex > index ? 'right' : 'left')}`} onClick={() => handleSelectCardId(question.id)}>
+                            <div className={`face front ${question.id == selectedCardId ? 'flipped' : ''}`}>
+                                <div className='content'>
+                                    {question?.content}
+                                </div>
+                            </div>
+                            <div className={`face back ${question.id == selectedCardId ? 'flipped' : ''}`}>
+                                <div className='content'>
+                                    {(question?.answers?.filter(a => a.isCorrect === true))?.map((answer) => (
+                                        <div key={answer.id}>
+                                            <div>{answer.content}</div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                        <div className={`face back ${question.id == selectedCardId ? 'flipped' : ''}`}>
-                            <div className='content'>
-                                {(question?.answers?.filter(a => a.isCorrect === true))?.map((answer) => (
-                                    <div key={answer.id}>
-                                        <div>{answer.content}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )
-            })}
-            <button className='btn' onClick={() => handleMoveCard('right')}>RIGHT</button>
+                    )
+                })}
+            </div>
+            <button className='btn btn-right' onClick={() => handleMoveCard('right')}>RIGHT</button>
 
             {/* <div>Length: {(selectedQuestion?.answers?.filter(a => a.isCorrect === true))?.length}</div>
             <div>{selectedQuestion?.answers?.[0]?.content || 'none'} - {selectedQuestion?.answers?.[0]?.isCorrect === true ? 'true' : 'false'}</div>
