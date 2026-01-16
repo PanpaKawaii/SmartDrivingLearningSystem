@@ -15,6 +15,7 @@ export default function Header() {
         { name: 'QUESTION', icon: 'icon', path: '/learning-question' },
         { name: 'SIGN', icon: 'icon', path: '/learning-sign' },
         { name: 'EXAM', icon: 'icon', path: '/exam' },
+        { name: 'VIDEO', icon: 'icon', path: '/controlled-video' },
     ];
 
     useEffect(() => {
