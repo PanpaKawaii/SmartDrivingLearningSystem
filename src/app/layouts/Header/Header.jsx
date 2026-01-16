@@ -12,6 +12,7 @@ export default function Header() {
 
     const menuItems = [
         { name: 'CORE LEARNING', icon: 'icon', path: '/core-learning' },
+        { name: 'QUESTION', icon: 'icon', path: '/learning-question' },
         { name: 'SIGN', icon: 'icon', path: '/learning-sign' },
         { name: 'EXAM', icon: 'icon', path: '/exam' },
     ];
