@@ -17,9 +17,7 @@ export default function Question({
                     <div className='index'><b>Câu hỏi {selectedQuestion.index}: </b>{selectedQuestion?.content}</div>
                     <div className='answers'>
                         {selectedQuestion?.answers?.map((answer, aIndex) => (
-                            <div key={answer.id} className='answer-item'>
-                                <div>{aIndex + 1}. {answer.content}</div>
-                            </div>
+                            <div key={answer.id} className='answer-item'>{aIndex + 1}. {answer.content}</div>
                         ))}
                     </div>
                 </div>
