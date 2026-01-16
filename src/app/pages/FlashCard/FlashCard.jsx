@@ -8,8 +8,8 @@ export default function FlashCard({
     list = [],
 }) {
     const [selectedQuestionId, setSelectedQuestionId] = useState(list?.[0]?.id);
-    const selectedQuestion = list.find(q => q.id === selectedQuestionId);
-    console.log('selectedQuestion', selectedQuestion);
+    // const selectedQuestion = list.find(q => q.id === selectedQuestionId);
+    // console.log('selectedQuestion', selectedQuestion);
 
     return (
         <div className='flash-card-container'>
@@ -21,7 +21,6 @@ export default function FlashCard({
                 list={list}
                 selectedQuestionId={selectedQuestionId}
                 setSelectedQuestionId={setSelectedQuestionId}
-                selectedQuestion={selectedQuestion}
             />
         </div>
     )
