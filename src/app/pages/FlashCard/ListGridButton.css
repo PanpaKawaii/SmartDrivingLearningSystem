@@ -1,8 +1,9 @@
 .list-grid-button-container {
+    width: fit-content;
+    height: fit-content;
     display: grid;
     grid-template-columns: repeat(var(--column), minmax(0, 1fr));
     gap: 4px;
-    height: fit-content;
 
     .btn-selected {
         background-color: var(--green-light);

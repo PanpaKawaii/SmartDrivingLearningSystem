@@ -25,7 +25,7 @@ export default function Header() {
     return (
         <div className='header-container'>
             <Link to='/'>
-                <div className='logo'>Xnova</div>
+                <div className='logo'>SDLS</div>
             </Link>
             <div className='items'>
                 {menuItems.map((item, index) => (

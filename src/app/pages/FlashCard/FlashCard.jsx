@@ -12,7 +12,7 @@ export default function FlashCard({
     // console.log('selectedQuestion', selectedQuestion);
 
     return (
-        <div className='flash-card-container'>
+        <div className='flash-card-container container'>
             <ListGridButton
                 list={list}
                 selectedQuestionId={selectedQuestionId}

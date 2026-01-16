@@ -70,7 +70,7 @@ export default function ExamTemp() {
     console.log('selectedQuestion', selectedQuestion);
 
     return (
-        <div className='exam-temp-container'>
+        <div className='exam-temp-container container'>
             <Question
                 QuestionsAnswers={QuestionsAnswers}
                 selectedQuestion={selectedQuestion}

@@ -201,6 +201,13 @@ video::-webkit-media-controls-play-button {
   }
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .card {
   /* background: var(--background-1-trans); */
   backdrop-filter: blur(4px);

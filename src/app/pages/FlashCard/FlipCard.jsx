@@ -24,7 +24,7 @@ export default function FlipCard({
 
     return (
         <div className='flip-card-container'>
-            <button className='btn btn-left' onClick={() => handleMoveCard('left')}>LEFT</button>
+            <button className='btn btn-left' onClick={() => handleMoveCard('left')}><i className='fa-solid fa-chevron-left'/></button>
             <div className='cards'>
                 {list.map((question, qIndex) => {
                     return (qIndex <= index + 1 && qIndex >= index - 1) && (
@@ -47,7 +47,7 @@ export default function FlipCard({
                     )
                 })}
             </div>
-            <button className='btn btn-right' onClick={() => handleMoveCard('right')}>RIGHT</button>
+            <button className='btn btn-right' onClick={() => handleMoveCard('right')}><i className='fa-solid fa-chevron-right'/></button>
 
             {/* <div>Length: {(selectedQuestion?.answers?.filter(a => a.isCorrect === true))?.length}</div>
             <div>{selectedQuestion?.answers?.[0]?.content || 'none'} - {selectedQuestion?.answers?.[0]?.isCorrect === true ? 'true' : 'false'}</div>
