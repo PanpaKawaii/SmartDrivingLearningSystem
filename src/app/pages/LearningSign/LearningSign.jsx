@@ -1,8 +1,8 @@
+import { useState } from 'react';
+import { answers, questions } from '../../../mocks/DataSample';
 import FlashCard from '../FlashCard/FlashCard';
-import { questions, answers } from '../../../mocks/DataSample';
 
 import './LearningSign.css';
-import { useState } from 'react';
 
 export default function LearningSign() {
     const [QUESTIONs, setQUESTIONs] = useState(questions || []);

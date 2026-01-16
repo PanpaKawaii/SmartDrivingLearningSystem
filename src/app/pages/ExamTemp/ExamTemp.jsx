@@ -1,9 +1,9 @@
+import { useState } from 'react';
+import { answers, questions } from '../../../mocks/DataSample.js';
 import Answer from './Answer';
 import Question from './Question';
-import { questions, answers } from '../../../mocks/DataSample.js';
 
 import './ExamTemp.css';
-import { useState } from 'react';
 
 export default function ExamTemp() {
     const [QUESTIONs, setQUESTIONs] = useState(questions || []);

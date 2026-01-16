@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import FlipCard from './FlipCard';
 import ListGridButton from './ListGridButton';
-import { useState } from 'react';
 
 import './FlashCard.css';
 
@@ -17,6 +17,7 @@ export default function FlashCard({
                 list={list}
                 selectedQuestionId={selectedQuestionId}
                 setSelectedQuestionId={setSelectedQuestionId}
+                column={4}
             />
             <FlipCard
                 list={list}

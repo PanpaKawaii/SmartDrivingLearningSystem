@@ -1,6 +1,7 @@
 .flip-card-container {
     display: flex;
     justify-content: space-between;
+    height: fit-content;
 
     .cards {
         width: 600px;
