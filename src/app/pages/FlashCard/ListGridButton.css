@@ -5,7 +5,28 @@
     grid-template-columns: repeat(var(--column), minmax(0, 1fr));
     gap: 4px;
 
-    .btn-selected {
-        background-color: var(--green-light);
+    .btn {
+        &.btn-selected {
+            background-color: var(--yellow-light);
+            box-shadow: 0 0 0 2px var(--yellow);
+        }
+
+        &.btn-correct {
+            background: var(--green);
+            color: #fff;
+        }
+
+        &.btn-incorrect {
+            background: var(--red);
+            color: #fff;
+        }
+
+        &.btn-correct-missing {
+            background: var(--green-light);
+        }
+
+        &.btn-incorrect-missing {
+            background: var(--red-light);
+        }
     }
 }

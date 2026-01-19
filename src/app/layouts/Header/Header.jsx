@@ -19,7 +19,7 @@ export default function Header() {
     ];
 
     useEffect(() => {
-        if (!localStorage.getItem('user')) navigate('/');
+        // if (!localStorage.getItem('user')) navigate('/');
     }, [user]);
 
     return (

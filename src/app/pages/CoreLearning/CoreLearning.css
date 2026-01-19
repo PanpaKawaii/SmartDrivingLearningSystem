@@ -37,6 +37,29 @@
                 .btn {
                     padding: 12px 20px;
                     text-align: start;
+
+                    /* &.selected {
+                        background-color: #4caf50;
+                        color: white;
+                    } */
+
+                    &.btn-correct {
+                        background: var(--green);
+                        color: #fff;
+                    }
+
+                    &.btn-incorrect {
+                        background: var(--red);
+                        color: #fff;
+                    }
+
+                    &.btn-correct-missing {
+                        background: var(--green-light);
+                    }
+
+                    &.btn-incorrect-missing {
+                        background: var(--red-light);
+                    }
                 }
             }
 

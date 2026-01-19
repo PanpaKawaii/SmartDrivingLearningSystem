@@ -13,6 +13,7 @@ export default function MainRoutes() {
             <ScrollToTop />
             <Header />
             <Routes>
+                <Route path='/' element={<></>} />
                 <Route path='/core-learning' element={<CoreLearning />} />
                 <Route path='/learning-question' element={<LearningQuestion />} />
                 <Route path='/learning-sign' element={<LearningSign />} />
