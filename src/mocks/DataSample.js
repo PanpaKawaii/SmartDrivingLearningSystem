@@ -217,4 +217,6 @@ export const comments = [
     { id: 16, userId: 1, questionId: 1, content: 'I answer 10', answer: 10, commentDate: '11-06-2025' },
     { id: 17, userId: 1, questionId: 1, content: 'I answer 13', answer: 13, commentDate: '11-06-2025' },
     { id: 18, userId: 1, questionId: 1, content: 'I answer 14', answer: 14, commentDate: '11-06-2025' },
+    { id: 19, userId: 1, questionId: 1, content: 'I answer 18', answer: 18, commentDate: '11-06-2025' },
+    { id: 20, userId: 1, questionId: 1, content: 'I answer 18 too', answer: 18, commentDate: '11-06-2025' },
 ];

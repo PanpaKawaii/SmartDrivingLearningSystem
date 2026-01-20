@@ -125,13 +125,13 @@ export default function Forum({
             <>
                 {ChildrenComment.map((comment, i) => (
                     <div key={i} id={`${comment.id}`} className='questions'>
-                        {num <= 2 && num > 0 &&
+                        {num <= 5 && num > 0 &&
                             <div className='head-block'>
                                 <div className={`vertical-line ${i + 1 == ChildrenComment.length ? 'no-line' : 'line-full'}`}></div>
                                 <div className='horizon-line'></div>
                             </div>
                         }
-                        <div style={{ width: `calc(100% - ${(num <= 2 && num > 0) ? 40 : 0}px)` }}>
+                        <div style={{ width: `calc(100% - ${(num <= 5 && num > 0) ? 40 : 0}px)` }}>
                             <div key={i} className='content'>
                                 <div className='image head-block'>
                                     <img src={comment.user?.image} alt={comment.user?.name} />
@@ -164,7 +164,7 @@ export default function Forum({
                                             placeholder={`Answer ${comment.user?.name}`}
                                             rows={2}
                                         />
-                                        <button onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
+                                        <button type='button' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
                                             Submit
                                         </button>
                                     </form>
@@ -196,7 +196,7 @@ export default function Forum({
                         placeholder={`Comment with ${user?.name}`}
                         rows={2}
                     />
-                    <button className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>Submit</button>
+                    <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>Submit</button>
                 </form>
             </div>
         </div>
