@@ -211,4 +211,10 @@ export const comments = [
     { id: 10, userId: 1, questionId: 1, content: 'I answer 9', answer: 9, commentDate: '11-06-2025' },
     { id: 11, userId: 1, questionId: 1, content: 'I talk about the question too', answer: null, commentDate: '11-06-2025' },
     { id: 12, userId: 1, questionId: 1, content: 'I answer 11', answer: 11, commentDate: '11-06-2025' },
+    { id: 13, userId: 1, questionId: 1, content: 'I answer 9', answer: 9, commentDate: '11-06-2025' },
+    { id: 14, userId: 1, questionId: 1, content: 'I answer 13', answer: 13, commentDate: '11-06-2025' },
+    { id: 15, userId: 1, questionId: 1, content: 'I answer 9', answer: 9, commentDate: '11-06-2025' },
+    { id: 16, userId: 1, questionId: 1, content: 'I answer 10', answer: 10, commentDate: '11-06-2025' },
+    { id: 17, userId: 1, questionId: 1, content: 'I answer 13', answer: 13, commentDate: '11-06-2025' },
+    { id: 18, userId: 1, questionId: 1, content: 'I answer 14', answer: 14, commentDate: '11-06-2025' },
 ];

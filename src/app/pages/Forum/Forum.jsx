@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { deleteData, fetchData, postData } from '../../../mocks/CallingAPI.js';
-import Button from '../../components/Button.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
+import { comments } from '../../../mocks/DataSample.js';
 
 import './Forum.css';
 
 export default function Forum({
-    SelectedQuestion = { id: 1 }
+    SelectedPost = { id: 1 }
 }) {
     const { user } = useAuth();
 
     const refReply = useRef(null);
     const refComment = useRef(null);
 
-    console.log('SelectedQuestion', SelectedQuestion);
+    console.log('SelectedPost', SelectedPost);
 
-    const [COMMENTs, setCOMMENTs] = useState([]);
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    const [COMMENTs, setCOMMENTs] = useState(comments || []);
     const [InputComment, setInputComment] = useState(null);
     const [YourText, setYourText] = useState('');
     const [Refresh, setRefresh] = useState(0);
@@ -23,14 +25,15 @@ export default function Forum({
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setCOMMENTs([]);
         // const token = user?.token; // === FIX ===
         const token = '';
         (async () => {
+            console.log('loading');
+            if (!user?.id || !token || !SelectedPost?.id || loading) return;
             try {
                 setLoading(true);
                 const listuser = await fetchData('listuser', token);
-                const commentData = await fetchData(`api/comment/question/${SelectedQuestion?.id}`, token);
+                const commentData = await fetchData(`api/comment/question/${SelectedPost?.id}`, token);
                 console.log('commentData', commentData);
 
                 const mergedListComment = commentData.map(comment => {
@@ -41,20 +44,20 @@ export default function Forum({
                     };
                 });
 
-                setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.commentDate) - new Date(b.commentDate)));
+                // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.commentDate) - new Date(b.commentDate)));
             } catch (error) {
                 setError(error);
             } finally {
                 setLoading(false);
             };
         })();
-    }, [user?.id, SelectedQuestion, Refresh]);
+    }, [user?.id, Refresh]);
 
     const SubmitComment = async (Content, Answer) => {
         const CommentData = {
             content: Content,
             answer: Answer,
-            questionId: SelectedQuestion?.id,
+            questionId: SelectedPost?.id,
             userId: user?.id,
         };
         console.log('CommentData:', CommentData);
@@ -67,7 +70,6 @@ export default function Forum({
 
             setRefresh(p => p + 1);
 
-            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
             await sleep(500);
 
             const el = document.getElementById(result?.id);
@@ -162,17 +164,9 @@ export default function Forum({
                                             placeholder={`Answer ${comment.user?.name}`}
                                             rows={2}
                                         />
-                                        <Button
-                                            width={'80px'}
-                                            height={'40px'}
-                                            border={'6px'}
-                                            radius={'12px'}
-                                            maincolor={'correct'}
-                                            active={false}
-                                            onToggle={() => handleSubmitComment(refReply.current.value, InputComment)}
-                                        >
-                                            <div className='text'>Submit</div>
-                                        </Button>
+                                        <button onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
+                                            Submit
+                                        </button>
                                     </form>
                                 </div>
                             }
@@ -202,17 +196,7 @@ export default function Forum({
                         placeholder={`Comment with ${user?.name}`}
                         rows={2}
                     />
-                    <Button
-                        width={'80px'}
-                        height={'40px'}
-                        border={'6px'}
-                        radius={'12px'}
-                        maincolor={'correct'}
-                        active={false}
-                        onToggle={() => handleSubmitComment(refComment.current.value, null)}
-                    >
-                        <div className='text'>Submit</div>
-                    </Button>
+                    <button className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>Submit</button>
                 </form>
             </div>
         </div>
