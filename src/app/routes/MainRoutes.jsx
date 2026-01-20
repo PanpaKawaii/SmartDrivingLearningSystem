@@ -4,6 +4,7 @@ import Header from '../layouts/Header/Header.jsx'
 import ControlledVideo from '../pages/ControlledVideo/ControlledVideo.jsx'
 import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
 import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
+import Forum from '../pages/Forum/Forum.jsx'
 import LearningQuestion from '../pages/LearningQuestion/LearningQuestion.jsx'
 import LearningSign from '../pages/LearningSign/LearningSign.jsx'
 
@@ -18,6 +19,7 @@ export default function MainRoutes() {
                 <Route path='/learning-question' element={<LearningQuestion />} />
                 <Route path='/learning-sign' element={<LearningSign />} />
                 <Route path='/exam' element={<ExamTemp />} />
+                <Route path='/forum' element={<Forum />} />
                 <Route path='/controlled-video' element={<ControlledVideo />} />
                 <Route path='*' element={<></>} />
             </Routes>

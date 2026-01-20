@@ -197,3 +197,18 @@ export const answers = [
     // { id: 95, questionId: 30, content: 'Theo người khác', isCorrect: false },
     // { id: 96, questionId: 30, content: 'Theo bà hàng xóm', isCorrect: false },
 ];
+
+export const comments = [
+    { id: 1, userId: 1, questionId: 1, content: 'I talk about the question', answer: null, commentDate: '11-06-2025' },
+    { id: 2, userId: 1, questionId: 1, content: 'I answer 1', answer: 1, commentDate: '11-06-2025' },
+    { id: 3, userId: 1, questionId: 1, content: 'I answer 1', answer: 1, commentDate: '11-06-2025' },
+    { id: 4, userId: 1, questionId: 1, content: 'I answer 2', answer: 2, commentDate: '11-06-2025' },
+    { id: 5, userId: 1, questionId: 1, content: 'I answer 2', answer: 2, commentDate: '11-06-2025' },
+    { id: 6, userId: 1, questionId: 1, content: 'I answer 5', answer: 5, commentDate: '11-06-2025' },
+    { id: 7, userId: 1, questionId: 1, content: 'I answer 2', answer: 2, commentDate: '11-06-2025' },
+    { id: 8, userId: 1, questionId: 1, content: 'I answer 3', answer: 3, commentDate: '11-06-2025' },
+    { id: 9, userId: 1, questionId: 1, content: 'I answer 3', answer: 3, commentDate: '11-06-2025' },
+    { id: 10, userId: 1, questionId: 1, content: 'I answer 9', answer: 9, commentDate: '11-06-2025' },
+    { id: 11, userId: 1, questionId: 1, content: 'I talk about the question too', answer: null, commentDate: '11-06-2025' },
+    { id: 12, userId: 1, questionId: 1, content: 'I answer 11', answer: 11, commentDate: '11-06-2025' },
+];
