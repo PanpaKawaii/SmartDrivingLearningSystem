@@ -55,12 +55,15 @@ export default function Forum({
 
     const SubmitComment = async (Content, Answer) => {
         const CommentData = {
+            id: crypto.randomUUID(),
             content: Content,
             answer: Answer,
             questionId: SelectedPost?.id,
             userId: user?.id,
+            commentDate: new Date().toLocaleDateString()
         };
         console.log('CommentData:', CommentData);
+        setCOMMENTs(prev => [...prev, CommentData]);
 
         // const token = user?.token;
         const token = '';
@@ -77,11 +80,13 @@ export default function Forum({
         } catch (error) {
             setError(error);
         } finally {
-            // setLoading(false);
+            setLoading(false);
         };
     };
 
     const TakeDownComment = async (CommentId) => {
+        setCOMMENTs(prev => prev.filter(comment => comment.id != CommentId));
+
         // const token = user?.token;
         const token = '';
         try {
@@ -93,7 +98,7 @@ export default function Forum({
         } catch (error) {
             setError(error);
         } finally {
-            // setLoading(false);
+            setLoading(false);
         };
     };
 
@@ -146,8 +151,8 @@ export default function Forum({
                                     <div className='commentdate-btn'>
                                         {/* <div className='commentdate'>{comment.commentDate?.split('T')[0]}</div> */}
                                         <div className='commentdate'>{comment.commentDate}</div>
-                                        <button className='btn' onClick={() => handleSetAnswer(comment.id)}>{comment.id == InputComment ? 'Close' : 'Reply'}</button>
-                                        {comment.user?.id == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Take down</button>}
+                                        <button className='btn' onClick={() => handleSetAnswer(comment.id)}>{comment.id == InputComment ? 'Hủy' : 'Trả lời'}</button>
+                                        {comment.user?.id == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Gỡ</button>}
                                     </div>
                                 </div>
                             </div>
