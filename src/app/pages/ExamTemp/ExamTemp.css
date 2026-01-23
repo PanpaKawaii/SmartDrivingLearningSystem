@@ -2,4 +2,5 @@
     display: flex;
     justify-content: center;
     gap: 4px;
+    max-width: 1600px;
 }

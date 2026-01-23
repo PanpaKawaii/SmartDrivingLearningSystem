@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { deleteData, fetchData, postData } from '../../../mocks/CallingAPI.js';
-import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import { comments } from '../../../mocks/DataSample.js';
+import AutoResizeTextarea from '../../components/AutoResizeTextarea.jsx';
+import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 
 import './Forum.css';
 
@@ -164,12 +165,8 @@ export default function Forum({
                                         <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length == 0) ? 'no-line' : 'line-img'}`}></div>
                                     </div>
                                     <form className='comment-area'>
-                                        <textarea
-                                            ref={refReply}
-                                            placeholder={`Answer ${comment.user?.name}`}
-                                            rows={2}
-                                        />
-                                        <button type='button' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
+                                        <AutoResizeTextarea refer={refReply} placeholder={user ? `Trả lời với tư cách ${user?.name}` : 'Nhập phản hồi...'} />
+                                        <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
                                             Submit
                                         </button>
                                     </form>
@@ -186,7 +183,7 @@ export default function Forum({
     };
 
     return (
-        <div className='forum-container'>
+        <div className='forum-container container'>
             <div className='forum-content'>
                 {getChildrenComment(null, 0)}
             </div>
@@ -196,12 +193,10 @@ export default function Forum({
                     <img src={user?.image} alt={user?.name} />
                 </div>
                 <form className='comment-area'>
-                    <textarea
-                        ref={refComment}
-                        placeholder={`Comment with ${user?.name}`}
-                        rows={2}
-                    />
-                    <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>Submit</button>
+                    <AutoResizeTextarea refer={refComment} placeholder={user ? `Bình luận với tư cách ${user?.name}` : 'Nhập bình luận...'} />
+                    <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
+                        Submit
+                    </button>
                 </form>
             </div>
         </div>

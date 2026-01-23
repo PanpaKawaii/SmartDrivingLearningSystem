@@ -1,9 +1,8 @@
 .forum-container {
-    width: 100%;
     position: relative;
+    padding: 20px 20px 0;
 
     .forum-content {
-        margin: 0 40px;
 
         .questions {
             display: flex;
@@ -108,7 +107,7 @@
                 color: #999;
 
                 &.btn-takedown {
-                    color: #ff8080;
+                    color: var(--red-light);
                 }
             }
         }
@@ -120,7 +119,8 @@
                 position: sticky;
                 bottom: 0;
                 background-color: #fff;
-                padding: 12px 0 0;
+                box-shadow: 0 0 12px 12px #fff;
+                z-index: 1;
             }
 
             .comment-area {
@@ -128,13 +128,8 @@
                 display: flex;
                 gap: 8px;
 
-                textarea {
-                    flex: 1;
-                    margin: 0 0 16px;
-                    width: 100%;
-                    resize: none;
-                    overflow-wrap: break-word;
-                    /* white-space: pre-wrap; */
+                .btn {
+                    height: fit-content;
                 }
             }
         }

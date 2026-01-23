@@ -26,7 +26,7 @@ export default function Header() {
     return (
         <div className='header-container'>
             <Link to='/'>
-                <div className='logo'>SDLS</div>
+                <div className='logo'>Green Light</div>
             </Link>
             <div className='items'>
                 {menuItems.map((item, index) => (
