@@ -8,6 +8,9 @@ import Forum from '../pages/Forum/Forum.jsx'
 import LearningQuestion from '../pages/LearningQuestion/LearningQuestion.jsx'
 import LearningSign from '../pages/LearningSign/LearningSign.jsx'
 
+import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
+import CarScene from '../pages/ThreeScene/CarScene.jsx'
+
 export default function MainRoutes() {
     return (
         <BrowserRouter>
@@ -21,6 +24,8 @@ export default function MainRoutes() {
                 <Route path='/exam' element={<ExamTemp />} />
                 <Route path='/forum' element={<Forum />} />
                 <Route path='/controlled-video' element={<ControlledVideo />} />
+                <Route path='/three-scene' element={<ThreeScene />} />
+                <Route path='/car' element={<CarScene />} />
                 <Route path='*' element={<></>} />
             </Routes>
             <></>

@@ -17,6 +17,8 @@ export default function Header() {
         { name: 'EXAM', icon: 'icon', path: '/exam' },
         { name: 'VIDEO', icon: 'icon', path: '/controlled-video' },
         { name: 'FORUM', icon: 'icon', path: '/forum' },
+        { name: 'GROUND', icon: 'icon', path: '/three-scene' },
+        { name: 'CAR', icon: 'car', path: '/car' },
     ];
 
     useEffect(() => {
@@ -35,7 +37,7 @@ export default function Header() {
                         className={`item ${location.pathname.includes(item.path) ? 'located' : ''}`}
                     >
                         <Link className='link' to={`${item.path}`}>
-                            <i className={`fa-solid fa-${item.icon}`}></i>
+                            {/* <i className={`fa-solid fa-${item.icon}`}></i> */}
                             <span>{item.name}</span>
                         </Link>
                     </div>
