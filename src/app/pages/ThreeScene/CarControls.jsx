@@ -1,4 +1,3 @@
-// src/components/CarControls.jsx
 import * as THREE from "three";
 
 export function initCarControls(car) {
@@ -13,18 +12,16 @@ export function initCarControls(car) {
     const maxSpeed = 20;
     const acceleration = 30;
     const brakeForce = 40;
-    const friction = 10;
-    const turnSpeed = 1.5;
+    const turnSpeed = 1.8;
 
-    // ===== Keyboard =====
-    document.addEventListener("keydown", (e) => {
+    window.addEventListener("keydown", (e) => {
         if (e.code === "KeyW") keys.forward = true;
         if (e.code === "KeyS") keys.backward = true;
         if (e.code === "KeyA") keys.left = true;
         if (e.code === "KeyD") keys.right = true;
     });
 
-    document.addEventListener("keyup", (e) => {
+    window.addEventListener("keyup", (e) => {
         if (e.code === "KeyW") keys.forward = false;
         if (e.code === "KeyS") keys.backward = false;
         if (e.code === "KeyA") keys.left = false;
@@ -33,32 +30,33 @@ export function initCarControls(car) {
 
     return {
         update(delta) {
-            // ===== Tốc độ =====
+            // ===== Speed =====
             if (keys.forward) {
-                speed += acceleration * delta;
-            } else if (keys.backward) {
                 speed -= acceleration * delta;
+            } else if (keys.backward) {
+                speed += acceleration * delta;
             } else {
-                // Ma sát
-                if (speed > 0) speed -= friction * delta;
-                if (speed < 0) speed += friction * delta;
+                // ma sát
+                speed *= 0.95;
             }
 
-            speed = THREE.MathUtils.clamp(speed, -maxSpeed / 2, maxSpeed);
+            speed = THREE.MathUtils.clamp(speed, -maxSpeed, maxSpeed);
 
-            // ===== Đánh lái =====
-            if (keys.left) {
-                car.rotation.y += turnSpeed * delta * (speed / maxSpeed);
+            // ===== Turn =====
+            if (Math.abs(speed) > 0.5) {
+                if (keys.left) {
+                    car.rotation.y -= turnSpeed * delta * Math.sign(speed);
+                }
+                if (keys.right) {
+                    car.rotation.y += turnSpeed * delta * Math.sign(speed);
+                }
             }
-            if (keys.right) {
-                car.rotation.y -= turnSpeed * delta * (speed / maxSpeed);
-            }
 
-            // ===== Di chuyển =====
-            const forwardVector = new THREE.Vector3(0, 0, -1);
-            forwardVector.applyQuaternion(car.quaternion);
+            // ===== Move forward =====
+            const forward = new THREE.Vector3(0, 0, 1);
+            forward.applyQuaternion(car.quaternion);
 
-            car.position.addScaledVector(forwardVector, speed * delta);
+            car.position.addScaledVector(forward, speed * delta);
         },
     };
 }
