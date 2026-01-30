@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { OBB } from 'three/examples/jsm/math/OBB.js';
 import { initCarControls } from "./CarControls";
 import "./ThreeScene.css";
-import { OBB } from 'three/examples/jsm/math/OBB.js';
 
 
 /* ================= ENVIRONMENT ================= */
@@ -160,12 +160,16 @@ export default function CarScene() {
 
                 // đặt lại vị trí: prev + slide
                 car.position.copy(prevPos).add(slide);
+                console.log('Collision');
+            } else {
+                console.log('Free');
             }
 
             car.position.y = GROUND_Y;
             // car.position.y += (GROUND_Y - car.position.y) * 0.2;
             // if (car.position.y < GROUND_Y) {
             //     car.position.y = GROUND_Y;
+            //     car.position.y += (GROUND_Y - car.position.y) * 0.2;
             // }
 
             const newWorldOBB = carOBB.clone();
@@ -204,5 +208,9 @@ export default function CarScene() {
         };
     }, []);
 
-    return <div className="three-scene" ref={mountRef} />;
+    return (
+        <>
+            <div className="three-scene" ref={mountRef} />
+        </>
+    )
 }

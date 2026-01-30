@@ -8,7 +8,7 @@ export default function Header() {
     const { logout, user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    console.log('NavigationBar', location.pathname);
+    console.log('Header', location.pathname);
 
     const menuItems = [
         { name: 'CORE LEARNING', icon: 'icon', path: '/core-learning' },
@@ -21,9 +21,11 @@ export default function Header() {
         { name: 'CAR', icon: 'car', path: '/car' },
     ];
 
-    useEffect(() => {
-        // if (!localStorage.getItem('user')) navigate('/');
-    }, [user]);
+    // useEffect(() => {
+    //     const UserSession = localStorage.getItem('user');
+    //     if (!UserSession) navigate('/');
+    //     else if (user?.role === 'admin') navigate('/admin/user-management');
+    // }, [user?.id]);
 
     return (
         <div className='header-container'>
