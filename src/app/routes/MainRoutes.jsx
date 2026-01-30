@@ -20,23 +20,27 @@ export default function MainRoutes() {
     return (
         <BrowserRouter>
             <ScrollToTop />
-            <Header />
+            {/* <Header /> */}
             <Routes>
-                <Route path='/' element={<></>} />
-                <Route path='/core-learning' element={<CoreLearning />} />
-                <Route path='/learning-question' element={<LearningQuestion />} />
-                <Route path='/learning-sign' element={<LearningSign />} />
-                <Route path='/exam' element={<ExamTemp />} />
-                <Route path='/forum' element={<Forum />} />
-                <Route path='/controlled-video' element={<ControlledVideo />} />
+                <Route path='/' element={<Header />} >
+                    <Route index element={<></>} />
+                    <Route path='core-learning' element={<CoreLearning />} />
+                    <Route path='learning-question' element={<LearningQuestion />} />
+                    <Route path='learning-sign' element={<LearningSign />} />
+                    <Route path='exam' element={<ExamTemp />} />
+                    <Route path='forum' element={<Forum />} />
+                    <Route path='controlled-video' element={<ControlledVideo />} />
+                </Route>
+
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
-                <Route path='*' element={<></>} />
 
                 <Route path='admin' element={<AdminSideBar />} >
                     <Route index element={<Navigate to='user-management' replace />} />
                     <Route path='user-management' element={<UserManagement />} />
                 </Route>
+
+                <Route path='*' element={<></>} />
             </Routes>
             <></>
         </BrowserRouter>
