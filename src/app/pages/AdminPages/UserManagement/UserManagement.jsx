@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { fetchData, putData } from '../../../../mocks/CallingAPI';
+import { GlobalColor } from '../../../../mocks/GlobalVar';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
 import EditUserModal from './EditUserModal';
+
 import './UserManagement.css';
 
 export default function UserManagement() {
@@ -216,7 +218,7 @@ export default function UserManagement() {
                         message={`Are you sure you want to ${popupProps.account?.status == 1 ? 'ban' : 'active'} this customer?`}
                         confirm={popupProps.account?.status == 1 ? 'BAN' : 'ACTIVE'}
                         cancel={'CANCEL'}
-                        color={popupProps.account?.status == 1 ? '#dc354580' : '#28a74580'}
+                        color={popupProps.account?.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
                         onConfirm={() => { banCustomer(popupProps), setPopupProps(null) }}
                         onCancel={() => setPopupProps(null)}
                     />
@@ -228,7 +230,7 @@ export default function UserManagement() {
                         message={`An error has occurred!`}
                         confirm={'OKAY'}
                         cancel={''}
-                        color={'#dc354580'}
+                        color={GlobalColor.red + '80'}
                         onConfirm={() => setErrorFunction(null)}
                         onCancel={() => setErrorFunction(null)}
                     />

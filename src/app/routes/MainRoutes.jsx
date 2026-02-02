@@ -15,6 +15,7 @@ import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
 
 import AdminSideBar from '../pages/AdminPages/AdminSideBar/AdminSideBar.jsx'
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
+import QuestionManagement from '../pages/AdminPages/QuestionManagement/QuestionManagement.jsx'
 
 export default function MainRoutes() {
     return (
@@ -38,6 +39,7 @@ export default function MainRoutes() {
                 <Route path='admin' element={<AdminSideBar />} >
                     <Route index element={<Navigate to='user-management' replace />} />
                     <Route path='user-management' element={<UserManagement />} />
+                    <Route path='question-management' element={<QuestionManagement />} />
                 </Route>
 
                 <Route path='*' element={<></>} />
