@@ -1,6 +1,7 @@
 .moving-label-input-container {
     flex: 1;
     position: relative;
+    height: 42px;
 
     input {
         width: 100%;
