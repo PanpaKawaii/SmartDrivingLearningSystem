@@ -122,7 +122,7 @@ CREATE TABLE [Role] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 2.Permission OK
@@ -132,7 +132,7 @@ CREATE TABLE [Permission] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 3.RolePermission OF
@@ -145,7 +145,7 @@ CREATE TABLE [RolePermission] (
     status      INT DEFAULT 1,
     FOREIGN KEY (roleId) REFERENCES [Role](id) ON DELETE CASCADE,
     FOREIGN KEY (permissionId) REFERENCES [Permission](id) ON DELETE CASCADE,
-    UNIQUE (roleId, permissionId)
+    UNIQUE (roleId, permissionId),
 );
 
 -- =====================================================
@@ -165,11 +165,11 @@ CREATE TABLE [User] ( -- Done
     type        NVARCHAR(20),
     description NVARCHAR(255),
     dateOfBirth DATE,
-    licenseType NVARCHAR(50),
+    licenseType NVARCHAR(20),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    FOREIGN KEY (roleId) REFERENCES [Role](id)
+    FOREIGN KEY (roleId) REFERENCES [Role](id),
 );
 
 -- 5.Payment AF
@@ -183,7 +183,7 @@ CREATE TABLE [Payment] ( -- Done
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    FOREIGN KEY (userId) REFERENCES [User](id)
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- =====================================================
@@ -197,7 +197,7 @@ CREATE TABLE [SimulationChapter] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 7.SimulationCategory OK
@@ -207,7 +207,7 @@ CREATE TABLE [SimulationCategory] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 8.SimulationDifficultyLevel OK
@@ -217,7 +217,7 @@ CREATE TABLE [SimulationDifficultyLevel] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 9.SimulationScenario AF
@@ -234,7 +234,7 @@ CREATE TABLE [SimulationScenario] ( -- Done
     status      INT DEFAULT 1,
     FOREIGN KEY (simulationChapterId) REFERENCES [SimulationChapter](id),
     FOREIGN KEY (simulationCategoryId) REFERENCES [SimulationCategory](id),
-    FOREIGN KEY (simulationDifficultyLevelId) REFERENCES [SimulationDifficultyLevel](id)
+    FOREIGN KEY (simulationDifficultyLevelId) REFERENCES [SimulationDifficultyLevel](id),
 );
 
 -- 10.SimulationSession AF
@@ -249,7 +249,7 @@ CREATE TABLE [SimulationSession] ( -- Done
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
     FOREIGN KEY (simulationId) REFERENCES [SimulationScenario](id),
-    FOREIGN KEY (userId) REFERENCES [User](id)
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- =====================================================
@@ -263,7 +263,7 @@ CREATE TABLE [QuestionChapter] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 12.QuestionCategory OK
@@ -273,7 +273,7 @@ CREATE TABLE [QuestionCategory] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 13.QuestionDifficultyLevel OK
@@ -283,7 +283,7 @@ CREATE TABLE [QuestionDifficultyLevel] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 14.Question AF
@@ -301,7 +301,7 @@ CREATE TABLE [Question] ( -- Done
     status      INT DEFAULT 1,
     FOREIGN KEY (questionChapterId) REFERENCES [QuestionChapter](id),
     FOREIGN KEY (questionCategoryId) REFERENCES [QuestionCategory](id),
-    FOREIGN KEY (questionDifficultyLevelId) REFERENCES [QuestionDifficultyLevel](id)
+    FOREIGN KEY (questionDifficultyLevelId) REFERENCES [QuestionDifficultyLevel](id),
 );
 
 -- 15.Tag OK
@@ -311,7 +311,7 @@ CREATE TABLE [Tag] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
     colorCode   NVARCHAR(255) NOT NULL UNIQUE,
 );
 
@@ -325,7 +325,7 @@ CREATE TABLE [QuestionTag] (
     status      INT DEFAULT 1,
     FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
     FOREIGN KEY (tagId) REFERENCES [Tag](id) ON DELETE CASCADE,
-    UNIQUE (questionId, tagId)
+    UNIQUE (questionId, tagId),
 );
 
 -- 17.SavedQuestion OF
@@ -338,7 +338,7 @@ CREATE TABLE [SavedQuestion] (
     status      INT DEFAULT 1,
     FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
-    UNIQUE (questionId, userId)
+    UNIQUE (questionId, userId),
 );
 
 -- 18.LearningProgress OF
@@ -351,7 +351,7 @@ CREATE TABLE [LearningProgress] (
     status      INT DEFAULT 1,
     FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
-    UNIQUE (questionId, userId)
+    UNIQUE (questionId, userId),
 );
 
 -- 19.Answer AF
@@ -363,7 +363,7 @@ CREATE TABLE [Answer] ( -- Done
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE
+    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
 );
 
 -- =====================================================
@@ -371,16 +371,18 @@ CREATE TABLE [Answer] ( -- Done
 -- =====================================================
 
 -- 20.Exam AF
-CREATE TABLE [Exam] ( -- NotDone
+CREATE TABLE [Exam] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    userId UUID REFERENCES [User](id),
+    userId      UNIQUEIDENTIFIER NOT NULL,
     title       NVARCHAR(255) NOT NULL,
-    description TEXT,
-    ownDone INTEGER DEFAULT 0,
-    totalQuestion INTEGER,
+    description NVARCHAR(255),
+    duration    INT,
+    passScore   INT,
+    isRandom    BIT NOT NULL DEFAULT 0,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- 21.ExamQuestion OF
@@ -393,19 +395,21 @@ CREATE TABLE [ExamQuestion] (
     status      INT DEFAULT 1,
     FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
     FOREIGN KEY (examId) REFERENCES [Exam](id) ON DELETE CASCADE,
-    UNIQUE (questionId, examId)
+    UNIQUE (questionId, examId),
 );
 
 -- 22.ExamSession AF
-CREATE TABLE [ExamSession] ( -- NotDone
+CREATE TABLE [ExamSession] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    examId UUID REFERENCES Exam(id) ON DELETE CASCADE,
-    userId UUID REFERENCES [User](id),
-    score INTEGER,
-    isPassed BIT NOT NULL DEFAULT 1,
+    examId      UNIQUEIDENTIFIER NOT NULL,
+    userId      UNIQUEIDENTIFIER NOT NULL,
+    score       INT,
+    isPassed    BIT NOT NULL DEFAULT 1,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (examId) REFERENCES [Exam](id),
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- 23.ExamDetail OF
@@ -418,7 +422,7 @@ CREATE TABLE [ExamDetail] (
     status      INT DEFAULT 1,
     FOREIGN KEY (answerId) REFERENCES [Answer](id) ON DELETE CASCADE,
     FOREIGN KEY (examSessionId) REFERENCES [ExamSession](id) ON DELETE CASCADE,
-    UNIQUE (answerId, examSessionId)
+    UNIQUE (answerId, examSessionId),
 );
 
 -- =====================================================
@@ -432,33 +436,38 @@ CREATE TABLE [ForumTopic] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 25.ForumPost AF
-CREATE TABLE [ForumPost] ( -- NotDone
+CREATE TABLE [ForumPost] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    forumTopicId UUID REFERENCES ForumTopic(id),
-    userId UUID REFERENCES [User](id),
-    name NVARCHAR(200),
+    forumTopicId    UNIQUEIDENTIFIER NOT NULL,
+    userId          UNIQUEIDENTIFIER NOT NULL,
+    name        NVARCHAR(255),
     title       NVARCHAR(255) NOT NULL,
     content     NVARCHAR(255) NOT NULL,
-    viewCount INTEGER DEFAULT 0,
+    viewCount   INT DEFAULT 0,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (forumTopicId) REFERENCES [ForumTopic](id),
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- 26.ForumComment AF
-CREATE TABLE [ForumComment] ( -- NotDone
+CREATE TABLE [ForumComment] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    replyId UUID REFERENCES ForumComment(id),
-    forumPostId UUID REFERENCES ForumPost(id) ON DELETE CASCADE,
-    userId UUID REFERENCES [User](id),
+    replyId     UNIQUEIDENTIFIER NOT NULL,
+    forumPostId UNIQUEIDENTIFIER NOT NULL,
+    userId      UNIQUEIDENTIFIER NOT NULL,
     content     NVARCHAR(255) NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (replyId) REFERENCES [User](id),
+    FOREIGN KEY (forumPostId) REFERENCES [ForumPost](id),
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- =====================================================
@@ -472,19 +481,22 @@ CREATE TABLE [SignCategory] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 28.TrafficSign AF
-CREATE TABLE [TrafficSign] ( -- NotDone
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    trafficSignCategoryId UUID REFERENCES TrafficSignCategory(id),
-    name NVARCHAR(200),
-    description TEXT,
+CREATE TABLE [TrafficSign] ( -- Done
+    id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    signCategoryId  UNIQUEIDENTIFIER NOT NULL,
+    name        NVARCHAR(255) NOT NULL UNIQUE,
+    code        NVARCHAR(255) NOT NULL UNIQUE,
+    description NVARCHAR(255),
+    vectorData  NVARCHAR(255),
     image       NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (signCategoryId) REFERENCES [SignCategory](id),
 );
 
 -- 29.SavedTrafficSign OF
@@ -497,7 +509,7 @@ CREATE TABLE [SavedTrafficSign] (
     status      INT DEFAULT 1,
     FOREIGN KEY (trafficSignId) REFERENCES [TrafficSign](id) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
-    UNIQUE (trafficSignId, userId)
+    UNIQUE (trafficSignId, userId),
 );
 
 -- =====================================================
@@ -511,33 +523,40 @@ CREATE TABLE [ReportCategory] (
     description NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 31.Report AF
-CREATE TABLE [Report] ( -- NotDone
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    questionId UUID REFERENCES Question(id),
-    reportCategoryId UUID REFERENCES ReportCategory(id),
-    simulationId UUID REFERENCES SimulationScenario(id),
-    userId UUID REFERENCES [User](id),
+CREATE TABLE [Report] ( -- Done
+    id                  UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    questionId          UNIQUEIDENTIFIER NOT NULL,
+    reportCategoryId    UNIQUEIDENTIFIER NOT NULL,
+    simulationId        UNIQUEIDENTIFIER NOT NULL,
+    reportedUserId      UNIQUEIDENTIFIER NOT NULL,
+    userId              UNIQUEIDENTIFIER NOT NULL,
     title       NVARCHAR(255) NOT NULL,
     content     NVARCHAR(255) NOT NULL,
     image       NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
+    FOREIGN KEY (reportCategoryId) REFERENCES [ReportCategory](id) ON DELETE CASCADE,
+    FOREIGN KEY (simulationId) REFERENCES [SimulationScenario](id) ON DELETE CASCADE,
+    FOREIGN KEY (reportedUserId) REFERENCES [User](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
 );
 
 -- 32.Resolve AF
-CREATE TABLE [Resolve] ( -- NotDone
+CREATE TABLE [Resolve] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    reportId UUID REFERENCES Report(id) ON DELETE CASCADE,
+    reportId    UNIQUEIDENTIFIER NOT NULL,
     title       NVARCHAR(255) NOT NULL,
     content     NVARCHAR(255) NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (reportId) REFERENCES [Report](id) ON DELETE CASCADE,
 );
 
 -- =====================================================
@@ -552,7 +571,7 @@ CREATE TABLE [Notification] (
     image       NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
 );
 
 -- 34.UserNotification OF
@@ -564,7 +583,7 @@ CREATE TABLE [UserNotification] (
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
     FOREIGN KEY (notificationId) REFERENCES [Notification](id) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
 );
 
 INSERT INTO [Role] VALUES
