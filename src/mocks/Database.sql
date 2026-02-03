@@ -458,15 +458,15 @@ CREATE TABLE [ForumPost] ( -- Done
 -- 26.ForumComment AF
 CREATE TABLE [ForumComment] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    replyId     UNIQUEIDENTIFIER NOT NULL,
+    replyId     UNIQUEIDENTIFIER NULL,
     forumPostId UNIQUEIDENTIFIER NOT NULL,
     userId      UNIQUEIDENTIFIER NOT NULL,
-    content     NVARCHAR(255) NOT NULL,
+    content     NVARCHAR(1000) NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    FOREIGN KEY (replyId) REFERENCES [User](id),
-    FOREIGN KEY (forumPostId) REFERENCES [ForumPost](id),
+    FOREIGN KEY (replyId) REFERENCES [ForumComment](id),
+    FOREIGN KEY (forumPostId) REFERENCES [ForumPost](id) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
@@ -529,13 +529,13 @@ CREATE TABLE [ReportCategory] (
 -- 31.Report AF
 CREATE TABLE [Report] ( -- Done
     id                  UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    questionId          UNIQUEIDENTIFIER NOT NULL,
+    questionId          UNIQUEIDENTIFIER NULL,
     reportCategoryId    UNIQUEIDENTIFIER NOT NULL,
-    simulationId        UNIQUEIDENTIFIER NOT NULL,
-    reportedUserId      UNIQUEIDENTIFIER NOT NULL,
+    simulationId        UNIQUEIDENTIFIER NULL,
+    reportedUserId      UNIQUEIDENTIFIER NULL,
     userId              UNIQUEIDENTIFIER NOT NULL,
     title       NVARCHAR(255) NOT NULL,
-    content     NVARCHAR(255) NOT NULL,
+    content     NVARCHAR(1000) NOT NULL,
     image       NVARCHAR(255),
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
@@ -543,8 +543,8 @@ CREATE TABLE [Report] ( -- Done
     FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
     FOREIGN KEY (reportCategoryId) REFERENCES [ReportCategory](id) ON DELETE CASCADE,
     FOREIGN KEY (simulationId) REFERENCES [SimulationScenario](id) ON DELETE CASCADE,
-    FOREIGN KEY (reportedUserId) REFERENCES [User](id) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    FOREIGN KEY (reportedUserId) REFERENCES [User](id),
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- 32.Resolve AF
@@ -585,12 +585,3 @@ CREATE TABLE [UserNotification] (
     FOREIGN KEY (notificationId) REFERENCES [Notification](id) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
 );
-
-INSERT INTO [Role] VALUES
-(N'Admin',      N'Manage system and users', 1),
-(N'Instructor', N'Manage questions bank, simulations, exams, forum, ...', 1),
-(N'Student',    N'Student of the system', 1);
-
-SELECT * FROM [Role]
-SELECT * FROM [Permission]
-SELECT * FROM [RolePermission]
