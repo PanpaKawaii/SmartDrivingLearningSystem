@@ -4,11 +4,12 @@ import { GlobalColor } from '../../../../mocks/GlobalVar';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
 import EditUserModal from './EditUserModal';
+import { users, roles, permissions, rolePermissions } from '../../../../mocks/DataSample';
 
 import './UserManagement.css';
 
 export default function UserManagement() {
-    const [CUSTOMERs, setCUSTOMERs] = useState([]);
+    const [USERs, setUSERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,7 +17,7 @@ export default function UserManagement() {
     const [editing, setEditing] = useState(null);
     const [creating, setCreating] = useState(false);
     const [popupProps, setPopupProps] = useState(null);
-    const DefaultAvatar = 'https://cdn-icons-png.flaticon.com/512/11485/11485970.png';
+    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
         const fetchDataAPI = async () => {
@@ -24,18 +25,33 @@ export default function UserManagement() {
             setLoading(true);
             const token = '';
             try {
-                const AccountResponse = await fetchData('accounts', token);
-                console.log('AccountResponse', AccountResponse);
-                const CustomerResponse = await fetchData('customers', token);
-                console.log('CustomerResponse', CustomerResponse);
+                // const UserResponse = await fetchData('users', token);
+                // console.log('UserResponse', UserResponse);
+                // const RoleResponse = await fetchData('roles', token);
+                // console.log('RoleResponse', RoleResponse);
+                // const PermissionResponse = await fetchData('permissions', token);
+                // console.log('PermissionResponse', PermissionResponse);
+                // const RolePermissionResponse = await fetchData('role-permissions', token);
+                // console.log('RolePermissionResponse', RolePermissionResponse);
 
-                const Customers = CustomerResponse.map(customer => ({
-                    ...customer,
-                    account: AccountResponse.find(acc => acc.id === customer.accountId) || null
+                const UserResponse = users;
+                const RoleResponse = roles;
+                const PermissionResponse = permissions;
+                const RolePermissionResponse = rolePermissions;
+
+                const Roles = RoleResponse.filter(r => r.status === 1).map(role => {
+                    const permissionIds = RolePermissionResponse.filter(rp => rp.roleId === role.id).map(rp => rp.permissionId);
+                    const permissions = PermissionResponse.filter(p => p.status === 1 && permissionIds.includes(p.id));
+                    return { ...role, permissions }
+                })
+                console.log('Roles', Roles);
+                const Users = UserResponse.map(user => ({
+                    ...user,
+                    role: Roles.find(r => r.id === user.roleId) || null
                 }));
-                console.log('Customers', Customers);
+                console.log('Users', Users);
 
-                setCUSTOMERs(Customers);
+                setUSERs(Users);
             } catch (error) {
                 setError('Error');
             } finally {
@@ -51,45 +67,47 @@ export default function UserManagement() {
     const openCreateModal = () => { setCreating(true); };
     const closeCreateModal = () => { setCreating(false); };
 
-    const banCustomer = async (customer) => {
+    const banUser = async (user) => {
         const token = '';
-        const newAccount = { ...customer.account, status: customer.account?.status == 1 ? 0 : 1 };
+        const newUser = { ...user, status: user.status === 1 ? 0 : 1 };
         try {
-            const AccountResult = await putData(`accounts/${newAccount.id}`, newAccount, token);
-            console.log('AccountResult', AccountResult);
+            const UserResult = await putData(`users/${newUser.id}`, newUser, token);
+            console.log('UserResult', UserResult);
             setRefresh(p => p + 1);
         } catch (error) {
             setErrorFunction('Error');
         }
-    }
+    };
 
-    const [searchCustomer, setSearchCustomer] = useState('');
+    const [searchUser, setSearchUser] = useState('');
     const [select, setSelect] = useState('');
-    const customersFilter = CUSTOMERs.filter((customer) => {
-        const customerName = customer.account?.name?.toLowerCase();
-        const customerEmail = customer.account?.email?.toLowerCase();
-        const customerPhone = customer.account?.phone?.toLowerCase();
-        const customerType = customer.type?.toLowerCase();
-        const customerStatus = customer.account?.status;
+    const usersFilter = USERs.filter((user) => {
+        const userName = user.name?.toLowerCase();
+        const userEmail = user.email?.toLowerCase();
+        const userPhone = user.phone?.toLowerCase();
 
-        const matchSearch = !searchCustomer
-            || customerName?.includes(searchCustomer.toLowerCase())
-            || customerEmail?.includes(searchCustomer.toLowerCase())
-            || customerPhone?.includes(searchCustomer.toLowerCase());
-        const matchSelect = !select || customerType?.includes(select.toLowerCase()) || customerStatus == select;
+        const userType = user.type?.toLowerCase();
+        const userStatus = user.status;
+
+        const matchSearch = !searchUser
+            || userName?.includes(searchUser.toLowerCase())
+            || userEmail?.includes(searchUser.toLowerCase())
+            || userPhone?.includes(searchUser.toLowerCase());
+        const matchSelect = !select || userType?.includes(select.toLowerCase()) || userStatus == select;
 
         return matchSearch && matchSelect;
     });
+    console.log('usersFilter', usersFilter);
     const handleClear = () => {
-        setSearchCustomer('');
+        setSearchUser('');
         setSelect('');
-    }
+    };
 
     if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
     if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
     return (
         <div className='admin-container'>
-            {/* {JSON.stringify(customersFilter?.[0], null, 0)} */}
+            {/* {JSON.stringify(usersFilter?.[0], null, 0)} */}
             <div className='inner-container management-container user-management-container'>
 
                 <header className='main-header'>
@@ -101,10 +119,10 @@ export default function UserManagement() {
                 </header>
 
                 <form className='controls'>
-                    <div className='count'>{customersFilter?.length} results</div>
+                    <div className='count'>{usersFilter?.length} results</div>
                     <div className='search-bar'>
                         <i className='fa-solid fa-magnifying-glass' />
-                        <input type='text' placeholder='Search by name, email, phone...' value={searchCustomer} onChange={(e) => setSearchCustomer(e.target.value)} />
+                        <input type='text' placeholder='Search by name, email, phone...' value={searchUser} onChange={(e) => setSearchUser(e.target.value)} />
                     </div>
                     <div className='field'>
                         <select id='formSelect' value={select} onChange={(e) => setSelect(e.target.value)}>
@@ -128,7 +146,7 @@ export default function UserManagement() {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>CUSTOMER</th>
+                                <th>USER</th>
                                 <th>EMAIL</th>
                                 <th>PHONE</th>
                                 <th>POINT</th>
@@ -137,39 +155,39 @@ export default function UserManagement() {
                             </tr>
                         </thead>
                         <tbody>
-                            {customersFilter?.map((customer, index) => (
+                            {usersFilter?.map((user, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>
-                                        <div className='customer-name-cell'>
+                                        <div className='user-name-cell'>
                                             <div className='avatar'>
-                                                <img src={`${customer.account?.image || DefaultAvatar}`} alt='avatar' />
+                                                <img src={`${user.account?.image || DefaultAvatar}`} alt='avatar' />
                                             </div>
-                                            <div className='customer-info'>
-                                                <span className='name'>{customer.account?.name}</span>
-                                                <span className='role'>{customer.account?.role}</span>
+                                            <div className='user-info'>
+                                                <span className='name'>{user.account?.name}</span>
+                                                <span className='role'>{user.account?.role}</span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='email'>
-                                            <span>{customer.account?.email}</span>
+                                            <span>{user.account?.email}</span>
                                         </div>
                                     </td>
-                                    <td><span>{customer.account?.phone}</span></td>
-                                    <td><span>{customer.point}</span></td>
-                                    <td><span>{customer.type}</span></td>
+                                    <td><span>{user.account?.phone}</span></td>
+                                    <td><span>{user.point}</span></td>
+                                    <td><span>{user.type}</span></td>
                                     <td>
                                         <div className='action-buttons'>
-                                            <button onClick={() => openEditModal(customer)}>
+                                            <button onClick={() => openEditModal(user)}>
                                                 <span>Modify</span>
                                                 <i className='fa-solid fa-pencil' />
                                             </button>
-                                            <button className={`btn-active ${customer.account?.status == 0 && 'abb'}`} onClick={() => setPopupProps(customer)} disabled={customer.account?.status == 1}>
+                                            <button className={`btn-active ${user.account?.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.account?.status == 1}>
                                                 <span>Active</span>
                                                 <i className='fa-solid fa-unlock' />
                                             </button>
-                                            <button className={`btn-banned ${customer.account?.status == 1 && 'abb'}`} onClick={() => setPopupProps(customer)} disabled={customer.account?.status == 0}>
+                                            <button className={`btn-banned ${user.account?.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.account?.status == 0}>
                                                 <span>Banned</span>
                                                 <i className='fa-solid fa-lock' />
                                             </button>
@@ -201,7 +219,7 @@ export default function UserManagement() {
                                 password: '123456',
                                 phone: '',
                                 image: '',
-                                role: 'Customer',
+                                role: 'User',
                                 description: '',
                                 status: 1,
                             }
@@ -215,11 +233,11 @@ export default function UserManagement() {
                 {popupProps && (
                     <ConfirmDialog
                         title={'CONFIRMATION'}
-                        message={`Are you sure you want to ${popupProps.account?.status == 1 ? 'ban' : 'active'} this customer?`}
+                        message={`Are you sure you want to ${popupProps.account?.status == 1 ? 'ban' : 'active'} this user?`}
                         confirm={popupProps.account?.status == 1 ? 'BAN' : 'ACTIVE'}
                         cancel={'CANCEL'}
                         color={popupProps.account?.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
-                        onConfirm={() => { banCustomer(popupProps), setPopupProps(null) }}
+                        onConfirm={() => { banUser(popupProps), setPopupProps(null) }}
                         onCancel={() => setPopupProps(null)}
                     />
                 )}

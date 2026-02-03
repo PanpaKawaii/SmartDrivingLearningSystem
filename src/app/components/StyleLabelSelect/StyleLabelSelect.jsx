@@ -4,12 +4,12 @@ export default function StyleLabelSelect({
     id = '',
     list = [],
     value = '',
-    onValueChange,
+    onValueChange = () => { },
     extraClassName = '',
     extraStyle = {},
     label = '',
     labelStyle = '',
-    disable = false
+    disable = false,
 }) {
     return (
         <div className='style-label-select-container' style={extraStyle}>

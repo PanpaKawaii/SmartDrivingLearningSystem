@@ -186,7 +186,7 @@
                     }
                 }
 
-                .customer-name-cell {
+                .user-name-cell {
                     display: flex;
                     align-items: center;
                     gap: 12px;
@@ -208,7 +208,7 @@
                         }
                     }
 
-                    .customer-info {
+                    .user-info {
                         display: flex;
                         flex-direction: column;
 

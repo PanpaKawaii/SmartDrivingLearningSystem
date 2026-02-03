@@ -2,13 +2,13 @@ import './MovingLabelInput.css';
 
 export default function MovingLabelInput({
     type = 'text',
-    value,
-    onValueChange,
+    value = '',
+    onValueChange = () => { },
     extraClassName = '',
     extraStyle = {},
     label = '',
     labelStyle = '',
-    disable = false
+    disable = false,
 }) {
     return (
         <div className='moving-label-input-container' style={extraStyle}>
@@ -20,7 +20,7 @@ export default function MovingLabelInput({
                     const val = type === 'number'
                         ? Number(e.target.value)
                         : e.target.value
-                    onValueChange({ value: val })
+                    onValueChange(val);
                 }}
                 className={`input ${extraClassName}`}
                 disabled={disable}
