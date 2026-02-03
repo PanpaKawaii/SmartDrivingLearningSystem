@@ -137,12 +137,12 @@ CREATE TABLE [Permission] (
 
 -- 3.RolePermission
 CREATE TABLE [RolePermission] (
-    id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    createAt    DATETIME2 DEFAULT GETDATE(),
-    updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     roleId          UNIQUEIDENTIFIER NOT NULL,
     permissionId    UNIQUEIDENTIFIER NOT NULL,
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
     FOREIGN KEY (roleId) REFERENCES [Role](id) ON DELETE CASCADE,
     FOREIGN KEY (permissionId) REFERENCES [Permission](id) ON DELETE CASCADE,
     UNIQUE (roleId, permissionId)
@@ -311,33 +311,40 @@ CREATE TABLE [Tag] (
 -- 16.QuestionTag
 CREATE TABLE [QuestionTag] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    questionId UUID REFERENCES Question(id) ON DELETE CASCADE,
-    tagId UUID REFERENCES Tag(id) ON DELETE CASCADE,
+    questionId  UNIQUEIDENTIFIER NOT NULL,
+    tagId       UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
+    FOREIGN KEY (tagId) REFERENCES [Tag](id) ON DELETE CASCADE,
+    UNIQUE (questionId, tagId)
 );
 
 -- 17.SavedQuestion
 CREATE TABLE [SavedQuestion] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    userId UUID REFERENCES [User](id) ON DELETE CASCADE,
-    questionId UUID REFERENCES Question(id) ON DELETE CASCADE,
+    questionId  UNIQUEIDENTIFIER NOT NULL,
+    userId      UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    UNIQUE(userId, questionId)
+    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    UNIQUE (questionId, userId)
 );
 
 -- 18.LearningProgress
 CREATE TABLE [LearningProgress] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    userId UUID REFERENCES [User](id) ON DELETE CASCADE,
-    questionId UUID REFERENCES Question(id) ON DELETE CASCADE,
+    questionId  UNIQUEIDENTIFIER NOT NULL,
+    userId      UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    UNIQUE(userId, questionId)
+    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    UNIQUE (questionId, userId)
 );
 
 -- 19.Answer
@@ -371,11 +378,14 @@ CREATE TABLE [Exam] (
 -- 21.ExamQuestion
 CREATE TABLE [ExamQuestion] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    eventId UUID REFERENCES Event(id) ON DELETE CASCADE,
-    questionId UUID REFERENCES Question(id),
+    questionId  UNIQUEIDENTIFIER NOT NULL,
+    examId      UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (questionId) REFERENCES [Question](id) ON DELETE CASCADE,
+    FOREIGN KEY (examId) REFERENCES [Exam](id) ON DELETE CASCADE,
+    UNIQUE (questionId, examId)
 );
 
 -- 22.ExamSession
@@ -393,12 +403,14 @@ CREATE TABLE [ExamSession] (
 -- 23.ExamDetail
 CREATE TABLE [ExamDetail] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    examSessionId UUID REFERENCES ExamSession(id) ON DELETE CASCADE,
-    questionId UUID REFERENCES Question(id),
-    userAnswerId UUID,
+    answerId        UNIQUEIDENTIFIER NOT NULL,
+    examSessionId   UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (answerId) REFERENCES [Answer](id) ON DELETE CASCADE,
+    FOREIGN KEY (examSessionId) REFERENCES [ExamSession](id) ON DELETE CASCADE,
+    UNIQUE (answerId, examSessionId)
 );
 
 -- =====================================================
@@ -470,12 +482,14 @@ CREATE TABLE [TrafficSign] (
 -- 29.SavedTrafficSign
 CREATE TABLE [SavedTrafficSign] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    starCategoryId UUID REFERENCES StarCategory(id),
-    name NVARCHAR(100),
-    code NVARCHAR(50),
+    trafficSignId   UNIQUEIDENTIFIER NOT NULL,
+    userId          UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (trafficSignId) REFERENCES [TrafficSign](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    UNIQUE (trafficSignId, userId)
 );
 
 -- =====================================================
@@ -536,11 +550,14 @@ CREATE TABLE [Notification] (
 -- 34.UserNotification
 CREATE TABLE [UserNotification] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    notificationId UUID REFERENCES Notification(id) ON DELETE CASCADE,
-    userId UUID REFERENCES [User](id) ON DELETE CASCADE,
+    notificationId  UNIQUEIDENTIFIER NOT NULL,
+    userId          UNIQUEIDENTIFIER NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1
+    status      INT DEFAULT 1,
+    FOREIGN KEY (notificationId) REFERENCES [Notification](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    UNIQUE (notificationId, userId)
 );
 
 INSERT INTO [Role] VALUES
@@ -549,3 +566,5 @@ INSERT INTO [Role] VALUES
 (N'Student',    N'Student of the system', 1);
 
 SELECT * FROM [Role]
+SELECT * FROM [Permission]
+SELECT * FROM [RolePermission]
