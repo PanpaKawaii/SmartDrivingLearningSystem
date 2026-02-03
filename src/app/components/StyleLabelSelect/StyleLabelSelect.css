@@ -3,11 +3,24 @@
     position: relative;
     height: 42px;
 
-    select {
+    .select {
         width: 100%;
         padding: 8px 4px;
         font-size: 16px;
         text-align: center;
+        color: var(--text-primary);
+        background: var(--gray-2);
+        border: 2px solid var(--gray-3);
+
+        &:focus {
+            border-color: var(--gray-4);
+            box-shadow: 0 0 0 4px var(--gray-4-80);
+        }
+    }
+
+    .option {
+        color: var(--text-primary);
+        background: var(--gray-3);
     }
 
     label {

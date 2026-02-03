@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { fetchData, putData } from '../../../../mocks/CallingAPI';
+import { permissions, rolePermissions, roles, users } from '../../../../mocks/DataSample';
 import { GlobalColor } from '../../../../mocks/GlobalVar';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
 import EditUserModal from './EditUserModal';
-import { users, roles, permissions, rolePermissions } from '../../../../mocks/DataSample';
 
 import './UserManagement.css';
 
@@ -39,9 +39,9 @@ export default function UserManagement() {
                 const PermissionResponse = permissions;
                 const RolePermissionResponse = rolePermissions;
 
-                const Roles = RoleResponse.filter(r => r.status === 1).map(role => {
+                const Roles = RoleResponse.filter(r => r.status == 1).map(role => {
                     const permissionIds = RolePermissionResponse.filter(rp => rp.roleId === role.id).map(rp => rp.permissionId);
-                    const permissions = PermissionResponse.filter(p => p.status === 1 && permissionIds.includes(p.id));
+                    const permissions = PermissionResponse.filter(p => p.status == 1 && permissionIds.includes(p.id));
                     return { ...role, permissions }
                 })
                 console.log('Roles', Roles);
@@ -69,7 +69,7 @@ export default function UserManagement() {
 
     const banUser = async (user) => {
         const token = '';
-        const newUser = { ...user, status: user.status === 1 ? 0 : 1 };
+        const newUser = { ...user, status: user.status == 1 ? 0 : 1 };
         try {
             const UserResult = await putData(`users/${newUser.id}`, newUser, token);
             console.log('UserResult', UserResult);
@@ -149,7 +149,6 @@ export default function UserManagement() {
                                 <th>USER</th>
                                 <th>EMAIL</th>
                                 <th>PHONE</th>
-                                <th>POINT</th>
                                 <th>TYPE</th>
                                 <th>ACTIONS</th>
                             </tr>
@@ -161,21 +160,20 @@ export default function UserManagement() {
                                     <td>
                                         <div className='user-name-cell'>
                                             <div className='avatar'>
-                                                <img src={`${user.account?.image || DefaultAvatar}`} alt='avatar' />
+                                                <img src={`${user.avatar || DefaultAvatar}`} alt='avatar' />
                                             </div>
                                             <div className='user-info'>
-                                                <span className='name'>{user.account?.name}</span>
-                                                <span className='role'>{user.account?.role}</span>
+                                                <span className='name'>{user.name}</span>
+                                                <span className='role'>{user.role?.name}</span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='email'>
-                                            <span>{user.account?.email}</span>
+                                            <span>{user.email}</span>
                                         </div>
                                     </td>
-                                    <td><span>{user.account?.phone}</span></td>
-                                    <td><span>{user.point}</span></td>
+                                    <td><span>{user.phone}</span></td>
                                     <td><span>{user.type}</span></td>
                                     <td>
                                         <div className='action-buttons'>
@@ -183,11 +181,11 @@ export default function UserManagement() {
                                                 <span>Modify</span>
                                                 <i className='fa-solid fa-pencil' />
                                             </button>
-                                            <button className={`btn-active ${user.account?.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.account?.status == 1}>
+                                            <button className={`btn-active ${user.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 1}>
                                                 <span>Active</span>
                                                 <i className='fa-solid fa-unlock' />
                                             </button>
-                                            <button className={`btn-banned ${user.account?.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.account?.status == 0}>
+                                            <button className={`btn-banned ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
                                                 <span>Banned</span>
                                                 <i className='fa-solid fa-lock' />
                                             </button>

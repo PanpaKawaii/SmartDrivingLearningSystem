@@ -39,7 +39,7 @@
             border-color: var(--button-primary-bg);
 
             &:hover {
-                background-color: #E6EDF3;
+                background-color: #c2dcf3;
             }
         }
     }
@@ -281,15 +281,15 @@
                         }
 
                         &.btn-banned {
-                            color: #dc3545;
+                            color: var(--red);
                         }
 
                         &.btn-delete {
-                            color: #ff0000;
+                            color: var(--red);
                         }
 
                         &.btn-active {
-                            color: #28a745;
+                            color: var(--green);
                         }
 
                         &:disabled {
