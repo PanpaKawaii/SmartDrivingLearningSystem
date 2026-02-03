@@ -22,6 +22,16 @@ export default function AdminSideBar() {
     //     else if (user?.role === 'user') navigate('/');
     // }, [user?.id]);
 
+    console.log('toJSON', new Date().toJSON());
+    console.log('toString', new Date().toString());
+    console.log('toISOString', new Date().toISOString());
+    console.log('toUTCString', new Date().toUTCString());
+    console.log('toDateString', new Date().toDateString());
+    console.log('toTimeString', new Date().toTimeString());
+    console.log('toLocaleDateString', new Date().toLocaleDateString());
+    console.log('toLocaleTimeString', new Date().toLocaleTimeString());
+    console.log('toLocaleString', new Date().toLocaleString());
+
     return (
         <>
             <div className={`admin-side-bar-container`}>
