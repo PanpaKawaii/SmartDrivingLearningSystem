@@ -60,7 +60,6 @@
 
     .content {
         word-break: break-all;
-        overflow: hidden;
         display: flex;
         gap: 8px;
 

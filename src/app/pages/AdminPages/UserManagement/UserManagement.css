@@ -10,16 +10,6 @@
         border: 2px solid var(--gray-3);
     }
 
-    /* select {
-        color: var(--text-primary);
-        background-color: var(--button-secondary-bg);
-        border: 2px solid var(--gray-3);
-
-        &:hover {
-            background-color: #30363D;
-        }
-    } */
-
     .main-header {
         display: flex;
         justify-content: space-between;

@@ -211,16 +211,14 @@ export default function UserManagement() {
                         userprop={{
                             point: 0,
                             type: 'Regular',
-                            account: {
-                                name: '',
-                                email: '',
-                                password: '123456',
-                                phone: '',
-                                image: '',
-                                role: 'User',
-                                description: '',
-                                status: 1,
-                            }
+                            name: '',
+                            email: '',
+                            password: '123456',
+                            phone: '',
+                            image: '',
+                            role: 'User',
+                            description: '',
+                            status: 1,
                         }}
                         onClose={closeCreateModal}
                         setRefresh={setRefresh}
@@ -231,10 +229,10 @@ export default function UserManagement() {
                 {popupProps && (
                     <ConfirmDialog
                         title={'CONFIRMATION'}
-                        message={`Are you sure you want to ${popupProps.account?.status == 1 ? 'ban' : 'active'} this user?`}
-                        confirm={popupProps.account?.status == 1 ? 'BAN' : 'ACTIVE'}
+                        message={`Are you sure you want to ${popupProps.status == 1 ? 'ban' : 'active'} this user?`}
+                        confirm={popupProps.status == 1 ? 'BAN' : 'ACTIVE'}
                         cancel={'CANCEL'}
-                        color={popupProps.account?.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
+                        color={popupProps.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
                         onConfirm={() => { banUser(popupProps), setPopupProps(null) }}
                         onCancel={() => setPopupProps(null)}
                     />

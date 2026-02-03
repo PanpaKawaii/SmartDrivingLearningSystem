@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { postData, putData } from '../../../../mocks/CallingAPI';
+
 import '../EditModal.css';
 
 export default function EditUserModal({ userprop, onClose, setRefresh, action }) {
     const [user, setUser] = useState(userprop);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const DefaultAvatar = 'https://cdn-icons-png.flaticon.com/512/11485/11485970.png';
+    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     const Update = async (user) => {
         const token = '';
-        const newAccount = { ...user.account };
-        const newUser = { id: user.id, point: Number(user.point) || 0, type: user.type, accountId: user.accountId };
+        const newUser = { id: user.id, point: Number(user.point) || 0, type: user.type };
         try {
-            const AccountResult = await putData(`accounts/${newAccount.id}`, newAccount, token);
             const UserResult = await putData(`users/${newUser.id}`, newUser, token);
             onClose();
             setRefresh(p => p + 1);
@@ -26,13 +25,9 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
 
     const Upload = async (user) => {
         const token = '';
-        const newAccount = { ...user.account };
+        const newUser = { point: Number(user.point) || 0, type: user.type };
         try {
-            const AccountResult = await postData('accounts', newAccount, token);
-            if (AccountResult) {
-                const newUser = { point: Number(user.point) || 0, type: user.type, accountId: AccountResult.id };
-                const UserResult = await postData('users', newUser, token);
-            }
+            const UserResult = await postData('users', newUser, token);
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {
@@ -44,15 +39,7 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name.startsWith('account.')) {
-            const key = name.split('.')[1];
-            setUser((prev) => ({
-                ...prev,
-                account: { ...prev.account, [key]: value },
-            }));
-        } else {
-            setUser((prev) => ({ ...prev, [name]: value }));
-        }
+        setUser((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = (e) => {
@@ -66,34 +53,36 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
         <div className='edit-modal'>
             <div className='modal-box'>
                 <button className='btn close-btn' onClick={() => onClose()}><i className='fa-solid fa-xmark'></i></button>
-                <form onSubmit={handleSubmit} className='user-edit-form'>
+                <form onSubmit={handleSubmit}>
                     <div className='edit-title'>Edit User</div>
                     <div className='flex'>
-                        <div className='image-container'><img src={user.account?.image || DefaultAvatar} alt='avatar' /></div>
+                        <div className='image-container'>
+                            <img src={user.image || DefaultAvatar} alt='avatar' />
+                        </div>
                         <div className='column'>
                             <div className='input-group'>
-                                <input name='account.name' placeholder=' ' value={user.account?.name} onChange={handleChange} required />
+                                <input name='name' placeholder=' ' value={user.name} onChange={handleChange} required />
                                 <label htmlFor='name'>Name</label>
                             </div>
                             <div className='input-group'>
-                                <input name='account.image' placeholder=' ' value={user.account?.image} onChange={handleChange} required />
+                                <input name='image' placeholder=' ' value={user.image} onChange={handleChange} required />
                                 <label htmlFor='image'>Image URL</label>
                             </div>
                         </div>
                     </div>
-                    {user.account?.id &&
+                    {user.id &&
                         <div className='input-group'>
-                            <input name='id' placeholder=' ' value={user.account?.id} disabled />
+                            <input name='id' placeholder=' ' value={user.id} disabled />
                             <label htmlFor='id' className='disable'>ID</label>
                         </div>
                     }
                     <div className='input-group'>
-                        <input name='account.email' placeholder=' ' value={user.account?.email} onChange={handleChange} disabled={action != 'create'} />
+                        <input name='email' placeholder=' ' value={user.email} onChange={handleChange} disabled={action != 'create'} />
                         <label htmlFor='email' className={`${action == 'create' ? '' : 'disable'}`}>Email</label>
                     </div>
                     <div className='column'>
                         <div className='flex'>
-                            <div className='input-group group-1'>
+                            <div className='input-group flex-1'>
                                 <select id='formType' name='type' onChange={handleChange}>
                                     <option value={user.type}>{user.type}</option>
                                     {user.type !== 'Regular' && <option value={'Regular'}>Regular</option>}
@@ -101,28 +90,24 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
                                 </select>
                                 <label htmlFor='type'>Type</label>
                             </div>
-                            <div className='input-group'>
-                                <input name='point' min={0} type='number' placeholder=' ' value={user.point} onChange={handleChange} required />
-                                <label htmlFor='point'>Point</label>
-                            </div>
                         </div>
                     </div>
                     <div className='input-group'>
-                        <input name='account.phone' placeholder=' ' value={user.account?.phone} onChange={handleChange} required />
+                        <input name='phone' placeholder=' ' value={user.phone} onChange={handleChange} required />
                         <label htmlFor='phone'>Phone</label>
                     </div>
-                    <div className='input-group group-1'>
-                        <label htmlFor='description'>Description</label>
+                    <div className='input-group flex-1'>
                         <textarea
-                            name='account.description'
+                            name='description'
                             placeholder=' '
-                            value={user.account?.description || ''}
+                            value={user.description || ''}
                             onChange={handleChange}
                         />
+                        <label htmlFor='description'>Description</label>
                     </div>
                     <div className='btn-box'>
-                        <button type='submit' className='btn-save' disabled={loading}>SAVE</button>
-                        <button type='button' onClick={() => onClose()}>CANCEL</button>
+                        <button type='submit' className='btn btn-save' disabled={loading}>SAVE</button>
+                        <button type='button' className='btn' onClick={() => onClose()}>CANCEL</button>
                     </div>
                 </form>
             </div>
