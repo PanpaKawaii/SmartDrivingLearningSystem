@@ -19,6 +19,7 @@ export default function Header() {
         { name: 'FORUM', icon: 'icon', path: '/forum' },
         { name: 'GROUND', icon: 'icon', path: '/three-scene' },
         { name: 'CAR', icon: 'car', path: '/car' },
+        { name: 'SIGN', icon: 'sign', path: '/traffic-sign-flip-book' },
     ];
 
     // useEffect(() => {

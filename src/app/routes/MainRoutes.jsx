@@ -9,6 +9,7 @@ import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 import Forum from '../pages/Forum/Forum.jsx'
 import LearningQuestion from '../pages/LearningQuestion/LearningQuestion.jsx'
 import LearningSign from '../pages/LearningSign/LearningSign.jsx'
+import TrafficSignFlipBook from '../pages/AdminPages/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 
 import CarScene from '../pages/ThreeScene/CarScene.jsx'
 import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
@@ -31,6 +32,7 @@ export default function MainRoutes() {
                     <Route path='exam' element={<ExamTemp />} />
                     <Route path='forum' element={<Forum />} />
                     <Route path='controlled-video' element={<ControlledVideo />} />
+                    <Route path='traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                 </Route>
 
                 <Route path='/three-scene' element={<ThreeScene />} />

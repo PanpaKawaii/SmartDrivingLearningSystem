@@ -1,0 +1,10 @@
+.page-container {
+    position: absolute;
+
+    width: 500px;
+    height: 600px;
+    background-color: yellow;
+    border: 1px solid green;
+    box-sizing: border-box;
+    transition: all 0.5s ease;
+}

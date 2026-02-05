@@ -1,0 +1,25 @@
+.flip-book-container {
+    width: 100%;
+    height: fit-content;
+    min-height: 600px;
+    perspective: 1000px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+
+    user-select: none;
+    transition: all 0.2s ease;
+
+    .book {
+        position: relative;
+        width: fit-content;
+        height: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform-style: preserve-3d;
+        transition: all 0.1s ease;
+    }
+}
