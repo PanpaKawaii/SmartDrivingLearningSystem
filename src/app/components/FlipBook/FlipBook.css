@@ -1,6 +1,6 @@
 .flip-book-container {
     width: 100%;
-    height: fit-content;
+    height: 80vh;
     min-height: 600px;
     perspective: 1000px;
 
