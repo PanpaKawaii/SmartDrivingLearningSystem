@@ -10,7 +10,7 @@ export default function Timer({
     showPauseButton = false,
     showRestartButton = false,
 
-    onFinish,
+    onFinish = () => {},
     timelines = [],
     color = '#000'
 }) {
@@ -58,7 +58,7 @@ export default function Timer({
 
     // Handle finish
     useEffect(() => {
-        if (direction === 'down' && time === 0) {
+        if (direction === 'down' && time === 0 && isRunning) {
             setIsRunning(false);
             onFinish && onFinish();
         }

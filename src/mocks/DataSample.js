@@ -1,3 +1,21 @@
+export const exams = [
+    { id: 1, userId: null, title: 'Bộ đề chương I', description: 'Bộ đề tổng hợp các câu hỏi của chương I', duration: 1800, passScore: 27, isRandom: 0, status: 1 },
+    { id: 2, userId: null, title: 'Bộ đề chương II', description: 'Bộ đề tổng hợp các câu hỏi của chương II', duration: 1800, passScore: 27, isRandom: 0, status: 1 },
+    { id: 3, userId: null, title: 'Bộ đề chương III', description: 'Bộ đề tổng hợp các câu hỏi của chương III', duration: 1800, passScore: 27, isRandom: 0, status: 1 },
+    { id: 4, userId: null, title: 'Bộ đề chương IV', description: 'Bộ đề tổng hợp các câu hỏi của chương IV', duration: 1800, passScore: 27, isRandom: 0, status: 1 },
+    { id: 5, userId: null, title: 'Bộ đề chương V', description: 'Bộ đề tổng hợp các câu hỏi của chương V', duration: 1800, passScore: 27, isRandom: 0, status: 1 },
+    { id: 6, userId: null, title: 'Bộ đề chương VI', description: 'Bộ đề tổng hợp các câu hỏi của chương VI', duration: 1800, passScore: 27, isRandom: 0, status: 1 },
+    { id: 7, userId: 1, title: 'Bộ đề của Triều', description: 'Bộ đề tổng hợp random', duration: 1800, passScore: 27, isRandom: 1, status: 1 },
+    { id: 8, userId: 1, title: 'Bộ đề thứ 2 của Triều', description: 'Bộ đề tổng hợp random', duration: 1800, passScore: 27, isRandom: 1, status: 1 },
+];
+
+export const chapters = [
+    { id: 'c1', name: 'Chapter 1' },
+    { id: 'c2', name: 'Chapter 2' },
+    { id: 'c3', name: 'Chapter 3' },
+    { id: 'c4', name: 'Chapter 4' },
+];
+
 export const questions = [
     { id: 1, content: 'Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì?', type: 'single', correctAnswer: 1, status: 1 },
     { id: 2, content: 'Khi đèn giao thông màu vàng, bạn phải làm gì?', type: 'single', correctAnswer: 1, status: 1 },

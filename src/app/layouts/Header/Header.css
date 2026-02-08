@@ -14,17 +14,12 @@
     z-index: 2;
 
     a {
-        .logo {
-            padding: 16px;
-            color: #fff;
-            text-shadow:
-                2px 2px 4px var(--green-light),
-                -2px 2px 4px var(--green-light),
-                2px -2px 4px var(--green-light),
-                -2px -2px 4px var(--green-light);
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 160px;
+            height: 60px;
         }
     }
 

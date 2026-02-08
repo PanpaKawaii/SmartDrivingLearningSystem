@@ -125,7 +125,7 @@ export default function Answer({
                         // showStartButton={true}
                         // showPauseButton={true}
                         // showRestartButton={true}
-                        onFinish={() => console.log('Hết giờ!')}
+                        onFinish={() => checkAnswersResult(QuestionsAnswers, myAnswers)}
                         timelines={[
                             { time: 10, action: () => console.log('Còn 10 giây!'), },
                             { time: 5, action: () => console.log('Sắp hết giờ!'), },

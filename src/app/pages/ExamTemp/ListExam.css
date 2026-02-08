@@ -1,0 +1,9 @@
+.list-exam-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .exam {
+        border: 1px solid #ccc;
+    }
+}

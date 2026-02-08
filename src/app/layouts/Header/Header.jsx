@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import LOGO from '../../assets/Logo.png';
 
 import './Header.css';
 
@@ -14,7 +15,7 @@ export default function Header() {
         { name: 'CORE LEARNING', icon: 'icon', path: '/core-learning' },
         { name: 'QUESTION', icon: 'icon', path: '/learning-question' },
         { name: 'SIGN', icon: 'icon', path: '/learning-sign' },
-        { name: 'EXAM', icon: 'icon', path: '/exam' },
+        { name: 'EXAM', icon: 'icon', path: '/list-exam' },
         { name: 'VIDEO', icon: 'icon', path: '/controlled-video' },
         { name: 'FORUM', icon: 'icon', path: '/forum' },
         { name: 'GROUND', icon: 'icon', path: '/three-scene' },
@@ -32,7 +33,7 @@ export default function Header() {
         <>
             <div className='header-container'>
                 <Link to='/'>
-                    <div className='logo'>Green Light</div>
+                    <img src={LOGO} alt={'green-light'} />
                 </Link>
                 <div className='items'>
                     {menuItems.map((item, index) => (
