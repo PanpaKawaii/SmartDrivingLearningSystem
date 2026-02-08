@@ -1,9 +1,7 @@
 .page-container {
     position: absolute;
-    width: 500px;
-    height: 600px;
-    background-color: yellow;
-    border: 1px solid white;
+    border: 1px solid #000;
     box-sizing: border-box;
-    transition: all 1s linear;
+    transition: transform 0.5s ease, opacity 0.1s linear;
+    pointer-events: none;
 }

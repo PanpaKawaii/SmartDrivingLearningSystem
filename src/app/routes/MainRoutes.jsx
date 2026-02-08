@@ -9,7 +9,7 @@ import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 import Forum from '../pages/Forum/Forum.jsx'
 import LearningQuestion from '../pages/LearningQuestion/LearningQuestion.jsx'
 import LearningSign from '../pages/LearningSign/LearningSign.jsx'
-import TrafficSignFlipBook from '../pages/AdminPages/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
+import TrafficSignFlipBook from '../pages/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 
 import CarScene from '../pages/ThreeScene/CarScene.jsx'
 import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'

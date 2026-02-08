@@ -2,4 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: start;
+
+    .btn {
+        z-index: 1;
+    }
 }
