@@ -22,8 +22,6 @@ export default function QuestionManagement() {
                     labelStyle={'left moving'}
                 />
 
-                <br />
-
                 <StyleLabelSelect
                     id={`select`}
                     list={[{ id: 'a', name: 'a' }, { id: 'b', name: 'b' }]}

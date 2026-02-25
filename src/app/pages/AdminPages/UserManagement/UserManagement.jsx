@@ -5,6 +5,8 @@ import { GlobalColor } from '../../../../mocks/GlobalVar';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
 import EditUserModal from './EditUserModal';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
+import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
 
 import './UserManagement.css';
 
@@ -121,17 +123,32 @@ export default function UserManagement() {
                 <form className='controls'>
                     <div className='count'>{usersFilter?.length} results</div>
                     <div className='search-bar'>
-                        <i className='fa-solid fa-magnifying-glass' />
-                        <input type='text' placeholder='Search by name, email, phone...' value={searchUser} onChange={(e) => setSearchUser(e.target.value)} />
+                        <MovingLabelInput
+                            type={'text'}
+                            value={searchUser || ''}
+                            onValueChange={(propE) => setSearchUser(propE)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Name'}
+                            labelStyle={'left moving'}
+                        />
                     </div>
                     <div className='field'>
-                        <select id='formSelect' value={select} onChange={(e) => setSelect(e.target.value)}>
-                            <option className='option' value={''}>-- Type / Status --</option>
-                            <option className='option-vip' value={'Vip'}>Vip</option>
-                            <option className='option-regular' value={'Regular'}>Regular</option>
-                            <option className='option-active' value={'1'}>Active</option>
-                            <option className='option-banned' value={'0'}>Banned</option>
-                        </select>
+                        <StyleLabelSelect
+                            id={`select`}
+                            list={[
+                                { id: 'Vip', name: 'Vip', extraOptionClassName: 'option-vip' },
+                                { id: 'Regular', name: 'Regular', extraOptionClassName: 'option-regular' },
+                            ]}
+                            value={select}
+                            onValueChange={(propE) => {
+                                setSelect(propE);
+                            }}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Select'}
+                            labelStyle={'center'}
+                        />
                     </div>
                     <button type='button' className='btn-secondary' onClick={handleClear}>
                         CLEAR

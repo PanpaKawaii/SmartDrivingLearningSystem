@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
+import LOGO from '../../../assets/Logo.png';
 
 import './AdminSideBar.css';
 
@@ -36,7 +37,7 @@ export default function AdminSideBar() {
         <>
             <div className={`admin-side-bar-container`}>
                 <Link to='/'>
-                    <div className='logo'>Green Light</div>
+                    <img src={LOGO} alt={'green-light'} />
                 </Link>
                 <div className='items'>
                     {menuItems.map((item, index) => (

@@ -53,31 +53,10 @@
         .search-bar {
             display: flex;
             flex: 1 1 200px;
-            align-items: center;
-            background-color: var(--gray-2);
-            border: 2px solid var(--gray-3);
-            border-radius: 6px;
-            padding: 0 12px;
-
-            i {
-                color: var(--text-secondary);
-                margin: 0 12px 0 0;
-                display: flex;
-                align-items: center;
-            }
 
             input {
-                padding: 8px 0;
-                flex: 1;
-                color: var(--text-primary);
-                background-color: transparent;
-                border: none;
-                outline: none;
                 font-size: 14px;
-
-                &::placeholder {
-                    color: var(--text-secondary);
-                }
+                text-align: start;
             }
         }
 
@@ -85,10 +64,6 @@
 
             select,
             input {
-                color: var(--text-primary);
-                background-color: transparent;
-                border: 2px solid var(--gray-3);
-
                 .option {
                     color: var(--text-secondary);
                 }

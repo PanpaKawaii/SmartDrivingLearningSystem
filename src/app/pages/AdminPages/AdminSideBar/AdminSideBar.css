@@ -13,18 +13,15 @@
     z-index: 2;
 
     a {
-        .logo {
-            padding: 16px;
-            margin: 16px 0;
-            color: #cfe6ff;
-            text-shadow:
-                2px 2px 4px #007bff,
-                -2px 2px 4px #007bff,
-                2px -2px 4px #007bff,
-                -2px -2px 4px #007bff;
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 160px;
+            height: 60px;
+            margin: 20px 0;
         }
     }
 

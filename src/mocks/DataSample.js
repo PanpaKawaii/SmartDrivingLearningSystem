@@ -277,8 +277,8 @@ export const rolePermissions = [
 ];
 
 export const users = [
-    { id: 1, roleId: 1, name: 'Duong', status: 1 },
-    { id: 2, roleId: 2, name: 'Trieu', status: 1 },
-    { id: 3, roleId: 3, name: 'Sang', status: 1 },
-    { id: 4, roleId: 3, name: 'Tin', status: 1 },
+    { id: 1, roleId: 1, name: 'Duong', email: 'duong@example.com', status: 1 },
+    { id: 2, roleId: 2, name: 'Trieu', email: 'trieu@example.com', status: 1 },
+    { id: 3, roleId: 3, name: 'Sang', email: 'sang@example.com', status: 1 },
+    { id: 4, roleId: 3, name: 'Tin', email: 'tin@example.com', status: 1 },
 ];
