@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './Cube.css';
 
 export default function Cube({
-    color,
-    setRefresh,
+    color = '',
+    setRefresh = () => { },
 }) {
     const [rotation, setRotation] = useState({ x: 0, y: 0, z: 0 });
     const handleChangeRotation = (axis, value) => {

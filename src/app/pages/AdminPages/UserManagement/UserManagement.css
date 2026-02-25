@@ -61,6 +61,8 @@
         }
 
         .field {
+            display: flex;
+            gap: 8px;
 
             select,
             input {
@@ -68,32 +70,20 @@
                     color: var(--text-secondary);
                 }
 
-                .option-type {
-                    color: #ffc107;
-                }
-
-                .option-status {
-                    color: #28a745;
-                }
-
-                .option-method {
-                    color: #007bff;
-                }
-
                 .option-vip {
-                    color: #ffc107;
+                    color: var(--yellow);
                 }
 
                 .option-regular {
-                    color: #808080;
+                    color: var(--gray-4);
                 }
 
                 .option-active {
-                    color: #28a745;
+                    color: var(--green);
                 }
 
-                .option-banned {
-                    color: #dc3545;
+                .option-inactive {
+                    color: var(--red);
                 }
             }
         }
@@ -245,7 +235,7 @@
                             opacity: 1;
                         }
 
-                        &.btn-banned {
+                        &.btn-inactive {
                             color: var(--red);
                         }
 

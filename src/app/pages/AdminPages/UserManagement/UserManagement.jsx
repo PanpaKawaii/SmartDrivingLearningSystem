@@ -4,9 +4,9 @@ import { permissions, rolePermissions, roles, users } from '../../../../mocks/Da
 import { GlobalColor } from '../../../../mocks/GlobalVar';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
-import EditUserModal from './EditUserModal';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
+import EditUserModal from './EditUserModal';
 
 import './UserManagement.css';
 
@@ -69,7 +69,7 @@ export default function UserManagement() {
     const openCreateModal = () => { setCreating(true); };
     const closeCreateModal = () => { setCreating(false); };
 
-    const banUser = async (user) => {
+    const inactiveUser = async (user) => {
         const token = '';
         const newUser = { ...user, status: user.status == 1 ? 0 : 1 };
         try {
@@ -82,28 +82,33 @@ export default function UserManagement() {
     };
 
     const [searchUser, setSearchUser] = useState('');
-    const [select, setSelect] = useState('');
+    const [selectType, setSelectType] = useState('');
+    const [selectStatus, setSelectStatus] = useState('');
     const usersFilter = USERs.filter((user) => {
         const userName = user.name?.toLowerCase();
         const userEmail = user.email?.toLowerCase();
         const userPhone = user.phone?.toLowerCase();
 
         const userType = user.type?.toLowerCase();
-        const userStatus = user.status;
+        const userStatus = user.status === 1 ? 'Active' : 'Inactive';
 
         const matchSearch = !searchUser
             || userName?.includes(searchUser.toLowerCase())
             || userEmail?.includes(searchUser.toLowerCase())
             || userPhone?.includes(searchUser.toLowerCase());
-        const matchSelect = !select || userType?.includes(select.toLowerCase()) || userStatus == select;
+        const matchSelectType = !selectType || userType === selectType.toLowerCase();
+        const matchSelectStatus = !selectStatus || userStatus == selectStatus;
 
-        return matchSearch && matchSelect;
+        return matchSearch && matchSelectType && matchSelectStatus;
     });
     console.log('usersFilter', usersFilter);
     const handleClear = () => {
         setSearchUser('');
-        setSelect('');
+        setSelectType('');
+        setSelectStatus('');
     };
+    console.log('selectType', selectType);
+    console.log('selectStatus', selectStatus);
 
     if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
     if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
@@ -135,19 +140,34 @@ export default function UserManagement() {
                     </div>
                     <div className='field'>
                         <StyleLabelSelect
-                            id={`select`}
+                            id={`selectType`}
                             list={[
                                 { id: 'Vip', name: 'Vip', extraOptionClassName: 'option-vip' },
                                 { id: 'Regular', name: 'Regular', extraOptionClassName: 'option-regular' },
                             ]}
-                            value={select}
+                            value={selectType}
                             onValueChange={(propE) => {
-                                setSelect(propE);
+                                setSelectType(propE);
                             }}
                             extraClassName={''}
                             extraStyle={{}}
-                            label={'Select'}
-                            labelStyle={'center'}
+                            label={'Type'}
+                            labelStyle={'left'}
+                        />
+                        <StyleLabelSelect
+                            id={`selectStatus`}
+                            list={[
+                                { id: 'Active', name: 'Active', extraOptionClassName: 'option-active' },
+                                { id: 'Inactive', name: 'Inactive', extraOptionClassName: 'option-inactive' },
+                            ]}
+                            value={selectStatus}
+                            onValueChange={(propE) => {
+                                setSelectStatus(propE);
+                            }}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Status'}
+                            labelStyle={'left'}
                         />
                     </div>
                     <button type='button' className='btn-secondary' onClick={handleClear}>
@@ -202,8 +222,8 @@ export default function UserManagement() {
                                                 <span>Active</span>
                                                 <i className='fa-solid fa-unlock' />
                                             </button>
-                                            <button className={`btn-banned ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
-                                                <span>Banned</span>
+                                            <button className={`btn-inactive ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
+                                                <span>Inactive</span>
                                                 <i className='fa-solid fa-lock' />
                                             </button>
                                         </div>
@@ -246,11 +266,11 @@ export default function UserManagement() {
                 {popupProps && (
                     <ConfirmDialog
                         title={'CONFIRMATION'}
-                        message={`Are you sure you want to ${popupProps.status == 1 ? 'ban' : 'active'} this user?`}
-                        confirm={popupProps.status == 1 ? 'BAN' : 'ACTIVE'}
+                        message={`Are you sure you want to ${popupProps.status == 1 ? 'inactive' : 'active'} this user?`}
+                        confirm={popupProps.status == 1 ? 'INACTIVE' : 'ACTIVE'}
                         cancel={'CANCEL'}
                         color={popupProps.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
-                        onConfirm={() => { banUser(popupProps), setPopupProps(null) }}
+                        onConfirm={() => { inactiveUser(popupProps), setPopupProps(null) }}
                         onCancel={() => setPopupProps(null)}
                     />
                 )}

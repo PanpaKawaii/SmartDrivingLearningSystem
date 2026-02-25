@@ -17,41 +17,41 @@ export const chapters = [
 ];
 
 export const questions = [
-    { id: 1, content: 'Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 2, content: 'Khi đèn giao thông màu vàng, bạn phải làm gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 3, content: 'Tốc độ tối đa trong khu dân cư là bao nhiêu?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 4, content: 'Người điều khiển xe phải mang theo giấy tờ gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 5, content: 'Biển báo hình tam giác có ý nghĩa gì?', type: 'single', correctAnswer: 1, status: 1 },
+    { id: 1, content: 'Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 2, content: 'Khi đèn giao thông màu vàng, bạn phải làm gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 3, content: 'Tốc độ tối đa trong khu dân cư là bao nhiêu?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 4, content: 'Người điều khiển xe phải mang theo giấy tờ gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 5, content: 'Biển báo hình tam giác có ý nghĩa gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
-    { id: 6, content: 'Khi gặp người đi bộ qua đường, bạn cần làm gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 7, content: 'Khoảng cách an toàn khi chạy xe là gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 8, content: 'Đèn đỏ được phép rẽ phải khi nào?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 9, content: 'Biển báo nền xanh là loại biển gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 10, content: 'Khi trời mưa, bạn nên làm gì?', type: 'single', correctAnswer: 1, status: 1 },
+    { id: 6, content: 'Khi gặp người đi bộ qua đường, bạn cần làm gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 7, content: 'Khoảng cách an toàn khi chạy xe là gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 8, content: 'Đèn đỏ được phép rẽ phải khi nào?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 9, content: 'Biển báo nền xanh là loại biển gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 10, content: 'Khi trời mưa, bạn nên làm gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
-    { id: 11, content: 'Tác dụng của dây an toàn là gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 12, content: 'Khi xe phía trước phanh gấp, bạn nên làm gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 13, content: 'Biển cấm vượt có ý nghĩa gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 14, content: 'Khi vào vòng xuyến, bạn phải nhường đường cho ai?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 15, content: 'Nồng độ cồn cho phép khi lái xe là bao nhiêu?', type: 'single', correctAnswer: 1, status: 1 },
+    { id: 11, content: 'Tác dụng của dây an toàn là gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 12, content: 'Khi xe phía trước phanh gấp, bạn nên làm gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 13, content: 'Biển cấm vượt có ý nghĩa gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 14, content: 'Khi vào vòng xuyến, bạn phải nhường đường cho ai?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 15, content: 'Nồng độ cồn cho phép khi lái xe là bao nhiêu?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
-    { id: 16, content: 'Biển báo chữ P có nghĩa là gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 17, content: 'Khi xe gặp sự cố giữa đường, cần làm gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 18, content: 'Khi đi ban đêm, cần bật đèn gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 19, content: 'Đường một chiều là gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 20, content: 'Biển báo nền vàng thường dùng trong trường hợp nào?', type: 'single', correctAnswer: 1, status: 1 },
+    { id: 16, content: 'Biển báo chữ P có nghĩa là gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 17, content: 'Khi xe gặp sự cố giữa đường, cần làm gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 18, content: 'Khi đi ban đêm, cần bật đèn gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 19, content: 'Đường một chiều là gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 20, content: 'Biển báo nền vàng thường dùng trong trường hợp nào?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
-    { id: 21, content: 'Khi gặp xe ưu tiên, bạn cần làm gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 22, content: 'Vạch kẻ đường màu vàng có ý nghĩa gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 23, content: 'Khi quay đầu xe, cần chú ý điều gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 24, content: 'Biển STOP có ý nghĩa gì?', type: 'single', correctAnswer: 1, status: 1 },
-    { id: 25, content: 'Khi điều khiển xe máy, có bắt buộc đội mũ bảo hiểm không?', type: 'single', correctAnswer: 1, status: 1 },
+    { id: 21, content: 'Khi gặp xe ưu tiên, bạn cần làm gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 22, content: 'Vạch kẻ đường màu vàng có ý nghĩa gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 23, content: 'Khi quay đầu xe, cần chú ý điều gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 24, content: 'Biển STOP có ý nghĩa gì?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 25, content: 'Khi điều khiển xe máy, có bắt buộc đội mũ bảo hiểm không?', type: 'single', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
-    { id: 26, content: 'Khi gặp tai nạn giao thông, bạn nên làm gì?', type: 'multiple', correctAnswer: 2, status: 1 },
-    { id: 27, content: 'Biển báo hình chữ nhật thường dùng để làm gì?', type: 'multiple', correctAnswer: 2, status: 1 },
-    { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'multiple', correctAnswer: 2, status: 1 },
-    { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'multiple', correctAnswer: 2, status: 1 },
-    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'multiple', correctAnswer: 3, status: 1 }
+    { id: 26, content: 'Khi gặp tai nạn giao thông, bạn nên làm gì?', type: 'multiple', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
+    { id: 27, content: 'Biển báo hình chữ nhật thường dùng để làm gì?', type: 'multiple', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
+    { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'multiple', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
+    { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'multiple', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
+    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'multiple', questionChapterId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 3, status: 1 }
 ];
 
 export const answers = [
@@ -277,8 +277,26 @@ export const rolePermissions = [
 ];
 
 export const users = [
-    { id: 1, roleId: 1, name: 'Duong', email: 'duong@example.com', status: 1 },
-    { id: 2, roleId: 2, name: 'Trieu', email: 'trieu@example.com', status: 1 },
-    { id: 3, roleId: 3, name: 'Sang', email: 'sang@example.com', status: 1 },
-    { id: 4, roleId: 3, name: 'Tin', email: 'tin@example.com', status: 1 },
+    { id: 1, roleId: 1, name: 'Duong', email: 'duong@example.com', type: 'Vip', status: 1 },
+    { id: 2, roleId: 2, name: 'Trieu', email: 'trieu@example.com', type: 'Regular', status: 1 },
+    { id: 3, roleId: 3, name: 'Sang', email: 'sang@example.com', type: 'Regular', status: 0 },
+    { id: 4, roleId: 3, name: 'Tin', email: 'tin@example.com', type: 'Vip', status: 1 },
+];
+
+export const questionChapters = [
+    { id: 1, name: 'Chapter 1', description: 'This is Chapter 1', status: 1 },
+    { id: 2, name: 'Chapter 2', description: 'This is Chapter 2', status: 1 },
+    { id: 3, name: 'Chapter 3', description: 'This is Chapter 3', status: 1 },
+];
+
+export const questionCategories = [
+    { id: 1, name: 'Category 1', description: 'This is Category 1', status: 1 },
+    { id: 2, name: 'Category 2', description: 'This is Category 2', status: 1 },
+    { id: 3, name: 'Category 3', description: 'This is Category 3', status: 1 },
+];
+
+export const questionDifficultyLevels = [
+    { id: 1, name: 'Hard', description: 'Hard difficulty level', status: 1 },
+    { id: 2, name: 'Average', description: 'Average difficulty level', status: 1 },
+    { id: 3, name: 'Low', description: 'Low difficulty level', status: 1 },
 ];

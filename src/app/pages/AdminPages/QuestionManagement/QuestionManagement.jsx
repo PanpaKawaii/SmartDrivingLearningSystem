@@ -1,39 +1,310 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { fetchData, putData } from '../../../../mocks/CallingAPI';
+import { permissions, questions, rolePermissions, roles, users, questionCategories, questionChapters, questionDifficultyLevels } from '../../../../mocks/DataSample';
+import { GlobalColor } from '../../../../mocks/GlobalVar';
+import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Cube from '../../../components/Cube/Cube';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
+import EditQuestionModal from './EditQuestionModal';
 
 import './QuestionManagement.css';
 
 export default function QuestionManagement() {
-    const [text, setText] = useState('');
-    const [select, setSelect] = useState('a');
+    const [USERs, setUSERs] = useState([]);
+    const [QUESTIONs, setQUESTIONs] = useState([]);
+    const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
+    const [QUESTIONCATEGORIes, setQUESTIONCATEGORIes] = useState([]);
+    const [QUESTIONDIFFICULTYLEVELs, setQUESTIONDIFFICULTYLEVELs] = useState([]);
+    const [refresh, setRefresh] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [errorFunction, setErrorFunction] = useState(null);
+    const [editing, setEditing] = useState(null);
+    const [creating, setCreating] = useState(false);
+    const [popupProps, setPopupProps] = useState(null);
+    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
+    useEffect(() => {
+        const fetchDataAPI = async () => {
+            setError(null);
+            setLoading(true);
+            const token = '';
+            try {
+                // const UserResponse = await fetchData('users', token);
+                // console.log('UserResponse', UserResponse);
+                // const RoleResponse = await fetchData('roles', token);
+                // console.log('RoleResponse', RoleResponse);
+
+                // const QuestionResponse = await fetchData('Questions', token);
+                // console.log('QuestionResponse', QuestionResponse);
+                // const QuestionChapterResponse = await fetchData('QuestionChapters', token);
+                // console.log('QuestionChapterResponse', QuestionChapterResponse);
+                // const QuestionCategoryResponse = await fetchData('QuestionCategories', token);
+                // console.log('QuestionCategoryResponse', QuestionCategoryResponse);
+                // const QuestionDifficultyLevelResponse = await fetchData('QuestionDifficultyLevels', token);
+                // console.log('QuestionDifficultyLevelResponse', QuestionDifficultyLevelResponse);
+
+                // const PermissionResponse = await fetchData('permissions', token);
+                // console.log('PermissionResponse', PermissionResponse);
+                // const RolePermissionResponse = await fetchData('role-permissions', token);
+                // console.log('RolePermissionResponse', RolePermissionResponse);
+
+                const UserResponse = users;
+                const RoleResponse = roles;
+
+                const QuestionResponse = questions;
+                const QuestionChapterResponse = questionChapters;
+                const QuestionCategoryResponse = questionCategories;
+                const QuestionDifficultyLevelResponse = questionDifficultyLevels;
+
+                const PermissionResponse = permissions;
+                const RolePermissionResponse = rolePermissions;
+
+                const Roles = RoleResponse.filter(r => r.status == 1).map(role => {
+                    const permissionIds = RolePermissionResponse.filter(rp => rp.roleId === role.id).map(rp => rp.permissionId);
+                    const permissions = PermissionResponse.filter(p => p.status == 1 && permissionIds.includes(p.id));
+                    return { ...role, permissions }
+                })
+                console.log('Roles', Roles);
+                const Users = UserResponse.map(user => ({
+                    ...user,
+                    role: Roles.find(r => r.id === user.roleId) || null
+                }));
+                console.log('Users', Users);
+                const Questions = QuestionResponse.map(question => ({
+                    ...question,
+                    user: Users.find(u => u.id === question.userId) || null,
+                    chapter: QuestionChapterResponse.find(c => c.id === question.questionChapterId) || null,
+                    category: QuestionCategoryResponse.find(c => c.id === question.questionCategoryId) || null,
+                    difficultyLevel: QuestionDifficultyLevelResponse.find(d => d.id === question.questionDifficultyLevelId) || null
+                }));
+                console.log('Questions', Questions);
+
+                setQUESTIONs(Questions);
+                setQUESTIONCHAPTERs(QuestionChapterResponse);
+                setQUESTIONCATEGORIes(QuestionCategoryResponse);
+                setQUESTIONDIFFICULTYLEVELs(QuestionDifficultyLevelResponse);
+            } catch (error) {
+                setError('Error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDataAPI();
+    }, [refresh]);
+
+    const openEditModal = (data) => { setEditing(data); };
+    const closeEditModal = () => { setEditing(null); };
+    const openCreateModal = () => { setCreating(true); };
+    const closeCreateModal = () => { setCreating(false); };
+
+    const inactiveQuestion = async (question) => {
+        const token = '';
+        const newQuestion = { ...question, status: question.status == 1 ? 0 : 1 };
+        try {
+            const QuestionResult = await putData(`questions/${newQuestion.id}`, newQuestion, token);
+            console.log('QuestionResult', QuestionResult);
+            setRefresh(p => p + 1);
+        } catch (error) {
+            setErrorFunction('Error');
+        }
+    };
+
+    const [searchQuestion, setSearchQuestion] = useState('');
+    const [select, setSelect] = useState('');
+    const questionsFilter = QUESTIONs.filter((question) => {
+        const questionContent = question.content?.toLowerCase();
+
+        const questionType = question.type?.toLowerCase();
+        const questionStatus = question.status;
+
+        const matchSearch = !searchQuestion
+            || questionContent?.includes(searchQuestion.toLowerCase())
+        const matchSelect = !select || questionType?.includes(select.toLowerCase()) || questionStatus == select;
+
+        return matchSearch && matchSelect;
+    });
+    console.log('questionsFilter', questionsFilter);
+    const handleClear = () => {
+        setSearchQuestion('');
+        setSelect('');
+    };
+
+    if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
+    if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
     return (
         <div className='admin-container'>
             <div className='inner-container management-container question-management-container'>
 
-                <MovingLabelInput
-                    type={'text'}
-                    value={text || ''}
-                    onValueChange={(propE) => setText(propE.value)}
-                    extraClassName={''}
-                    extraStyle={{}}
-                    label={'Name'}
-                    labelStyle={'left moving'}
-                />
+                <header className='main-header'>
+                    <h1>Question Management</h1>
+                    <button className='btn-primary' onClick={() => openCreateModal(true)}>
+                        <i className='fa-solid fa-plus' />
+                        Add more question
+                    </button>
+                </header>
 
-                <StyleLabelSelect
-                    id={`select`}
-                    list={[{ id: 'a', name: 'a' }, { id: 'b', name: 'b' }]}
-                    value={select}
-                    onValueChange={(propE) => {
-                        setSelect(propE);
-                    }}
-                    extraClassName={''}
-                    extraStyle={{}}
-                    label={'Select'}
-                    labelStyle={'center'}
-                />
+                <form className='controls'>
+                    <div className='count'>{questionsFilter?.length} results</div>
+                    <div className='search-bar'>
+                        <MovingLabelInput
+                            type={'text'}
+                            value={searchQuestion || ''}
+                            onValueChange={(propE) => setSearchQuestion(propE)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Name'}
+                            labelStyle={'left moving'}
+                        />
+                    </div>
+                    <div className='field'>
+                        <StyleLabelSelect
+                            id={`select`}
+                            list={QUESTIONCHAPTERs}
+                            value={select}
+                            onValueChange={(propE) => {
+                                setSelect(propE);
+                            }}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Select'}
+                            labelStyle={'left'}
+                        />
+                        <StyleLabelSelect
+                            id={`select`}
+                            list={QUESTIONCATEGORIes}
+                            value={select}
+                            onValueChange={(propE) => {
+                                setSelect(propE);
+                            }}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Select'}
+                            labelStyle={'left'}
+                        />
+                        <StyleLabelSelect
+                            id={`select`}
+                            list={QUESTIONDIFFICULTYLEVELs}
+                            value={select}
+                            onValueChange={(propE) => {
+                                setSelect(propE);
+                            }}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Select'}
+                            labelStyle={'left'}
+                        />
+                    </div>
+                    <button type='button' className='btn-secondary' onClick={handleClear}>
+                        CLEAR
+                    </button>
+                    <button type='button' className='btn-secondary' onClick={() => setRefresh(p => p + 1)}>
+                        Refresh
+                    </button>
+                </form>
+
+                <section className='admin-table-container'>
+                    <table className='admin-table'>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>QUESTION</th>
+                                <th>IMAGE</th>
+                                <th>DIFFICULTY</th>
+                                <th>TYPE</th>
+                                <th>CATEGORY</th>
+                                <th>CHAPTER</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {questionsFilter?.map((user, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td><div>{user.content}</div></td>
+                                    <td>
+                                        {user.image ? <img src={user.image} alt={user.content} style={{ width: 100, height: 100, objectFit: 'cover' }} /> : <div style={{ width: 100, height: 100, backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No Image</div>}
+                                    </td>
+                                    <td><span>{user.chapter?.name}</span></td>
+                                    <td><span>{user.category?.name}</span></td>
+                                    <td><span>{user.difficultyLevel?.name}</span></td>
+                                    <td><span>{user.type}</span></td>
+                                    <td>
+                                        <div className='action-buttons'>
+                                            <button onClick={() => openEditModal(user)}>
+                                                <span>Modify</span>
+                                                <i className='fa-solid fa-pencil' />
+                                            </button>
+                                            <button className={`btn-active ${user.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 1}>
+                                                <span>Active</span>
+                                                <i className='fa-solid fa-unlock' />
+                                            </button>
+                                            <button className={`btn-inactive ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
+                                                <span>Inactive</span>
+                                                <i className='fa-solid fa-lock' />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </section>
+
+                {editing && (
+                    <EditUserModal
+                        userprop={editing}
+                        onClose={closeEditModal}
+                        setRefresh={setRefresh}
+                        action={'edit'}
+                    />
+                )}
+
+                {creating && (
+                    <EditQuestionModal
+                        userprop={{
+                            point: 0,
+                            type: 'Regular',
+                            name: '',
+                            email: '',
+                            password: '123456',
+                            phone: '',
+                            image: '',
+                            role: 'User',
+                            description: '',
+                            status: 1,
+                        }}
+                        onClose={closeCreateModal}
+                        setRefresh={setRefresh}
+                        action={'create'}
+                    />
+                )}
+
+                {popupProps && (
+                    <ConfirmDialog
+                        title={'CONFIRMATION'}
+                        message={`Are you sure you want to ${popupProps.status == 1 ? 'inactive' : 'active'} this user?`}
+                        confirm={popupProps.status == 1 ? 'INACTIVE' : 'ACTIVE'}
+                        cancel={'CANCEL'}
+                        color={popupProps.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
+                        onConfirm={() => { inactiveUser(popupProps), setPopupProps(null) }}
+                        onCancel={() => setPopupProps(null)}
+                    />
+                )}
+
+                {errorFunction && (
+                    <ConfirmDialog
+                        title={'ERROR'}
+                        message={`An error has occurred!`}
+                        confirm={'OKAY'}
+                        cancel={''}
+                        color={GlobalColor.red + '80'}
+                        onConfirm={() => setErrorFunction(null)}
+                        onCancel={() => setErrorFunction(null)}
+                    />
+                )}
             </div>
         </div>
     )
