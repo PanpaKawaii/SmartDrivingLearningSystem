@@ -1,2 +1,9 @@
 .question-management-container {
+
+    .admin-table-container {
+
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
 }

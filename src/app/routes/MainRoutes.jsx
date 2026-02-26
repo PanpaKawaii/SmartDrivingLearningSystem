@@ -8,6 +8,7 @@ import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
 import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 import ListExam from '../pages/ExamTemp/ListExam.jsx'
 import Forum from '../pages/Forum/Forum.jsx'
+import Home from '../pages/Home/Home.jsx'
 import LearningQuestion from '../pages/LearningQuestion/LearningQuestion.jsx'
 import LearningSign from '../pages/LearningSign/LearningSign.jsx'
 import TrafficSignFlipBook from '../pages/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
@@ -26,7 +27,7 @@ export default function MainRoutes() {
             {/* <Header /> */}
             <Routes>
                 <Route path='/' element={<Header />} >
-                    <Route index element={<></>} />
+                    <Route index element={<Home/>} />
                     <Route path='core-learning' element={<CoreLearning />} />
                     <Route path='learning-question' element={<LearningQuestion />} />
                     <Route path='learning-sign' element={<LearningSign />} />

@@ -11,7 +11,6 @@ import EditQuestionModal from './EditQuestionModal';
 import './QuestionManagement.css';
 
 export default function QuestionManagement() {
-    const [USERs, setUSERs] = useState([]);
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [QUESTIONCATEGORIes, setQUESTIONCATEGORIes] = useState([]);
@@ -220,28 +219,28 @@ export default function QuestionManagement() {
                             </tr>
                         </thead>
                         <tbody>
-                            {questionsFilter?.map((user, index) => (
+                            {questionsFilter?.map((question, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td><div>{user.content}</div></td>
+                                    <td><div>{question.content}</div></td>
                                     <td>
-                                        {user.image ? <img src={user.image} alt={user.content} style={{ width: 100, height: 100, objectFit: 'cover' }} /> : <div style={{ width: 100, height: 100, backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No Image</div>}
+                                        {question.image ? <img src={question.image} alt={question.content} style={{ width: 100, height: 100, objectFit: 'cover' }} /> : <div style={{ width: 100, height: 100, backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No Image</div>}
                                     </td>
-                                    <td><span>{user.chapter?.name}</span></td>
-                                    <td><span>{user.category?.name}</span></td>
-                                    <td><span>{user.difficultyLevel?.name}</span></td>
-                                    <td><span>{user.type}</span></td>
+                                    <td><span>{question.chapter?.name}</span></td>
+                                    <td><span>{question.category?.name}</span></td>
+                                    <td><span>{question.difficultyLevel?.name}</span></td>
+                                    <td><span>{question.type}</span></td>
                                     <td>
                                         <div className='action-buttons'>
-                                            <button onClick={() => openEditModal(user)}>
+                                            <button onClick={() => openEditModal(question)}>
                                                 <span>Modify</span>
                                                 <i className='fa-solid fa-pencil' />
                                             </button>
-                                            <button className={`btn-active ${user.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 1}>
+                                            <button className={`btn-active ${question.status == 0 && 'abb'}`} onClick={() => setPopupProps(question)} disabled={question.status == 1}>
                                                 <span>Active</span>
                                                 <i className='fa-solid fa-unlock' />
                                             </button>
-                                            <button className={`btn-inactive ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
+                                            <button className={`btn-inactive ${question.status == 1 && 'abb'}`} onClick={() => setPopupProps(question)} disabled={question.status == 0}>
                                                 <span>Inactive</span>
                                                 <i className='fa-solid fa-lock' />
                                             </button>
@@ -254,8 +253,8 @@ export default function QuestionManagement() {
                 </section>
 
                 {editing && (
-                    <EditUserModal
-                        userprop={editing}
+                    <EditQuestionModal
+                        questionprop={editing}
                         onClose={closeEditModal}
                         setRefresh={setRefresh}
                         action={'edit'}
@@ -264,17 +263,7 @@ export default function QuestionManagement() {
 
                 {creating && (
                     <EditQuestionModal
-                        userprop={{
-                            point: 0,
-                            type: 'Regular',
-                            name: '',
-                            email: '',
-                            password: '123456',
-                            phone: '',
-                            image: '',
-                            role: 'User',
-                            description: '',
-                            status: 1,
+                        questionprop={{
                         }}
                         onClose={closeCreateModal}
                         setRefresh={setRefresh}
@@ -285,11 +274,11 @@ export default function QuestionManagement() {
                 {popupProps && (
                     <ConfirmDialog
                         title={'CONFIRMATION'}
-                        message={`Are you sure you want to ${popupProps.status == 1 ? 'inactive' : 'active'} this user?`}
+                        message={`Are you sure you want to ${popupProps.status == 1 ? 'inactive' : 'active'} this question?`}
                         confirm={popupProps.status == 1 ? 'INACTIVE' : 'ACTIVE'}
                         cancel={'CANCEL'}
                         color={popupProps.status == 1 ? GlobalColor.red + '80' : GlobalColor.green + '80'}
-                        onConfirm={() => { inactiveUser(popupProps), setPopupProps(null) }}
+                        onConfirm={() => { inactiveQuestion(popupProps), setPopupProps(null) }}
                         onCancel={() => setPopupProps(null)}
                     />
                 )}
