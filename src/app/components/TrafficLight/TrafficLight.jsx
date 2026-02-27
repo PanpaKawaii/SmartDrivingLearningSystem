@@ -41,10 +41,10 @@ export default function TrafficLight({
         };
     }, []);
 
-    const color = text == 'Error' ? GlobalColor.red : (text == 'Loading' ? GlobalColor.yellow : (text == 'Success' ? GlobalColor.green : ''));
+    const color = text == 'error' ? GlobalColor.red : (text == 'loading' ? GlobalColor.yellow : (text == 'success' ? GlobalColor.green : ''));
     return (
         <div className='traffic-light-container'>
-            <div className={`scene-traffic-light ${text.toLowerCase()}`}
+            <div className={`scene-traffic-light ${text}`}
                 ref={containerRef}>
                 <div className='traffic-light'
                     ref={objectRef}>
@@ -63,7 +63,7 @@ export default function TrafficLight({
                                     {[...Array(6)].map((_, k) => (
                                         <div
                                             key={k}
-                                            className={`light l${k + 1} ${k < 2 ? 'updown-light' : 'side-light'} ${color.color} ${text.toLowerCase() == color.color ? 'active' : 'inactive'}`}
+                                            className={`light l${k + 1} ${k < 2 ? 'updown-light' : 'side-light'} ${color.color} ${text == color.color ? 'active' : 'inactive'}`}
                                             style={{ '--i': i, '--j': 1 - j }}
                                         >
                                             {/* I{i + 1}-J{j + 1}-K{k + 1} */}

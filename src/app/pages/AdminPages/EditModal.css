@@ -136,6 +136,11 @@
                         box-shadow: inset 1.8px 1.8px 0px #1D2533;
                     }
                 }
+
+                textarea {
+                    resize: none;
+                    min-height: 120px;
+                }
             }
 
             .btn-box {

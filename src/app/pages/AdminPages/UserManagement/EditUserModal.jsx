@@ -83,10 +83,9 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
                     <div className='column'>
                         <div className='flex'>
                             <div className='input-group flex-1'>
-                                <select id='formType' name='type' onChange={handleChange}>
-                                    <option value={user.type}>{user.type}</option>
-                                    {user.type !== 'Regular' && <option value={'Regular'}>Regular</option>}
-                                    {user.type !== 'Vip' && <option value={'Vip'}>Vip</option>}
+                                <select id='formType' name='type' value={user.type || 'Regular'} onChange={handleChange}>
+                                    <option value={'Regular'}>Regular</option>
+                                    <option value={'Vip'}>Vip</option>
                                 </select>
                                 <label htmlFor='type'>Type</label>
                             </div>

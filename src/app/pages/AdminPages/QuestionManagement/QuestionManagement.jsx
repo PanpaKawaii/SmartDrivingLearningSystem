@@ -7,10 +7,14 @@ import Cube from '../../../components/Cube/Cube';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
 import EditQuestionModal from './EditQuestionModal';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 import './QuestionManagement.css';
 
 export default function QuestionManagement() {
+    const { user } = useAuth();
+
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [QUESTIONCATEGORIes, setQUESTIONCATEGORIes] = useState([]);
@@ -25,7 +29,7 @@ export default function QuestionManagement() {
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
-        const fetchDataAPI = async () => {
+        (async () => {
             setError(null);
             setLoading(true);
             const token = '';
@@ -89,9 +93,7 @@ export default function QuestionManagement() {
             } finally {
                 setLoading(false);
             }
-        };
-
-        fetchDataAPI();
+        })();
     }, [refresh]);
 
     const openEditModal = (data) => { setEditing(data); };
@@ -131,8 +133,8 @@ export default function QuestionManagement() {
         setSelect('');
     };
 
-    if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
-    if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
+    if (loading) return <div className='admin-container'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div className='admin-container'><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='admin-container'>
             <div className='inner-container management-container question-management-container'>
@@ -154,7 +156,7 @@ export default function QuestionManagement() {
                             onValueChange={(propE) => setSearchQuestion(propE)}
                             extraClassName={''}
                             extraStyle={{}}
-                            label={'Name'}
+                            label={'Content'}
                             labelStyle={'left moving'}
                         />
                     </div>
@@ -168,7 +170,7 @@ export default function QuestionManagement() {
                             }}
                             extraClassName={''}
                             extraStyle={{}}
-                            label={'Select'}
+                            label={'Chapter'}
                             labelStyle={'left'}
                         />
                         <StyleLabelSelect
@@ -180,7 +182,7 @@ export default function QuestionManagement() {
                             }}
                             extraClassName={''}
                             extraStyle={{}}
-                            label={'Select'}
+                            label={'Category'}
                             labelStyle={'left'}
                         />
                         <StyleLabelSelect
@@ -192,7 +194,7 @@ export default function QuestionManagement() {
                             }}
                             extraClassName={''}
                             extraStyle={{}}
-                            label={'Select'}
+                            label={'Difficulty'}
                             labelStyle={'left'}
                         />
                     </div>
@@ -211,10 +213,10 @@ export default function QuestionManagement() {
                                 <th>#</th>
                                 <th>QUESTION</th>
                                 <th>IMAGE</th>
+                                <th>CHAPTER</th>
+                                <th>CATEGORY</th>
                                 <th>DIFFICULTY</th>
                                 <th>TYPE</th>
-                                <th>CATEGORY</th>
-                                <th>CHAPTER</th>
                                 <th>ACTIONS</th>
                             </tr>
                         </thead>
@@ -258,16 +260,26 @@ export default function QuestionManagement() {
                         onClose={closeEditModal}
                         setRefresh={setRefresh}
                         action={'edit'}
+                        additionalData={{ questionChapters: QUESTIONCHAPTERs, questionCategories: QUESTIONCATEGORIes, questionDifficultyLevels: QUESTIONDIFFICULTYLEVELs }}
                     />
                 )}
 
                 {creating && (
                     <EditQuestionModal
                         questionprop={{
+                            userId: user?.id,
+                            questionChapterId: '',
+                            questionCategoryId: '',
+                            questionDifficultyLevelId: '',
+                            content: '',
+                            image: '',
+                            explanation: '',
+                            type: 'single',
                         }}
                         onClose={closeCreateModal}
                         setRefresh={setRefresh}
                         action={'create'}
+                        additionalData={{ questionChapters: QUESTIONCHAPTERs, questionCategories: QUESTIONCATEGORIes, questionDifficultyLevels: QUESTIONDIFFICULTYLEVELs }}
                     />
                 )}
 

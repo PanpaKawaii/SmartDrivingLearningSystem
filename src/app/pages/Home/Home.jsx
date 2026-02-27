@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 
 export default function Home() {
-    const [state, setState] = useState('Error');
+    const [state, setState] = useState('error');
 
     useEffect(() => {
         const interval = setInterval(() => {
             setState(prev => {
-                if (prev === 'Error') return 'Loading';
-                if (prev === 'Loading') return 'Success';
-                return 'Error';
+                if (prev === 'error') return 'loading';
+                if (prev === 'loading') return 'success';
+                return 'error';
             });
         }, 2000);
         return () => clearInterval(interval);

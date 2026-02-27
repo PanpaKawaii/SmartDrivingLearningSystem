@@ -7,10 +7,14 @@ import Cube from '../../../components/Cube/Cube';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
 import EditUserModal from './EditUserModal';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 import './UserManagement.css';
 
 export default function UserManagement() {
+    const { user } = useAuth();
+
     const [USERs, setUSERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -22,7 +26,7 @@ export default function UserManagement() {
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
-        const fetchDataAPI = async () => {
+        (async () => {
             setError(null);
             setLoading(true);
             const token = '';
@@ -59,9 +63,7 @@ export default function UserManagement() {
             } finally {
                 setLoading(false);
             }
-        };
-
-        fetchDataAPI();
+        })();
     }, [refresh]);
 
     const openEditModal = (data) => { setEditing(data); };
@@ -110,8 +112,10 @@ export default function UserManagement() {
     console.log('selectType', selectType);
     console.log('selectStatus', selectStatus);
 
-    if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
-    if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
+    // if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
+    // if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
+    if (loading) return <div className='admin-container'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div className='admin-container'><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='admin-container'>
             {/* {JSON.stringify(usersFilter?.[0], null, 0)} */}
@@ -246,16 +250,17 @@ export default function UserManagement() {
                 {creating && (
                     <EditUserModal
                         userprop={{
-                            point: 0,
-                            type: 'Regular',
-                            name: '',
+                            roleId: '',
                             email: '',
                             password: '123456',
+                            name: '',
+                            avatar: '',
                             phone: '',
-                            image: '',
-                            role: 'User',
+                            gender: '',
+                            type: 'Regular',
                             description: '',
-                            status: 1,
+                            dateOfBirth: '',
+                            licenseType: '',
                         }}
                         onClose={closeCreateModal}
                         setRefresh={setRefresh}
