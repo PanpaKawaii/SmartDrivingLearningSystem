@@ -60,7 +60,7 @@ export default function TrafficLight({
                         [{ color: 'error' }, { color: 'loading' }, { color: 'success' }].map((color, j) => {
                             return (
                                 <React.Fragment key={j}>
-                                    {[...Array(3)].map((_, k) => (
+                                    {[...Array(6)].map((_, k) => (
                                         <div
                                             key={k}
                                             className={`light l${k + 1} ${k < 2 ? 'updown-light' : 'side-light'} ${color.color} ${text.toLowerCase() == color.color ? 'active' : 'inactive'}`}

@@ -39,14 +39,12 @@
             align-items: center;
             transform-style: preserve-3d;
             transition: all 0.1s ease;
-            /* animation: traffic-light-rotate 10s linear infinite; */
+            animation: traffic-light-rotate 10s linear infinite;
 
             --LightWidth: 80px;
-            --LightWidth: 120px;
             --LightHeight: 20px;
-
-            --SpaceVertical: 30px;
-            --SpaceHorizontal: 10px;
+            --SpaceVertical: 40px;
+            --SpaceHorizontal: 30px;
 
             .face {
                 position: absolute;
@@ -54,8 +52,6 @@
                 background: var(--gray-3);
                 border: 1px solid var(--gray-2);
                 transition: all 1s ease;
-
-                opacity: 0.6;
 
                 display: flex;
                 justify-content: center;
@@ -99,9 +95,6 @@
                 }
             }
 
-            --Distance_1: 60px;
-            --Distance_2: 80px;
-
             .light {
                 position: absolute;
                 box-sizing: border-box;
@@ -138,15 +131,15 @@
                 }
 
                 &.l4 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(180deg) translateY(70px) translateZ(40px);
+                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(180deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.l5 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(90deg) translateY(70px) translateZ(40px);
+                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(90deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.l6 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(-90deg) translateY(70px) translateZ(40px);
+                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(-90deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.active {
