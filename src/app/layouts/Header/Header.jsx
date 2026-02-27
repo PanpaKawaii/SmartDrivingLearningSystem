@@ -21,6 +21,7 @@ export default function Header() {
         { name: 'GROUND', icon: 'icon', path: '/three-scene' },
         { name: 'CAR', icon: 'car', path: '/car' },
         { name: 'SIGN', icon: 'sign', path: '/traffic-sign-flip-book' },
+        { name: 'ADMIN', icon: 'user', path: '/admin' },
     ];
 
     // useEffect(() => {
