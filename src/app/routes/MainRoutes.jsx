@@ -20,14 +20,15 @@ import AdminSideBar from '../pages/AdminPages/AdminSideBar/AdminSideBar.jsx'
 import QuestionManagement from '../pages/AdminPages/QuestionManagement/QuestionManagement.jsx'
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
 
+import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
+
 export default function MainRoutes() {
     return (
         <BrowserRouter>
             <ScrollToTop />
-            {/* <Header /> */}
             <Routes>
                 <Route path='/' element={<Header />} >
-                    <Route index element={<Home/>} />
+                    <Route index element={<StarsBackground />} />
                     <Route path='core-learning' element={<CoreLearning />} />
                     <Route path='learning-question' element={<LearningQuestion />} />
                     <Route path='learning-sign' element={<LearningSign />} />
@@ -49,7 +50,6 @@ export default function MainRoutes() {
 
                 <Route path='*' element={<></>} />
             </Routes>
-            <></>
         </BrowserRouter>
     )
 }
