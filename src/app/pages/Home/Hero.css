@@ -61,12 +61,16 @@
                 flex-wrap: wrap;
 
                 button {
-                    padding: 1.2rem 3rem;
+                    padding: 1.2rem 2rem;
                     border-radius: 1rem;
                     font-weight: bold;
                     font-size: 1.1rem;
                     cursor: pointer;
                     transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    color: white;
                 }
 
                 .primary-btn {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import RunningCar from '../../components/RunningCar/RunningCar';
 import Hero from './Hero';
+import Platform from './Platform';
 
 export default function Home() {
     const [state, setState] = useState('error');
@@ -88,7 +88,10 @@ export default function Home() {
     return (
         <div className='home-container'>
             {/* <TrafficLight text={state} /> */}
-            <Hero stats={stats} features={features} testimonials={testimonials} />
+
+            <StarsBackground />
+            <Hero stats={stats} />
+            <Platform features={features} testimonials={testimonials} />
         </div>
     )
 }

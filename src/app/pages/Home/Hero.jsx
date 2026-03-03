@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import RunningCar from '../../components/RunningCar/RunningCar';
 
 import './Hero.css';
@@ -9,10 +8,7 @@ export default function Hero({
 }) {
     return (
         <div className='hero-container'>
-
-            <StarsBackground />
             <RunningCar />
-
             <section className='container'>
                 <div className='car-wrapper'>
                     <div className='car-3d'>
