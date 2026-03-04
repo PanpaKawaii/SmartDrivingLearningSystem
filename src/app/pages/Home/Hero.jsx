@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import RunningCar from '../../components/RunningCar/RunningCar';
+import DecorationWrapper from './DecorationWrapper/DecorationWrapper';
 
 import './Hero.css';
 
@@ -14,39 +15,7 @@ export default function Hero() {
         <div className='hero-container'>
             <RunningCar />
             <section className='container'>
-                <div className='car-wrapper'>
-                    <div className='car-3d'>
-                        <div className='car-body'>
-                            <div className='car-roof'></div>
-                            <div className='car-windshield'></div>
-                            <div className='car-wheel car-wheel-left'></div>
-                            <div className='car-wheel car-wheel-right'></div>
-                            <div className='car-headlight car-headlight-left'></div>
-                            <div className='car-headlight car-headlight-right'></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className='traffic-wrapper'>
-                    <div className='traffic-light-3d'>
-                        <div className='traffic-light-pole'></div>
-                        <div className='traffic-light-box'>
-                            <div className='traffic-light-red'></div>
-                            <div className='traffic-light-yellow'></div>
-                            <div className='traffic-light-green'></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className='sign-wrapper'>
-                    <div className='road-sign-3d'>
-                        <div className='road-sign-pole'></div>
-                        <div className='road-sign-board'>
-                            <i className='fa-solid fa-exclamation-triangle' />
-                        </div>
-                    </div>
-                </div>
-
+                <DecorationWrapper />
                 <div className='content'>
                     <div className='badge'>
                         <i className='fa-solid fa-zap' />
