@@ -99,9 +99,12 @@
                 background: rgba(15, 23, 42, 0.8);
                 border: 1px solid rgba(71, 85, 105, 0.5);
                 transition: all 0.3s ease;
+                box-sizing: border-box;
+                box-shadow: 0 0 15px #60A5FA33;
 
                 &:hover {
                     border-color: rgba(59, 130, 246, 0.4);
+                    box-shadow: 0 0 15px #60A5FA80;
                     transform: translateY(-6px);
                 }
 
@@ -114,12 +117,11 @@
                     justify-content: center;
                     margin-bottom: 2rem;
                     transition: 0.4s ease;
-                }
 
-                .icon {
-                    width: 40px;
-                    height: 40px;
-                    color: white;
+                    i {
+                        font-size: 2rem;
+                        color: white;
+                    }
                 }
 
                 .feature-title {
@@ -133,6 +135,7 @@
                     font-size: 1.05rem;
                     color: #94a3b8;
                     line-height: 1.7;
+                    margin: 0;
                 }
             }
         }
