@@ -1,11 +1,11 @@
 --USE MASTER
 
---DROP DATABASE GreenLight
+--DROP DATABASE GREENLIGHT
 
 
---CREATE DATABASE GreenLight
+--CREATE DATABASE GREENLIGHT
 
---USE GreenLight
+--USE GREENLIGHT
 
 IF OBJECT_ID('dbo.[UserNotification]', 'U') IS NOT NULL
     DROP TABLE dbo.[UserNotification];
@@ -31,8 +31,17 @@ IF OBJECT_ID('dbo.[TrafficSign]', 'U') IS NOT NULL
 IF OBJECT_ID('dbo.[SignCategory]', 'U') IS NOT NULL
     DROP TABLE dbo.[SignCategory];
     GO
+IF OBJECT_ID('dbo.[CommentVote]', 'U') IS NOT NULL
+    DROP TABLE dbo.[CommentVote];
+    GO
 IF OBJECT_ID('dbo.[ForumComment]', 'U') IS NOT NULL
     DROP TABLE dbo.[ForumComment];
+    GO
+IF OBJECT_ID('dbo.[PostReact]', 'U') IS NOT NULL
+    DROP TABLE dbo.[PostReact];
+    GO
+IF OBJECT_ID('dbo.[PostImage]', 'U') IS NOT NULL
+    DROP TABLE dbo.[PostImage];
     GO
 IF OBJECT_ID('dbo.[ForumPost]', 'U') IS NOT NULL
     DROP TABLE dbo.[ForumPost];
@@ -70,12 +79,6 @@ IF OBJECT_ID('dbo.[Tag]', 'U') IS NOT NULL
 IF OBJECT_ID('dbo.[Question]', 'U') IS NOT NULL
     DROP TABLE dbo.[Question];
     GO
-IF OBJECT_ID('dbo.[QuestionDifficultyLevel]', 'U') IS NOT NULL
-    DROP TABLE dbo.[QuestionDifficultyLevel];
-    GO
-IF OBJECT_ID('dbo.[QuestionCategory]', 'U') IS NOT NULL
-    DROP TABLE dbo.[QuestionCategory];
-    GO
 IF OBJECT_ID('dbo.[QuestionChapter]', 'U') IS NOT NULL
     DROP TABLE dbo.[QuestionChapter];
     GO
@@ -100,12 +103,6 @@ IF OBJECT_ID('dbo.[Payment]', 'U') IS NOT NULL
 IF OBJECT_ID('dbo.[User]', 'U') IS NOT NULL
     DROP TABLE dbo.[User];
     GO
-IF OBJECT_ID('dbo.[RolePermission]', 'U') IS NOT NULL
-    DROP TABLE dbo.[RolePermission];
-    GO
-IF OBJECT_ID('dbo.[Permission]', 'U') IS NOT NULL
-    DROP TABLE dbo.[Permission];
-    GO
 IF OBJECT_ID('dbo.[Role]', 'U') IS NOT NULL
     DROP TABLE dbo.[Role];
     GO
@@ -125,34 +122,11 @@ CREATE TABLE [Role] (
     status      INT DEFAULT 1,
 );
 
--- 2.Permission OK
---CREATE TABLE [Permission] (
---    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
---    name        NVARCHAR(255) NOT NULL UNIQUE,
---    description NVARCHAR(255),
---    createAt    DATETIME2 DEFAULT GETDATE(),
---    updateAt    DATETIME2 DEFAULT GETDATE(),
---    status      INT DEFAULT 1,
---);
-
--- 3.RolePermission OF
---CREATE TABLE [RolePermission] (
---    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
---    roleId          UNIQUEIDENTIFIER NOT NULL,
---    permissionId    UNIQUEIDENTIFIER NOT NULL,
---    createAt    DATETIME2 DEFAULT GETDATE(),
---    updateAt    DATETIME2 DEFAULT GETDATE(),
---    status      INT DEFAULT 1,
---    FOREIGN KEY (roleId) REFERENCES [Role](id) ON DELETE CASCADE,
---    FOREIGN KEY (permissionId) REFERENCES [Permission](id) ON DELETE CASCADE,
---    UNIQUE (roleId, permissionId),
---);
-
 -- =====================================================
 -- USER MODULE
 -- =====================================================
 
--- 4.User AF
+-- 2.User AF
 CREATE TABLE [User] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     roleId      UNIQUEIDENTIFIER NOT NULL,
@@ -162,7 +136,6 @@ CREATE TABLE [User] ( -- Done
     avatar      NVARCHAR(255),
     phone       NVARCHAR(20),
     gender      NVARCHAR(20),
-    type        NVARCHAR(20),
     description NVARCHAR(255),
     dateOfBirth DATE,
     licenseType NVARCHAR(20),
@@ -172,7 +145,7 @@ CREATE TABLE [User] ( -- Done
     FOREIGN KEY (roleId) REFERENCES [Role](id),
 );
 
--- 5.Payment AF
+-- 3.Payment AF
 CREATE TABLE [Payment] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     userId      UNIQUEIDENTIFIER NOT NULL,
@@ -190,7 +163,7 @@ CREATE TABLE [Payment] ( -- Done
 -- SIMULATION MODULE
 -- =====================================================
 
--- 6.SimulationChapter OK
+-- 4.SimulationChapter OK
 CREATE TABLE [SimulationChapter] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -200,7 +173,7 @@ CREATE TABLE [SimulationChapter] (
     status      INT DEFAULT 1,
 );
 
--- 7.SimulationCategory OK
+-- 5.SimulationCategory OK
 CREATE TABLE [SimulationCategory] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -210,7 +183,7 @@ CREATE TABLE [SimulationCategory] (
     status      INT DEFAULT 1,
 );
 
--- 8.SimulationDifficultyLevel OK
+-- 6.SimulationDifficultyLevel OK
 CREATE TABLE [SimulationDifficultyLevel] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -220,7 +193,7 @@ CREATE TABLE [SimulationDifficultyLevel] (
     status      INT DEFAULT 1,
 );
 
--- 9.SimulationScenario AF
+-- 7.SimulationScenario AF
 CREATE TABLE [SimulationScenario] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     simulationChapterId             UNIQUEIDENTIFIER NOT NULL,
@@ -229,6 +202,11 @@ CREATE TABLE [SimulationScenario] ( -- Done
     name        NVARCHAR(255) NOT NULL UNIQUE,
     description NVARCHAR(255),
     video       NVARCHAR(255),
+    hint        NVARCHAR(255),
+    baseScore   INT NOT NULL,
+    totalTime   INT NOT NULL,
+    startPoint  INT NOT NULL,
+    endPoint    INT NOT NULL,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
@@ -237,7 +215,7 @@ CREATE TABLE [SimulationScenario] ( -- Done
     FOREIGN KEY (simulationDifficultyLevelId) REFERENCES [SimulationDifficultyLevel](id),
 );
 
--- 10.SimulationSession AF
+-- 8.SimulationSession AF
 CREATE TABLE [SimulationSession] ( -- Done
     id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     simulationId    UNIQUEIDENTIFIER NOT NULL,
@@ -256,7 +234,7 @@ CREATE TABLE [SimulationSession] ( -- Done
 -- QUESTION MODULE
 -- =====================================================
 
--- 11.QuestionChapter OK
+-- 9.QuestionChapter OK
 CREATE TABLE [QuestionChapter] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -266,32 +244,12 @@ CREATE TABLE [QuestionChapter] (
     status      INT DEFAULT 1,
 );
 
--- 12.QuestionCategory OK
---CREATE TABLE [QuestionCategory] (
---    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
---    name        NVARCHAR(255) NOT NULL UNIQUE,
---    description NVARCHAR(255),
---    createAt    DATETIME2 DEFAULT GETDATE(),
---    updateAt    DATETIME2 DEFAULT GETDATE(),
---    status      INT DEFAULT 1,
---);
-
--- 13.QuestionDifficultyLevel OK
---CREATE TABLE [QuestionDifficultyLevel] (
---    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
---    name        NVARCHAR(255) NOT NULL UNIQUE,
---    description NVARCHAR(255),
---    createAt    DATETIME2 DEFAULT GETDATE(),
---    updateAt    DATETIME2 DEFAULT GETDATE(),
---    status      INT DEFAULT 1,
---);
-
--- 14.Question AF
+-- 10.Question AF
 CREATE TABLE [Question] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    questionChapterId             UNIQUEIDENTIFIER NOT NULL,
-    questionCategoryId            UNIQUEIDENTIFIER NOT NULL,
-    questionDifficultyLevelId     UNIQUEIDENTIFIER NOT NULL,
+    questionChapterId   UNIQUEIDENTIFIER NOT NULL,
+    userId              UNIQUEIDENTIFIER NOT NULL,
+    parentId            UNIQUEIDENTIFIER NULL,
     content     NVARCHAR(255) NOT NULL,
     image       NVARCHAR(255),
     explanation NVARCHAR(255),
@@ -300,11 +258,11 @@ CREATE TABLE [Question] ( -- Done
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
     FOREIGN KEY (questionChapterId) REFERENCES [QuestionChapter](id),
-    FOREIGN KEY (questionCategoryId) REFERENCES [QuestionCategory](id),
-    FOREIGN KEY (questionDifficultyLevelId) REFERENCES [QuestionDifficultyLevel](id),
+    FOREIGN KEY (userId) REFERENCES [User](id),
+    FOREIGN KEY (parentId) REFERENCES [Question](id),
 );
 
--- 15.Tag OK
+-- 11.Tag OK
 CREATE TABLE [Tag] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -315,7 +273,7 @@ CREATE TABLE [Tag] (
     colorCode   NVARCHAR(255) NOT NULL UNIQUE,
 );
 
--- 16.QuestionTag OF
+-- 12.QuestionTag OF
 CREATE TABLE [QuestionTag] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -328,7 +286,7 @@ CREATE TABLE [QuestionTag] (
     UNIQUE (questionId, tagId),
 );
 
--- 17.SavedQuestion OF
+-- 13.SavedQuestion OF
 CREATE TABLE [SavedQuestion] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -341,7 +299,7 @@ CREATE TABLE [SavedQuestion] (
     UNIQUE (questionId, userId),
 );
 
--- 18.LearningProgress OF
+-- 14.LearningProgress OF
 CREATE TABLE [LearningProgress] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -354,7 +312,7 @@ CREATE TABLE [LearningProgress] (
     UNIQUE (questionId, userId),
 );
 
--- 19.Answer AF
+-- 15.Answer AF
 CREATE TABLE [Answer] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -370,7 +328,7 @@ CREATE TABLE [Answer] ( -- Done
 -- EXAM MODULE
 -- =====================================================
 
--- 20.Exam AF
+-- 16.Exam AF
 CREATE TABLE [Exam] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     userId      UNIQUEIDENTIFIER NOT NULL,
@@ -385,7 +343,7 @@ CREATE TABLE [Exam] ( -- Done
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 21.ExamQuestion OF
+-- 17.ExamQuestion OF
 CREATE TABLE [ExamQuestion] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -398,7 +356,7 @@ CREATE TABLE [ExamQuestion] (
     UNIQUE (questionId, examId),
 );
 
--- 22.ExamSession AF
+-- 18.ExamSession AF
 CREATE TABLE [ExamSession] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     examId      UNIQUEIDENTIFIER NOT NULL,
@@ -412,7 +370,7 @@ CREATE TABLE [ExamSession] ( -- Done
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 23.ExamDetail OF
+-- 19.ExamDetail OF
 CREATE TABLE [ExamDetail] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     answerId        UNIQUEIDENTIFIER NOT NULL,
@@ -429,7 +387,7 @@ CREATE TABLE [ExamDetail] (
 -- FORUM MODULE
 -- =====================================================
 
--- 24.ForumTopic OK
+-- 20.ForumTopic OK
 CREATE TABLE [ForumTopic] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -439,7 +397,7 @@ CREATE TABLE [ForumTopic] (
     status      INT DEFAULT 1,
 );
 
--- 25.ForumPost AF
+-- 21.ForumPost AF
 CREATE TABLE [ForumPost] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     forumTopicId    UNIQUEIDENTIFIER NOT NULL,
@@ -455,7 +413,33 @@ CREATE TABLE [ForumPost] ( -- Done
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 26.ForumComment AF
+-- 22.PostImage AF
+CREATE TABLE [PostImage] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    forumPostId UNIQUEIDENTIFIER NOT NULL,
+    name        NVARCHAR(255),
+    url         NVARCHAR(255),
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+    FOREIGN KEY (forumPostId) REFERENCES [ForumPost](id),
+);
+
+-- 23.PostReact AF
+CREATE TABLE [PostReact] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    forumPostId UNIQUEIDENTIFIER NOT NULL,
+    userId      UNIQUEIDENTIFIER NOT NULL,
+    reactType   NVARCHAR(20) NOT NULL,
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+    FOREIGN KEY (forumPostId) REFERENCES [ForumPost](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    UNIQUE (forumPostId, userId),
+);
+
+-- 24.ForumComment AF
 CREATE TABLE [ForumComment] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     replyId     UNIQUEIDENTIFIER NULL,
@@ -470,11 +454,24 @@ CREATE TABLE [ForumComment] ( -- Done
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
+-- 25.CommentVote OF
+CREATE TABLE [CommentVote] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    commentId   UNIQUEIDENTIFIER NOT NULL,
+    userId      UNIQUEIDENTIFIER NOT NULL,
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+    FOREIGN KEY (commentId) REFERENCES [ForumComment](id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES [User](id) ON DELETE CASCADE,
+    UNIQUE (commentId, userId),
+);
+
 -- =====================================================
 -- TRAFFIC SIGN MODULE
 -- =====================================================
 
--- 27.SignCategory OK
+-- 26.SignCategory OK
 CREATE TABLE [SignCategory] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -484,7 +481,7 @@ CREATE TABLE [SignCategory] (
     status      INT DEFAULT 1,
 );
 
--- 28.TrafficSign AF
+-- 27.TrafficSign AF
 CREATE TABLE [TrafficSign] ( -- Done
     id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     signCategoryId  UNIQUEIDENTIFIER NOT NULL,
@@ -499,7 +496,7 @@ CREATE TABLE [TrafficSign] ( -- Done
     FOREIGN KEY (signCategoryId) REFERENCES [SignCategory](id),
 );
 
--- 29.SavedTrafficSign OF
+-- 28.SavedTrafficSign OF
 CREATE TABLE [SavedTrafficSign] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     trafficSignId   UNIQUEIDENTIFIER NOT NULL,
@@ -516,7 +513,7 @@ CREATE TABLE [SavedTrafficSign] (
 -- REPORT MODULE
 -- =====================================================
 
--- 30.ReportCategory OK
+-- 29.ReportCategory OK
 CREATE TABLE [ReportCategory] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -526,7 +523,7 @@ CREATE TABLE [ReportCategory] (
     status      INT DEFAULT 1,
 );
 
--- 31.Report AF
+-- 30.Report AF
 CREATE TABLE [Report] ( -- Done
     id                  UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId          UNIQUEIDENTIFIER NULL,
@@ -547,7 +544,7 @@ CREATE TABLE [Report] ( -- Done
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 32.Resolve AF
+-- 31.Resolve AF
 CREATE TABLE [Resolve] ( -- Done
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     reportId    UNIQUEIDENTIFIER NOT NULL,
@@ -563,7 +560,7 @@ CREATE TABLE [Resolve] ( -- Done
 -- NOTIFICATION MODULE
 -- =====================================================
 
--- 33.Notification OK
+-- 32.Notification OK
 CREATE TABLE [Notification] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     title       NVARCHAR(255) NOT NULL,
@@ -574,7 +571,7 @@ CREATE TABLE [Notification] (
     status      INT DEFAULT 1,
 );
 
--- 34.UserNotification OF
+-- 33.UserNotification OF
 CREATE TABLE [UserNotification] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     notificationId  UNIQUEIDENTIFIER NOT NULL,
