@@ -126,27 +126,27 @@ CREATE TABLE [Role] (
 );
 
 -- 2.Permission OK
-CREATE TABLE [Permission] (
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    name        NVARCHAR(255) NOT NULL UNIQUE,
-    description NVARCHAR(255),
-    createAt    DATETIME2 DEFAULT GETDATE(),
-    updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1,
-);
+--CREATE TABLE [Permission] (
+--    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+--    name        NVARCHAR(255) NOT NULL UNIQUE,
+--    description NVARCHAR(255),
+--    createAt    DATETIME2 DEFAULT GETDATE(),
+--    updateAt    DATETIME2 DEFAULT GETDATE(),
+--    status      INT DEFAULT 1,
+--);
 
 -- 3.RolePermission OF
-CREATE TABLE [RolePermission] (
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    roleId          UNIQUEIDENTIFIER NOT NULL,
-    permissionId    UNIQUEIDENTIFIER NOT NULL,
-    createAt    DATETIME2 DEFAULT GETDATE(),
-    updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1,
-    FOREIGN KEY (roleId) REFERENCES [Role](id) ON DELETE CASCADE,
-    FOREIGN KEY (permissionId) REFERENCES [Permission](id) ON DELETE CASCADE,
-    UNIQUE (roleId, permissionId),
-);
+--CREATE TABLE [RolePermission] (
+--    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+--    roleId          UNIQUEIDENTIFIER NOT NULL,
+--    permissionId    UNIQUEIDENTIFIER NOT NULL,
+--    createAt    DATETIME2 DEFAULT GETDATE(),
+--    updateAt    DATETIME2 DEFAULT GETDATE(),
+--    status      INT DEFAULT 1,
+--    FOREIGN KEY (roleId) REFERENCES [Role](id) ON DELETE CASCADE,
+--    FOREIGN KEY (permissionId) REFERENCES [Permission](id) ON DELETE CASCADE,
+--    UNIQUE (roleId, permissionId),
+--);
 
 -- =====================================================
 -- USER MODULE
@@ -267,24 +267,24 @@ CREATE TABLE [QuestionChapter] (
 );
 
 -- 12.QuestionCategory OK
-CREATE TABLE [QuestionCategory] (
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    name        NVARCHAR(255) NOT NULL UNIQUE,
-    description NVARCHAR(255),
-    createAt    DATETIME2 DEFAULT GETDATE(),
-    updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1,
-);
+--CREATE TABLE [QuestionCategory] (
+--    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+--    name        NVARCHAR(255) NOT NULL UNIQUE,
+--    description NVARCHAR(255),
+--    createAt    DATETIME2 DEFAULT GETDATE(),
+--    updateAt    DATETIME2 DEFAULT GETDATE(),
+--    status      INT DEFAULT 1,
+--);
 
 -- 13.QuestionDifficultyLevel OK
-CREATE TABLE [QuestionDifficultyLevel] (
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    name        NVARCHAR(255) NOT NULL UNIQUE,
-    description NVARCHAR(255),
-    createAt    DATETIME2 DEFAULT GETDATE(),
-    updateAt    DATETIME2 DEFAULT GETDATE(),
-    status      INT DEFAULT 1,
-);
+--CREATE TABLE [QuestionDifficultyLevel] (
+--    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+--    name        NVARCHAR(255) NOT NULL UNIQUE,
+--    description NVARCHAR(255),
+--    createAt    DATETIME2 DEFAULT GETDATE(),
+--    updateAt    DATETIME2 DEFAULT GETDATE(),
+--    status      INT DEFAULT 1,
+--);
 
 -- 14.Question AF
 CREATE TABLE [Question] ( -- Done
