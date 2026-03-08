@@ -82,6 +82,15 @@ IF OBJECT_ID('dbo.[Tag]', 'U') IS NOT NULL
 IF OBJECT_ID('dbo.[Question]', 'U') IS NOT NULL
     DROP TABLE dbo.[Question];
     GO
+IF OBJECT_ID('dbo.[QuestionCategory]', 'U') IS NOT NULL
+    DROP TABLE dbo.[QuestionCategory];
+    GO
+IF OBJECT_ID('dbo.[QuestionTopic]', 'U') IS NOT NULL
+    DROP TABLE dbo.[QuestionTopic];
+    GO
+IF OBJECT_ID('dbo.[Vehicle]', 'U') IS NOT NULL
+    DROP TABLE dbo.[Vehicle];
+    GO
 IF OBJECT_ID('dbo.[QuestionLesson]', 'U') IS NOT NULL
     DROP TABLE dbo.[QuestionLesson];
     GO
@@ -277,7 +286,7 @@ CREATE TABLE [QuestionLesson] (
     FOREIGN KEY (questionChapterId) REFERENCES [QuestionChapter](id),
 );
 
--- 31.Vehicle OK
+-- 12.Vehicle OK
 CREATE TABLE [Vehicle] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -287,7 +296,7 @@ CREATE TABLE [Vehicle] (
     status      INT DEFAULT 1,
 );
 
--- 31.QuestionTopic OK
+-- 13.QuestionTopic OK
 CREATE TABLE [QuestionTopic] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -297,7 +306,7 @@ CREATE TABLE [QuestionTopic] (
     status      INT DEFAULT 1,
 );
 
--- 31.QuestionCategory OK
+-- 14.QuestionCategory OK
 CREATE TABLE [QuestionCategory] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -307,7 +316,7 @@ CREATE TABLE [QuestionCategory] (
     status      INT DEFAULT 1,
 );
 
--- 12.Question AF
+-- 15.Question AF
 CREATE TABLE [Question] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionLessonId    UNIQUEIDENTIFIER NOT NULL,
@@ -329,7 +338,7 @@ CREATE TABLE [Question] (
     FOREIGN KEY (parentId) REFERENCES [Question](id),
 );
 
--- 13.Tag OK
+-- 16.Tag OK
 CREATE TABLE [Tag] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -340,7 +349,7 @@ CREATE TABLE [Tag] (
     colorCode   NVARCHAR(255) NOT NULL UNIQUE,
 );
 
--- 14.QuestionTag OF
+-- 17.QuestionTag OF
 CREATE TABLE [QuestionTag] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -353,7 +362,7 @@ CREATE TABLE [QuestionTag] (
     UNIQUE (questionId, tagId),
 );
 
--- 15.SavedQuestion OF
+-- 18.SavedQuestion OF
 CREATE TABLE [SavedQuestion] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -366,7 +375,7 @@ CREATE TABLE [SavedQuestion] (
     UNIQUE (questionId, userId),
 );
 
--- 16.LearningProgress OF
+-- 19.LearningProgress OF
 CREATE TABLE [LearningProgress] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -379,7 +388,7 @@ CREATE TABLE [LearningProgress] (
     UNIQUE (questionId, userId),
 );
 
--- 17.Answer AF
+-- 20.Answer AF
 CREATE TABLE [Answer] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -395,7 +404,7 @@ CREATE TABLE [Answer] (
 -- EXAM MODULE
 -- =====================================================
 
--- 18.Exam AF
+-- 21.Exam AF
 CREATE TABLE [Exam] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     userId      UNIQUEIDENTIFIER NOT NULL,
@@ -410,7 +419,7 @@ CREATE TABLE [Exam] (
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 19.ExamQuestion OF
+-- 22.ExamQuestion OF
 CREATE TABLE [ExamQuestion] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     questionId  UNIQUEIDENTIFIER NOT NULL,
@@ -423,7 +432,7 @@ CREATE TABLE [ExamQuestion] (
     UNIQUE (questionId, examId),
 );
 
--- 20.ExamSession AF
+-- 23.ExamSession AF
 CREATE TABLE [ExamSession] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     examId      UNIQUEIDENTIFIER NOT NULL,
@@ -437,7 +446,7 @@ CREATE TABLE [ExamSession] (
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 21.ExamDetail OF
+-- 24.ExamDetail OF
 CREATE TABLE [ExamDetail] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     answerId        UNIQUEIDENTIFIER NOT NULL,
@@ -454,7 +463,7 @@ CREATE TABLE [ExamDetail] (
 -- FORUM MODULE
 -- =====================================================
 
--- 22.ForumTopic OK
+-- 25.ForumTopic OK
 CREATE TABLE [ForumTopic] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -464,7 +473,7 @@ CREATE TABLE [ForumTopic] (
     status      INT DEFAULT 1,
 );
 
--- 23.ForumPost AF
+-- 26.ForumPost AF
 CREATE TABLE [ForumPost] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     forumTopicId    UNIQUEIDENTIFIER NOT NULL,
@@ -480,7 +489,7 @@ CREATE TABLE [ForumPost] (
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 24.PostImage AF
+-- 27.PostImage AF
 CREATE TABLE [PostImage] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     forumPostId UNIQUEIDENTIFIER NOT NULL,
@@ -492,7 +501,7 @@ CREATE TABLE [PostImage] (
     FOREIGN KEY (forumPostId) REFERENCES [ForumPost](id),
 );
 
--- 25.PostReact AF
+-- 28.PostReact AF
 CREATE TABLE [PostReact] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     forumPostId UNIQUEIDENTIFIER NOT NULL,
@@ -506,7 +515,7 @@ CREATE TABLE [PostReact] (
     UNIQUE (forumPostId, userId),
 );
 
--- 26.ForumComment AF
+-- 29.ForumComment AF
 CREATE TABLE [ForumComment] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     replyId     UNIQUEIDENTIFIER NULL,
@@ -521,7 +530,7 @@ CREATE TABLE [ForumComment] (
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 27.CommentVote OF
+-- 30.CommentVote OF
 CREATE TABLE [CommentVote] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     forumCommentId  UNIQUEIDENTIFIER NOT NULL,
@@ -538,7 +547,7 @@ CREATE TABLE [CommentVote] (
 -- TRAFFIC SIGN MODULE
 -- =====================================================
 
--- 28.SignCategory OK
+-- 31.SignCategory OK
 CREATE TABLE [SignCategory] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -548,7 +557,7 @@ CREATE TABLE [SignCategory] (
     status      INT DEFAULT 1,
 );
 
--- 29.TrafficSign AF
+-- 32.TrafficSign AF
 CREATE TABLE [TrafficSign] (
     id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     signCategoryId  UNIQUEIDENTIFIER NOT NULL,
@@ -563,7 +572,7 @@ CREATE TABLE [TrafficSign] (
     FOREIGN KEY (signCategoryId) REFERENCES [SignCategory](id),
 );
 
--- 30.SavedTrafficSign OF
+-- 33.SavedTrafficSign OF
 CREATE TABLE [SavedTrafficSign] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     trafficSignId   UNIQUEIDENTIFIER NOT NULL,
@@ -580,7 +589,7 @@ CREATE TABLE [SavedTrafficSign] (
 -- REPORT MODULE
 -- =====================================================
 
--- 31.ReportCategory OK
+-- 34.ReportCategory OK
 CREATE TABLE [ReportCategory] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     name        NVARCHAR(255) NOT NULL UNIQUE,
@@ -590,7 +599,7 @@ CREATE TABLE [ReportCategory] (
     status      INT DEFAULT 1,
 );
 
--- 32.Report AF
+-- 35.Report AF
 CREATE TABLE [Report] (
     id                  UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     simulationId        UNIQUEIDENTIFIER NULL,
@@ -613,7 +622,7 @@ CREATE TABLE [Report] (
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
--- 33.Resolve AF
+-- 36.Resolve AF
 CREATE TABLE [Resolve] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     reportId    UNIQUEIDENTIFIER NOT NULL,
@@ -631,7 +640,7 @@ CREATE TABLE [Resolve] (
 -- NOTIFICATION MODULE
 -- =====================================================
 
--- 34.Notification OK
+-- 37.Notification OK
 CREATE TABLE [Notification] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     title       NVARCHAR(255) NOT NULL,
@@ -642,7 +651,7 @@ CREATE TABLE [Notification] (
     status      INT DEFAULT 1,
 );
 
--- 35.UserNotification OF
+-- 38.UserNotification OF
 CREATE TABLE [UserNotification] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     notificationId  UNIQUEIDENTIFIER NOT NULL,
