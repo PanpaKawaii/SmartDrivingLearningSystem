@@ -3,6 +3,7 @@ import './AutoResizeTextarea.css';
 export default function AutoResizeTextarea({
     refer = null,
     placeholder = '',
+    disable = false,
 }) {
     const handleInput = () => {
         const textarea = refer.current;
@@ -18,6 +19,7 @@ export default function AutoResizeTextarea({
             rows={1}
             placeholder={placeholder}
             onInput={handleInput}
+            disabled={disable}
         />
     )
 }

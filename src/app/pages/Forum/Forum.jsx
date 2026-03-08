@@ -140,12 +140,12 @@ export default function Forum({
                         <div style={{ width: `calc(100% - ${(num <= 5 && num > 0) ? 40 : 0}px)` }}>
                             <div key={i} className='content'>
                                 <div className='image head-block'>
-                                    <img src={comment.user?.image} alt={comment.user?.name} />
+                                    <img src={comment.user?.image} alt={comment.user?.email} />
                                     {/* <div className={`vertical-line ${(ChildrenComment.length == 1 || num == 2) ? ((ChildrenComment.length == 1 && num == 2) ? 'line-full' : 'no-line') : 'line-full'}`}></div> */}
                                     <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length != 0 || comment.id == InputComment) ? 'line-img' : 'no-line'}`}></div>
                                 </div>
                                 <div>
-                                    <div className={`name-comment ${comment.user?.id == user?.id ? 'my-comment' : ''}`}>
+                                    <div className={`name-comment ${(user?.id && comment.user?.id == user?.id) ? 'my-comment' : ''}`}>
                                         <div className='name'>{comment.user?.name}---CMT:{comment.id}</div>
                                         <div>{comment.content}</div>
                                     </div>
@@ -153,19 +153,19 @@ export default function Forum({
                                         {/* <div className='commentdate'>{comment.commentDate?.split('T')[0]}</div> */}
                                         <div className='commentdate'>{comment.commentDate}</div>
                                         <button className='btn' onClick={() => handleSetAnswer(comment.id)}>{comment.id == InputComment ? 'Hủy' : 'Trả lời'}</button>
-                                        {comment.user?.id == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Gỡ</button>}
+                                        {user?.id && comment.user?.id == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Gỡ</button>}
                                     </div>
                                 </div>
                             </div>
                             {comment.id == InputComment &&
                                 <div className='content input-reply'>
                                     <div className='image head-block'>
-                                        <img src={user?.image} alt={user?.name} />
+                                        <img src={user?.image} alt={user?.email} />
                                         {/* <div className={`vertical-line ${(ChildrenComment.length == 1 || num == 2) ? ((ChildrenComment.length == 1 && num == 2) ? 'line-full' : 'no-line') : 'line-full'}`}></div> */}
                                         <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length == 0) ? 'no-line' : 'line-img'}`}></div>
                                     </div>
                                     <form className='comment-area'>
-                                        <AutoResizeTextarea refer={refReply} placeholder={user ? `Trả lời với tư cách ${user?.name}` : 'Nhập phản hồi...'} />
+                                        <AutoResizeTextarea refer={refReply} placeholder={user ? `Trả lời với tư cách ${user?.email}` : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
                                         <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
                                             Submit
                                         </button>
@@ -190,10 +190,10 @@ export default function Forum({
 
             <div className='content input-comment'>
                 <div className='image head-block'>
-                    <img src={user?.image} alt={user?.name} />
+                    <img src={user?.image} alt={user?.email} />
                 </div>
                 <form className='comment-area'>
-                    <AutoResizeTextarea refer={refComment} placeholder={user ? `Bình luận với tư cách ${user?.name}` : 'Nhập bình luận...'} />
+                    <AutoResizeTextarea refer={refComment} placeholder={user ? `Bình luận với tư cách ${user?.email}` : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
                     <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
                         Submit
                     </button>

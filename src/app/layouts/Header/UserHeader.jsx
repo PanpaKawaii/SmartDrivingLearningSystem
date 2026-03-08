@@ -33,7 +33,7 @@ export default function UserHeader() {
                 <div className='logo'>
                     <Link to='/'>
                         <div className='logo-icon'>
-                            <i className='fa-solid fa-gamepad' />
+                            <i className='fa-solid fa-car' />
                         </div>
                         <span className='logo-text'>GREENLIGHT</span>
                     </Link>
