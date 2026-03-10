@@ -26,6 +26,9 @@ import Learning from '../pages/Learning/Learning.jsx'
 import ForumPopup from '../pages/Forum/ForumPopup.jsx'
 import ReadExcelData from '../pages/ReadExcelData/ReadExcelData.jsx'
 
+import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
+import LearningProgress from '../pages/DrivingLicense/LearningProgress.jsx'
+
 export default function MainRoutes() {
     return (
         <BrowserRouter>
@@ -70,6 +73,11 @@ export default function MainRoutes() {
 
                     <Route path='forum-post' element={<ForumPopup />} />
                     <Route path='forum' element={<Forum />} />
+
+                    <Route path='license' element={<DrivingLicense />} />
+                    <Route path='license/:licenseId/chapter' element={<LearningProgress />} />
+                    <Route path='license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam' element={<ListExam />} />
+                    <Route path='license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam/exam/:examId' element={<ExamTemp />} />
 
                     <Route path='read-excel-data' element={<ReadExcelData />} />
                 </Route>

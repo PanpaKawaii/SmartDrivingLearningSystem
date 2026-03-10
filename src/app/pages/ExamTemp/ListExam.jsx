@@ -51,7 +51,7 @@ export default function ListExam() {
     return (
         <div className='list-exam-container container'>
             {EXAMs.map((exam, index) => (
-                <Link key={exam.id} to={`./${exam.id}`}>
+                <Link key={exam.id} to={`exam/${exam.id}`}>
                     <div className='exam'>
                         <div>{exam.title}</div>
                         <div>{exam.description}</div>

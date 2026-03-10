@@ -16,6 +16,8 @@ export default function UserHeader() {
         { name: 'HOME', icon: 'house', path: '/' },
         { name: 'LEARNING', icon: 'book-open', path: '/learning' },
         { name: 'FORUM', icon: 'message', path: '/forum' },
+        { name: 'LICENSE', icon: 'wwwww', path: '/license' },
+
         { name: 'GROUND', icon: 'map', path: '/three-scene' },
         { name: 'CAR', icon: 'car', path: '/car' },
         { name: 'ADMIN', icon: 'user', path: '/admin' },
@@ -42,12 +44,14 @@ export default function UserHeader() {
 
                 <div className='nav-links'>
                     {menuItems.map((item, index) => {
-                        const isActive = location.pathname === item.path;
+                        const locationPathname = location.pathname;
+                        const itemPath = item.path;
+                        const isActive = (itemPath !== '/' && (locationPathname)?.includes(itemPath)) || (itemPath === '/' && locationPathname === '/');
 
                         return (
                             <Link
                                 key={index}
-                                to={item.path}
+                                to={itemPath}
                                 className={`nav-item ${isActive ? 'active' : ''}`}
                             >
                                 <i className={`fa-solid fa-${item.icon}`} />
