@@ -2,47 +2,38 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { generateUUID } from 'three/src/math/MathUtils.js';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './DrivingLicense.css';
 
 export default function DrivingLicense() {
-    const [licenses, setLicenses] = useState([]);
+    const { user } = useAuth();
+
+    const [LICENSEs, setLICENSEs] = useState([]);
+    const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [errorFunction, setErrorFunction] = useState(null);
 
     useEffect(() => {
-        // (async () => {
-        //     try {
-        //         const { data: licensesData, error } = await supabase
-        //             .from('licenses')
-        //             .select('*')
-        //             .eq('is_active', true)
-        //             .order('order_index');
-
-        //         if (error) throw error;
-
-        //         const licensesWithCounts = await Promise.all(
-        //             (licensesData || []).map(async (license) => {
-        //                 const { count } = await supabase
-        //                     .from('license_lessons')
-        //                     .select('*', { count: 'exact', head: true })
-        //                     .eq('license_id', license.id)
-        //                     .eq('is_active', true);
-
-        //                 return {
-        //                     ...license,
-        //                     lesson_count: count || 0,
-        //                 };
-        //             })
-        //         );
-
-        //         setLicenses(licensesWithCounts);
-        //     } catch (error) {
-        //         console.error('Error loading licenses:', error);
-        //     } finally {
-        //         setLoading(false);
-        //     }
-        // })();
-    }, []);
+        (async () => {
+            setError(null);
+            setLoading(true);
+            const token = user?.token || '';
+            try {
+                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
+                // console.log('LicenseResponse', LicenseResponse);
+                // setLICENSEs(LicenseResponse);
+                // const LicenseResponse = await fetchData('licenses', token);
+                // console.log('LicenseResponse', LicenseResponse);
+            } catch (error) {
+                setError('Error');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [refresh]);
 
     const listDrivingLicense = [
         {
@@ -335,6 +326,8 @@ export default function DrivingLicense() {
         },
     ];
 
+    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='driving-license-container container'>
             <StarsBackground />
@@ -359,7 +352,7 @@ export default function DrivingLicense() {
                     >
                         <div className='license-card'>
                             <div className='image'>
-                                <img src={license.image_url || 'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={license.name} />
+                                {/* <img src={license.image_url || 'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={license.name} /> */}
                                 <div className='overlay'></div>
                                 <h3>{license.name}</h3>
                             </div>

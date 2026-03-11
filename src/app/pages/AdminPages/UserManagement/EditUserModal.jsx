@@ -4,16 +4,20 @@ import { postData, putData } from '../../../../mocks/CallingAPI';
 import '../EditModal.css';
 
 export default function EditUserModal({ userprop, onClose, setRefresh, action }) {
+    // const { user } = useAuth(); ==FIX==
+
     const [user, setUser] = useState(userprop);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [errorFunction, setErrorFunction] = useState(null);
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     const Update = async (user) => {
+        // const token = user?.token || ''; ==FIX==
         const token = '';
         const newUser = { id: user.id, point: Number(user.point) || 0, type: user.type };
         try {
-            const UserResult = await putData(`users/${newUser.id}`, newUser, token);
+            await putData(`users/${newUser.id}`, newUser, token);
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {
@@ -24,10 +28,11 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
     };
 
     const Upload = async (user) => {
+        // const token = user?.token || ''; ==FIX==
         const token = '';
         const newUser = { point: Number(user.point) || 0, type: user.type };
         try {
-            const UserResult = await postData('users', newUser, token);
+            await postData('users', newUser, token);
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {

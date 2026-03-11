@@ -31,7 +31,7 @@ export default function QuestionManagement() {
         (async () => {
             setError(null);
             setLoading(true);
-            const token = '';
+            const token = user?.token || '';
             try {
                 // const UserResponse = await fetchData('users', token);
                 // console.log('UserResponse', UserResponse);
@@ -101,7 +101,7 @@ export default function QuestionManagement() {
     const closeCreateModal = () => { setCreating(false); };
 
     const inactiveQuestion = async (question) => {
-        const token = '';
+        const token = user?.token || '';
         const newQuestion = { ...question, status: question.status == 1 ? 0 : 1 };
         try {
             const QuestionResult = await putData(`questions/${newQuestion.id}`, newQuestion, token);

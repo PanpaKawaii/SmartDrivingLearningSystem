@@ -35,12 +35,6 @@
                 font-weight: 600;
                 color: #93c5fd;
             }
-
-            i {
-                width: 18px;
-                height: 18px;
-                color: #60a5fa;
-            }
         }
     }
 
@@ -48,117 +42,117 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
-    }
 
-    .license-link {
-        text-decoration: none;
-        animation: fadeIn .6s ease forwards;
-    }
+        .license-link {
+            text-decoration: none;
+            animation: fadeIn .6s ease forwards;
 
-    .license-card {
-        border-radius: 24px;
-        overflow: hidden;
-        background: rgba(15, 23, 42, .8);
-        border: 1px solid rgba(255, 255, 255, .05);
-        transition: .35s;
+            .license-card {
+                border-radius: 24px;
+                overflow: hidden;
+                background: rgba(15, 23, 42, .8);
+                border: 1px solid rgba(255, 255, 255, .05);
+                transition: .35s;
 
-        &:hover {
-            transform: translateY(-8px);
-            border-color: rgba(59, 130, 246, .4);
-            box-shadow: 0 20px 50px rgba(59, 130, 246, .25);
-        }
+                &:hover {
+                    transform: translateY(-8px);
+                    border-color: rgba(59, 130, 246, .4);
+                    box-shadow: 0 20px 50px rgba(59, 130, 246, .25);
+                }
 
-        .image {
-            position: relative;
-            height: 260px;
-            overflow: hidden;
+                .image {
+                    position: relative;
+                    height: 160px;
+                    overflow: hidden;
 
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: .7s;
-            }
+                    /* img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        transition: .7s;
+                    } */
 
-            h3 {
-                position: absolute;
-                bottom: 20px;
-                left: 20px;
+                    h3 {
+                        position: absolute;
+                        bottom: 20px;
+                        left: 40px;
 
-                font-size: 1.7rem;
-                font-weight: 700;
-                color: white;
-            }
+                        font-size: 4rem;
+                        font-weight: 700;
+                        color: white;
+                    }
 
-            .overlay {
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(to top,
-                        rgba(2, 6, 23, .95),
-                        rgba(2, 6, 23, .5),
-                        transparent);
-            }
-        }
+                    .overlay {
+                        position: absolute;
+                        inset: 0;
+                        background: linear-gradient(to top,
+                                rgba(2, 6, 23, .95),
+                                rgba(2, 6, 23, .5),
+                                transparent);
+                    }
+                }
 
-        &:hover img {
-            transform: scale(1.1);
-        }
+                /* &:hover img {
+                    transform: scale(1.1);
+                } */
 
-        .content {
-            padding: 2rem;
-            backdrop-filter: blur(10px);
+                .content {
+                    padding: 2rem;
+                    backdrop-filter: blur(10px);
 
-            p {
-                color: #cbd5e1;
-                font-size: 1.125rem;
-                margin: 0 0 1.5rem;
-            }
+                    p {
+                        color: #cbd5e1;
+                        font-size: 1.125rem;
+                        margin: 0 0 1.5rem;
+                    }
 
-            .meta {
-                display: flex;
-                justify-content: space-between;
-                gap: 1.5rem;
-
-                .detail {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    color: #cbd5e1;
-                    font-size: .9rem;
-
-                    .item {
+                    .meta {
                         display: flex;
-                        align-items: baseline;
-                        gap: 4px;
+                        justify-content: space-between;
+                        gap: 1.5rem;
 
-                        i {
+                        .detail {
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+                            color: #cbd5e1;
+                            font-size: .9rem;
+
+                            .item {
+                                display: flex;
+                                align-items: baseline;
+                                gap: 4px;
+
+                                i {
+                                    color: #60a5fa;
+
+                                    &.fa-check-circle {
+                                        color: #34d399;
+                                    }
+                                }
+                            }
+                        }
+
+                        .cta {
+                            display: flex;
+                            align-items: center;
+                            gap: .5rem;
                             color: #60a5fa;
+                            font-weight: 600;
 
-                            &.fa-check-circle {
-                                color: #34d399;
+                            .arrow {
+                                width: 18px;
+                                height: 18px;
+                                transition: .3s;
                             }
                         }
                     }
                 }
 
-                .cta {
-                    display: flex;
-                    align-items: center;
-                    gap: .5rem;
-                    color: #60a5fa;
-                    font-weight: 600;
-
-                    .arrow {
-                        width: 18px;
-                        height: 18px;
-                        transition: .3s;
-                    }
+                &:hover .cta {
+                    transform: translateX(6px);
                 }
             }
-        }
-
-        &:hover .cta {
-            transform: translateX(6px);
         }
     }
 

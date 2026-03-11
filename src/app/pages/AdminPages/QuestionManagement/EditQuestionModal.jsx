@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { postData, putData } from '../../../../mocks/CallingAPI';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 import '../EditModal.css';
 
 export default function EditQuestionModal({ questionprop, onClose, setRefresh, action, additionalData }) {
+    const { user } = useAuth();
+
     const [question, setQuestion] = useState(questionprop);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [errorFunction, setErrorFunction] = useState(null);
 
     const Update = async (question) => {
-        const token = '';
+        const token = user?.token || '';
         const newQuestion = { id: question.id, point: Number(question.point) || 0, type: question.type };
         try {
             const QuestionResult = await putData(`questions/${newQuestion.id}`, newQuestion, token);
@@ -23,7 +27,7 @@ export default function EditQuestionModal({ questionprop, onClose, setRefresh, a
     };
 
     const Upload = async (question) => {
-        const token = '';
+        const token = user?.token || '';
         const newQuestion = { point: Number(question.point) || 0, type: question.type };
         try {
             const QuestionResult = await postData('questions', newQuestion, token);

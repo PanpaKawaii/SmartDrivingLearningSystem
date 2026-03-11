@@ -24,13 +24,14 @@ export default function ForumPopup({
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [errorFunction, setErrorFunction] = useState(null);
 
     useEffect(() => {
-        // const token = user?.token; // === FIX ===
-        const token = '';
+        const token = user?.token || '';
         (async () => {
             console.log('loading');
             if (!user?.id || !token || !SelectedPost?.id || loading) return;
+            console.log('access');
             try {
                 setLoading(true);
                 const listuser = await fetchData('listuser', token);
@@ -66,8 +67,7 @@ export default function ForumPopup({
         console.log('CommentData:', CommentData);
         setCOMMENTs(prev => [...prev, CommentData]);
 
-        // const token = user?.token;
-        const token = '';
+        const token = user?.token || '';
         try {
             const result = await postData('api/comment', CommentData, token);
             console.log('result', result);
@@ -88,8 +88,7 @@ export default function ForumPopup({
     const TakeDownComment = async (CommentId) => {
         setCOMMENTs(prev => prev.filter(comment => comment.id != CommentId));
 
-        // const token = user?.token;
-        const token = '';
+        const token = user?.token || '';
         try {
             // setLoading(true);
             const result = await deleteData(`api/comment/${CommentId}`, token);
@@ -165,7 +164,7 @@ export default function ForumPopup({
                                         <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length == 0) ? 'no-line' : 'line-img'}`}></div>
                                     </div>
                                     <form className='comment-area'>
-                                        <AutoResizeTextarea refer={refReply} placeholder={user ? `Trả lời với tư cách ${user?.email}` : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
+                                        <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
                                         <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
                                             Submit
                                         </button>
@@ -193,7 +192,7 @@ export default function ForumPopup({
                     <img src={user?.image} alt={user?.email} />
                 </div>
                 <form className='comment-area'>
-                    <AutoResizeTextarea refer={refComment} placeholder={user ? `Bình luận với tư cách ${user?.email}` : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
+                    <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
                     <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
                         Submit
                     </button>

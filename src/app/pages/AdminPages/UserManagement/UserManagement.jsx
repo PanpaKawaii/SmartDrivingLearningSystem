@@ -28,7 +28,7 @@ export default function UserManagement() {
         (async () => {
             setError(null);
             setLoading(true);
-            const token = '';
+            const token = user?.token || '';
             try {
                 // const UserResponse = await fetchData('users', token);
                 // console.log('UserResponse', UserResponse);
@@ -71,6 +71,7 @@ export default function UserManagement() {
     const closeCreateModal = () => { setCreating(false); };
 
     const inactiveUser = async (user) => {
+        // const token = user?.token || ''; ==FIX==
         const token = '';
         const newUser = { ...user, status: user.status == 1 ? 0 : 1 };
         try {
