@@ -14,9 +14,9 @@ export default function UserHeader() {
 
     const menuItems = [
         { name: 'HOME', icon: 'house', path: '/' },
-        { name: 'LEARNING', icon: 'book-open', path: '/learning' },
-        { name: 'FORUM', icon: 'message', path: '/forum' },
         { name: 'LICENSE', icon: 'book', path: '/driving-license' },
+        { name: 'FORUM', icon: 'message', path: '/forum' },
+        { name: 'LEARNING', icon: 'book-open', path: '/learning' },
 
         { name: 'GROUND', icon: 'map', path: '/three-scene' },
         { name: 'CAR', icon: 'car', path: '/car' },
