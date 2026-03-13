@@ -90,7 +90,7 @@
         }
 
         .feature {
-            animation: fadeIn 0.6s ease forwards;
+            animation: slideInUp 0.6s ease forwards;
 
             .card {
                 position: relative;
@@ -140,18 +140,5 @@
                 }
             }
         }
-    }
-}
-
-/* simple fade animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }

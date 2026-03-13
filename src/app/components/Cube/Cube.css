@@ -26,7 +26,7 @@
             transform-style: preserve-3d;
             transition: all 1s ease;
             transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-            animation: cube-rotate 3s linear infinite;
+            animation: cube_rotate 3s linear infinite;
 
             display: flex;
             justify-content: center;
@@ -81,7 +81,7 @@
     }
 }
 
-@keyframes cube-rotate {
+@keyframes cube_rotate {
     0% {
         transform: rotateX(90deg) rotateZ(0deg);
     }

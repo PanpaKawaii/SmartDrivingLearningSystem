@@ -39,7 +39,7 @@
             align-items: center;
             transform-style: preserve-3d;
             transition: all 0.1s ease;
-            animation: traffic-light-rotate 10s linear infinite;
+            animation: traffic_light_rotate 10s linear infinite;
 
             --LightWidth: 80px;
             --LightHeight: 20px;
@@ -188,7 +188,7 @@
     }
 }
 
-@keyframes traffic-light-rotate {
+@keyframes traffic_light_rotate {
     0% {
         transform: rotateX(90deg) rotateZ(0deg);
     }

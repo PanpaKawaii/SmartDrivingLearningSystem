@@ -45,7 +45,7 @@
 
         .license-link {
             text-decoration: none;
-            animation: fadeIn .6s ease forwards;
+            animation: slideInUp .6s ease forwards;
 
             .license-card {
                 border-radius: 24px;
@@ -149,34 +149,6 @@
                 }
             }
         }
-    }
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes glow {
-    from {
-        opacity: .6
-    }
-
-    to {
-        opacity: 1
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
     }
 }
 
