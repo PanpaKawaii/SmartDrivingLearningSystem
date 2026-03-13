@@ -91,6 +91,9 @@ IF OBJECT_ID('dbo.[QuestionTopic]', 'U') IS NOT NULL
 IF OBJECT_ID('dbo.[LessonProgress]', 'U') IS NOT NULL
     DROP TABLE dbo.[LessonProgress];
     GO
+IF OBJECT_ID('dbo.[LessonImage]', 'U') IS NOT NULL
+    DROP TABLE dbo.[LessonImage];
+    GO
 IF OBJECT_ID('dbo.[QuestionLesson]', 'U') IS NOT NULL
     DROP TABLE dbo.[QuestionLesson];
     GO
@@ -106,8 +109,17 @@ IF OBJECT_ID('dbo.[Vehicle]', 'U') IS NOT NULL
 IF OBJECT_ID('dbo.[DrivingLicense]', 'U') IS NOT NULL
     DROP TABLE dbo.[DrivingLicense];
     GO
+IF OBJECT_ID('dbo.[SimulationSessionDetail]', 'U') IS NOT NULL
+    DROP TABLE dbo.[SimulationSessionDetail];
+    GO
 IF OBJECT_ID('dbo.[SimulationSession]', 'U') IS NOT NULL
     DROP TABLE dbo.[SimulationSession];
+    GO
+IF OBJECT_ID('dbo.[SimulationExam]', 'U') IS NOT NULL
+    DROP TABLE dbo.[SimulationExam];
+    GO
+IF OBJECT_ID('dbo.[SituationExam]', 'U') IS NOT NULL
+    DROP TABLE dbo.[SituationExam];
     GO
 IF OBJECT_ID('dbo.[SimulationScenario]', 'U') IS NOT NULL
     DROP TABLE dbo.[SimulationScenario];
@@ -226,7 +238,6 @@ CREATE TABLE [SimulationScenario] (
     name        NVARCHAR(255) NOT NULL UNIQUE,
     description NVARCHAR(255),
     video       NVARCHAR(255),
-    baseScore   INT NOT NULL,
     totalTime   INT NOT NULL,
     startPoint  INT NOT NULL,
     endPoint    INT NOT NULL,
@@ -238,23 +249,65 @@ CREATE TABLE [SimulationScenario] (
     FOREIGN KEY (simulationDifficultyLevelId) REFERENCES [SimulationDifficultyLevel](id),
 );
 
+-- 7.SituationExam OK
+CREATE TABLE [SituationExam] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    title       NVARCHAR(255) NOT NULL,
+    description NVARCHAR(255),
+    duration    INT,
+    passScore   INT,
+    isRandom    BIT NOT NULL DEFAULT 0,
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+);
+
+-- 19.SimulationExam AF
+CREATE TABLE [SimulationExam] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    situationExamId     UNIQUEIDENTIFIER NOT NULL,
+    simulationId        UNIQUEIDENTIFIER NOT NULL,
+    baseScore   INT,
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+    FOREIGN KEY (situationExamId) REFERENCES [SituationExam](id) ON DELETE CASCADE,
+    FOREIGN KEY (simulationId) REFERENCES [SimulationScenario](id) ON DELETE CASCADE,
+    UNIQUE (situationExamId, simulationId),
+);
+
 -- 8.SimulationSession AF
 CREATE TABLE [SimulationSession] (
-    id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    simulationId    UNIQUEIDENTIFIER NOT NULL,
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    situationExamId UNIQUEIDENTIFIER NOT NULL,
     userId          UNIQUEIDENTIFIER NOT NULL,
-    durationSecond  INT,
-    score           INT,
+    totalScore      INT,
+    totalDuration   INT,
     isPassed        BIT NOT NULL DEFAULT 1,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
-    FOREIGN KEY (simulationId) REFERENCES [SimulationScenario](id),
+    FOREIGN KEY (situationExamId) REFERENCES [SituationExam](id),
     FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
+-- 19.SimulationSessionDetail AF
+CREATE TABLE [SimulationSessionDetail] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    simulationExamId        UNIQUEIDENTIFIER NOT NULL,
+    simulationSessionId     UNIQUEIDENTIFIER NOT NULL,
+    durationSecond  INT,
+    score           INT,
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+    FOREIGN KEY (simulationExamId) REFERENCES [SimulationExam](id) ON DELETE CASCADE,
+    FOREIGN KEY (simulationSessionId) REFERENCES [SimulationSession](id) ON DELETE CASCADE,
+    UNIQUE (simulationExamId, simulationSessionId),
+);
+
 -- =====================================================
--- QUESTION MODULE
+-- LICENSE MODULE
 -- =====================================================
 
 -- 9.DrivingLicense OK
@@ -292,6 +345,10 @@ CREATE TABLE [UserLicense] (
     UNIQUE (userId, drivingLicenseId),
 );
 
+-- =====================================================
+-- QUESTION MODULE
+-- =====================================================
+
 -- 12.QuestionChapter AF
 CREATE TABLE [QuestionChapter] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -313,7 +370,20 @@ CREATE TABLE [QuestionLesson] (
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
+    content     NVARCHAR(MAX),
     FOREIGN KEY (questionChapterId) REFERENCES [QuestionChapter](id),
+);
+
+-- 29.LessonImage AF
+CREATE TABLE [LessonImage] (
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    questionLessonId    UNIQUEIDENTIFIER NOT NULL,
+    name        NVARCHAR(255),
+    url         NVARCHAR(255),
+    createAt    DATETIME2 DEFAULT GETDATE(),
+    updateAt    DATETIME2 DEFAULT GETDATE(),
+    status      INT DEFAULT 1,
+    FOREIGN KEY (questionLessonId) REFERENCES [QuestionLesson](id),
 );
 
 -- 14.LessonProgress OF
@@ -469,6 +539,7 @@ CREATE TABLE [ExamSession] (
     examId      UNIQUEIDENTIFIER NOT NULL,
     userId      UNIQUEIDENTIFIER NOT NULL,
     score       INT,
+    totalDuration   INT,
     isPassed    BIT NOT NULL DEFAULT 1,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
@@ -590,7 +661,7 @@ CREATE TABLE [SignCategory] (
 
 -- 34.TrafficSign AF
 CREATE TABLE [TrafficSign] (
-    id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     signCategoryId  UNIQUEIDENTIFIER NOT NULL,
     name        NVARCHAR(255) NOT NULL UNIQUE,
     code        NVARCHAR(255) NOT NULL UNIQUE,
@@ -632,7 +703,7 @@ CREATE TABLE [ReportCategory] (
 
 -- 37.Report AF
 CREATE TABLE [Report] (
-    id                  UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     simulationId        UNIQUEIDENTIFIER NULL,
     forumPostId         UNIQUEIDENTIFIER NULL,
     forumCommentId      UNIQUEIDENTIFIER NULL,
