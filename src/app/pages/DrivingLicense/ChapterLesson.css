@@ -130,6 +130,23 @@
                     padding: 32px;
                     border: 1px solid #33415580;
                     background: #0f172ab3;
+                    transition: .3s;
+
+                    &:hover {
+                        transform: translateY(-8px);
+                        background: #3b82f620;
+                        border-color: #3b82f666;
+                        box-shadow: 0 20px 50px #3b82f633;
+                    }
+
+                    &:hover .icon-box {
+                        transform: scale(1.1);
+                        box-shadow: 0 0 20px rgba(59, 130, 246, .6);
+                    }
+
+                    &:hover .right {
+                        transform: translate(6px);
+                    }
 
                     .card-header {
                         display: flex;
@@ -147,10 +164,11 @@
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
+                                transition: .2s;
 
                                 i {
+                                    color: #fff;
                                     font-size: 1.75rem;
-                                    color: white;
                                 }
                             }
 
@@ -167,8 +185,9 @@
                             }
                         }
 
-                        i {
+                        .right {
                             color: #94a3b8;
+                            transition: .2s;
                         }
                     }
 

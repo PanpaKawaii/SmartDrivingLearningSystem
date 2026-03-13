@@ -370,7 +370,7 @@ export default function ChapterLesson() {
                 <div className='overlay'></div>
                 <div className='overlay-blue'></div>
                 <div className='content'>
-                    <Link to='/licenses' className='back-btn'>
+                    <Link to='/driving-license' className='back-btn'>
                         <i className='fa-solid fa-chevron-left' />
                         <div>Back to Licenses</div>
                     </Link>
@@ -432,7 +432,7 @@ export default function ChapterLesson() {
                                                     <p>{lesson} lessons</p>
                                                 </div>
                                             </div>
-                                            <i className='fa-solid fa-chevron-right' />
+                                            <i className='fa-solid fa-chevron-right right' />
                                         </div>
                                         <div className='detail'>
                                             <div className='item'>
@@ -467,7 +467,10 @@ export default function ChapterLesson() {
                     </div>
                 )}
 
-                <SelectedChapter drivingLicenseId={drivingLicenseId} QUESTIONCHAPTERs={QUESTIONCHAPTERs} selectedChapterId={selectedChapterId} />
+                <SelectedChapter
+                    QUESTIONCHAPTERs={QUESTIONCHAPTERs}
+                    selectedChapterId={selectedChapterId}
+                />
             </div>
         </div>
     )

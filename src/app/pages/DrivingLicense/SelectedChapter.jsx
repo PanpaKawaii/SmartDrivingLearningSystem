@@ -4,7 +4,6 @@ import EmptyNotification from '../../components/EmptyNotification/EmptyNotificat
 import './SelectedChapter.css';
 
 export default function SelectedChapter({
-    drivingLicenseId = '',
     QUESTIONCHAPTERs = [],
     selectedChapterId = '',
 }) {
@@ -37,62 +36,59 @@ export default function SelectedChapter({
                                     {chapter.questionLessons?.map((lesson, index_lesson) => (
                                         <Link
                                             key={index_lesson}
-                                            to={`./chapter/${selectedChapterId}/lessons/${lesson.id}`}
+                                            to={`./chapter/${selectedChapterId}/lesson/${lesson.id}`}
                                             className='lesson-link'
                                             style={{ animationDelay: `${index_lesson * 0.1}s` }}
                                         >
-                                            <div className='lesson'>
-                                                <div className='lesson-glow'></div>
-                                                <div className='lesson-card'>
-                                                    <div className='lesson-row'>
-                                                        <div className='lesson-number'>
-                                                            <div
-                                                                className={
-                                                                    lesson.isCompleted
-                                                                        ? 'number completed'
-                                                                        : 'number'
-                                                                }
-                                                            >
-                                                                {index_lesson + 1}
-                                                            </div>
+                                            <div className='lesson-card'>
+                                                <div className='lesson-row'>
+                                                    <div className='lesson-number'>
+                                                        <div
+                                                            className={
+                                                                lesson.isCompleted
+                                                                    ? 'number completed'
+                                                                    : 'number' // ==FIX==
+                                                            }
+                                                        >
+                                                            {index_lesson + 1}
                                                         </div>
+                                                    </div>
 
-                                                        <div className='lesson-content'>
-                                                            <div className='lesson-header'>
-                                                                <div className='lesson-text'>
-                                                                    <h3>{lesson.name}</h3>
-                                                                    <p className='description'>
-                                                                        {lesson.description}
-                                                                    </p>
-                                                                    <div className='lesson-meta'>
-                                                                        <div className='meta-item'>
-                                                                            {/* <i className='fa-solid fa-book-open'/>
-                                                                        <span>{lesson.theory_count} sections</span> */}
+                                                    <div className='lesson-content'>
+                                                        <div className='lesson-header'>
+                                                            <div className='lesson-text'>
+                                                                <h3>{lesson.name}</h3>
+                                                                <p className='description'>
+                                                                    {lesson.description}
+                                                                </p>
+                                                                <div className='lesson-meta'>
+                                                                    <div className='detail'>
+                                                                        <div className='item'>
+                                                                            <i className='fa-solid fa-book-open' />
+                                                                            <span>Lessons</span>
                                                                         </div>
-                                                                        {lesson.has_exam && (
-                                                                            <div className='meta-item'>
-                                                                                {/* <FileText className='meta-icon purple' /> */}
-                                                                                <span>Practice Exam</span>
-                                                                            </div>
-                                                                        )}
+                                                                        <div className='item'>
+                                                                            <i className='fa-regular fa-file-lines' />
+                                                                            <span>Exam</span>
+                                                                        </div>
                                                                         {lesson.exam_score !== undefined &&
                                                                             lesson.exam_score !== null && (
-                                                                                <div className='meta-item score'>
-                                                                                    Score: {lesson.exam_score}%
+                                                                                <div className='score'>
+                                                                                    {/* ==FIX== */}
+                                                                                    Score: {lesson.exam_score || 0}%
                                                                                 </div>
                                                                             )}
                                                                     </div>
                                                                 </div>
-                                                                {/* {lesson.isCompleted ? (
-                                                                        <CheckCircle2 className='status done' />
-                                                                    ) : (
-                                                                        <Circle className='status' />
-                                                                    )} */}
                                                             </div>
+                                                            {lesson.isCompleted ? ( // ==FIX==
+                                                                <i className='fa-regular fa-check-circle status done' />
+                                                            ) : (
+                                                                <i className='fa-regular fa-circle status' />
+                                                            )}
                                                         </div>
-                                                        {/* <ChevronRight className='arrow' /> */}
-                                                        <i className='fa-solid fa-chevron-right' />
                                                     </div>
+                                                    <i className='fa-solid fa-chevron-right right' />
                                                 </div>
                                             </div>
                                         </Link>
