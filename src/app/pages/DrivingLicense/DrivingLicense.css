@@ -52,12 +52,12 @@
                 overflow: hidden;
                 background: rgba(15, 23, 42, .8);
                 border: 1px solid rgba(255, 255, 255, .05);
-                transition: .35s;
+                transition: .3s;
 
                 &:hover {
                     transform: translateY(-8px);
-                    border-color: rgba(59, 130, 246, .4);
-                    box-shadow: 0 20px 50px rgba(59, 130, 246, .25);
+                    border-color: #3b82f666;
+                    box-shadow: 0 20px 50px #3b82f640;
                 }
 
                 .image {
@@ -114,14 +114,14 @@
                         .detail {
                             display: flex;
                             align-items: center;
-                            gap: 1rem;
+                            gap: 1.5rem;
                             color: #cbd5e1;
                             font-size: .9rem;
 
                             .item {
                                 display: flex;
                                 align-items: baseline;
-                                gap: 4px;
+                                gap: 6px;
 
                                 i {
                                     color: #60a5fa;
@@ -136,15 +136,10 @@
                         .cta {
                             display: flex;
                             align-items: center;
-                            gap: .5rem;
+                            gap: .75rem;
                             color: #60a5fa;
                             font-weight: 600;
-
-                            .arrow {
-                                width: 18px;
-                                height: 18px;
-                                transition: .3s;
-                            }
+                            transition: all .3s ease;
                         }
                     }
                 }
@@ -158,24 +153,20 @@
 
     .empty {
         text-align: center;
-        padding: 6rem 0;
+        padding: 80px 0;
 
-        .icon-box {
+        .empty-icon {
             width: 96px;
             height: 96px;
             border-radius: 50%;
-            background: rgba(30, 41, 59, .6);
-
+            background: #1e293b80;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: auto auto 24px;
 
-            margin: auto;
-            margin: 0 0 1.5rem;
-
-            svg {
-                width: 48px;
-                height: 48px;
+            i {
+                font-size: 2rem;
                 color: #64748b;
             }
         }
@@ -191,8 +182,6 @@
         }
     }
 }
-
-/* animations */
 
 @keyframes spin {
     to {
@@ -222,19 +211,16 @@
     }
 }
 
-/* responsive */
-
-@media (max-width:900px) {
-
-    .licenses-page {
+@media (max-width:992px) {
+    .driving-license-container {
+        .licenses-header {
+            h1 {
+                font-size: 2.4rem;
+            }
+        }
 
         .license-grid {
             grid-template-columns: 1fr;
         }
-
-        .licenses-header h1 {
-            font-size: 2.4rem;
-        }
-
     }
 }
