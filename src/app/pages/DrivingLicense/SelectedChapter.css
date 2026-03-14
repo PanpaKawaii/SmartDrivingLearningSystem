@@ -46,7 +46,8 @@
 
             .lesson-link {
                 text-decoration: none;
-                animation: fadeIn 0.4s ease forwards;
+                opacity: 0;
+                animation: slideInUp 0.4s ease forwards;
 
                 .lesson-card {
                     position: relative;

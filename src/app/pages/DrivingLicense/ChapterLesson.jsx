@@ -6,319 +6,9 @@ import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import SelectedChapter from './SelectedChapter';
+import { drivingLicense, questionChapter, questionLesson } from '../../../mocks/DataSample';
 
 import './ChapterLesson.css';
-
-const listDrivingLicense = [
-    {
-        id: '0788adcd-48a2-4eb4-85e4-6dcf27889228', name: 'A1', description: 'Description of A1', questionChapters: [
-            {
-                id: generateUUID(), name: 'Chapter 1', description: 'Description of Chapter 1', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 9', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 10', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 2', description: 'Description of Chapter 2', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 3', description: 'Description of Chapter 3', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 4', description: 'Description of Chapter 4', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 5', description: 'Description of Chapter 5', questionLessons: [],
-            },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'A2', description: 'Description of A1', questionChapters: [
-            {
-                id: generateUUID(), name: 'Chapter 1', description: 'Description of Chapter 1', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 9', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 10', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 2', description: 'Description of Chapter 2', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 3', description: 'Description of Chapter 3', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 4', description: 'Description of Chapter 4', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 5', description: 'Description of Chapter 5', questionLessons: [],
-            },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'A3', description: 'Description of A1', questionChapters: [
-            {
-                id: generateUUID(), name: 'Chapter 1', description: 'Description of Chapter 1', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 9', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 10', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 2', description: 'Description of Chapter 2', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 3', description: 'Description of Chapter 3', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 4', description: 'Description of Chapter 4', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 5', description: 'Description of Chapter 5', questionLessons: [],
-            },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'A4', description: 'Description of A1', questionChapters: [
-            {
-                id: generateUUID(), name: 'Chapter 1', description: 'Description of Chapter 1', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 9', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 10', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 2', description: 'Description of Chapter 2', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 3', description: 'Description of Chapter 3', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 4', description: 'Description of Chapter 4', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 5', description: 'Description of Chapter 5', questionLessons: [],
-            },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'A5', description: 'Description of A1', questionChapters: [
-            {
-                id: generateUUID(), name: 'Chapter 1', description: 'Description of Chapter 1', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 9', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 10', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 2', description: 'Description of Chapter 2', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 3', description: 'Description of Chapter 3', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 4', description: 'Description of Chapter 4', questionLessons: [
-                    { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-                    { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-                ],
-            },
-            {
-                id: generateUUID(), name: 'Chapter 5', description: 'Description of Chapter 5', questionLessons: [],
-            },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'A6', description: 'Description of A1', questionChapters: [],
-    },
-];
-
-const listQuestionChapter = [
-    {
-        id: generateUUID(), name: 'Chapter 1', description: 'Description of Chapter 1', questionLessons: [
-            { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 9', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 10', description: 'Description of Lesson', },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'Chapter 2', description: 'Description of Chapter 2', questionLessons: [
-            { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 7', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 8', description: 'Description of Lesson', },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'Chapter 3', description: 'Description of Chapter 3', questionLessons: [
-            { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 5', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 6', description: 'Description of Lesson', },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'Chapter 4', description: 'Description of Chapter 4', questionLessons: [
-            { id: generateUUID(), name: 'Lesson 1', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 2', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 3', description: 'Description of Lesson', },
-            { id: generateUUID(), name: 'Lesson 4', description: 'Description of Lesson', },
-        ],
-    },
-    {
-        id: generateUUID(), name: 'Chapter 5', description: 'Description of Chapter 5', questionLessons: [],
-    },
-];
 
 export default function ChapterLesson() {
     const { user } = useAuth();
@@ -327,8 +17,8 @@ export default function ChapterLesson() {
     const drivingLicenseId = Params?.licenseId;
     console.log('drivingLicenseId', drivingLicenseId);
 
-    const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState(listDrivingLicense || []);
-    const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState(listQuestionChapter || []);
+    const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
+    const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -345,6 +35,19 @@ export default function ChapterLesson() {
                 // setDRIVINGLICENSEs(LicenseResponse);
                 // const LicenseResponse = await fetchData('licenses', token);
                 // console.log('LicenseResponse', LicenseResponse);
+                console.log('questionChapter', questionChapter);
+
+                const QuestionChapters = questionChapter.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
+                    ...qc,
+                    questionLessons: questionLesson.filter(ql => ql.questionChapterId === qc.id),
+                    drivingLicense: drivingLicense.find(dl => dl.id === qc.drivingLicenseId) || null,
+                }));
+
+                console.log('drivingLicense', drivingLicense);
+                console.log('QuestionChapters', QuestionChapters);
+
+                setDRIVINGLICENSEs(drivingLicense);
+                setQUESTIONCHAPTERs(QuestionChapters);
             } catch (error) {
                 setError('Error');
             } finally {
@@ -353,7 +56,7 @@ export default function ChapterLesson() {
         })();
     }, [refresh]);
 
-    const ThisDrivingLicense = DRIVINGLICENSEs?.find(d => d.id === drivingLicenseId);
+    const ThisDrivingLicense = DRIVINGLICENSEs?.find(d => d.id == drivingLicenseId);
     console.log('ThisDrivingLicense', ThisDrivingLicense);
 
     const [selectedLessonId, setSelectedLessonId] = useState('');
@@ -392,12 +95,12 @@ export default function ChapterLesson() {
                     >
                         All Chapters
                     </button>
-                    {QUESTIONCHAPTERs.map(chapter => {
+                    {QUESTIONCHAPTERs.map((chapter, index_chapter) => {
                         const lesson = chapter.questionLessons?.length || 0;
                         const completed = 0 || 0; // ==FIX==
                         return (
                             <button
-                                key={chapter.name}
+                                key={index_chapter}
                                 className={`tab ${selectedChapterId === chapter.id ? 'active' : ''}`}
                                 onClick={() => setSelectedChapterId(chapter.id)}
                             >

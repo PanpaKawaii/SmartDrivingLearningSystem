@@ -44,7 +44,7 @@
         gap: 2rem;
 
         .license-link {
-            text-decoration: none;
+            opacity: 0;
             animation: slideInUp .6s ease forwards;
 
             .license-card {
