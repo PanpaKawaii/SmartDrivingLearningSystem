@@ -27,8 +27,11 @@ import Learning from '../pages/Learning/Learning.jsx'
 import ForumPopup from '../pages/Forum/ForumPopup.jsx'
 import ReadExcelData from '../pages/ReadExcelData/ReadExcelData.jsx'
 
-import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
 import LearningProgress from '../pages/DrivingLicense/LearningProgress.jsx'
+import SelectedChapter from '../pages/DrivingLicense/SelectedChapter.jsx'
+import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
+import ChapterLesson from '../pages/DrivingLicense/ChapterLesson.jsx'
+import LearningLesson from '../pages/DrivingLicense/LearningLesson.jsx'
 
 export default function MainRoutes() {
     return (
@@ -76,7 +79,8 @@ export default function MainRoutes() {
                     <Route path='forum' element={<Forum />} />
 
                     <Route path='driving-license' element={<DrivingLicense />} />
-                    <Route path='driving-license/:licenseId/chapter' element={<LearningProgress />} />
+                    <Route path='driving-license/:licenseId' element={<ChapterLesson />} />
+                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId' element={<LearningLesson />} />
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam' element={<ListExam />} />
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam/exam/:examId' element={<ExamTemp />} />
 

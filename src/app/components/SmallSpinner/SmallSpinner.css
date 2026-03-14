@@ -5,14 +5,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: small-spinner-rotate 1s linear infinite;
+    animation: small_spinner_rotate 1s linear infinite;
 
     i {
         margin: 0 !important;
     }
 }
 
-@keyframes small-spinner-rotate {
+@keyframes small_spinner_rotate {
     0% {
         transform: rotate(0deg);
     }

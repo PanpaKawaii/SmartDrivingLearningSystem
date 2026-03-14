@@ -56,7 +56,7 @@
 
         .category-link {
             text-decoration: none;
-            animation: fadeIn .6s ease forwards;
+            animation: slideInUp .6s ease forwards;
         }
 
         .category-card {
@@ -167,50 +167,21 @@
     }
 }
 
-/* Animations */
+@media (max-width: 992px) {
+    .learning-container {
+        min-height: 100vh;
+        padding: 5rem 1rem;
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+        .content {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
 
-@keyframes glowPulse {
-    from {
-        opacity: .6
-    }
-
-    to {
-        opacity: 1
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive */
-
-@media (max-width: 900px) {
-
-    .learn-page {
-
-        .category-grid {
-            grid-template-columns: 1fr;
+            .learn-header {
+                h1 {
+                    font-size: 2.2rem;
+                }
+            }
         }
-
-        .learn-header h1 {
-            font-size: 2.2rem;
-        }
-
     }
-
 }

@@ -10,50 +10,14 @@
 
     .container {
         position: relative;
-        padding: 10rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        max-width: 1100px;
+        padding: 10rem 1.5rem;
         color: #fff;
-
-        .background {
-            position: absolute;
-            inset: 0;
-
-            .glow {
-                position: absolute;
-                width: 800px;
-                height: 800px;
-                border-radius: 50%;
-                filter: blur(140px);
-                animation: float 6s ease-in-out infinite;
-
-                &.glow-left {
-                    top: 0;
-                    left: 0;
-                    background: rgba(255, 255, 255, 0.1);
-                }
-
-                &.glow-right {
-                    bottom: 0;
-                    right: 0;
-                    background: rgba(59, 130, 246, 0.2);
-                    animation-delay: 1.5s;
-                }
-            }
-        }
-
-        .wrapper {
-            max-width: 1100px;
-            margin: auto;
-            padding: 0 1.5rem;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
-            gap: 4rem;
-        }
+        text-align: center;
+        z-index: 1;
 
         .text {
             .title {
@@ -134,35 +98,5 @@
                 }
             }
         }
-    }
-}
-
-/* Animations */
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-
-    100% {
-        transform: translateY(0px);
     }
 }
