@@ -11,41 +11,37 @@ export default function PracticeExams({
     // if (exams.length === 0) return null
     return (
         <div className='practice-exams-container'>
-            <div className='card'>
-                <div className='content'>
-                    <div className='header'>
-                        <div className='title'>
-                            <div className='icon-box'>
-                                {/* <Trophy className='icon' /> */}
-                            </div>
-                            <div>
-                                <h2>Practice Exams</h2>
-                                <p>
-                                    {exams.length} exam{exams.length > 1 ? 's' : ''} available
-                                </p>
-                            </div>
-                        </div>
+            <div className='header'>
+                <div className='title'>
+                    <div className='icon-box'>
+                        {/* <Trophy className='icon' /> */}
                     </div>
-                    <div className='exam-list'>
-                        {exams.map((exam, index) => {
-                            const isLocked = !progress?.theory_completed
-                            const isPassed =
-                                progress?.exam_completed &&
-                                (progress?.exam_score || 0) >= exam.passing_score
-                            return (
-                                <ExamCard
-                                    key={exam.id}
-                                    exam={exam}
-                                    index={index}
-                                    isLocked={isLocked}
-                                    isPassed={isPassed}
-                                    progress={progress}
-                                    startExam={startExam}
-                                />
-                            )
-                        })}
+                    <div>
+                        <h2>Practice Exams</h2>
+                        <p>
+                            {exams.length} exam{exams.length > 1 ? 's' : ''} available
+                        </p>
                     </div>
                 </div>
+            </div>
+            <div className='exam-list'>
+                {exams.map((exam, index) => {
+                    const isLocked = !progress?.theory_completed
+                    const isPassed =
+                        progress?.exam_completed &&
+                        (progress?.exam_score || 0) >= exam.passing_score
+                    return (
+                        <ExamCard
+                            key={exam.id}
+                            exam={exam}
+                            index={index}
+                            isLocked={isLocked}
+                            isPassed={isPassed}
+                            progress={progress}
+                            startExam={startExam}
+                        />
+                    )
+                })}
             </div>
         </div>
     )

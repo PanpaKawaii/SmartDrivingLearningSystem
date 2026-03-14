@@ -7,56 +7,53 @@ export default function ProgressOverview({
 }) {
     return (
         <div className='progress-overview-container'>
-            <div className='progress-sticky'>
-                <div className='progress-wrapper'>
-                    <div className='card'>
-                        <div className='content'>
-                            <h3>Progress Overview</h3>
-                            <div className='progress-list'>
-                                <ProgressItem
-                                    icon={<i className='fa-solid fa-book-open' />}
-                                    title='Theory'
-                                    completed={progress?.theory_completed}
-                                    text={
-                                        progress?.theory_completed
-                                            ? 'Completed'
-                                            : 'Not started'
-                                    }
-                                />
-                                <ProgressItem
-                                    icon={<i className='fa-solid fa-file-lines' />}
-                                    title='Exam'
-                                    completed={progress?.exam_completed}
-                                    text={
-                                        progress?.exam_completed
-                                            ? `Score: ${progress.exam_score}%`
-                                            : 'Not started'
-                                    }
-                                />
+            <h3>Progress Overview</h3>
+            <div className='progress-list'>
+                <ProgressItem
+                    icon={<i className='fa-solid fa-book-open' />}
+                    title='Theory'
+                    completed={progress?.theory_completed}
+                    text={
+                        progress?.theory_completed
+                            ? 'Completed'
+                            : 'Not started'
+                    }
+                />
+                <ProgressItem
+                    icon={<i className='fa-solid fa-file-lines' />}
+                    title='Exam'
+                    completed={progress?.exam_completed}
+                    text={
+                        progress?.exam_completed
+                            ? `Score: ${progress.exam_score}%`
+                            : 'Not started'
+                    }
+                />
+            </div>
+            {progress?.theory_completed &&
+                progress?.exam_completed && (
+                    <div className='lesson-complete'>
+                        <div className='complete-box'>
+                            <div className='complete-title'>
+                                <CheckCircle2 className='icon' />
+                                <span>Lesson Complete!</span>
                             </div>
-                            {progress?.theory_completed &&
-                                progress?.exam_completed && (
-                                    <div className='lesson-complete'>
-                                        <div className='complete-box'>
-                                            <div className='complete-title'>
-                                                <CheckCircle2 className='icon' />
-                                                <span>Lesson Complete!</span>
-                                            </div>
-                                            <p>
-                                                Great job! You've completed all requirements for this lesson.
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
+                            <p>
+                                Great job! You've completed all requirements for this lesson.
+                            </p>
                         </div>
                     </div>
-                </div>
-            </div>
+                )}
         </div>
     )
 }
 
-function ProgressItem({ icon, title, text, completed }) {
+const ProgressItem = ({
+    icon,
+    title,
+    text,
+    completed,
+}) => {
     return (
         <div className='progress-item'>
             <div className={`icon-box ${completed ? 'completed' : ''}`}>

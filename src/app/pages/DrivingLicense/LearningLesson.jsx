@@ -80,40 +80,11 @@ export default function LicenseLessonDetail() {
         // catch (error) {
         //     console.error('Error updating progress:', error)
         // }
-    }
+    };
 
     const startExam = examId => {
         // navigate(`/licenses/${licenseId}/lessons/${lessonId}/exam/${examId}`)
-    }
-
-    // if (loading) {
-    //     return (
-    //         <div className='loading-page'>
-    //             <div className='loading-box'>
-    //                 <div className='spinner'></div>
-    //                 <p>Loading lesson...</p>
-    //             </div>
-    //         </div>
-    //     )
-    // }
-
-    // if (!lesson) {
-    //     return (
-    //         <div className='loading-page'>
-    //             <div className='loading-box'>
-    //                 <h2>Lesson not found</h2>
-    //                 <Link
-    //                     to={`/licenses/${licenseId}`}
-    //                     className='back-link'
-    //                 >
-    //                     Back to Lessons
-    //                 </Link>
-    //             </div>
-    //         </div>
-    //     )
-    // }
-
-    console.log('ThisQuestionLesson', ThisQuestionLesson);
+    };
 
     if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
@@ -136,7 +107,7 @@ export default function LicenseLessonDetail() {
                 </div>
 
                 <div className='content-grid'>
-                    <div className='main'>
+                    <div className='main-content'>
                         {/* Theory Sections */}
                         <TheorySections
                             theorySections={''}
@@ -154,6 +125,7 @@ export default function LicenseLessonDetail() {
                         />
                     </div>
 
+                    {/* Progress Overview */}
                     <ProgressOverview progress={{}} />
                 </div>
             </div>

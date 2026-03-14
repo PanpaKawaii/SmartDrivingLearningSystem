@@ -36,6 +36,7 @@
             justify-content: center;
 
             .back-btn {
+                width: fit-content;
                 margin: 0 0 32px;
                 color: #93c5fd;
                 font-weight: 500;

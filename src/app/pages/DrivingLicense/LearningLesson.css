@@ -2,9 +2,9 @@
     padding: 48px 20px;
 
     .content {
-        position: relative;
 
         .back-button {
+            width: fit-content;
             margin: 0 0 32px;
             color: #93c5fd;
             font-weight: 500;
@@ -40,14 +40,14 @@
         }
 
         .content-grid {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
+            display: flex;
             gap: 32px;
 
-            .main {
+            .main-content {
                 display: flex;
                 flex-direction: column;
                 gap: 32px;
+                flex: 3;
             }
         }
     }
