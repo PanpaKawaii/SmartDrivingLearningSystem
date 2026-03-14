@@ -91,6 +91,7 @@
 
         .testimonial {
             position: relative;
+            opacity: 0;
             animation: slideInUp 0.6s ease forwards;
 
             .card {
