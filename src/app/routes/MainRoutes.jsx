@@ -18,6 +18,7 @@ import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
 
 import AdminSideBar from '../pages/AdminPages/AdminSideBar/AdminSideBar.jsx'
 import QuestionManagement from '../pages/AdminPages/QuestionManagement/QuestionManagement.jsx'
+ import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagement.jsx'
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
 
 import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
@@ -93,6 +94,7 @@ export default function MainRoutes() {
                     <Route index element={<Navigate to='user-management' replace />} />
                     <Route path='user-management' element={<UserManagement />} />
                     <Route path='question-management' element={<QuestionManagement />} />
+                     <Route path='lesson-management' element={<LessonManagement />} /> 
                 </Route>
             </Routes>
 

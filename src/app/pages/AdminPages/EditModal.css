@@ -170,3 +170,77 @@
         }
     }
 }
+
+.edit-modal.lesson-editor-modal {
+    color: #ffffff;
+
+    .modal-box {
+        width: 700px;
+        max-height: 95vh;
+        color: #ffffff;
+
+        input,
+        select,
+        textarea {
+            color: #ffffff;
+        }
+
+        label {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        form {
+            .input-group {
+                &.rich-editor {
+                    position: relative;
+                    flex: 1;
+
+                    > .rich-label {
+                        position: relative;
+                        top: 0;
+                        left: 0;
+                        background-color: transparent;
+                        margin-bottom: 8px;
+                        display: block;
+                        color: #fff;
+                        font-weight: 500;
+                        font-size: 15px;
+                    }
+
+                    .rte-wrapper {
+                        border-radius: 8px;
+                        background: #1b2430;
+                        border: 2px solid var(--gray-3);
+
+                        .rte-toolbar {
+                            background: #2b3340;
+                            border-bottom: 1px solid #3a3f46;
+                        }
+
+                        .rte-toolbar button {
+                            color: #ffffff;
+                            border-color: transparent;
+                        }
+
+                        .rte-toolbar button:hover {
+                            background: rgba(255, 255, 255, 0.04);
+                        }
+                    }
+
+                    .rte-editor-area {
+                        min-height: 300px;
+
+                        .rte-content-editable {
+                            color: #ffffff;
+                            caret-color: #fff;
+                        }
+
+                        .rte-placeholder {
+                            color: rgba(255, 255, 255, 0.5);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

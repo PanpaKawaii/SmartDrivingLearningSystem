@@ -15,6 +15,7 @@ export default function AdminSideBar() {
         { name: 'USER', icon: 'user', path: '/admin/user-management' },
         { name: 'TRANSACTION', icon: 'money-check-dollar', path: '/admin/transaction-management', },
         { name: 'QUESTION', icon: 'question', path: '/admin/question-management', },
+        { name: 'LESSON', icon: 'pencil', path: '/admin/lesson-management', },
     ];
 
     // useEffect(() => {

@@ -300,3 +300,25 @@ export const questionDifficultyLevels = [
     { id: 2, name: 'Average', description: 'Average difficulty level', status: 1 },
     { id: 3, name: 'Low', description: 'Low difficulty level', status: 1 },
 ];
+export const questionLessons = [
+    {
+        id: 'lesson-1',
+        questionChapterId: 1,
+        name: 'Lesson 1',
+        description: 'Basic road signs',
+        content: '<p>Nội dung bài học 1...</p>',
+        createAt: new Date().toISOString(),
+        updateAt: new Date().toISOString(),
+        status: 1,
+    },
+    {
+        id: 'lesson-2',
+        questionChapterId: 2,
+        name: 'Lesson 2',
+        description: 'Priority rules',
+        content: '<p>Nội dung bài học 2...</p>',
+        createAt: new Date().toISOString(),
+        updateAt: new Date().toISOString(),
+        status: 1,
+    },
+];
