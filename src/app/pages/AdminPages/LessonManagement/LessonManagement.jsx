@@ -221,7 +221,14 @@ export default function LessonManagement() {
                     <span>{lesson.description || "--"}</span>
                   </td>
                   <td>
-                    <span>{lesson.content || "--"}</span>
+                    {lesson.content ? (
+                      <span
+                        className="lesson-content-ellipsis"
+                        dangerouslySetInnerHTML={{ __html: lesson.content }}
+                      />
+                    ) : (
+                      <span>--</span>
+                    )}
                   </td>
                   <td>
                     <span>{lesson.status == 1 ? "Active" : "Inactive"}</span>

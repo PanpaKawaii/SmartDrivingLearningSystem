@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postData, putData } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
+import RichTextEditor from "../../../components/RichTextEditor/RichTextEditor";
 
 import "../EditModal.css";
 
@@ -16,7 +17,16 @@ export default function EditLessonModal({
 	const { user } = useAuth();
 
 	const [lesson, setLesson] = useState(lessonProp);
+	const [editorInitialHtml, setEditorInitialHtml] = useState(
+		lessonProp?.content || "",
+	);
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setLesson(lessonProp);
+		setEditorInitialHtml(lessonProp?.content || "");
+		console.log("[EditLessonModal] Prefill content:", lessonProp?.content || "");
+	}, [lessonProp]);
 
 	const persistLesson = async (payload) => {
 		const enableApiPersistence = false;
@@ -57,12 +67,21 @@ export default function EditLessonModal({
 		setLesson((prev) => ({ ...prev, [name]: value }));
 	};
 
+	const handleContentChange = (html) => {
+		const outputHtml = typeof html === "string" ? html : "";
+		setLesson((prev) => ({ ...prev, content: outputHtml }));
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
 
 		try {
 			const nextLesson = buildLessonPayload();
+			console.log("[EditLessonModal] RichText input -> output:", {
+				prefill: editorInitialHtml,
+				output: nextLesson.content,
+			});
 			await persistLesson(nextLesson);
 
 			if (onSave) {
@@ -79,7 +98,7 @@ export default function EditLessonModal({
 	};
 
 	return (
-		<div className="edit-modal">
+		<div className="edit-modal lesson-editor-modal">
 			<div className="modal-box">
 				<button className="btn close-btn" type="button" onClick={onClose}>
 					<i className="fa-solid fa-xmark"></i>
@@ -140,15 +159,17 @@ export default function EditLessonModal({
 						<label htmlFor="description">Description</label>
 					</div>
 
-					<div className="input-group flex-1">
-						<textarea
-							name="content"
-							placeholder=" "
-							value={lesson.content || ""}
-							onChange={handleChange}
-							required
+					<div className="input-group flex-1 rich-editor">
+						<label htmlFor="content" className="rich-label">
+							Content
+						</label>
+						<RichTextEditor
+							key={`${action}-${lesson.id || "new"}`}
+							initialHtml={editorInitialHtml}
+							onHtmlChange={handleContentChange}
+							placeholder="Nhập nội dung bài học..."
+							autoFocus={false}
 						/>
-						<label htmlFor="content">Content</label>
 					</div>
 
 					<div className="btn-box">

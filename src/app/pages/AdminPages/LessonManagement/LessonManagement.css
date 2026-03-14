@@ -1,0 +1,23 @@
+/* Vertical action buttons for lesson management */
+.admin-table .action-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	align-items: flex-start;
+}
+.admin-table .action-buttons button {
+	width: 100px;
+	margin: 0;
+	justify-content: flex-start;
+}
+/* Limit lesson content display */
+.lesson-content-ellipsis {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 320px;
+	white-space: normal;
+	word-break: break-word;
+}
