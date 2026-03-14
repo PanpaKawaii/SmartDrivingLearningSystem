@@ -62,7 +62,7 @@ export default function UserHeader() {
                 {/* ==FIX== */}
                 <div className='user-profile'>
                     <div className='avatar'>
-                        <img src={``} alt={user?.name} />
+                        <img src={'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={user?.name} />
                     </div>
                     <span>{user?.name || 'THIS IS USER NAME'}</span>
                 </div>

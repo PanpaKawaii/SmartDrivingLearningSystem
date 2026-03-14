@@ -67,6 +67,10 @@
                         transform: translate(6px);
                     }
 
+                    &:hover .lesson-row .lesson-content .lesson-header .lesson-text h3 {
+                        color: #2563eb;
+                    }
+
                     .lesson-row {
                         display: flex;
                         align-items: start;

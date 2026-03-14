@@ -10,7 +10,7 @@ export default function SelectedChapter({
     return (
         <div className='selected-chapter-container'>
             {QUESTIONCHAPTERs
-                .filter(c => c.id === selectedChapterId)
+                .filter(c => c.id == selectedChapterId)
                 .map(chapter => {
                     const lesson = chapter.questionLessons?.length || 0;
                     const completed = 0 || 0; // ==FIX==
@@ -26,7 +26,7 @@ export default function SelectedChapter({
                                 </div>
                             </div>
 
-                            {chapter.questionLessons.length === 0 ? (
+                            {chapter.questionLessons.length == 0 ? (
                                 <EmptyNotification
                                     name={'No Lessons Available'}
                                     description={'Lessons for this chapter are coming soon.'}

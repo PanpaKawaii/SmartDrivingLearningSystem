@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { drivingLicenses, questionChapters, questionLessons } from '../../../mocks/DataSample';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import SelectedChapter from './SelectedChapter';
-import { drivingLicenses, questionChapters, questionLessons } from '../../../mocks/DataSample';
+import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
 
 import './ChapterLesson.css';
 
@@ -13,15 +13,21 @@ export default function ChapterLesson() {
     const { user } = useAuth();
 
     const Params = useParams();
+    const location = useLocation();
+
     const drivingLicenseId = Params?.licenseId;
     console.log('drivingLicenseId', drivingLicenseId);
+    const questionChapterId = location.state;
+    console.log('questionChapterId', questionChapterId);
 
-    const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
+    const [ThisDrivingLicense, setThisDrivingLicense] = useState(null);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
+
+    const [selectedChapterId, setSelectedChapterId] = useState(questionChapterId || '');
 
     useEffect(() => {
         (async () => {
@@ -37,15 +43,16 @@ export default function ChapterLesson() {
 
                 const QuestionChapters = questionChapters.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
                     ...qc,
-                    questionLessons: questionLessons.filter(ql => ql.questionChapterId === qc.id),
-                    drivingLicense: drivingLicenses.find(dl => dl.id === qc.drivingLicenseId) || null,
+                    questionLessons: questionLessons.filter(ql => ql.questionChapterId == qc.id),
+                    drivingLicense: drivingLicenses.find(dl => dl.id == qc.drivingLicenseId) || null,
                 }));
-
-                console.log('drivingLicense', drivingLicenses);
                 console.log('QuestionChapters', QuestionChapters);
 
-                setDRIVINGLICENSEs(drivingLicenses);
+                const DrivingLicenseResponse = drivingLicenses?.find(d => d.id == drivingLicenseId);
+                console.log('ThisDrivingLicense', ThisDrivingLicense);
+
                 setQUESTIONCHAPTERs(QuestionChapters);
+                setThisDrivingLicense(DrivingLicenseResponse);
             } catch (error) {
                 setError('Error');
             } finally {
@@ -53,12 +60,6 @@ export default function ChapterLesson() {
             }
         })();
     }, [refresh]);
-
-    const ThisDrivingLicense = DRIVINGLICENSEs?.find(d => d.id == drivingLicenseId);
-    console.log('ThisDrivingLicense', ThisDrivingLicense);
-
-    const [selectedLessonId, setSelectedLessonId] = useState('');
-    const [selectedChapterId, setSelectedChapterId] = useState('');
 
     if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
@@ -88,7 +89,7 @@ export default function ChapterLesson() {
 
                 <div className='chapter-tabs'>
                     <button
-                        className={`tab ${selectedChapterId === '' ? 'active' : ''}`}
+                        className={`tab ${selectedChapterId == '' ? 'active' : ''}`}
                         onClick={() => setSelectedChapterId('')}
                     >
                         All Chapters
@@ -99,7 +100,7 @@ export default function ChapterLesson() {
                         return (
                             <button
                                 key={index_chapter}
-                                className={`tab ${selectedChapterId === chapter.id ? 'active' : ''}`}
+                                className={`tab ${selectedChapterId == chapter.id ? 'active' : ''}`}
                                 onClick={() => setSelectedChapterId(chapter.id)}
                             >
                                 <div>{chapter.name}</div>
@@ -109,7 +110,7 @@ export default function ChapterLesson() {
                     })}
                 </div>
 
-                {selectedChapterId === '' && (
+                {selectedChapterId == '' && (
                     <div className='chapter-grid'>
                         {QUESTIONCHAPTERs.map((chapter, index_chapter) => {
                             const lesson = chapter.questionLessons?.length || 0;
