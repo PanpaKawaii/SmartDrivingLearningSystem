@@ -6,6 +6,7 @@ import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './LearningLesson.css';
+import TheorySections from './TheorySections';
 
 export default function LicenseLessonDetail() {
     const { user } = useAuth();
@@ -135,6 +136,14 @@ export default function LicenseLessonDetail() {
                 <div className='content-grid'>
                     <div className='main'>
                         {/* Theory Sections */}
+                        <TheorySections
+                            theorySections={'' }
+                            selectedTheory={'' }
+                            setSelectedTheory={'' }
+                            progress={'' }
+                            markTheoryComplete={ ''}
+                        />
+
                         {/* Practice Exams */}
                     </div>
                 </div>
