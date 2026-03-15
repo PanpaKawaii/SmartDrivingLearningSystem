@@ -67,10 +67,10 @@ export default function ToolbarPlugin() {
     return (
         <div className='rte-toolbar'>
             {/* Undo / Redo */}
-            <button title='Undo' onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)}>
+            <button type='button' title='Undo' onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)}>
                 <i className='fa-solid fa-rotate-left' />
             </button>
-            <button title='Redo' onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)}>
+            <button type='button' title='Redo' onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)}>
                 <i className='fa-solid fa-rotate-right' />
             </button>
 
@@ -89,6 +89,7 @@ export default function ToolbarPlugin() {
 
             {/* Inline format */}
             <button
+                type='button'
                 title='Bold'
                 className={isBold ? 'active' : ''}
                 onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')}
@@ -96,6 +97,7 @@ export default function ToolbarPlugin() {
                 <i className='fa-solid fa-bold' />
             </button>
             <button
+                type='button'
                 title='Italic'
                 className={isItalic ? 'active' : ''}
                 onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')}
@@ -103,6 +105,7 @@ export default function ToolbarPlugin() {
                 <i className='fa-solid fa-italic' />
             </button>
             <button
+                type='button'
                 title='Underline'
                 className={isUnderline ? 'active' : ''}
                 onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')}
@@ -110,6 +113,7 @@ export default function ToolbarPlugin() {
                 <i className='fa-solid fa-underline' />
             </button>
             <button
+                type='button'
                 title='Strikethrough'
                 className={isStrike ? 'active' : ''}
                 onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')}
@@ -121,18 +125,21 @@ export default function ToolbarPlugin() {
 
             {/* Lists */}
             <button
+                type='button'
                 title='Unordered list'
                 onClick={() => editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)}
             >
                 <i className='fa-solid fa-list-ul' />
             </button>
             <button
+                type='button'
                 title='Ordered list'
                 onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)}
             >
                 <i className='fa-solid fa-list-ol' />
             </button>
             <button
+                type='button'
                 title='Remove list'
                 onClick={() => editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)}
             >

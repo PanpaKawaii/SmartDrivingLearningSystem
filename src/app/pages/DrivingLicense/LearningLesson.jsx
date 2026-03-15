@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { questionLessons } from '../../../mocks/DataSample';
+// import { fetchData } from '../../../mocks/CallingAPI';
+// import { putData } from '../../../mocks/CallingAPI';
+import { lessonProgresses, questionLessons } from '../../../mocks/DataSample';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './LearningLesson.css';
-import TheorySections from './TheorySections';
+import LessonContent from './LessonContent';
 import PracticeExams from './PracticeExams';
 import ProgressOverview from './ProgressOverview';
 
@@ -21,11 +23,9 @@ export default function LicenseLessonDetail() {
 
     const { licenseId, lessonId } = useParams();
     const navigate = useNavigate();
-    const [lesson, setLesson] = useState(null);
-    const [theorySections, setTheorySections] = useState([]);
     const [exams, setExams] = useState([]);
     const [progress, setProgress] = useState(null);
-    const [selectedTheory, setSelectedTheory] = useState(null);
+    const [lessonProgressList, setLessonProgressList] = useState(lessonProgresses);
 
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
     const [refresh, setRefresh] = useState(0);
@@ -44,42 +44,66 @@ export default function LicenseLessonDetail() {
                 // setDRIVINGLICENSEs(LicenseResponse);
                 // const LicenseResponse = await fetchData('licenses', token);
                 // console.log('LicenseResponse', LicenseResponse);
-
-                const QuestionLessonResponse = questionLessons.find(ql => ql.questionChapterId == questionChapterId);
+                // const QuestionLessonResponse = await fetchData(`lessons/${lessonId}`, token);
+                const QuestionLessonResponse = questionLessons.find(ql => String (ql.id) === String(lessonId)) || questionLessons.find(ql => String (ql.questionChapterId) === String(questionChapterId));
                 console.log('QuestionLessonResponse', QuestionLessonResponse);
 
                 setThisQuestionLesson(QuestionLessonResponse);
+
+                const currentUserId = Number(user?.id || 1);
+                const currentLessonId = Number(QuestionLessonResponse?.id || lessonId);
+                const currentProgress = lessonProgressList.find(
+                    lp => Number(lp.userId) === currentUserId && Number(lp.questionLessonId) === currentLessonId,
+                );
+                setProgress({
+                    lesson_progress_id: currentProgress?.id || null,
+                    status: currentProgress?.status || 0,
+                    theory_completed: Number(currentProgress?.status || 0) === 1,
+                });
             } catch (error) {
                 setError('Error');
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh]);
+    }, [refresh, lessonId, questionChapterId, user?.id, lessonProgressList]);
 
-    const markTheoryComplete = async () => {
-        // const sessionId = getSessionId()
-        // try {
-        //     const { error } =
-        //         await supabase
-        //             .from('user_license_progress')
-        //             .upsert(
-        //                 {
-        //                     session_id: sessionId,
-        //                     lesson_id: lessonId,
-        //                     theory_completed: true,
-        //                     updated_at: new Date().toISOString()
-        //                 },
-        //                 {
-        //                     onConflict: 'session_id,lesson_id'
-        //                 }
-        //             )
-        //     if (error) throw error
-        //     await loadData()
-        // }
-        // catch (error) {
-        //     console.error('Error updating progress:', error)
-        // }
+    const markLessonContentComplete = async () => {
+        const currentUserId = Number(user?.id || 1);
+        const currentLessonId = Number(ThisQuestionLesson?.id || lessonId);
+
+        // API-ready (enable when backend is available):
+        // await putData(`lesson-progress/${currentLessonId}`, { status: 1 }, user?.token || '');
+
+        setLessonProgressList(prev => {
+            const existing = prev.find(
+                lp => Number(lp.userId) === currentUserId && Number(lp.questionLessonId) === currentLessonId,
+            );
+
+            if (existing) {
+                return prev.map(lp => (
+                    Number(lp.userId) === currentUserId && Number(lp.questionLessonId) === currentLessonId
+                        ? { ...lp, status: 1 }
+                        : lp
+                ));
+            }
+
+            return [
+                ...prev,
+                {
+                    id: Date.now(),
+                    userId: currentUserId,
+                    questionLessonId: currentLessonId,
+                    status: 1,
+                },
+            ];
+        });
+
+        setProgress(prev => ({
+            ...(prev || {}),
+            status: 1,
+            theory_completed: true,
+        }));
     };
 
     const startExam = examId => {
@@ -108,25 +132,23 @@ export default function LicenseLessonDetail() {
 
                 <div className='content-grid'>
                     <div className='main-content'>
-                        {/* Theory Sections */}
-                        <TheorySections
-                            theorySections={''}
-                            selectedTheory={''}
-                            setSelectedTheory={''}
-                            progress={''}
-                            markTheoryComplete={''}
+                        <LessonContent
+                            lessonName={ThisQuestionLesson?.name || ''}
+                            lessonContentHtml={ThisQuestionLesson?.content || ''}
+                            progress={progress}
+                            onMarkLessonContentComplete={markLessonContentComplete}
                         />
 
                         {/* Practice Exams */}
                         <PracticeExams
                             exams={[]}
-                            progress={''}
-                            startExam={''}
+                            progress={progress}
+                            startExam={startExam}
                         />
                     </div>
 
                     {/* Progress Overview */}
-                    <ProgressOverview progress={{}} />
+                    <ProgressOverview progress={progress || {}} />
                 </div>
             </div>
         </div>

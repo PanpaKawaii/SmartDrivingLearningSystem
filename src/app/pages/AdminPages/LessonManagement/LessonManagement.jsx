@@ -20,6 +20,7 @@ export default function LessonManagement() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errorFunction, setErrorFunction] = useState(null);
+  const [popupProps, setPopupProps] = useState(null);
   const [editing, setEditing] = useState(null);
   const [creating, setCreating] = useState(false);
 
@@ -121,6 +122,33 @@ export default function LessonManagement() {
     }
 
     setLESSONs((prev) => [normalizedLesson, ...prev]);
+  };
+
+  const toggleLessonStatus = async (lesson) => {
+    const token = user?.token || "";
+    const nextLesson = {
+      ...lesson,
+      status: Number(lesson.status) === 1 ? 0 : 1,
+      updateAt: new Date().toISOString(),
+    };
+
+    try {
+      const enableApiPersistence = false;
+
+      if (enableApiPersistence) {
+        await putData(`lessons/${nextLesson.id}`, nextLesson, token);
+      }
+
+      setLESSONs((prev) =>
+        prev.map((item) =>
+          String(item.id) === String(nextLesson.id)
+            ? { ...item, ...nextLesson }
+            : item,
+        ),
+      );
+    } catch {
+      setErrorFunction("Error");
+    }
   };
 
   if (loading)
@@ -231,7 +259,9 @@ export default function LessonManagement() {
                     )}
                   </td>
                   <td>
-                    <span>{lesson.status == 1 ? "Active" : "Inactive"}</span>
+                    <span className={lesson.status == 1 ? "status-tag status-active" : "status-tag status-inactive"}>
+                      {lesson.status == 1 ? "Active" : "Inactive"}
+                    </span>
                   </td>
                   <td>
                     <div className="action-buttons">
@@ -239,11 +269,21 @@ export default function LessonManagement() {
                         <span>Modify</span>
                         <i className="fa-solid fa-pencil" />
                       </button>
-                      <button type="button" className="btn-active" disabled>
+                      <button
+                        type="button"
+                        className={`btn-active ${lesson.status == 0 && "abb"}`}
+                        onClick={() => setPopupProps(lesson)}
+                        disabled={lesson.status == 1}
+                      >
                         <span>Active</span>
                         <i className="fa-solid fa-unlock" />
                       </button>
-                      <button type="button" className="btn-inactive" disabled>
+                      <button
+                        type="button"
+                        className={`btn-inactive ${lesson.status == 1 && "abb"}`}
+                        onClick={() => setPopupProps(lesson)}
+                        disabled={lesson.status == 0}
+                      >
                         <span>Inactive</span>
                         <i className="fa-solid fa-lock" />
                       </button>
@@ -285,6 +325,21 @@ export default function LessonManagement() {
             additionalData={{ questionChapters: QUESTIONCHAPTERs }}
             onSave={handleLessonSaved}
             onError={setErrorFunction}
+          />
+        )}
+
+        {popupProps && (
+          <ConfirmDialog
+            title={"CONFIRMATION"}
+            message={`Are you sure you want to ${popupProps.status == 1 ? "inactive" : "active"} this lesson?`}
+            confirm={popupProps.status == 1 ? "INACTIVE" : "ACTIVE"}
+            cancel={"CANCEL"}
+            color={popupProps.status == 1 ? "#ff4d4f80" : "#52c41a80"}
+            onConfirm={() => {
+              toggleLessonStatus(popupProps);
+              setPopupProps(null);
+            }}
+            onCancel={() => setPopupProps(null)}
           />
         )}
 

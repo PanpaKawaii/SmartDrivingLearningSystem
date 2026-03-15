@@ -1,0 +1,144 @@
+.lesson-content-viewer {
+    opacity: 0;
+    animation: slideInUp 0.4s forwards;
+    animation-delay: 0.2s;
+    border-radius: 24px;
+    border: 1px solid rgba(51, 65, 85, .5);
+    padding: 32px;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 24px;
+
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #2563eb, #0891b2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+                color: white;
+            }
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .completed {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, .2);
+            border: 1px solid rgba(16, 185, 129, .3);
+            backdrop-filter: blur(10px);
+
+            span {
+                font-size: 14px;
+                font-weight: 600;
+                color: #6ee7b7;
+            }
+        }
+    }
+
+    .lesson-content-detail {
+        padding: 32px;
+        border-radius: 16px;
+        border: 1px solid #334155;
+        background: rgba(15, 23, 42, .5);
+        backdrop-filter: blur(10px);
+        margin-bottom: 24px;
+
+        h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 24px;
+        }
+    }
+
+    .lesson-content-body {
+        color: #cbd5f5;
+        font-size: 18px;
+        line-height: 1.8;
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: white;
+            margin: 0 0 12px;
+        }
+
+        p {
+            margin: 0 0 12px;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 12px 20px;
+        }
+    }
+
+    .footer {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #334155;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .complete-button {
+        width: auto;
+
+        &.compact {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1;
+        }
+    }
+
+    .empty {
+        text-align: center;
+        padding: 48px 0;
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, .5);
+            margin: 0 auto 16px;
+        }
+
+        p {
+            color: #94a3b8;
+        }
+    }
+}
