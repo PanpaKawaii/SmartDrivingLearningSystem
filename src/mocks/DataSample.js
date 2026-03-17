@@ -460,9 +460,14 @@ export const questionLessons = [
 ];
 
 export const lessonProgresses = [
-    { id: 1, userId: 1, questionLessonId: 1, status: 1 },
-    { id: 2, userId: 1, questionLessonId: 2, status: 0 },
-    { id: 3, userId: 1, questionLessonId: 3, status: 0 },
+    { id: 1, userId: 1, questionLessonId: 1, status: 1, score: 90 },
+    { id: 2, userId: 1, questionLessonId: 1, status: 1, score: 50 },
+    { id: 3, userId: 1, questionLessonId: 1, status: 1, score: 70 },
+    { id: 4, userId: 1, questionLessonId: 2, status: 1, score: 40 },
+    { id: 5, userId: 1, questionLessonId: 4, status: 1, score: 80 },
+    { id: 6, userId: 2, questionLessonId: 1, status: 1, score: 60 },
+    { id: 7, userId: 2, questionLessonId: 2, status: 1, score: 10 },
+    { id: 8, userId: 2, questionLessonId: 3, status: 1, score: 30 },
 ];
 
 

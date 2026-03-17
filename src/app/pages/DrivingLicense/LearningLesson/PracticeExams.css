@@ -109,16 +109,30 @@
             margin: 0 0 16px;
             padding: 8px 16px;
             border-radius: 100px;
-            background: rgba(16, 185, 129, .2);
-            border: 1px solid rgba(16, 185, 129, .3);
+            /* background: rgba(16, 185, 129, .2); */
+            border: 1px solid #33415580;
 
             span {
-                color: #6ee7b7;
+                color: var(--text-primary);
                 font-weight: 700;
             }
 
             i {
-                color: #34d399;
+                color: var(--text-primary);
+            }
+
+            &.score-passed {
+                background: rgba(16, 185, 129, .2);
+                border: 1px solid rgba(16, 185, 129, .3);
+
+                span {
+                    color: #6ee7b7;
+                    font-weight: 700;
+                }
+
+                i {
+                    color: #34d399;
+                }
             }
         }
 

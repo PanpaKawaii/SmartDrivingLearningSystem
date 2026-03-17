@@ -1,15 +1,13 @@
-// import { Trophy, FileText, Clock, Target, BookOpen, PlayCircle } from 'lucide-react';
-// import { Button } from '../components/ui/Button';
-
 import './PracticeExams.css';
 
 export default function PracticeExams({
     lesson = {},
-    progress = false,
+    progress = [],
 }) {
-    // ==FIX==
-    const isLocked = progress;
-    const isPassed = progress;
+    console.log('progress', progress);
+    const maxScore = progress?.[0]?.score;
+    const isLocked = progress?.length == 0;
+    const isPassed = maxScore >= 50;
     return (
         <div className='practice-exams-container'>
             <div className='header'>
@@ -26,11 +24,10 @@ export default function PracticeExams({
             <div className={`exam ${isLocked ? 'locked' : ''} ${isPassed ? 'passed' : ''}`}>
                 <div className='glow'></div>
                 <div className='exam-card'>
-                    {isPassed && (
-                        <div className='score'>
-                            {/* ==FIX== */}
+                    {!isLocked && (
+                        <div className={`score ${isPassed ? 'score-passed' : ''}`}>
                             <i className='fa-solid fa-trophy' />
-                            <span>{0}%</span>
+                            <span>{maxScore || 0}%</span>
                         </div>
                     )}
                     <div className='stats'>
@@ -53,26 +50,18 @@ export default function PracticeExams({
                             <i className='fa-solid fa-bullseye green' />
                             <div>
                                 <p className='label'>Pass Score</p>
-                                <p className='value'>{80}%</p>
+                                <p className='value'>{50}%</p>
                             </div>
                         </div>
                     </div>
                     {isLocked ? (
                         <div className='locked-box'>
                             <i className='fa-solid fa-book-open' />
-                            <span>
-                                Complete theory sections to unlock
-                            </span>
+                            <span>Complete theory sections to unlock</span>
                         </div>
                     ) : (
-                        <button
-                            variant={isPassed ? 'secondary' : 'primary'}
-                            className='start-button'
-                        >
-                            {/* <PlayCircle className='btn-icon' /> */}
-                            {progress
-                                ? 'Retake Exam'
-                                : 'Start Exam'}
+                        <button className='start-button'>
+                            Start Exam
                         </button>
                     )}
                 </div>

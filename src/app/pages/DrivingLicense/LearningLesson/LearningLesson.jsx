@@ -26,6 +26,7 @@ export default function LearningLesson() {
     const [lessonProgressList, setLessonProgressList] = useState(lessonProgresses);
 
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
+    const [LESSONPROGRESSes, setLESSONPROGRESSes] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -56,11 +57,25 @@ export default function LearningLesson() {
 
                 setThisQuestionLesson(QuestionLesson);
 
+                // ==FIX==
+                const userId = 1;
+                const LessonProgressResponse = [...lessonProgresses];
+                const LessonProgress = LessonProgressResponse.filter(lp => lp.questionLessonId == lessonId && lp.userId == userId)?.sort((a, b) => (b?.score) - (a?.score));
+                console.log('LessonProgress', LessonProgress);
+                setLESSONPROGRESSes(LessonProgress);
+
+                // ==FIX==
                 const currentUserId = Number(user?.id || 1);
                 const currentLessonId = Number(QuestionLessonResponse?.id || lessonId);
                 const currentProgress = lessonProgressList.find(
                     lp => Number(lp.userId) === currentUserId && Number(lp.questionLessonId) === currentLessonId,
                 );
+                console.log('setProgress', {
+                    lesson_progress_id: currentProgress?.id || null,
+                    status: currentProgress?.status || 0,
+                    theory_completed: Number(currentProgress?.status || 0) === 1,
+                });
+
                 setProgress({
                     lesson_progress_id: currentProgress?.id || null,
                     status: currentProgress?.status || 0,
@@ -70,7 +85,7 @@ export default function LearningLesson() {
                 setError('Error');
             } finally {
                 setLoading(false);
-            }
+            };
         })();
     }, [refresh, lessonId, questionChapterId, user?.id, lessonProgressList]);
 
@@ -143,12 +158,11 @@ export default function LearningLesson() {
 
                         <PracticeExams
                             lesson={ThisQuestionLesson}
-                            // ==FIX==
-                            progress={false}
+                            progress={LESSONPROGRESSes}
                         />
                     </div>
 
-                    <ProgressOverview progress={progress || {}} />
+                    <ProgressOverview progress={LESSONPROGRESSes} />
                 </div>
             </div>
         </div>
