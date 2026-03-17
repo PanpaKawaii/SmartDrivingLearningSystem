@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { drivingLicenses, questionChapters, questionLessons } from '../../../mocks/DataSample';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import TrafficLight from '../../components/TrafficLight/TrafficLight';
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import { drivingLicenses, questionChapters, questionLessons } from '../../../../mocks/DataSample';
+import StarsBackground from '../../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import SelectedChapter from './SelectedChapter';
-import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
+import EmptyNotification from '../../../components/EmptyNotification/EmptyNotification';
 
 import './ChapterLesson.css';
 

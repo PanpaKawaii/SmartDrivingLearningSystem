@@ -55,13 +55,13 @@ export default function Forum() {
           ))}
         </div>
         {/* TEST DEMO RICH TEXT EDITOR */}
-        <RichTextEditor
+        {/* <RichTextEditor
           initialHtml='<h2>Tiêu đề</h2><ul><li value="1">chấm</li></ul><p><br></p><ol><li value="1">số</li></ol><p><br></p><h1><strong>IN ĐÂM</strong></h1>' //test prefill
           onHtmlChange={handleHtmlChange}
           placeholder="Viết bình luận của bạn..."
           autoFocus
-        />
-        <button
+        /> */}
+        {/* <button
           onClick={() =>
             console.log(
               "Editor content:",
@@ -71,7 +71,7 @@ export default function Forum() {
         >
           {" "}
           Log Content{" "}
-        </button>
+        </button> */}
         {/* TEST DEMO RICH TEXT EDITOR */}
       </div>
       <div className="right"></div>

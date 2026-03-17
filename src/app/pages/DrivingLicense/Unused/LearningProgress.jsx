@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { generateUUID } from 'three/src/math/MathUtils.js';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import TrafficLight from '../../components/TrafficLight/TrafficLight';
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import StarsBackground from '../../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 import './LearningProgress.css';
 

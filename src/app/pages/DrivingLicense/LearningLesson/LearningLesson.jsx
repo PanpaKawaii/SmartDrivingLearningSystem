@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 // import { fetchData } from '../../../mocks/CallingAPI';
 // import { putData } from '../../../mocks/CallingAPI';
-import { lessonProgresses, questionLessons } from '../../../mocks/DataSample';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import TrafficLight from '../../components/TrafficLight/TrafficLight';
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
-
-import './LearningLesson.css';
+import { lessonProgresses, questionLessons } from '../../../../mocks/DataSample';
+import StarsBackground from '../../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import LessonContent from './LessonContent';
 import PracticeExams from './PracticeExams';
 import ProgressOverview from './ProgressOverview';
+
+import './LearningLesson.css';
 
 export default function LicenseLessonDetail() {
     const { user } = useAuth();
@@ -45,7 +45,7 @@ export default function LicenseLessonDetail() {
                 // const LicenseResponse = await fetchData('licenses', token);
                 // console.log('LicenseResponse', LicenseResponse);
                 // const QuestionLessonResponse = await fetchData(`lessons/${lessonId}`, token);
-                const QuestionLessonResponse = questionLessons.find(ql => String (ql.id) === String(lessonId)) || questionLessons.find(ql => String (ql.questionChapterId) === String(questionChapterId));
+                const QuestionLessonResponse = questionLessons.find(ql => String(ql.id) === String(lessonId)) || questionLessons.find(ql => String(ql.questionChapterId) === String(questionChapterId));
                 console.log('QuestionLessonResponse', QuestionLessonResponse);
 
                 setThisQuestionLesson(QuestionLessonResponse);

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
+import EmptyNotification from '../../../components/EmptyNotification/EmptyNotification';
 
 import './SelectedChapter.css';
 
