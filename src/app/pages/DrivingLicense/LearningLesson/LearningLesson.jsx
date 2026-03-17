@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 // import { fetchData } from '../../../mocks/CallingAPI';
 // import { putData } from '../../../mocks/CallingAPI';
-import { lessonProgresses, questionLessons } from '../../../../mocks/DataSample';
+import { lessonProgresses, questionLessons, questions } from '../../../../mocks/DataSample';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -12,7 +12,7 @@ import ProgressOverview from './ProgressOverview';
 
 import './LearningLesson.css';
 
-export default function LicenseLessonDetail() {
+export default function LearningLesson() {
     const { user } = useAuth();
 
     const Params = useParams();
@@ -22,8 +22,6 @@ export default function LicenseLessonDetail() {
     console.log('drivingLicenseId', drivingLicenseId);
 
     const { licenseId, lessonId } = useParams();
-    const navigate = useNavigate();
-    const [exams, setExams] = useState([]);
     const [progress, setProgress] = useState(null);
     const [lessonProgressList, setLessonProgressList] = useState(lessonProgresses);
 
@@ -45,10 +43,18 @@ export default function LicenseLessonDetail() {
                 // const LicenseResponse = await fetchData('licenses', token);
                 // console.log('LicenseResponse', LicenseResponse);
                 // const QuestionLessonResponse = await fetchData(`lessons/${lessonId}`, token);
-                const QuestionLessonResponse = questionLessons.find(ql => String(ql.id) === String(lessonId)) || questionLessons.find(ql => String(ql.questionChapterId) === String(questionChapterId));
+                const QuestionResponse = [...questions];
+                console.log('QuestionResponse', QuestionResponse);
+                const QuestionLessonResponse = questionLessons.find(ql => ql.id == lessonId);
                 console.log('QuestionLessonResponse', QuestionLessonResponse);
 
-                setThisQuestionLesson(QuestionLessonResponse);
+                const QuestionLesson = {
+                    ...QuestionLessonResponse,
+                    questions: QuestionResponse.filter(q => q.questionLessonId == QuestionLessonResponse.id),
+                };
+                console.log('QuestionLesson', QuestionLesson);
+
+                setThisQuestionLesson(QuestionLesson);
 
                 const currentUserId = Number(user?.id || 1);
                 const currentLessonId = Number(QuestionLessonResponse?.id || lessonId);
@@ -106,10 +112,6 @@ export default function LicenseLessonDetail() {
         }));
     };
 
-    const startExam = examId => {
-        // navigate(`/licenses/${licenseId}/lessons/${lessonId}/exam/${examId}`)
-    };
-
     if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
@@ -125,7 +127,7 @@ export default function LicenseLessonDetail() {
                     <span>Back to Lessons</span>
                 </Link>
 
-                <div className='header'>
+                <div className='lesson-header'>
                     <h1>{ThisQuestionLesson?.name}</h1>
                     <p>{ThisQuestionLesson?.description}</p>
                 </div>
@@ -139,15 +141,13 @@ export default function LicenseLessonDetail() {
                             onMarkLessonContentComplete={markLessonContentComplete}
                         />
 
-                        {/* Practice Exams */}
                         <PracticeExams
-                            exams={[]}
-                            progress={progress}
-                            startExam={startExam}
+                            lesson={ThisQuestionLesson}
+                            // ==FIX==
+                            progress={false}
                         />
                     </div>
 
-                    {/* Progress Overview */}
                     <ProgressOverview progress={progress || {}} />
                 </div>
             </div>

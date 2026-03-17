@@ -4,121 +4,73 @@
 import './PracticeExams.css';
 
 export default function PracticeExams({
-    exams = [],
-    progress = '',
-    startExam = '',
+    lesson = {},
+    progress = false,
 }) {
-    // if (exams.length === 0) return null
+    // ==FIX==
+    const isLocked = progress;
+    const isPassed = progress;
     return (
         <div className='practice-exams-container'>
             <div className='header'>
                 <div className='title'>
                     <div className='icon-box'>
-                        {/* <Trophy className='icon' /> */}
+                        <i className='fa-solid fa-trophy' />
                     </div>
                     <div>
                         <h2>Practice Exams</h2>
-                        <p>
-                            {exams.length} exam{exams.length > 1 ? 's' : ''} available
-                        </p>
+                        <p>Test your learned knowledge</p>
                     </div>
                 </div>
             </div>
-            <div className='exam-list'>
-                {exams.map((exam, index) => {
-                    const isLocked = !progress?.theory_completed
-                    const isPassed =
-                        progress?.exam_completed &&
-                        (progress?.exam_score || 0) >= exam.passing_score
-                    return (
-                        <ExamCard
-                            key={exam.id}
-                            exam={exam}
-                            index={index}
-                            isLocked={isLocked}
-                            isPassed={isPassed}
-                            progress={progress}
-                            startExam={startExam}
-                        />
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-
-function ExamCard({
-    exam,
-    index,
-    isLocked,
-    isPassed,
-    progress,
-    startExam
-}) {
-    return (
-        <div
-            className={`exam ${isLocked ? 'locked' : ''} ${isPassed ? 'passed' : ''}`}
-        >
-            <div className='glow'></div>
-            <div className='exam-card'>
-                <div className='top'>
-                    <div className='info'>
-                        <div className='title-row'>
-                            <div className={`number ${isPassed ? 'passed' : ''}`}>
-                                {index + 1}
-                            </div>
-                            <h3>{exam.title}</h3>
-                        </div>
-                        <p className='description'>
-                            {exam.description}
-                        </p>
-                    </div>
+            <div className={`exam ${isLocked ? 'locked' : ''} ${isPassed ? 'passed' : ''}`}>
+                <div className='glow'></div>
+                <div className='exam-card'>
                     {isPassed && (
                         <div className='score'>
-                            {/* <Trophy className='icon' /> */}
-                            <span>{progress?.exam_score}%</span>
+                            {/* ==FIX== */}
+                            <i className='fa-solid fa-trophy' />
+                            <span>{0}%</span>
                         </div>
                     )}
-                </div>
-                <div className='stats'>
-                    <div className='stat'>
-                        {/* <FileText className='icon blue' /> */}
-                        <div>
-                            <p className='label'>Questions</p>
-                            <p className='value'>{exam.question_count}</p>
+                    <div className='stats'>
+                        <div className='stat'>
+                            <i className='fa-regular fa-question-circle blue' />
+                            <div>
+                                <p className='label'>Questions</p>
+                                <p className='value'>{lesson?.questions?.length}</p>
+                            </div>
+                        </div>
+                        <div className='stat'>
+                            <i className='fa-regular fa-clock purple' />
+                            <div>
+                                <p className='label'>Average duration</p>
+                                <p className='value'>~{(lesson?.questions?.length * 10 / 60 || 0)?.toFixed(0)} mins</p>
+                            </div>
+                        </div>
+                        {/* ==FIX== */}
+                        <div className='stat'>
+                            <i className='fa-solid fa-bullseye green' />
+                            <div>
+                                <p className='label'>Pass Score</p>
+                                <p className='value'>{80}%</p>
+                            </div>
                         </div>
                     </div>
-                    <div className='stat'>
-                        {/* <Clock className='icon purple' /> */}
-                        <div>
-                            <p className='label'>Duration</p>
-                            <p className='value'>{exam.duration_minutes} min</p>
-                        </div>
-                    </div>
-                    <div className='stat'>
-                        {/* <Target className='icon green' /> */}
-                        <div>
-                            <p className='label'>Pass Score</p>
-                            <p className='value'>{exam.passing_score}%</p>
-                        </div>
-                    </div>
-                </div>
-                <div className='action'>
                     {isLocked ? (
                         <div className='locked-box'>
-                            {/* <BookOpen className='icon' /> */}
+                            <i className='fa-solid fa-book-open' />
                             <span>
                                 Complete theory sections to unlock
                             </span>
                         </div>
                     ) : (
                         <button
-                            onClick={() => startExam(exam.id)}
                             variant={isPassed ? 'secondary' : 'primary'}
                             className='start-button'
                         >
                             {/* <PlayCircle className='btn-icon' /> */}
-                            {progress?.exam_completed
+                            {progress
                                 ? 'Retake Exam'
                                 : 'Start Exam'}
                         </button>

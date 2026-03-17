@@ -18,7 +18,7 @@
             }
         }
 
-        .header {
+        .lesson-header {
             margin: 0 0 48px;
             opacity: 0;
             animation: slideInUp 0.4s forwards;

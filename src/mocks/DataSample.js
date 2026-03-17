@@ -20,8 +20,8 @@ export const questions = [
     { id: 1, content: 'Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì? Biển báo tròn viền đỏ có ý nghĩa gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
     { id: 2, content: 'Khi đèn giao thông màu vàng, bạn phải làm gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
     { id: 3, content: 'Tốc độ tối đa trong khu dân cư là bao nhiêu?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
-    { id: 4, content: 'Người điều khiển xe phải mang theo giấy tờ gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
-    { id: 5, content: 'Biển báo hình tam giác có ý nghĩa gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 4, content: 'Người điều khiển xe phải mang theo giấy tờ gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 5, content: 'Biển báo hình tam giác có ý nghĩa gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
     { id: 6, content: 'Khi gặp người đi bộ qua đường, bạn cần làm gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
     { id: 7, content: 'Khoảng cách an toàn khi chạy xe là gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
@@ -47,11 +47,11 @@ export const questions = [
     { id: 24, content: 'Biển STOP có ý nghĩa gì?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
     { id: 25, content: 'Khi điều khiển xe máy, có bắt buộc đội mũ bảo hiểm không?', type: 'single', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
 
-    { id: 26, content: 'Khi gặp tai nạn giao thông, bạn nên làm gì?', type: 'multiple', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
-    { id: 27, content: 'Biển báo hình chữ nhật thường dùng để làm gì?', type: 'multiple', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
-    { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'multiple', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
-    { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'multiple', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 2, status: 1 },
-    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'multiple', questionLessonId: 1, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 3, status: 1 }
+    { id: 26, content: 'Khi gặp tai nạn giao thông, bạn nên làm gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 27, content: 'Biển báo hình chữ nhật thường dùng để làm gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 },
+    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'single', questionLessonId: 2, questionCategoryId: 1, questionDifficultyLevelId: 1, correctAnswer: 1, status: 1 }
 ];
 
 export const answers = [
@@ -184,36 +184,30 @@ export const answers = [
     { id: 78, questionId: 25, content: 'Chỉ đi xa mới cần', isCorrect: false, status: 1 },
 
     // Question 26 (3 answers)
-    { id: 79, questionId: 26, content: 'Gọi cấp cứu và báo công an', isCorrect: true, status: 1 },
     { id: 80, questionId: 26, content: 'Gọi cấp cứu và báo công an', isCorrect: true, status: 1 },
     { id: 81, questionId: 26, content: 'Bỏ đi', isCorrect: false, status: 1 },
-    // { id: 81, questionId: 26, content: 'Tự ý giải quyết', isCorrect: false, status: 1 },
+    { id: 81, questionId: 26, content: 'Tự ý giải quyết', isCorrect: false, status: 1 },
 
     // Question 27 (3 answers)
-    { id: 82, questionId: 27, content: 'Chỉ dẫn thông tin', isCorrect: true, status: 1 },
     { id: 83, questionId: 27, content: 'Chỉ dẫn thông tin', isCorrect: true, status: 1 },
     { id: 84, questionId: 27, content: 'Cấm đường', isCorrect: false, status: 1 },
-    // { id: 84, questionId: 27, content: 'Nguy hiểm', isCorrect: false, status: 1 },
+    { id: 84, questionId: 27, content: 'Nguy hiểm', isCorrect: false, status: 1 },
 
     // Question 28 (3 answers)
-    { id: 85, questionId: 28, content: 'Nghỉ ngơi hợp lý', isCorrect: true, status: 1 },
     { id: 86, questionId: 28, content: 'Nghỉ ngơi hợp lý', isCorrect: true, status: 1 },
     { id: 87, questionId: 28, content: 'Lái liên tục', isCorrect: false, status: 1 },
-    // { id: 87, questionId: 28, content: 'Không cần nghỉ', isCorrect: false, status: 1 },
+    { id: 87, questionId: 28, content: 'Không cần nghỉ', isCorrect: false, status: 1 },
 
-    // Question 29 (3 answers)
-    { id: 88, questionId: 29, content: 'Đường vắng, không có xe đối diện', isCorrect: true, status: 1 },
+    // Question 29 (1 answers)
     { id: 89, questionId: 29, content: 'Đường vắng, không có xe đối diện', isCorrect: true, status: 1 },
     { id: 90, questionId: 29, content: 'Trong thành phố đông xe', isCorrect: false, status: 1 },
-    // { id: 90, questionId: 29, content: 'Khi dừng xe', isCorrect: false, status: 1 },
+    { id: 90, questionId: 29, content: 'Khi dừng xe', isCorrect: false, status: 1 },
 
-    // Question 30 (3 answers)
-    { id: 91, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
-    { id: 92, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
+    // Question 30 (1 answers)
     { id: 93, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
     { id: 94, questionId: 30, content: 'Theo cảm tính', isCorrect: false, status: 1 },
-    // { id: 95, questionId: 30, content: 'Theo người khác', isCorrect: false, status: 1 },
-    // { id: 96, questionId: 30, content: 'Theo bà hàng xóm', isCorrect: false, status: 1 },
+    { id: 95, questionId: 30, content: 'Theo người khác', isCorrect: false, status: 1 },
+    { id: 96, questionId: 30, content: 'Theo bà hàng xóm', isCorrect: false, status: 1 },
 ];
 
 export const comments = [
