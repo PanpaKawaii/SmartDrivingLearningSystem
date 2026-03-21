@@ -45,14 +45,15 @@ export default function ExcelMultiSheetViewer() {
     };
 
     return (
-        <div style={{ padding: 20 }}>
+        <div style={{ color: '#000', padding: 20 }}>
             <input type='file' accept='.xlsx' onChange={handleFile} />
-
             <div style={{ marginTop: 20 }}>
                 {Object.entries(sheetsData).map(([sheetName, data]) => (
                     <div key={sheetName} style={{ marginBottom: 20 }}>
-                        <h3>{sheetName}</h3>
-                        <button onClick={() => navigator.clipboard.writeText(JSON.stringify(data))}>Copy</button>
+                        <div style={{ display: 'flex', alignItems: 'end', gap: '20px', marginBottom: '12px' }}>
+                            <h3>{sheetName}</h3>
+                            <button onClick={() => navigator.clipboard.writeText(JSON.stringify(data))}>Copy</button>
+                        </div>
                         <textarea
                             value={JSON.stringify(data, null, 2)}
                             readOnly

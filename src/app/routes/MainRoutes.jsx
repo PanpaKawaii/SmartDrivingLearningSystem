@@ -39,7 +39,7 @@ import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.js
 
 import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
 import ForumPopup from '../pages/Forum/ForumPopup.jsx'
-import ReadExcelData from '../pages/ReadExcelData/ReadExcelData.jsx'
+import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
 import LearningProgress from '../pages/DrivingLicense/Unused/LearningProgress.jsx'
 import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
@@ -75,7 +75,7 @@ export default function MainRoutes() {
                     <Route path='learning/list-simulation' element={<ControlledVideo />} />
                     {/* <Route path='learning/list-simulation/:id' element={<ControlledVideo />} /> */}
 
-                    <Route path='read-excel-data' element={<ReadExcelData />} />
+                    <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
                 </Route>
 
                 <Route path='/three-scene' element={<ThreeScene />} />
