@@ -91,14 +91,6 @@ export default function EditQuestionModal({ questionprop, onClose, setRefresh, a
                     </div>
                     <div className='flex'>
                         <div className='input-group flex-1'>
-                            <select id='formDifficultyLevel' name='questionDifficultyLevelId' value={question.questionDifficultyLevelId || 'single'} onChange={handleChange}>
-                                {additionalData?.questionDifficultyLevels?.map((chapter, index) => (
-                                    <option key={index} value={chapter.id}>{chapter.name}</option>
-                                ))}
-                            </select>
-                            <label htmlFor='questionDifficultyLevelId'>Difficulty Level</label>
-                        </div>
-                        <div className='input-group flex-1'>
                             <select id='formType' name='type' value={question.type || 'single'} onChange={handleChange}>
                                 <option value={'single'}>Single</option>
                                 <option value={'multiple'}>Multiple</option>

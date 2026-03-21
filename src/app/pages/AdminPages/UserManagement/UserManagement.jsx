@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchData, putData } from '../../../../mocks/CallingAPI';
-import { permissions, rolePermissions, roles, users } from '../../../../mocks/DataSample';
+import { roles, users } from '../../../../mocks/DataSample';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
@@ -34,25 +34,14 @@ export default function UserManagement() {
                 // console.log('UserResponse', UserResponse);
                 // const RoleResponse = await fetchData('roles', token);
                 // console.log('RoleResponse', RoleResponse);
-                // const PermissionResponse = await fetchData('permissions', token);
-                // console.log('PermissionResponse', PermissionResponse);
-                // const RolePermissionResponse = await fetchData('role-permissions', token);
-                // console.log('RolePermissionResponse', RolePermissionResponse);
 
                 const UserResponse = users;
                 const RoleResponse = roles;
-                const PermissionResponse = permissions;
-                const RolePermissionResponse = rolePermissions;
 
-                const Roles = RoleResponse.filter(r => r.status == 1).map(role => {
-                    const permissionIds = RolePermissionResponse.filter(rp => rp.roleId === role.id).map(rp => rp.permissionId);
-                    const permissions = PermissionResponse.filter(p => p.status == 1 && permissionIds.includes(p.id));
-                    return { ...role, permissions }
-                })
-                console.log('Roles', Roles);
+                console.log('RoleResponse', RoleResponse);
                 const Users = UserResponse.map(user => ({
                     ...user,
-                    role: Roles.find(r => r.id === user.roleId) || null
+                    role: RoleResponse.find(r => r.id === user.roleId) || null
                 }));
                 console.log('Users', Users);
 
@@ -215,7 +204,6 @@ export default function UserManagement() {
                                         </div>
                                     </td>
                                     <td><span>{user.phone}</span></td>
-                                    <td><span>{user.type}</span></td>
                                     <td>
                                         <div className='action-buttons'>
                                             <button onClick={() => openEditModal(user)}>

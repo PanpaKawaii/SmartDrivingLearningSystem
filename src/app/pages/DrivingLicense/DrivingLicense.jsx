@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { drivingLicenses } from '../../../mocks/DataSample';
+import { drivingLicenses, questionChapters } from '../../../mocks/DataSample';
 import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
@@ -29,7 +29,14 @@ export default function DrivingLicense() {
                 // const LicenseResponse = await fetchData('licenses', token);
                 // console.log('LicenseResponse', LicenseResponse);
 
-                setDRIVINGLICENSEs(drivingLicenses);
+                const QuestionChapterResponse = [...questionChapters];
+                const DrivingLicenseResponse = [...drivingLicenses];
+                const DrivingLicense = DrivingLicenseResponse.map(dl => ({
+                    ...dl,
+                    chapters: QuestionChapterResponse.filter(qc => qc.drivingLicenseId == dl.id),
+                }));
+
+                setDRIVINGLICENSEs(DrivingLicense);
             } catch (error) {
                 setError('Error');
             } finally {
@@ -76,7 +83,7 @@ export default function DrivingLicense() {
                                     <div className='detail'>
                                         <div className='item'>
                                             <i className='fa-solid fa-book-open' />
-                                            <span>{license.chapters?.length} Lessons</span>
+                                            <span>{license.chapters?.length} Chapters</span>
                                         </div>
                                         <div className='item'>
                                             <i className='fa-regular fa-check-circle' />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchData, putData } from '../../../../mocks/CallingAPI';
-import { permissions, questions, rolePermissions, roles, users, questionCategories, questionChapters, questionDifficultyLevels } from '../../../../mocks/DataSample';
+import { questions, roles, users, questionCategories, questionChapters } from '../../../../mocks/DataSample';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import Cube from '../../../components/Cube/Cube';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
@@ -17,7 +17,6 @@ export default function QuestionManagement() {
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [QUESTIONCATEGORIes, setQUESTIONCATEGORIes] = useState([]);
-    const [QUESTIONDIFFICULTYLEVELs, setQUESTIONDIFFICULTYLEVELs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -44,13 +43,6 @@ export default function QuestionManagement() {
                 // console.log('QuestionChapterResponse', QuestionChapterResponse);
                 // const QuestionCategoryResponse = await fetchData('QuestionCategories', token);
                 // console.log('QuestionCategoryResponse', QuestionCategoryResponse);
-                // const QuestionDifficultyLevelResponse = await fetchData('QuestionDifficultyLevels', token);
-                // console.log('QuestionDifficultyLevelResponse', QuestionDifficultyLevelResponse);
-
-                // const PermissionResponse = await fetchData('permissions', token);
-                // console.log('PermissionResponse', PermissionResponse);
-                // const RolePermissionResponse = await fetchData('role-permissions', token);
-                // console.log('RolePermissionResponse', RolePermissionResponse);
 
                 const UserResponse = users;
                 const RoleResponse = roles;
@@ -58,20 +50,11 @@ export default function QuestionManagement() {
                 const QuestionResponse = questions;
                 const QuestionChapterResponse = questionChapters;
                 const QuestionCategoryResponse = questionCategories;
-                const QuestionDifficultyLevelResponse = questionDifficultyLevels;
 
-                const PermissionResponse = permissions;
-                const RolePermissionResponse = rolePermissions;
-
-                const Roles = RoleResponse.filter(r => r.status == 1).map(role => {
-                    const permissionIds = RolePermissionResponse.filter(rp => rp.roleId === role.id).map(rp => rp.permissionId);
-                    const permissions = PermissionResponse.filter(p => p.status == 1 && permissionIds.includes(p.id));
-                    return { ...role, permissions }
-                })
-                console.log('Roles', Roles);
+                console.log('RoleResponse', RoleResponse);
                 const Users = UserResponse.map(user => ({
                     ...user,
-                    role: Roles.find(r => r.id === user.roleId) || null
+                    role: RoleResponse.find(r => r.id === user.roleId) || null
                 }));
                 console.log('Users', Users);
                 const Questions = QuestionResponse.map(question => ({
@@ -79,14 +62,12 @@ export default function QuestionManagement() {
                     user: Users.find(u => u.id === question.userId) || null,
                     chapter: QuestionChapterResponse.find(c => c.id === question.questionChapterId) || null,
                     category: QuestionCategoryResponse.find(c => c.id === question.questionCategoryId) || null,
-                    difficultyLevel: QuestionDifficultyLevelResponse.find(d => d.id === question.questionDifficultyLevelId) || null
                 }));
                 console.log('Questions', Questions);
 
                 setQUESTIONs(Questions);
                 setQUESTIONCHAPTERs(QuestionChapterResponse);
                 setQUESTIONCATEGORIes(QuestionCategoryResponse);
-                setQUESTIONDIFFICULTYLEVELs(QuestionDifficultyLevelResponse);
             } catch (error) {
                 setError('Error');
             } finally {
@@ -184,18 +165,6 @@ export default function QuestionManagement() {
                             label={'Category'}
                             labelStyle={'left'}
                         />
-                        <StyleLabelSelect
-                            id={`select`}
-                            list={QUESTIONDIFFICULTYLEVELs}
-                            value={select}
-                            onValueChange={(propE) => {
-                                setSelect(propE);
-                            }}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Difficulty'}
-                            labelStyle={'left'}
-                        />
                     </div>
                     <button type='button' className='btn-secondary' onClick={handleClear}>
                         CLEAR
@@ -259,7 +228,7 @@ export default function QuestionManagement() {
                         onClose={closeEditModal}
                         setRefresh={setRefresh}
                         action={'edit'}
-                        additionalData={{ questionChapters: QUESTIONCHAPTERs, questionCategories: QUESTIONCATEGORIes, questionDifficultyLevels: QUESTIONDIFFICULTYLEVELs }}
+                        additionalData={{ questionChapters: QUESTIONCHAPTERs, questionCategories: QUESTIONCATEGORIes }}
                     />
                 )}
 
@@ -269,7 +238,6 @@ export default function QuestionManagement() {
                             userId: user?.id,
                             questionChapterId: '',
                             questionCategoryId: '',
-                            questionDifficultyLevelId: '',
                             content: '',
                             image: '',
                             explanation: '',
@@ -278,7 +246,7 @@ export default function QuestionManagement() {
                         onClose={closeCreateModal}
                         setRefresh={setRefresh}
                         action={'create'}
-                        additionalData={{ questionChapters: QUESTIONCHAPTERs, questionCategories: QUESTIONCATEGORIes, questionDifficultyLevels: QUESTIONDIFFICULTYLEVELs }}
+                        additionalData={{ questionChapters: QUESTIONCHAPTERs, questionCategories: QUESTIONCATEGORIes }}
                     />
                 )}
 

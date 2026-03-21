@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { exams, chapters } from '../../../mocks/DataSample.js';
+import { exams, questionChapters } from '../../../mocks/DataSample.js';
 
 import './ListExam.css';
 
 export default function ListExam() {
     const [EXAMs, setEXAMs] = useState(exams || []);
-    const [CHAPTERs, setCHAPTERs] = useState(chapters || []);
+    const [CHAPTERs, setCHAPTERs] = useState(questionChapters || []);
 
 
     const [totalQuestions, setTotalQuestions] = useState(0);
