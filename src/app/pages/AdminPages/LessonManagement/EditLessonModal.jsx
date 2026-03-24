@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { postData, putData } from "../../../../mocks/CallingAPI";
+import { postData, putData, uploadMedia } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
 import RichTextEditor from "../../../components/RichTextEditor/RichTextEditor";
 
@@ -21,6 +21,28 @@ export default function EditLessonModal({
 		lessonProp?.content || "",
 	);
 	const [loading, setLoading] = useState(false);
+	const hasPersistedLessonId = Boolean(lesson?.id && String(lesson.id).trim());
+	const token = user?.token || "";
+
+	const imageFeatures = {
+		upload: hasPersistedLessonId,
+		dragDrop: hasPersistedLessonId,
+		paste: hasPersistedLessonId,
+		url: true,
+	};
+
+	const imageUploadConfig = {
+		entityId: hasPersistedLessonId ? String(lesson.id) : "",
+		imageTarget: "LessonImage",
+		uploadHandler: async ({ files, entityId, imageTarget }) => {
+			return uploadMedia({
+				files,
+				entityId,
+				imageTarget,
+				token,
+			});
+		},
+	};
 
 	useEffect(() => {
 		setLesson(lessonProp);
@@ -28,8 +50,6 @@ export default function EditLessonModal({
 	}, [lessonProp]);
 
 	const persistLesson = async (payload) => {
-		const token = user?.token || "";
-
 		if (action === "edit") {
 			return putData(`/questionlessons/${payload.id}`, payload, token);
 		}
@@ -153,10 +173,18 @@ export default function EditLessonModal({
 						<label htmlFor="content" className="rich-label">
 							Content
 						</label>
+						{!hasPersistedLessonId && (
+							<div className="rich-editor-hint">
+								Save lesson first to enable image upload, drag-drop, and paste image.
+							</div>
+						)}
 						<RichTextEditor
 							key={`${action}-${lesson.id || "new"}`}
 							initialHtml={editorInitialHtml}
 							onHtmlChange={handleContentChange}
+							enableImage
+							imageFeatures={imageFeatures}
+							imageUploadConfig={imageUploadConfig}
 							placeholder="Nhập nội dung bài học..."
 							autoFocus={false}
 						/>
