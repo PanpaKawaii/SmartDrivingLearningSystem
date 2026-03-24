@@ -4020,30 +4020,30 @@ export const answers = [
     { id: 78, questionId: 25, content: 'Chỉ đi xa mới cần', isCorrect: false, status: 1 },
 
     // Question 26 (3 answers)
-    { id: 80, questionId: 26, content: 'Gọi cấp cứu và báo công an', isCorrect: true, status: 1 },
-    { id: 81, questionId: 26, content: 'Bỏ đi', isCorrect: false, status: 1 },
+    { id: 79, questionId: 26, content: 'Gọi cấp cứu và báo công an', isCorrect: true, status: 1 },
+    { id: 80, questionId: 26, content: 'Bỏ đi', isCorrect: false, status: 1 },
     { id: 81, questionId: 26, content: 'Tự ý giải quyết', isCorrect: false, status: 1 },
 
     // Question 27 (3 answers)
-    { id: 83, questionId: 27, content: 'Chỉ dẫn thông tin', isCorrect: true, status: 1 },
-    { id: 84, questionId: 27, content: 'Cấm đường', isCorrect: false, status: 1 },
+    { id: 82, questionId: 27, content: 'Chỉ dẫn thông tin', isCorrect: true, status: 1 },
+    { id: 83, questionId: 27, content: 'Cấm đường', isCorrect: false, status: 1 },
     { id: 84, questionId: 27, content: 'Nguy hiểm', isCorrect: false, status: 1 },
 
     // Question 28 (3 answers)
-    { id: 86, questionId: 28, content: 'Nghỉ ngơi hợp lý', isCorrect: true, status: 1 },
-    { id: 87, questionId: 28, content: 'Lái liên tục', isCorrect: false, status: 1 },
+    { id: 85, questionId: 28, content: 'Nghỉ ngơi hợp lý', isCorrect: true, status: 1 },
+    { id: 86, questionId: 28, content: 'Lái liên tục', isCorrect: false, status: 1 },
     { id: 87, questionId: 28, content: 'Không cần nghỉ', isCorrect: false, status: 1 },
 
     // Question 29 (1 answers)
-    { id: 89, questionId: 29, content: 'Đường vắng, không có xe đối diện', isCorrect: true, status: 1 },
-    { id: 90, questionId: 29, content: 'Trong thành phố đông xe', isCorrect: false, status: 1 },
+    { id: 88, questionId: 29, content: 'Đường vắng, không có xe đối diện', isCorrect: true, status: 1 },
+    { id: 89, questionId: 29, content: 'Trong thành phố đông xe', isCorrect: false, status: 1 },
     { id: 90, questionId: 29, content: 'Khi dừng xe', isCorrect: false, status: 1 },
 
     // Question 30 (1 answers)
-    { id: 93, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
-    { id: 94, questionId: 30, content: 'Theo cảm tính', isCorrect: false, status: 1 },
-    { id: 95, questionId: 30, content: 'Theo người khác', isCorrect: false, status: 1 },
-    { id: 96, questionId: 30, content: 'Theo bà hàng xóm', isCorrect: false, status: 1 },
+    { id: 91, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
+    { id: 92, questionId: 30, content: 'Theo cảm tính', isCorrect: false, status: 1 },
+    { id: 93, questionId: 30, content: 'Theo người khác', isCorrect: false, status: 1 },
+    { id: 94, questionId: 30, content: 'Theo bà hàng xóm', isCorrect: false, status: 1 },
 ];
 
 export const comments = [

@@ -1,0 +1,48 @@
+.controlled-video-container {
+    flex: 1;
+
+    video {
+        width: 100%;
+        min-height: 400px;
+        max-height: 600px;
+        border: 2px solid #868ea7;
+        box-sizing: border-box;
+        background-color: #868ea73d;
+        pointer-events: 'none';
+    }
+
+    .content {
+        width: 100%;
+        margin: 8px 0 0;
+
+        .bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e5e7eb;
+
+            &.point-bar {
+                display: flex;
+            }
+
+            .fill {
+                height: 100%;
+
+                &.white-point {
+                    background-color: #2259c7;
+                }
+            }
+        }
+    }
+
+    .no-video {
+        width: 100%;
+        height: 500px;
+        background-color: #868ea73d;
+        text-align: center;
+        align-content: center;
+        border: 1px solid #868ea7;
+        box-sizing: border-box;
+        border-radius: 20px;
+        font-style: italic;
+    }
+}

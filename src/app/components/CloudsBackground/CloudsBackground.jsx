@@ -165,38 +165,6 @@ export default function CloudsBackground() {
                     style={{ left: '17.9789%', top: '84.0464%', animationDelay: '0.311376s', animationDuration: '8.2688s', opacity: '0.53517' }}>
                 </div>
             </div>
-            <div className='absolute inset-0 opacity-20'>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '73.7554%', top: '33.9435%', animationDelay: '4.85897s', animationDuration: '9.14821s, transform: rotate(191.589deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '72.3021%', top: '20.0119%', animationDelay: '2.81119s', animationDuration: '9.43584s, transform: rotate(3.55285deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '29.4372%', top: '39.6725%', animationDelay: '6.89361s', animationDuration: '7.24255s, transform: rotate(75.2599deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '48.2429%', top: '42.1212%', animationDelay: '4.4278s', animationDuration: '7.81154s, transform: rotate(255.555deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '44.9309%', top: '24.9462%', animationDelay: '2.14568s', animationDuration: '7.55128s, transform: rotate(249.186deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '21.2465%', top: '30.9855%', animationDelay: '7.24294s', animationDuration: '8.79576s, transform: rotate(181.277deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '40.3792%', top: '44.662%', animationDelay: '1.78284s', animationDuration: '8.27217s, transform: rotate(278.722deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '22.2933%', top: '12.2085%', animationDelay: '6.47147s', animationDuration: '8.98354s, transform: rotate(219.316deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '9.82632%', top: '41.4853%', animationDelay: '7.22333s', animationDuration: '8.198s, transform: rotate(353.704deg)' }}>
-                </div>
-                <div className='absolute h-[2px] w-32 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'
-                    style={{ left: '67.7911%', top: '39.2482%', animationDelay: '5.12046s', animationDuration: '8.97845s, transform: rotate(322.065deg)' }}>
-                </div>
-            </div>
             <div className='absolute top-0 left-0 w-full h-full'>
                 <div className='absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400/10 rounded-full blur-2xl animate-pulse-glow'></div>
                 <div className='absolute bottom-1/3 right-1/4 w-64 h-64 bg-purple-400/10 rounded-full blur-2xl animate-pulse-glow'
@@ -216,13 +184,6 @@ export default function CloudsBackground() {
                 style={{ animationDelay: '2s' }}></div>
             <div className='absolute top-1/2 right-1/4 w-3 h-3 bg-pink-400 rounded-full animate-float blur-sm'
                 style={{ animationDelay: '1.5s' }}></div>
-            <div className='absolute inset-0 opacity-20'>
-                <div className='absolute top-20 left-1/4 w-64 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-float'></div>
-                <div className='absolute bottom-40 right-1/4 w-48 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent animate-float'
-                    style={{ animationDelay: '2s' }}></div>
-                <div className='absolute top-1/2 left-10 w-56 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent animate-float'
-                    style={{ animationDelay: '3s' }}></div>
-            </div>
             <div className='absolute top-0 left-0 w-full h-full pointer-events-none'>
                 <div className='absolute top-1/4 left-1/3 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse-glow'></div>
                 <div className='absolute bottom-1/4 right-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse-glow'

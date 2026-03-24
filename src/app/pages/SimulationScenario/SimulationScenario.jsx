@@ -13,6 +13,7 @@ export default function SimulationScenario() {
     const { user } = useAuth();
 
     const [SIMULATIONSCENARIOs, setSIMULATIONSCENARIOs] = useState([]);
+    const [selectedScenarioId, setSelectedScenarioId] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -43,6 +44,7 @@ export default function SimulationScenario() {
                 console.log('SimulationScenario', SimulationScenario);
 
                 setSIMULATIONSCENARIOs(SimulationScenario);
+                // setSelectedScenarioId(SimulationScenario?.[0]?.id);
             } catch (error) {
                 setError('Error');
             } finally {
@@ -51,14 +53,21 @@ export default function SimulationScenario() {
         })();
     }, [refresh]);
 
+    const selectedScenario = SIMULATIONSCENARIOs.find(ss => ss.id == selectedScenarioId);
+    console.log('selectedScenario', selectedScenario);
+
     if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='simulation-scenario-container'>
             <CloudsBackground />
             <div className='container'>
-                {/* <ControlledVideo /> */}
-                {/* <ListScenario list={SIMULATIONSCENARIOs} groupBy={'simulationChapterId'} /> */}
+                <ControlledVideo selectedScenario={selectedScenario} />
+                <ListScenario
+                    list={SIMULATIONSCENARIOs}
+                    groupBy={'simulationChapterId'}
+                    onClickButton={setSelectedScenarioId}
+                />
             </div>
         </div>
     )

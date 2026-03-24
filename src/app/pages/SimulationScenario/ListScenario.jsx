@@ -4,6 +4,7 @@ import './ListScenario.css';
 export default function ListScenario({
     list = [],
     groupBy = '',
+    onClickButton = () => { },
 }) {
     const groupedList = Object.values(
         list.reduce((acc, item) => {
@@ -40,7 +41,7 @@ export default function ListScenario({
 
                         <div className='list'>
                             {group.items?.map((item, index) => (
-                                <button key={index} className='item'>
+                                <button key={index} className='item' onClick={() => onClickButton(item.id)}>
                                     <div>
                                         {index + 1}
                                     </div>

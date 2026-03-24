@@ -177,7 +177,7 @@ export default function LessonQuiz() {
                             <div className='grid-answer'>
                                 {selectedQuestion?.answers?.map((answer, aIndex) => (
                                     <button
-                                        key={answer.id}
+                                        key={aIndex}
                                         className={`${getAnswerStatus(selectedQuestion, answer, myAnswers)}`}
                                         style={{ animationDelay: `${aIndex * 0.1}s` }}
                                         onClick={() => toggleAnswerInMyAnswers(selectedQuestion?.id, answer.id)}
