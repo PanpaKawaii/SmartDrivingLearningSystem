@@ -2,25 +2,62 @@
 
     .container {
         display: flex;
-        gap: 100px;
+        gap: 50px;
         position: relative;
 
         .content {
-            background-color: #00ff00;
             flex: 1;
+
+            span {
+                color: #6c9aff;
+
+                &.bold {
+                    font-weight: bold;
+                }
+            }
+
+            h2 {
+                margin: 0 0 28px;
+                max-width: 540px;
+            }
+
+            ul {
+                li {
+                    margin: 0 0 16px;
+                }
+            }
         }
 
         .link {
-            background-color: #0000ff;
             position: sticky;
             top: 100px;
             margin: 60px 0 0;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
+            width: 340px;
+            height: fit-content;
 
-            text-align: center;
-            align-content: center;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+
+            i {
+                margin: 0 0 20px;
+                color: #447fff;
+                font-size: 10rem;
+            }
+
+            h2 {
+                span {
+                    color: #447fff;
+                }
+            }
+
+            p {
+                max-width: 220px;
+                color: var(--text-secondary);
+                text-align: center;
+            }
         }
     }
 }

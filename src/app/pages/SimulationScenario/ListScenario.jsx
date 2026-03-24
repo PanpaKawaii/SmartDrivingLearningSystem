@@ -21,33 +21,21 @@ export default function ListScenario({
 
     return (
         <div className='list-scenario-container'>
-            {/* <div className='group-list'>
-                {[...Array(groupedList.length)].map((_, gIndex) => (
-                    <div key={gIndex}>
-                        <div>
-                            {gIndex + 1}: {groupedList?.[gIndex]?.chapter?.name}
-                        </div>
-                    </div>
-                ))}
-            </div> */}
-
-
             <div className='group-list'>
                 {groupedList.map((group, gIndex) => (
                     <div key={gIndex} className='group-item'>
-                        <h3>
-                            Chương {gIndex + 1}: {group?.[groupBy]?.name}
-                            {/* {JSON.stringify(group)} */}
-                        </h3>
-
+                        <h3>Chương {gIndex + 1}: {group?.[groupBy]?.name}</h3>
                         <div className='list'>
-                            {group.items?.map((item, index) => (
-                                <button key={index} className={`item ${item.id == selected ? 'btn-selected' : ''}`} onClick={() => onClickButton(item.id)}>
-                                    <div>
-                                        {index + 1}
-                                    </div>
-                                </button>
-                            ))}
+                            {group.items?.map((item, index) => {
+                                const i = list?.findIndex(s => s.id == item.id);
+                                return (
+                                    <button key={index} className={`item ${item.id == selected ? 'btn-selected' : ''}`} onClick={() => onClickButton(item.id)}>
+                                        <div>
+                                            {i + 1}
+                                        </div>
+                                    </button>
+                                )
+                            })}
                         </div>
                     </div>
                 ))}
