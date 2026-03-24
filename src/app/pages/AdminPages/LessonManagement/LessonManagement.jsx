@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 import { deleteData, fetchData, putData } from "../../../../mocks/CallingAPI";
-import {
-  questionChapters,
-  questionLessons,
-} from "../../../../mocks/DataSample";
 import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
 import MovingLabelInput from "../../../components/MovingLabelInput/MovingLabelInput";
 import StyleLabelSelect from "../../../components/StyleLabelSelect/StyleLabelSelect";
@@ -58,12 +54,12 @@ export default function LessonManagement() {
           token,
         );
 
-        const chapterResponse = Array.isArray(chapterResponseRaw)
-          ? chapterResponseRaw
-          : questionChapters;
-        const lessonResponse = Array.isArray(lessonResponseRaw)
-          ? lessonResponseRaw
-          : questionLessons;
+        const chapterResponse = Array.isArray(chapterResponseRaw?.items)
+          ? chapterResponseRaw.items
+          : [];
+        const lessonResponse = Array.isArray(lessonResponseRaw?.items)
+          ? lessonResponseRaw.items
+          : [];
 
         const lessonsWithChapter = lessonResponse.map((lesson) => ({
           ...lesson,
