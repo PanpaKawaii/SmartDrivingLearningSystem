@@ -21,12 +21,26 @@ import { $setBlocksType } from '@lexical/selection';
 import { $createParagraphNode } from 'lexical';
 import { mergeRegister } from '@lexical/utils';
 
-export default function ToolbarPlugin() {
+export default function ToolbarPlugin({
+    enableImage = false,
+    imageFeatures = {},
+    imageUploadConfig = {},
+}) {
     const [editor] = useLexicalComposerContext();
     const [isBold, setIsBold] = useState(false);
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
     const [isStrike, setIsStrike] = useState(false);
+
+    // Reserved for commit 4 where image actions are added to the toolbar.
+    const _imageFlags = {
+        enableImage,
+        ...imageFeatures,
+    };
+
+    const _imageUploadConfig = imageUploadConfig;
+    void _imageFlags;
+    void _imageUploadConfig;
 
     // Sync trạng thái các nút khi selection thay đổi
     const updateToolbar = useCallback(() => {

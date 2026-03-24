@@ -10,13 +10,29 @@ import { $createImageNode } from "../nodes/ImageNode";
 
 export const INSERT_IMAGE_COMMAND = createCommand("INSERT_IMAGE_COMMAND");
 
-export default function ImagePlugin() {
+export default function ImagePlugin({
+  enableImage = false,
+  canInsertImage = false,
+  imageFeatures = {},
+  imageUploadConfig = {},
+}) {
   const [editor] = useLexicalComposerContext();
+  const supportsImageInsert = Boolean(enableImage && canInsertImage);
+
+  // Reserved for commit 5 where DnD/Paste upload will use these config values.
+  const _imageFeatureFlags = imageFeatures;
+  const _imageUploadConfig = imageUploadConfig;
+  void _imageFeatureFlags;
+  void _imageUploadConfig;
 
   useEffect(() => {
     return editor.registerCommand(
       INSERT_IMAGE_COMMAND,
       (payload) => {
+        if (!supportsImageInsert) {
+          return false;
+        }
+
         const src = payload?.src;
         if (!src) {
           return false;
@@ -35,7 +51,7 @@ export default function ImagePlugin() {
       },
       COMMAND_PRIORITY_EDITOR,
     );
-  }, [editor]);
+  }, [editor, supportsImageInsert]);
 
   return null;
 }
