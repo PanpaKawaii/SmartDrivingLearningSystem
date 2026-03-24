@@ -16,6 +16,8 @@ import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { $createParagraphNode, $getRoot } from "lexical";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import ImagePlugin from "./plugins/ImagePlugin";
+import { ImageNode } from "./nodes/ImageNode";
 import "./RichTextEditor.css";
 
 const theme = {
@@ -181,6 +183,7 @@ export default function RichTextEditor({
       ListItemNode,
       LinkNode,
       AutoLinkNode,
+      ImageNode,
     ],
     ...initialConfig,
   };
@@ -200,6 +203,7 @@ export default function RichTextEditor({
           <HistoryPlugin />
           <ListPlugin />
           <LinkPlugin />
+          <ImagePlugin />
           <InitialHtmlPlugin initialHtml={initialHtml} />
           {autoFocus && <AutoFocusPlugin />}
           {(onChange || onHtmlChange) && (
