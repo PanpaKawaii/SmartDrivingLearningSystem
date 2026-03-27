@@ -6,6 +6,42 @@
         padding: 20px;
     }
 
+    .react-count {
+        padding: 0 20px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        background-color: transparent;
+
+        .count {
+            margin: 0 0 0 8px;
+            color: var(--text-secondary);
+        }
+
+        i {
+            padding: 2px;
+            font-size: 1.2rem;
+            background-clip: text;
+            background: var(--background);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 4px #00000080);
+            position: relative;
+
+            &.fa-circle::after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: .37rem;
+                height: .37rem;
+                background-color: #FFDA72;
+                border-radius: 50%;
+            }
+        }
+    }
+
     .react-comment {
         display: flex;
         padding: 8px;
@@ -17,6 +53,7 @@
             display: inline-block;
 
             .reaction-popup {
+                z-index: 10;
                 position: absolute;
                 bottom: 100%;
                 left: 50%;
@@ -42,12 +79,26 @@
                         animation: swingingForum 2s ease-in-out infinite;
 
                         i {
+                            padding: 2px;
                             font-size: 2rem;
                             background-clip: text;
                             background: var(--background);
                             -webkit-background-clip: text;
                             -webkit-text-fill-color: transparent;
                             transition: transform 0.2s, margin 0.5s;
+                            position: relative;
+
+                            &.fa-circle::after {
+                                content: '';
+                                position: absolute;
+                                left: 50%;
+                                top: 50%;
+                                transform: translate(-50%, -50%);
+                                width: .625rem;
+                                height: .625rem;
+                                background-color: #FFDA72;
+                                border-radius: 50%;
+                            }
 
                             &:hover {
                                 margin: 0 20px;
@@ -70,15 +121,30 @@
                 align-items: center;
 
                 .fa-solid {
-                    min-width: 40px;
+                    padding: 2px;
                     background-clip: text;
                     background: var(--background);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
+                    position: relative;
+
+                    &.fa-circle::after {
+                        content: '';
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        width: .44rem;
+                        height: .44rem;
+                        background-color: #FFDA72;
+                        border-radius: 50%;
+                    }
                 }
 
                 span {
+                    margin: 0 0 0 8px;
                     font-size: 1rem;
+                    font-weight: bold;
                 }
 
                 &:hover {

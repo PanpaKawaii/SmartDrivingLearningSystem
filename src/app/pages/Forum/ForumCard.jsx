@@ -18,6 +18,9 @@ export default function ForumCard({
     const actions = [
         { id: 'Like', icon: 'fa-solid fa-thumbs-up', color: '#538DFF', background: 'linear-gradient(to bottom, #538DFF, #538DFF)', force: true, },
         { id: 'Heart', icon: 'fa-solid fa-heart', color: '#F74C61', background: 'linear-gradient(to bottom, #F74C61, #F74C61)', force: true, },
+        { id: 'Pray', icon: 'fa-solid fa-circle', color: '#A58BE2', background: 'conic-gradient( #9271DC 0deg 15deg, #A58BE2 15deg 45deg, #9271DC 45deg 75deg, #A58BE2 75deg 105deg, #9271DC 105deg 135deg, #A58BE2 135deg 165deg, #9271DC 165deg 195deg, #A58BE2 195deg 225deg, #9271DC 225deg 255deg, #A58BE2 255deg 285deg, #9271DC 285deg 315deg, #A58BE2 315deg 345deg, #9271DC 345deg 360deg)', force: true, },
+        { id: 'Pride', icon: 'fa-solid fa-square', color: '#ffffff', background: 'linear-gradient(to bottom, #E40303 0% 25%, #FF8C00 25% 37.5%, #FFED00 37.5% 50%, #008026 50% 62.5%, #24408E 62.5% 75%, #732982 75% 100%)', force: true, },
+        { id: 'Love', icon: 'fa-solid fa-face-kiss-wink-heart', color: '#FFDA61', background: 'linear-gradient(to bottom, #FFDA61, #FFDA61)', force: true, },
         { id: 'Haha', icon: 'fa-solid fa-face-laugh-squint', color: '#FFDA61', background: 'linear-gradient(to bottom, #FFDA61, #FFDA61)', force: true, },
         { id: 'Wow', icon: 'fa-solid fa-face-surprise', color: '#FFDA61', background: 'linear-gradient(to bottom, #FFDA61, #FFDA61)', force: true, },
         { id: 'Sad', icon: 'fa-solid fa-face-frown', color: '#FFDA61', background: 'linear-gradient(to bottom, #FFDA61, #FFDA61)', force: true, },
@@ -30,9 +33,24 @@ export default function ForumCard({
                 <h2>{post.title}</h2>
                 <p>{post.content}</p>
             </div>
-            <div className='react-count'>
-                <i />
-            </div>
+            <button className='react-count' onClick={() => setSelectedPost(post)}>
+                {[...Array(actions?.length)].map((_, index) => (
+                    <span
+                        key={index}
+                        style={{ zIndex: actions?.length - index }}
+                    >
+                        <i
+                            className={actions[index].icon}
+                            style={{
+                                color: actions[index].color,
+                                marginLeft: `${-8}px`,
+                                '--background': actions[index].background
+                            }}
+                        />
+                    </span>
+                ))}
+                <span className='count'>2K+</span>
+            </button>
             <div className='react-comment'>
                 <div
                     className='button-wrapper'
