@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import AddLessonModal from './AddLessonModal';
 import '../InstructorPages.css';
 
-const mockLessons = [
+const initialLessons = [
     { id: 1, title: 'Giới thiệu Luật giao thông đường bộ', chapter: 'Luật giao thông', type: 'Lý thuyết', duration: '45 phút', status: 'active' },
     { id: 2, title: 'Biển báo cấm và biển báo nguy hiểm', chapter: 'Biển báo', type: 'Lý thuyết', duration: '30 phút', status: 'active' },
     { id: 3, title: 'Kỹ thuật vào cua an toàn', chapter: 'Kỹ thuật lái xe', type: 'Thực hành', duration: '60 phút', status: 'active' },
@@ -30,6 +32,24 @@ const columns = [
 ];
 
 export default function LessonManagement() {
+    const [showModal, setShowModal] = useState(false);
+    const [lessons, setLessons] = useState(initialLessons);
+
+    const handleSave = (newLesson) => {
+        const chapterMap = { '1': 'Luật giao thông', '2': 'Kỹ thuật lái xe', '3': 'Biển báo', '4': 'Tình huống', '5': 'Cấu tạo và sửa chữa', '6': 'Đạo đức người lái xe' };
+        setLessons((prev) => [
+            ...prev,
+            {
+                id: prev.length + 1,
+                title: newLesson.name,
+                chapter: chapterMap[newLesson.chapter] || newLesson.chapter,
+                type: newLesson.type,
+                duration: newLesson.duration || '--',
+                status: Number(newLesson.status) === 1 ? 'active' : 'draft',
+            },
+        ]);
+    };
+
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
@@ -37,11 +57,12 @@ export default function LessonManagement() {
                     <h1>Quản lý Bài học</h1>
                     <p>Quản lý danh sách bài học trong hệ thống đào tạo.</p>
                 </div>
-                <button className='ins-btn ins-btn-primary'>
+                <button className='ins-btn ins-btn-primary' onClick={() => setShowModal(true)}>
                     <i className='fa-solid fa-plus'></i> Thêm bài học
                 </button>
             </div>
-            <InstructorDataTable title='Danh sách bài học' columns={columns} data={mockLessons} />
+            <InstructorDataTable title='Danh sách bài học' columns={columns} data={lessons} />
+            <AddLessonModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={handleSave} />
         </div>
     );
 }
