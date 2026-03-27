@@ -70,7 +70,7 @@ export default function MainRoutes() {
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
-                <Route path='/' element={<UserLayout />} >
+                {/* <Route path='/' element={<UserLayout />} >
                     <Route index element={<Home />} />
 
                     <Route path='driving-license' element={<DrivingLicense />} />
@@ -93,14 +93,14 @@ export default function MainRoutes() {
                     <Route path='learning/theory-question' element={<CoreLearning />} />
                     <Route path='learning/question-flashcard' element={<LearningQuestion />} />
                     <Route path='learning/list-traffic-sign' element={<LearningSign />} />
-                    {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} /> */}
+                     <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} /> 
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
                     <Route path='learning/list-simulation' element={<ControlledVideo />} />
-                    {/* <Route path='learning/list-simulation/:id' element={<ControlledVideo />} /> */}
+                     <Route path='learning/list-simulation/:id' element={<ControlledVideo />} /> 
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
-                </Route>
+                </Route>  */}
 
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
@@ -113,7 +113,7 @@ export default function MainRoutes() {
                 </Route>
 
                 {/* Instructor CMS Routes */}
-                <Route path='instructor' element={<InstructorLayout />} >
+                <Route path='/' element={<InstructorLayout />} >
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<InsDashboard />} />
                     <Route path='question-bank' element={<InsQuestionBank />} />
