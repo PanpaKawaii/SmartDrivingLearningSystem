@@ -6,20 +6,22 @@ export default function ForumCard({
     post = { title: '', content: '' },
     setSelectedPost = () => { },
 }) {
+    const [reaction, setReaction] = useState(null);
     const [open, setOpen] = useState(false);
 
     const handleClickReact = (reaction) => {
         console.log(reaction);
+        setReaction(p => reaction.force ? reaction : (p != null ? null : reaction));
         setOpen(false);
     };
 
     const actions = [
-        { icon: <i className='fa-regular fa-thumbs-up' />, action: () => handleClickReact('Like') },
-        { icon: <i className='fa-regular fa-heart' />, action: () => handleClickReact('Heart') },
-        { icon: <i className='fa-regular fa-face-laugh-squint' />, action: () => handleClickReact('Haha') },
-        { icon: <i className='fa-regular fa-face-surprise' />, action: () => handleClickReact('Wow') },
-        { icon: <i className='fa-regular fa-face-frown' />, action: () => handleClickReact('Sad') },
-        { icon: <i className='fa-regular fa-angry' />, action: () => handleClickReact('Angry') },
+        { id: 'Like', icon: 'fa-solid fa-thumbs-up', color: '#538DFF', force: true, },
+        { id: 'Heart', icon: 'fa-solid fa-heart', color: '#F74C61', force: true, },
+        { id: 'Haha', icon: 'fa-solid fa-face-laugh-squint', color: '#FFDA61', force: true, },
+        { id: 'Wow', icon: 'fa-solid fa-face-surprise', color: '#FFDA61', force: true, },
+        { id: 'Sad', icon: 'fa-solid fa-face-frown', color: '#FFDA61', force: true, },
+        { id: 'Angry', icon: 'fa-solid fa-angry', color: '#FA8662', force: true, },
     ];
 
     return (
@@ -29,33 +31,48 @@ export default function ForumCard({
                 <p>{post.content}</p>
             </div>
             <div className='react-comment'>
-
                 <div
-                    className='fab-wrapper'
+                    className='button-wrapper'
                     onMouseEnter={() => setOpen(true)}
                     onMouseLeave={() => setOpen(false)}
                 >
-                    <button className='fab-main' onClick={() => handleClickReact('Like')}>
-                        <i className='fa-regular fa-thumbs-up' />
+                    <button
+                        className='main-btn'
+                        style={{ backgroundColor: reaction ? reaction?.color + '40' : '#2D3644' }}
+                        onClick={() => handleClickReact({ id: 'Like', icon: 'fa-solid fa-thumbs-up', color: '#538DFF', force: false, })}
+                    >
+                        {reaction ?
+                            <i className={reaction.icon} style={{ color: reaction.color }} />
+                            :
+                            <i className='fa-regular fa-thumbs-up' />
+                        }
                     </button>
 
                     {open && (
-                        <div className='fab-popup'>
+                        <div className='reaction-popup'>
                             {actions.map((item, index) => (
-                                <button
-                                    key={index}
-                                    className='fab-item'
-                                    onClick={item.action}
+                                <div
+                                    key={item.id}
+                                    style={{ animationDelay: `${index * 0.05}s` }}
+                                    className='reaction-item'
                                 >
-                                    {item.icon}
-                                </button>
+                                    <button
+                                        className='btn-item'
+                                        style={{ animationDelay: `${index * 0.1}s` }}
+                                        onClick={() => handleClickReact(item)}
+                                    >
+                                        <i className={item.icon} style={{ color: item.color, animationDelay: `${index * 0.1}s` }} />
+                                    </button>
+                                </div>
                             ))}
                         </div>
                     )}
                 </div>
-
-                <button><i className='fa-regular fa-thumbs-up' /></button>
-                <button onClick={() => setSelectedPost(post)}><i className='fa-regular fa-comment' /></button>
+                <div className='button-wrapper'>
+                    <button className='main-btn' onClick={() => setSelectedPost(post)}>
+                        <i className='fa-regular fa-comment' />
+                    </button>
+                </div>
             </div>
         </div>
     )

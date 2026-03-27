@@ -21,8 +21,7 @@
 
         .list {
             background-color: #ff8080;
-            width: 100%;
-            max-width: 680px;
+            width: 680px;
             display: flex;
             flex-direction: column;
             gap: 40px;

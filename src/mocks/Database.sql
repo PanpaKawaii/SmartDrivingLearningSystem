@@ -386,11 +386,12 @@ CREATE TABLE [LessonImage] (
     FOREIGN KEY (questionLessonId) REFERENCES [QuestionLesson](id),
 );
 
--- 18.LessonProgress OF
+-- 18.LessonProgress AF
 CREATE TABLE [LessonProgress] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     userId              UNIQUEIDENTIFIER NOT NULL,
     questionLessonId    UNIQUEIDENTIFIER NOT NULL,
+    score       INT,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
