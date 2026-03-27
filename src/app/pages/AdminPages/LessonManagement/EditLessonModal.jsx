@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { postData, putData } from "../../../../mocks/CallingAPI";
+import { postData, putData, uploadMedia } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
 import RichTextEditor from "../../../components/RichTextEditor/RichTextEditor";
 
@@ -21,45 +21,81 @@ export default function EditLessonModal({
 		lessonProp?.content || "",
 	);
 	const [loading, setLoading] = useState(false);
+	const hasPersistedLessonId = Boolean(lesson?.id && String(lesson.id).trim());
+	const token = user?.token || "";
+
+	const imageFeatures = {
+		upload: hasPersistedLessonId,
+		dragDrop: hasPersistedLessonId,
+		paste: hasPersistedLessonId,
+		url: true,
+	};
+
+	const imageUploadConfig = {
+		entityId: hasPersistedLessonId ? String(lesson.id) : "",
+		imageTarget: "LessonImage",
+		uploadHandler: async ({ files, entityId, imageTarget }) => {
+			return uploadMedia({
+				files,
+				entityId,
+				imageTarget,
+				token,
+			});
+		},
+	};
 
 	useEffect(() => {
 		setLesson(lessonProp);
 		setEditorInitialHtml(lessonProp?.content || "");
-		console.log("[EditLessonModal] Prefill content:", lessonProp?.content || "");
 	}, [lessonProp]);
 
 	const persistLesson = async (payload) => {
-		const enableApiPersistence = false;
-		const token = user?.token || "";
-
-		if (!enableApiPersistence) {
-			return payload;
-		}
-
 		if (action === "edit") {
-			return putData(`lessons/${payload.id}`, payload, token);
+			return putData(`api/questionlessons/${payload.id}`, payload, token);
 		}
+		console.log("Creating lesson with payload:", payload);
+		return postData("api/questionlessons", payload, token);
+	};
 
-		return postData("lessons", payload, token);
+	const normalizeStatus = (value) => {
+		const parsed = Number(value);
+		return parsed === 0 ? 0 : 1;
 	};
 
 	const buildLessonPayload = () => {
-		const now = new Date().toISOString();
-
+		console.log("Building lesson payload with current state:", lesson.content?.trim());
 		return {
-			...lesson,
-			id:
-				action === "create"
-					? lesson.id || `lesson-${Date.now()}`
-					: lesson.id,
-			questionChapterId: Number(lesson.questionChapterId) || "",
+			...(action === "edit" ? { id: lesson.id } : {}),
+			questionChapterId: String(lesson.questionChapterId || "").trim(),
 			name: lesson.name?.trim() || "",
 			description: lesson.description?.trim() || "",
 			content: lesson.content?.trim() || "",
-			status: Number(lesson.status ?? 1),
-			createAt: lesson.createAt || now,
-			updateAt: now,
+			status: normalizeStatus(lesson.status),
 		};
+	};
+
+	const validateLessonPayload = (payload) => {
+		if (!payload.questionChapterId) {
+			return "Chapter is required";
+		}
+
+		if (!payload.name) {
+			return "Lesson Name is required";
+		}
+
+		if (payload.name.length > 255) {
+			return "Lesson Name must be at most 255 characters";
+		}
+
+		if (!payload.description) {
+			return "Description is required";
+		}
+
+		if (payload.description.length > 255) {
+			return "Description must be at most 255 characters";
+		}
+
+		return "";
 	};
 
 	const handleChange = (e) => {
@@ -75,23 +111,30 @@ export default function EditLessonModal({
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
+		let nextLesson;
 
 		try {
-			const nextLesson = buildLessonPayload();
-			console.log("[EditLessonModal] RichText input -> output:", {
-				prefill: editorInitialHtml,
-				output: nextLesson.content,
-			});
-			await persistLesson(nextLesson);
-
-			if (onSave) {
-				onSave(nextLesson, action);
+			nextLesson = buildLessonPayload();
+			const validationError = validateLessonPayload(nextLesson);
+			if (validationError) {
+				onError?.(validationError);
+				return;
 			}
 
-			setRefresh((prev) => prev);
+			const savedLesson = await persistLesson(nextLesson);
+			const finalLesson = savedLesson && typeof savedLesson === "object"
+				? { ...nextLesson, ...savedLesson }
+				: nextLesson;
+
+			if (onSave) {
+				onSave(finalLesson, action);
+			}
+
+			setRefresh((prev) => prev + 1);
 			onClose();
-		} catch {
-			onError?.("Error");
+		} catch (error) {
+			onError?.(error?.message || "Error");
+			console.error("Error saving lesson:", nextLesson);
 		} finally {
 			setLoading(false);
 		}
@@ -123,6 +166,7 @@ export default function EditLessonModal({
 							placeholder=" "
 							value={lesson.name || ""}
 							onChange={handleChange}
+							maxLength={255}
 							required
 						/>
 						<label htmlFor="name">Lesson Name</label>
@@ -154,6 +198,7 @@ export default function EditLessonModal({
 							placeholder=" "
 							value={lesson.description || ""}
 							onChange={handleChange}
+							maxLength={255}
 							required
 						/>
 						<label htmlFor="description">Description</label>
@@ -163,10 +208,18 @@ export default function EditLessonModal({
 						<label htmlFor="content" className="rich-label">
 							Content
 						</label>
+						{!hasPersistedLessonId && (
+							<div className="rich-editor-hint">
+								Save lesson first to enable image upload, drag-drop, and paste image.
+							</div>
+						)}
 						<RichTextEditor
 							key={`${action}-${lesson.id || "new"}`}
 							initialHtml={editorInitialHtml}
 							onHtmlChange={handleContentChange}
+							enableImage
+							imageFeatures={imageFeatures}
+							imageUploadConfig={imageUploadConfig}
 							placeholder="Nhập nội dung bài học..."
 							autoFocus={false}
 						/>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { drivingLicenses, questionChapters } from '../../../mocks/DataSample';
+import { fetchData } from '../../../mocks/CallingAPI';
 import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
@@ -23,17 +23,24 @@ export default function DrivingLicense() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
+                const drivingLicenseQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '200',
+                });
+                const chapterQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
 
-                const QuestionChapterResponse = [...questionChapters];
-                const DrivingLicenseResponse = [...drivingLicenses];
-                const DrivingLicense = DrivingLicenseResponse.map(dl => ({
+                const DrivingLicenseResponse = await fetchData(`api/drivinglicenses?${drivingLicenseQuery.toString()}`, token);
+                const QuestionChapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
+
+                const drivingLicenses = Array.isArray(DrivingLicenseResponse) ? DrivingLicenseResponse : [];
+                const questionChapters = Array.isArray(QuestionChapterResponse) ? QuestionChapterResponse : [];
+
+                const DrivingLicense = drivingLicenses.map(dl => ({
                     ...dl,
-                    chapters: QuestionChapterResponse.filter(qc => qc.drivingLicenseId == dl.id),
+                    chapters: questionChapters.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
                 setDRIVINGLICENSEs(DrivingLicense);
@@ -43,7 +50,7 @@ export default function DrivingLicense() {
                 setLoading(false);
             }
         })();
-    }, [refresh]);
+    }, [refresh, user?.token]);
 
     if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>

@@ -104,3 +104,102 @@ export const deleteData = async (endpoint, token) => {
         throw error;
     }
 };
+
+const normalizeMediaUploadResponse = (payload) => {
+    if (Array.isArray(payload)) {
+        return payload;
+    }
+
+    if (Array.isArray(payload?.items)) {
+        return payload.items;
+    }
+
+    if (Array.isArray(payload?.data)) {
+        return payload.data;
+    }
+
+    if (payload && typeof payload === 'object') {
+        return [payload];
+    }
+
+    return [];
+};
+
+export const uploadMedia = async ({ files = [], entityId = '', imageTarget = '', token = '' }) => {
+    try {
+        if (!Array.isArray(files) || files.length === 0) {
+            throw new Error('Files is required');
+        }
+
+        if (!entityId) {
+            throw new Error('EntityId is required');
+        }
+
+        if (!imageTarget) {
+            throw new Error('ImageTarget is required');
+        }
+
+        const formData = new FormData();
+        files.forEach((file) => {
+            formData.append('Files', file);
+        });
+        formData.append('EntityId', entityId);
+        formData.append('ImageTarget', imageTarget);
+
+        const response = await fetch(`${apiUrl}api/media/upload`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const payload = await response.json();
+        return normalizeMediaUploadResponse(payload);
+    } catch (error) {
+        console.error('Error uploading media:', error);
+        throw error;
+    }
+};
+
+export const deleteMedia = async ({ fileUrl = '', imageTarget = '', token = '' }) => {
+    try {
+        if (!fileUrl) {
+            throw new Error('fileUrl is required');
+        }
+
+        if (!imageTarget) {
+            throw new Error('imageTarget is required');
+        }
+
+        const query = new URLSearchParams({
+            fileUrl,
+            imageTarget,
+        });
+
+        const response = await fetch(`${apiUrl}api/media?${query.toString()}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+
+        if (response.status === 204) {
+            return true;
+        }
+
+        const text = await response.text();
+        return text ? JSON.parse(text) : true;
+    } catch (error) {
+        console.error('Error deleting media:', error);
+        throw error;
+    }
+};

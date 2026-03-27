@@ -16,6 +16,8 @@ import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { $createParagraphNode, $getRoot } from "lexical";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import ImagePlugin from "./plugins/ImagePlugin";
+import { ImageNode } from "./nodes/ImageNode";
 import "./RichTextEditor.css";
 
 const theme = {
@@ -150,6 +152,43 @@ function InitialHtmlPlugin({ initialHtml }) {
   return null;
 }
 
+const DEFAULT_IMAGE_FEATURES = {
+  upload: true,
+  url: true,
+  dragDrop: true,
+  paste: true,
+};
+
+const resolveImageFeatures = (enableImage, imageFeatures = {}) => {
+  if (!enableImage) {
+    return {
+      upload: false,
+      url: false,
+      dragDrop: false,
+      paste: false,
+    };
+  }
+
+  return {
+    upload:
+      typeof imageFeatures.upload === "boolean"
+        ? imageFeatures.upload
+        : DEFAULT_IMAGE_FEATURES.upload,
+    url:
+      typeof imageFeatures.url === "boolean"
+        ? imageFeatures.url
+        : DEFAULT_IMAGE_FEATURES.url,
+    dragDrop:
+      typeof imageFeatures.dragDrop === "boolean"
+        ? imageFeatures.dragDrop
+        : DEFAULT_IMAGE_FEATURES.dragDrop,
+    paste:
+      typeof imageFeatures.paste === "boolean"
+        ? imageFeatures.paste
+        : DEFAULT_IMAGE_FEATURES.paste,
+  };
+};
+
 /**
  * Props:
  *  - onChange(editorState, editor) : lắng nghe thay đổi
@@ -157,6 +196,9 @@ function InitialHtmlPlugin({ initialHtml }) {
  *  - initialConfig : override LexicalComposer config (tuỳ chọn)
  *  - placeholder : text placeholder (default: "Nhập nội dung...")
  *  - initialHtml : HTML ban đầu để prefill khi edit
+ *  - enableImage : bật/tắt toàn bộ tính năng ảnh
+ *  - imageFeatures : override chi tiết { upload, url, dragDrop, paste }
+ *  - imageUploadConfig : config upload ảnh { entityId, imageTarget, uploadHandler, deleteHandler }
  *  - readOnly : boolean
  *  - autoFocus : boolean
  */
@@ -165,10 +207,33 @@ export default function RichTextEditor({
   onHtmlChange,
   placeholder = "Nhập nội dung...",
   initialHtml = "",
+  enableImage = false,
+  imageFeatures = {},
+  imageUploadConfig = {},
   readOnly = false,
   autoFocus = false,
   initialConfig = {},
 }) {
+  const resolvedImageFeatures = resolveImageFeatures(enableImage, imageFeatures);
+  const canInsertImage =
+    resolvedImageFeatures.upload ||
+    resolvedImageFeatures.url ||
+    resolvedImageFeatures.dragDrop ||
+    resolvedImageFeatures.paste;
+
+  const resolvedImageUploadConfig = {
+    entityId: imageUploadConfig?.entityId || "",
+    imageTarget: imageUploadConfig?.imageTarget || "",
+    uploadHandler:
+      typeof imageUploadConfig?.uploadHandler === "function"
+        ? imageUploadConfig.uploadHandler
+        : null,
+    deleteHandler:
+      typeof imageUploadConfig?.deleteHandler === "function"
+        ? imageUploadConfig.deleteHandler
+        : null,
+  };
+
   const config = {
     namespace: "RichTextEditor",
     theme,
@@ -181,6 +246,7 @@ export default function RichTextEditor({
       ListItemNode,
       LinkNode,
       AutoLinkNode,
+      ImageNode,
     ],
     ...initialConfig,
   };
@@ -188,7 +254,13 @@ export default function RichTextEditor({
   return (
     <LexicalComposer initialConfig={config}>
       <div className="rte-wrapper">
-        {!readOnly && <ToolbarPlugin />}
+        {!readOnly && (
+          <ToolbarPlugin
+            enableImage={enableImage}
+            imageFeatures={resolvedImageFeatures}
+            imageUploadConfig={resolvedImageUploadConfig}
+          />
+        )}
         <div className="rte-editor-area">
           <RichTextPlugin
             contentEditable={
@@ -200,6 +272,12 @@ export default function RichTextEditor({
           <HistoryPlugin />
           <ListPlugin />
           <LinkPlugin />
+          <ImagePlugin
+            enableImage={enableImage}
+            canInsertImage={canInsertImage}
+            imageFeatures={resolvedImageFeatures}
+            imageUploadConfig={resolvedImageUploadConfig}
+          />
           <InitialHtmlPlugin initialHtml={initialHtml} />
           {autoFocus && <AutoFocusPlugin />}
           {(onChange || onHtmlChange) && (

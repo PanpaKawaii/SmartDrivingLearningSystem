@@ -1,5 +1,5 @@
 // src/app/components/RichTextEditor/plugins/ToolbarPlugin.jsx
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
     $getSelection,
@@ -20,13 +20,114 @@ import {
 import { $setBlocksType } from '@lexical/selection';
 import { $createParagraphNode } from 'lexical';
 import { mergeRegister } from '@lexical/utils';
+import { INSERT_IMAGE_COMMAND } from './ImagePlugin';
 
-export default function ToolbarPlugin() {
+export default function ToolbarPlugin({
+    enableImage = false,
+    imageFeatures = {},
+    imageUploadConfig = {},
+}) {
     const [editor] = useLexicalComposerContext();
+    const fileInputRef = useRef(null);
     const [isBold, setIsBold] = useState(false);
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
     const [isStrike, setIsStrike] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+    const canUploadImage = Boolean(
+        enableImage
+        && imageFeatures?.upload
+        && imageUploadConfig?.entityId
+        && imageUploadConfig?.imageTarget
+        && typeof imageUploadConfig?.uploadHandler === 'function'
+    );
+    const canInsertImageByUrl = Boolean(enableImage && imageFeatures?.url);
+
+    const resolveUploadedImageUrl = (payload) => {
+        if (!payload) return '';
+
+        if (typeof payload === 'string') {
+            return payload.trim();
+        }
+
+        if (Array.isArray(payload)) {
+            return resolveUploadedImageUrl(payload[0]);
+        }
+
+        if (typeof payload === 'object') {
+            return (
+                payload.fileUrl
+                || payload.url
+                || payload.path
+                || payload.secureUrl
+                || payload.location
+                || ''
+            ).toString().trim();
+        }
+
+        return '';
+    };
+
+    const insertImageByUrl = (src, alt = '') => {
+        if (!src) return;
+        editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+            src,
+            alt,
+            width: '100%',
+            height: 'auto',
+        });
+    };
+
+    const handleUploadImageFiles = async (rawFiles) => {
+        const files = Array.from(rawFiles || []).filter((file) => file?.type?.startsWith('image/'));
+        if (files.length === 0 || !canUploadImage || isUploadingImage) return;
+
+        setIsUploadingImage(true);
+        try {
+            const uploadResult = await imageUploadConfig.uploadHandler({
+                files,
+                entityId: imageUploadConfig.entityId,
+                imageTarget: imageUploadConfig.imageTarget,
+            });
+
+            const uploadedImageUrl = resolveUploadedImageUrl(uploadResult);
+            if (!uploadedImageUrl) {
+                throw new Error('Upload succeeded but no image URL returned.');
+            }
+
+            insertImageByUrl(uploadedImageUrl, files[0]?.name || 'Image');
+        } catch (error) {
+            console.error('Image upload failed:', error);
+        } finally {
+            setIsUploadingImage(false);
+        }
+    };
+
+    const handleInsertImageByUrl = () => {
+        if (!canInsertImageByUrl) return;
+
+        const input = window.prompt('Input image URL (http/https)');
+        const imageUrl = (input || '').trim();
+        if (!imageUrl) return;
+
+        if (!/^https?:\/\//i.test(imageUrl)) {
+            console.error('Invalid image URL. URL must start with http:// or https://');
+            return;
+        }
+
+        insertImageByUrl(imageUrl, 'Image');
+    };
+
+    const handleSelectImageFile = () => {
+        if (!canUploadImage || isUploadingImage) return;
+        fileInputRef.current?.click();
+    };
+
+    const handleFileInputChange = async (event) => {
+        await handleUploadImageFiles(event.target.files);
+        event.target.value = '';
+    };
 
     // Sync trạng thái các nút khi selection thay đổi
     const updateToolbar = useCallback(() => {
@@ -145,6 +246,44 @@ export default function ToolbarPlugin() {
             >
                 <i className='fa-solid fa-list' />
             </button>
+
+            {enableImage && (canUploadImage || canInsertImageByUrl) && (
+                <>
+                    <span className='rte-divider' />
+
+                    {canUploadImage && (
+                        <>
+                            <button
+                                type='button'
+                                title='Upload image'
+                                onClick={handleSelectImageFile}
+                                disabled={isUploadingImage}
+                            >
+                                <i className='fa-solid fa-image' />
+                            </button>
+                            <input
+                                ref={fileInputRef}
+                                type='file'
+                                accept='image/*'
+                                multiple={false}
+                                style={{ display: 'none' }}
+                                onChange={handleFileInputChange}
+                            />
+                        </>
+                    )}
+
+                    {canInsertImageByUrl && (
+                        <button
+                            type='button'
+                            title='Insert image by URL'
+                            onClick={handleInsertImageByUrl}
+                            disabled={isUploadingImage}
+                        >
+                            <i className='fa-solid fa-link' />
+                        </button>
+                    )}
+                </>
+            )}
         </div>
     );
 }

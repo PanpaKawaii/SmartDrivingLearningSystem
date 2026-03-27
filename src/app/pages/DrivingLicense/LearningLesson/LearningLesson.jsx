@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-// import { fetchData } from '../../../mocks/CallingAPI';
-// import { putData } from '../../../mocks/CallingAPI';
-import { lessonProgresses, questionLessons, questions } from '../../../../mocks/DataSample';
+import { fetchData } from '../../../../mocks/CallingAPI';
+import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
+import { lessonProgresses } from '../../../../mocks/DataSample';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -36,23 +36,25 @@ export default function LearningLesson() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-                // const QuestionLessonResponse = await fetchData(`lessons/${questionLessonId}`, token);
-                const QuestionResponse = [...questions];
+                const QuestionLessonRawResponse = await fetchData(`api/questionlessons/${questionLessonId}`, token);
+                const QuestionLessonResponse = normalizeDetailResponse(QuestionLessonRawResponse);
+
+                const questionQuery = new URLSearchParams({
+                    lessonId: String(questionLessonId),
+                    page: '1',
+                    pageSize: '500',
+                });
+                const QuestionResponseRaw = await fetchData(`api/questions?${questionQuery.toString()}`, token);
+                const QuestionResponse = Array.isArray(QuestionResponseRaw) ? QuestionResponseRaw : [];
                 console.log('QuestionResponse', QuestionResponse);
-                const QuestionLessonResponse = questionLessons.find(ql => ql.id == questionLessonId);
                 console.log('QuestionLessonResponse', QuestionLessonResponse);
                 const LessonProgressResponse = [...lessonProgresses];
                 console.log('LessonProgressResponse', LessonProgressResponse);
 
-                const QuestionLesson = {
+                const QuestionLesson = QuestionLessonResponse ? {
                     ...QuestionLessonResponse,
-                    questions: QuestionResponse.filter(q => q.questionLessonId == QuestionLessonResponse.id),
-                };
+                    questions: QuestionResponse,
+                } : null;
                 console.log('QuestionLesson', QuestionLesson);
                 setThisQuestionLesson(QuestionLesson);
 

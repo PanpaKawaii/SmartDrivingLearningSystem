@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { drivingLicenses, questionChapters, questionLessons } from '../../../../mocks/DataSample';
+import { fetchData } from '../../../../mocks/CallingAPI';
+import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -35,20 +36,34 @@ export default function ChapterLesson() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
+                const chapterQuery = new URLSearchParams({
+                    drivingLicenseId: String(drivingLicenseId),
+                    page: '1',
+                    pageSize: '500',
+                });
 
-                const QuestionChapters = questionChapters.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
-                    ...qc,
-                    questionLessons: questionLessons.filter(ql => ql.questionChapterId == qc.id),
-                    drivingLicense: drivingLicenses.find(dl => dl.id == qc.drivingLicenseId) || null,
+                const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
+                const chapterList = Array.isArray(chapterResponse) ? chapterResponse : [];
+
+                const QuestionChapters = await Promise.all(chapterList.map(async (chapter) => {
+                    const lessonQuery = new URLSearchParams({
+                        questionChapterId: String(chapter.id),
+                        page: '1',
+                        pageSize: '500',
+                    });
+
+                    const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
+                    const questionLessons = Array.isArray(lessonResponse) ? lessonResponse : [];
+
+                    return {
+                        ...chapter,
+                        questionLessons,
+                    };
                 }));
                 console.log('QuestionChapters', QuestionChapters);
 
-                const DrivingLicenseResponse = drivingLicenses?.find(d => d.id == drivingLicenseId);
+                const DrivingLicenseRawResponse = await fetchData(`api/drivinglicenses/${drivingLicenseId}`, token);
+                const DrivingLicenseResponse = normalizeDetailResponse(DrivingLicenseRawResponse);
                 console.log('ThisDrivingLicense', ThisDrivingLicense);
 
                 setQUESTIONCHAPTERs(QuestionChapters);
@@ -59,7 +74,7 @@ export default function ChapterLesson() {
                 setLoading(false);
             }
         })();
-    }, [refresh]);
+    }, [drivingLicenseId, refresh, user?.token]);
 
     if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>

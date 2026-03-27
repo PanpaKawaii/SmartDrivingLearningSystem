@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { answers, questions } from '../../../../mocks/DataSample';
+import { fetchData } from '../../../../mocks/CallingAPI';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import ListGridButton from '../../FlashCard/ListGridButton';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -30,19 +31,17 @@ export default function LessonQuiz() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-                // const QuestionLessonResponse = await fetchData(`lessons/${questionLessonId}`, token);
-                const QuestionResponse = questions.filter(q => q.questionLessonId == questionLessonId);
+                const questionQuery = new URLSearchParams({
+                    lessonId: String(questionLessonId),
+                    page: '1',
+                    pageSize: '500',
+                });
+                const QuestionRawResponse = await fetchData(`/questions?${questionQuery.toString()}`, token);
+                const QuestionResponse = Array.isArray(QuestionRawResponse) ? QuestionRawResponse : [];
                 console.log('QuestionResponse', QuestionResponse);
-                const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
-                console.log('AnswerResponse', AnswerResponse);
 
                 const QuestionsAnswers = QuestionResponse.map((q, i) => {
-                    const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
+                    const relatedAnswers = q.answers || q.questionAnswers || q.options || [];
                     return { ...q, answers: relatedAnswers, index: i + 1 };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
@@ -55,7 +54,7 @@ export default function LessonQuiz() {
                 setLoading(false);
             };
         })();
-    }, [refresh, user?.id]);
+    }, [questionLessonId, refresh, user?.id, user?.token]);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     console.log('selectedQuestion', selectedQuestion);
