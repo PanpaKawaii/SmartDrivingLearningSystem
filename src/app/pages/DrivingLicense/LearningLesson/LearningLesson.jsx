@@ -10,6 +10,7 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import LessonContent from './LessonContent';
 import PracticeExams from './PracticeExams';
 import ProgressOverview from './ProgressOverview';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 
 import './LearningLesson.css';
 
@@ -102,8 +103,8 @@ export default function LearningLesson() {
         })();
     }, [refresh, questionLessonId, questionChapterId, drivingLicenseId, user?.id]);
 
-    if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='learning-lesson-container container'>
             <StarsBackground />

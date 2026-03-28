@@ -56,8 +56,8 @@ export default function SimulationScenario() {
     const selectedScenario = SIMULATIONSCENARIOs.find(ss => ss.id == selectedScenarioId);
     console.log('selectedScenario', selectedScenario);
 
-    if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='simulation-scenario-container'>
             <CloudsBackground />

@@ -6,6 +6,7 @@ import StarsBackground from '../../../components/StarsBackground/StarsBackground
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import ListGridButton from '../../FlashCard/ListGridButton';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 
 import './LessonQuiz.css';
 
@@ -161,8 +162,8 @@ export default function LessonQuiz() {
 
     console.log('myAnswers', myAnswers);
 
-    if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='lesson-quiz-container'>
             <StarsBackground />

@@ -7,6 +7,7 @@ import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import { drivingLicenses, questionChapters, questionLessons } from '../../../../mocks/DataSample';
 import SelectedChapter from './SelectedChapter';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 
 import './ChapterLesson.css';
 
@@ -106,8 +107,8 @@ export default function ChapterLesson() {
         })();
     }, [drivingLicenseId, refresh, user?.token]);
 
-    if (loading) return <div><StarsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><StarsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='chapter-lesson-container'>
             <div
