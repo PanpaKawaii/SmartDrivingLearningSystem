@@ -20,9 +20,7 @@ export default function ControlledVideo({
         const handleTimeUpdate = () => {
             const current = video.currentTime;
             const duration = video.duration || 1;
-
             lastTimeRef.current = current;
-
             const percent = (current / duration) * 100;
             setProgressPercent(percent);
         };
@@ -33,12 +31,11 @@ export default function ControlledVideo({
                 e.stopPropagation();
 
                 if (!video.paused) {
-                    // const exactSeconds = Math.floor(lastTimeRef.current); // ✅ FIX
-                    const exactSeconds = lastTimeRef.current; // ✅ FIX
-
+                    // const exactSeconds = Math.floor(lastTimeRef.current);
+                    const exactSeconds = lastTimeRef.current;
                     video.pause();
-                    setVideoTimeInSeconds(exactSeconds);
-
+                    setVideoTimeInSeconds(p => !p ? exactSeconds : p);
+                    // setVideoTimeInSeconds(exactSeconds);
                     console.log('⏸ Video dừng tại:', exactSeconds, 'giây');
                 } else {
                     if (allowContinue) {
@@ -76,6 +73,17 @@ export default function ControlledVideo({
     // console.log('LastWhite', LastWhite);
     // console.log('MiddlePoint', MiddlePoint);
 
+    const range = selectedScenario?.endPoint - selectedScenario?.startPoint;
+    const smallRange = Number(videoTimeInSeconds) - selectedScenario?.startPoint;
+    const percent = smallRange / range;
+    console.log('range', range);
+    console.log('smallRange', smallRange);
+    console.log('percent', percent);
+    const maxScore = 10;
+    const minScore = 2;
+    const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ? maxScore - (maxScore - minScore) * percent : 0;
+    console.log('point', point);
+
     return (
         <div className='controlled-video-container'>
             {selectedScenario ?
@@ -91,6 +99,7 @@ export default function ControlledVideo({
                     <div className='content'>
                         <div className='bars'>
                             <div className='bar'>
+                                {/* Video duration - blue */}
                                 <div
                                     className='fill'
                                     style={{
@@ -98,8 +107,28 @@ export default function ControlledVideo({
                                         backgroundColor: progressPercent > 80 ? '#ef4444' : '#3b82f6',
                                     }}
                                 />
+                                {/* Mark enter event - green */}
+                                <div
+                                    className='fill'
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: `${100 * videoTimeInSeconds / selectedScenario?.totalTime || 0}%`,
+                                        height: 8,
+                                        backgroundColor: '#7aef44',
+                                    }}
+                                />
+                                {/* Triangle mark enter event - green */}
+                                {videoTimeInSeconds &&
+                                    <div className='mark'
+                                        style={{
+                                            left: `${100 * videoTimeInSeconds / selectedScenario?.totalTime || 0}%`,
+                                        }}
+                                    ></div>
+                                }
                             </div>
-                            {videoTimeInSeconds &&
+                            {videoTimeInSeconds !== null &&
                                 <div className='bar point-bar'>
                                     <div
                                         className='fill white-point'
@@ -119,19 +148,20 @@ export default function ControlledVideo({
                                 </div>
                             }
                         </div>
-                        {/* <small>
-                            {progressPercent > 95
-                                ? 'Video sắp kết thúc'
-                                : 'Đang phát'}
-                        </small> */}
-
-                        <div className='detail'>
+                        <div className='flex'>
                             {allowRestart &&
                                 <button onClick={handleRestart} disabled={!allowRestart}>Bắt đầu lại</button>
                             }
                             {videoTimeInSeconds !== null && (
-                                <p>Thời gian đã chạy: {videoTimeInSeconds?.toFixed(3)} giây</p>
+                                <>
+                                    <p>Thời gian: {videoTimeInSeconds?.toFixed(3)} giây</p>
+                                    <p>Điểm: {point ? point?.toFixed(3) : 0}</p>
+                                </>
                             )}
+                        </div>
+                        <div className='detail'>
+                            <h2>{selectedScenario.name}</h2>
+                            <p>{selectedScenario.description}</p>
                         </div>
                     </div>
                 </>
