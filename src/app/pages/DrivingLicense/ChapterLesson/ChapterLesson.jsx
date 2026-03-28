@@ -5,8 +5,8 @@ import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import { drivingLicenses, questionChapters, questionLessons } from '../../../../mocks/DataSample';
 import SelectedChapter from './SelectedChapter';
-import EmptyNotification from '../../../components/EmptyNotification/EmptyNotification';
 
 import './ChapterLesson.css';
 
@@ -43,34 +43,57 @@ export default function ChapterLesson() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                const chapterQuery = new URLSearchParams({
-                    drivingLicenseId: String(drivingLicenseId),
-                    page: '1',
-                    pageSize: '500',
-                });
+                // const chapterQuery = new URLSearchParams({
+                //     drivingLicenseId: String(drivingLicenseId),
+                //     page: '1',
+                //     pageSize: '500',
+                // });
 
-                const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
-                const chapterList = getListFromResponse(chapterResponse);
+                // const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
+                // const chapterList = getListFromResponse(chapterResponse);
 
-                const QuestionChapters = await Promise.all(chapterList.map(async (chapter) => {
-                    const lessonQuery = new URLSearchParams({
-                        questionChapterId: String(chapter.id),
-                        page: '1',
-                        pageSize: '500',
-                    });
+                // const QuestionChapters = await Promise.all(chapterList.map(async (chapter) => {
+                //     const lessonQuery = new URLSearchParams({
+                //         questionChapterId: String(chapter.id),
+                //         page: '1',
+                //         pageSize: '500',
+                //     });
 
-                    const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
-                    const questionLessons = getListFromResponse(lessonResponse);
+                //     const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
+                //     const questionLessons = getListFromResponse(lessonResponse);
 
-                    return {
-                        ...chapter,
-                        questionLessons,
-                    };
+                //     return {
+                //         ...chapter,
+                //         questionLessons,
+                //     };
+                // }));
+                // console.log('QuestionChapters', QuestionChapters);
+
+                // const DrivingLicenseRawResponse = await fetchData(`api/drivinglicenses/${drivingLicenseId}`, token);
+                // const DrivingLicenseResponse = normalizeDetailResponse(DrivingLicenseRawResponse);
+                // console.log('ThisDrivingLicense', ThisDrivingLicense);
+
+                // setQUESTIONCHAPTERs(QuestionChapters);
+                // setThisDrivingLicense(DrivingLicenseResponse);
+
+
+
+
+
+                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
+                // console.log('LicenseResponse', LicenseResponse);
+                // setDRIVINGLICENSEs(LicenseResponse);
+                // const LicenseResponse = await fetchData('licenses', token);
+                // console.log('LicenseResponse', LicenseResponse);
+
+                const QuestionChapters = questionChapters.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
+                    ...qc,
+                    questionLessons: questionLessons.filter(ql => ql.questionChapterId == qc.id),
+                    drivingLicense: drivingLicenses.find(dl => dl.id == qc.drivingLicenseId) || null,
                 }));
                 console.log('QuestionChapters', QuestionChapters);
 
-                const DrivingLicenseRawResponse = await fetchData(`api/drivinglicenses/${drivingLicenseId}`, token);
-                const DrivingLicenseResponse = normalizeDetailResponse(DrivingLicenseRawResponse);
+                const DrivingLicenseResponse = drivingLicenses?.find(d => d.id == drivingLicenseId);
                 console.log('ThisDrivingLicense', ThisDrivingLicense);
 
                 setQUESTIONCHAPTERs(QuestionChapters);

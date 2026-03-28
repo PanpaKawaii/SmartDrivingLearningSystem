@@ -5,6 +5,7 @@ import EmptyNotification from '../../components/EmptyNotification/EmptyNotificat
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import { drivingLicenses, questionChapters } from '../../../mocks/DataSample';
 
 import './DrivingLicense.css';
 
@@ -30,25 +31,43 @@ export default function DrivingLicense() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                const drivingLicenseQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '200',
-                });
-                const chapterQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
-                });
+                // const drivingLicenseQuery = new URLSearchParams({
+                //     page: '1',
+                //     pageSize: '200',
+                // });
+                // const chapterQuery = new URLSearchParams({
+                //     page: '1',
+                //     pageSize: '500',
+                // });
 
-                const DrivingLicenseResponse = await fetchData(`api/drivinglicenses?${drivingLicenseQuery.toString()}`, token);
-                console.log('DrivingLicenseResponse', DrivingLicenseResponse);
-                const QuestionChapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
+                // const DrivingLicenseResponse = await fetchData(`api/drivinglicenses?${drivingLicenseQuery.toString()}`, token);
+                // console.log('DrivingLicenseResponse', DrivingLicenseResponse);
+                // const QuestionChapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
 
-                const drivingLicenses = getListFromResponse(DrivingLicenseResponse);
-                const questionChapters = getListFromResponse(QuestionChapterResponse);
+                // const drivingLicenses = getListFromResponse(DrivingLicenseResponse);
+                // const questionChapters = getListFromResponse(QuestionChapterResponse);
 
-                const DrivingLicense = drivingLicenses.map(dl => ({
+                // const DrivingLicense = drivingLicenses.map(dl => ({
+                //     ...dl,
+                //     chapters: questionChapters.filter(qc => qc.drivingLicenseId == dl.id),
+                // }));
+
+                // setDRIVINGLICENSEs(DrivingLicense);
+
+
+
+
+
+                // const LicenseResponse = await fetchData('licenses', token);
+                // console.log('LicenseResponse', LicenseResponse);
+
+                // const QuestionChapterResponse = await data here; // ==FIX==
+                // const DrivingLicenseResponse = await data here; // ==FIX==
+                const QuestionChapterResponse = [...questionChapters];
+                const DrivingLicenseResponse = [...drivingLicenses];
+                const DrivingLicense = DrivingLicenseResponse.map(dl => ({
                     ...dl,
-                    chapters: questionChapters.filter(qc => qc.drivingLicenseId == dl.id),
+                    chapters: QuestionChapterResponse.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
                 setDRIVINGLICENSEs(DrivingLicense);

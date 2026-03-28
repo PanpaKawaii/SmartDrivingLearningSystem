@@ -16,6 +16,7 @@ import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
 import ChapterLesson from '../pages/DrivingLicense/ChapterLesson/ChapterLesson.jsx'
 import LearningLesson from '../pages/DrivingLicense/LearningLesson/LearningLesson.jsx'
 import LessonQuiz from '../pages/DrivingLicense/LessonQuiz/LessonQuiz.jsx'
+import QuizResult from '../pages/DrivingLicense/LessonQuiz/QuizResult.jsx'
 import ListExam from '../pages/ExamTemp/ListExam.jsx'
 import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 
@@ -44,7 +45,6 @@ import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
 import ForumPopup from '../pages/Forum/ForumPopup.jsx'
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
-import LearningProgress from '../pages/DrivingLicense/Unused/LearningProgress.jsx'
 import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
 
 export default function MainRoutes() {
@@ -59,6 +59,7 @@ export default function MainRoutes() {
                     <Route path='driving-license/:licenseId' element={<ChapterLesson />} />
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId' element={<LearningLesson />} />
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/quiz' element={<LessonQuiz />} />
+                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/quiz/result' element={<QuizResult />} />
 
                     <Route path='simulation' element={<SimulationIntroduction />} />
                     <Route path='simulation/scenarios' element={<SimulationScenario />} />

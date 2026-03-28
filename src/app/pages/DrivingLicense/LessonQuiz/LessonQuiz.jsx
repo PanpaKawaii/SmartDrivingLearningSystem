@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchData } from '../../../../mocks/CallingAPI';
+import { useNavigate, useParams } from 'react-router-dom';
+import { answers, questions } from '../../../../mocks/DataSample';
+import ProgressBar from '../../../components/ProgressBar';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import ListGridButton from '../../FlashCard/ListGridButton';
-import { useNavigate, useParams } from 'react-router-dom';
-import ProgressBar from '../../../components/ProgressBar';
 
 import './LessonQuiz.css';
 
@@ -31,17 +31,40 @@ export default function LessonQuiz() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                const questionQuery = new URLSearchParams({
-                    lessonId: String(questionLessonId),
-                    page: '1',
-                    pageSize: '500',
-                });
-                const QuestionRawResponse = await fetchData(`/questions?${questionQuery.toString()}`, token);
-                const QuestionResponse = Array.isArray(QuestionRawResponse) ? QuestionRawResponse : [];
+                // const questionQuery = new URLSearchParams({
+                //     lessonId: String(questionLessonId),
+                //     page: '1',
+                //     pageSize: '500',
+                // });
+                // const QuestionRawResponse = await fetchData(`/questions?${questionQuery.toString()}`, token);
+                // const QuestionResponse = Array.isArray(QuestionRawResponse) ? QuestionRawResponse : [];
+                // console.log('QuestionResponse', QuestionResponse);
+
+                // const QuestionsAnswers = QuestionResponse.map((q, i) => {
+                //     const relatedAnswers = q.answers || q.questionAnswers || q.options || [];
+                //     return { ...q, answers: relatedAnswers, index: i + 1 };
+                // });
+                // console.log('QuestionsAnswers', QuestionsAnswers);
+
+                // setQUESTIONs(QuestionsAnswers);
+                // setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
+
+
+
+
+                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
+                // console.log('LicenseResponse', LicenseResponse);
+                // setDRIVINGLICENSEs(LicenseResponse);
+                // const LicenseResponse = await fetchData('licenses', token);
+                // console.log('LicenseResponse', LicenseResponse);
+                // const QuestionLessonResponse = await fetchData(`lessons/${questionLessonId}`, token);
+                const QuestionResponse = questions.filter(q => q.questionLessonId == questionLessonId);
                 console.log('QuestionResponse', QuestionResponse);
+                const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
+                console.log('AnswerResponse', AnswerResponse);
 
                 const QuestionsAnswers = QuestionResponse.map((q, i) => {
-                    const relatedAnswers = q.answers || q.questionAnswers || q.options || [];
+                    const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
                     return { ...q, answers: relatedAnswers, index: i + 1 };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
@@ -54,7 +77,7 @@ export default function LessonQuiz() {
                 setLoading(false);
             };
         })();
-    }, [questionLessonId, refresh, user?.id, user?.token]);
+    }, [refresh, user?.id]);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     console.log('selectedQuestion', selectedQuestion);
@@ -67,7 +90,7 @@ export default function LessonQuiz() {
     };
 
     const handleEndQuiz = () => {
-        navigate('/');
+        navigate('./result');
     };
 
     const toggleAnswerInMyAnswers = (questionId, answerId) => {

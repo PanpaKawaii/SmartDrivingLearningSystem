@@ -2,7 +2,7 @@
     width: 100%;
 
     .bar {
-        background: #e5e7eb;
+        background: #45546C;
         border-radius: 8px;
         position: relative;
         border-radius: 200px;
@@ -30,7 +30,7 @@
             top: 0;
             right: 0;
             overflow: hidden;
-            background-color: #e5e7eb;
+            background-color: #45546C;
             transition: width 0.4s ease, background-color 0.4s ease;
             z-index: 1;
         }
