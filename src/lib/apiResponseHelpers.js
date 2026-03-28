@@ -6,3 +6,11 @@ export const normalizeDetailResponse = (response) => {
     if (response?.result) return response.result;
     return response;
 };
+
+export const normalizeListResponse = (response) => {
+    if (Array.isArray(response)) return response;
+    if (Array.isArray(response?.items)) return response.items;
+    if (Array.isArray(response?.data)) return response.data;
+    if (Array.isArray(response?.result)) return response.result;
+    return [];
+};

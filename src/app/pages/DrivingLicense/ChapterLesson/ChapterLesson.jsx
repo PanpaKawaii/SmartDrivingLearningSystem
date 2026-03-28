@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
-import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
+import { drivingLicenses as sampleDrivingLicenses, questionChapters as sampleQuestionChapters, questionLessons as sampleQuestionLessons } from '../../../../mocks/DataSample';
+import { normalizeDetailResponse, normalizeListResponse } from '../../../../lib/apiResponseHelpers';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import SelectedChapter from './SelectedChapter';
-import EmptyNotification from '../../../components/EmptyNotification/EmptyNotification';
 
 import './ChapterLesson.css';
 
@@ -23,16 +23,23 @@ export default function ChapterLesson() {
 
     const [ThisDrivingLicense, setThisDrivingLicense] = useState(null);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
+    const [dataSourceInfo, setDataSourceInfo] = useState({
+        apiChapters: 0,
+        sampleChapters: 0,
+        apiLessons: 0,
+        sampleLessons: 0,
+    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getListFromResponse = (response) => {
-        if (Array.isArray(response)) return response;
-        if (Array.isArray(response?.items)) return response.items;
-        if (Array.isArray(response?.data)) return response.data;
-        if (Array.isArray(response?.result)) return response.result;
-        return [];
+    const mergeWithSource = (apiList, sampleList, idKey = 'id') => {
+        const apiWithSource = apiList.map((item) => ({ ...item, dataSource: 'api' }));
+        const apiIdSet = new Set(apiWithSource.map((item) => String(item?.[idKey])));
+        const sampleWithSource = sampleList
+            .filter((item) => !apiIdSet.has(String(item?.[idKey])))
+            .map((item) => ({ ...item, dataSource: 'sample' }));
+        return [...apiWithSource, ...sampleWithSource];
     };
 
     const [selectedChapterId, setSelectedChapterId] = useState(questionChapterId || '');
@@ -43,14 +50,28 @@ export default function ChapterLesson() {
             setLoading(true);
             const token = user?.token || '';
             try {
+                const sampleChaptersForLicense = sampleQuestionChapters.filter(
+                    (chapter) => String(chapter.drivingLicenseId) === String(drivingLicenseId),
+                );
+
                 const chapterQuery = new URLSearchParams({
                     drivingLicenseId: String(drivingLicenseId),
                     page: '1',
                     pageSize: '500',
                 });
 
-                const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
-                const chapterList = getListFromResponse(chapterResponse);
+                let apiChapterList = [];
+                try {
+                    const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
+                    apiChapterList = normalizeListResponse(chapterResponse);
+                } catch (chapterError) {
+                    console.warn('Failed to fetch chapters from API, fallback to DataSample.', chapterError);
+                }
+
+                const chapterList = mergeWithSource(apiChapterList, sampleChaptersForLicense);
+
+                let apiLessonCount = 0;
+                let sampleLessonCount = 0;
 
                 const QuestionChapters = await Promise.all(chapterList.map(async (chapter) => {
                     const lessonQuery = new URLSearchParams({
@@ -59,8 +80,21 @@ export default function ChapterLesson() {
                         pageSize: '500',
                     });
 
-                    const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
-                    const questionLessons = getListFromResponse(lessonResponse);
+                    let apiLessons = [];
+                    try {
+                        const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
+                        apiLessons = normalizeListResponse(lessonResponse);
+                    } catch (lessonError) {
+                        console.warn(`Failed to fetch lessons for chapter ${chapter.id} from API.`, lessonError);
+                    }
+
+                    const sampleLessons = sampleQuestionLessons.filter(
+                        (lesson) => String(lesson.questionChapterId) === String(chapter.id),
+                    );
+
+                    const questionLessons = mergeWithSource(apiLessons, sampleLessons);
+                    apiLessonCount += apiLessons.length;
+                    sampleLessonCount += questionLessons.filter((lesson) => lesson.dataSource === 'sample').length;
 
                     return {
                         ...chapter,
@@ -69,12 +103,35 @@ export default function ChapterLesson() {
                 }));
                 console.log('QuestionChapters', QuestionChapters);
 
-                const DrivingLicenseRawResponse = await fetchData(`api/drivinglicenses/${drivingLicenseId}`, token);
-                const DrivingLicenseResponse = normalizeDetailResponse(DrivingLicenseRawResponse);
+                let DrivingLicenseResponse = null;
+                try {
+                    const DrivingLicenseRawResponse = await fetchData(`api/drivinglicenses/${drivingLicenseId}`, token);
+                    DrivingLicenseResponse = normalizeDetailResponse(DrivingLicenseRawResponse);
+                } catch (drivingLicenseError) {
+                    console.warn('Failed to fetch driving license detail from API, fallback to DataSample.', drivingLicenseError);
+                }
+
+                if (!DrivingLicenseResponse) {
+                    DrivingLicenseResponse = sampleDrivingLicenses.find(
+                        (license) => String(license.id) === String(drivingLicenseId),
+                    ) || null;
+                }
+
                 console.log('ThisDrivingLicense', ThisDrivingLicense);
 
                 setQUESTIONCHAPTERs(QuestionChapters);
                 setThisDrivingLicense(DrivingLicenseResponse);
+
+                setDataSourceInfo({
+                    apiChapters: apiChapterList.length,
+                    sampleChapters: chapterList.filter((chapter) => chapter.dataSource === 'sample').length,
+                    apiLessons: apiLessonCount,
+                    sampleLessons: sampleLessonCount,
+                });
+
+                if (!DrivingLicenseResponse && QuestionChapters.length === 0) {
+                    setError('Error');
+                }
             } catch (error) {
                 setError('Error');
             } finally {
@@ -107,6 +164,9 @@ export default function ChapterLesson() {
                 <div className='section-header'>
                     <h2>Course Chapters</h2>
                     <p>Complete lessons and pass exams to progress</p>
+                    <p className='data-source-note'>
+                        Demo data sources - Chapters(API/DataSample): {dataSourceInfo.apiChapters}/{dataSourceInfo.sampleChapters}, Lessons(API/DataSample): {dataSourceInfo.apiLessons}/{dataSourceInfo.sampleLessons}
+                    </p>
                 </div>
 
                 <div className='chapter-tabs'>
@@ -126,6 +186,9 @@ export default function ChapterLesson() {
                                 onClick={() => setSelectedChapterId(chapter.id)}
                             >
                                 <div>{chapter.name}</div>
+                                <div className={`data-source-badge-inline ${chapter.dataSource || 'api'}`}>
+                                    {chapter.dataSource === 'sample' ? 'DataSample' : 'API'}
+                                </div>
                                 <div className='progress'>({completed}/{lesson})</div>
                             </button>
                         )

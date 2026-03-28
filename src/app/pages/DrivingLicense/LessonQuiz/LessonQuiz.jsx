@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchData } from '../../../../mocks/CallingAPI';
+import { answers as sampleAnswers, questions as sampleQuestions } from '../../../../mocks/DataSample';
+import { normalizeListResponse } from '../../../../lib/apiResponseHelpers';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -20,10 +22,23 @@ export default function LessonQuiz() {
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [selectedQuestionId, setSelectedQuestionId] = useState(QUESTIONs?.[0]?.id);
     const [myAnswers, setMyAnswers] = useState([]);
+    const [dataSourceInfo, setDataSourceInfo] = useState({
+        apiQuestions: 0,
+        sampleQuestions: 0,
+        sampleAnswers: 0,
+    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
+
+    const mergeWithSource = (apiList, sampleList, idKey = 'id') => {
+        const apiWithSource = apiList.map((item) => ({ ...item, dataSource: 'api' }));
+        const apiIdSet = new Set(apiWithSource.map((item) => String(item?.[idKey])));
+        const sampleWithSource = sampleList
+            .filter((item) => !apiIdSet.has(String(item?.[idKey])))
+            .map((item) => ({ ...item, dataSource: 'sample' }));
+        return [...apiWithSource, ...sampleWithSource];
+    };
 
     useEffect(() => {
         (async () => {
@@ -36,18 +51,51 @@ export default function LessonQuiz() {
                     page: '1',
                     pageSize: '500',
                 });
-                const QuestionRawResponse = await fetchData(`/questions?${questionQuery.toString()}`, token);
-                const QuestionResponse = Array.isArray(QuestionRawResponse) ? QuestionRawResponse : [];
-                console.log('QuestionResponse', QuestionResponse);
+                let apiQuestionList = [];
+                try {
+                    const QuestionRawResponse = await fetchData(`api/questions?${questionQuery.toString()}`, token);
+                    apiQuestionList = normalizeListResponse(QuestionRawResponse);
+                } catch (apiError) {
+                    console.warn('Failed to fetch quiz questions from API, fallback to DataSample.', apiError);
+                }
 
-                const QuestionsAnswers = QuestionResponse.map((q, i) => {
-                    const relatedAnswers = q.answers || q.questionAnswers || q.options || [];
+                const sampleQuestionList = sampleQuestions.filter(
+                    (question) => String(question.questionLessonId) === String(questionLessonId),
+                );
+
+                const mergedQuestions = mergeWithSource(apiQuestionList, sampleQuestionList);
+
+                let sampleAnswerCount = 0;
+                const QuestionsAnswers = mergedQuestions.map((q, i) => {
+                    const apiRelatedAnswers = q.answers || q.questionAnswers || q.options || [];
+                    const sampleRelatedAnswers = sampleAnswers.filter(
+                        (answer) => String(answer.questionId) === String(q.id),
+                    );
+
+                    const relatedAnswers = apiRelatedAnswers.length > 0
+                        ? apiRelatedAnswers
+                        : sampleRelatedAnswers.map((answer) => ({ ...answer, dataSource: 'sample' }));
+
+                    if (apiRelatedAnswers.length === 0) {
+                        sampleAnswerCount += sampleRelatedAnswers.length;
+                    }
+
                     return { ...q, answers: relatedAnswers, index: i + 1 };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
                 setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
+
+                setDataSourceInfo({
+                    apiQuestions: apiQuestionList.length,
+                    sampleQuestions: mergedQuestions.filter((question) => question.dataSource === 'sample').length,
+                    sampleAnswers: sampleAnswerCount,
+                });
+
+                if (QuestionsAnswers.length === 0) {
+                    setError('Error');
+                }
             } catch (error) {
                 setError('Error');
             } finally {
@@ -157,6 +205,9 @@ export default function LessonQuiz() {
                             <div className='text'>
                                 Câu hỏi {index + 1} trong số {QUESTIONs?.length} câu hỏi
                             </div>
+                            <div className='data-source-note'>
+                                Demo data sources - Questions(API/DataSample): {dataSourceInfo.apiQuestions}/{dataSourceInfo.sampleQuestions}, Answers from DataSample: {dataSourceInfo.sampleAnswers}
+                            </div>
                             {/* <div className='bar'>
                                 <div
                                     className='fill'
@@ -171,6 +222,9 @@ export default function LessonQuiz() {
                         <div className='card'>
                             <div className='title'>
                                 <div className='index'>Câu hỏi {selectedQuestion?.index}: </div>
+                                <div className={`data-source-badge-inline ${selectedQuestion?.dataSource || 'api'}`}>
+                                    {selectedQuestion?.dataSource === 'sample' ? 'DataSample' : 'API'}
+                                </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
                             </div>
                             <div className='grid-answer'>

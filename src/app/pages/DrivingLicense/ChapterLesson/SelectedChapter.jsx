@@ -59,6 +59,11 @@ export default function SelectedChapter({
                                                             <div className='lesson-text'>
                                                                 <h3>{lesson.name}</h3>
                                                                 <p className='description'>
+                                                                <p className='description'>
+                                                                    <span className={`data-source-badge-inline ${lesson.dataSource || 'api'}`}>
+                                                                        {lesson.dataSource === 'sample' ? 'DataSample' : 'API'}
+                                                                    </span>
+                                                                </p>
                                                                     {lesson.description}
                                                                 </p>
                                                                 <div className='lesson-meta'>
