@@ -26,7 +26,14 @@ export default function ChapterLesson() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
+
+    const getListFromResponse = (response) => {
+        if (Array.isArray(response)) return response;
+        if (Array.isArray(response?.items)) return response.items;
+        if (Array.isArray(response?.data)) return response.data;
+        if (Array.isArray(response?.result)) return response.result;
+        return [];
+    };
 
     const [selectedChapterId, setSelectedChapterId] = useState(questionChapterId || '');
 
@@ -43,7 +50,7 @@ export default function ChapterLesson() {
                 });
 
                 const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
-                const chapterList = Array.isArray(chapterResponse) ? chapterResponse : [];
+                const chapterList = getListFromResponse(chapterResponse);
 
                 const QuestionChapters = await Promise.all(chapterList.map(async (chapter) => {
                     const lessonQuery = new URLSearchParams({
@@ -53,7 +60,7 @@ export default function ChapterLesson() {
                     });
 
                     const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
-                    const questionLessons = Array.isArray(lessonResponse) ? lessonResponse : [];
+                    const questionLessons = getListFromResponse(lessonResponse);
 
                     return {
                         ...chapter,

@@ -15,7 +15,14 @@ export default function DrivingLicense() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
+
+    const getListFromResponse = (response) => {
+        if (Array.isArray(response)) return response;
+        if (Array.isArray(response?.items)) return response.items;
+        if (Array.isArray(response?.data)) return response.data;
+        if (Array.isArray(response?.result)) return response.result;
+        return [];
+    };
 
     useEffect(() => {
         (async () => {
@@ -33,10 +40,11 @@ export default function DrivingLicense() {
                 });
 
                 const DrivingLicenseResponse = await fetchData(`api/drivinglicenses?${drivingLicenseQuery.toString()}`, token);
+                console.log('DrivingLicenseResponse', DrivingLicenseResponse);
                 const QuestionChapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
 
-                const drivingLicenses = Array.isArray(DrivingLicenseResponse) ? DrivingLicenseResponse : [];
-                const questionChapters = Array.isArray(QuestionChapterResponse) ? QuestionChapterResponse : [];
+                const drivingLicenses = getListFromResponse(DrivingLicenseResponse);
+                const questionChapters = getListFromResponse(QuestionChapterResponse);
 
                 const DrivingLicense = drivingLicenses.map(dl => ({
                     ...dl,
