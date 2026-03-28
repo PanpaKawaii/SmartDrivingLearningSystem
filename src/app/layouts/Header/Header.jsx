@@ -22,6 +22,7 @@ export default function Header() {
         { name: 'CAR', icon: 'car', path: '/car' },
         { name: 'SIGN', icon: 'sign', path: '/traffic-sign-flip-book' },
         { name: 'ADMIN', icon: 'user', path: '/admin' },
+        { name: 'INSTRUCTOR', icon: 'chalkboard-user', path: '/instructor' },
     ];
 
     // useEffect(() => {

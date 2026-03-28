@@ -1,0 +1,59 @@
+.instructor-layout {
+    --ins-bg: #070e1d;
+    --ins-surface-low: #081328;
+    --ins-surface: #091935;
+    --ins-surface-high: #091f42;
+    --ins-surface-highest: #082450;
+    --ins-surface-bright: #062a5f;
+    --ins-primary: #bdc7db;
+    --ins-primary-container: #3d4757;
+    --ins-on-surface: #dde5ff;
+    --ins-on-surface-variant: #95abde;
+    --ins-outline: #5f75a5;
+    --ins-outline-variant: #314774;
+    --ins-error: #ee7d77;
+    --ins-success: #52c41a;
+    --ins-warning: #faad14;
+    --ins-font-headline: 'Be Vietnam Pro', sans-serif;
+    --ins-font-body: 'Inter', sans-serif;
+
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--ins-bg);
+    color: var(--ins-on-surface);
+    font-family: var(--ins-font-body);
+}
+
+.instructor-layout .instructor-main-area {
+    flex: 1;
+    margin-left: 280px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.instructor-layout .instructor-content {
+    flex: 1;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Override scrollbar for instructor pages */
+.instructor-layout ::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+.instructor-layout ::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.instructor-layout ::-webkit-scrollbar-thumb {
+    background-color: var(--ins-outline-variant);
+    border-radius: 4px;
+}
+
+.instructor-layout ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ins-outline);
+}
