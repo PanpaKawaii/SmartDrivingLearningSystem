@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
 import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
-import { lessonProgresses } from '../../../../mocks/DataSample';
 import { lessonProgresses, questionLessons, questions } from '../../../../mocks/DataSample';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
