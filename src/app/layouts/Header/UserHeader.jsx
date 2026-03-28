@@ -15,16 +15,16 @@ export default function UserHeader({
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const menuItems = [
-        // { name: 'HOME', icon: 'house', iconType: 'solid', path: '/' },
-        // { name: 'LICENSE', icon: 'book', iconType: 'solid', path: '/driving-license' },
-        // { name: 'SIMULATION', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
-        // { name: 'FORUM', icon: 'message', iconType: 'solid', path: '/forum' },
-        // { name: 'LEARNING', icon: 'book-open', iconType: 'solid', path: '/learning' },
+        { name: 'HOME', icon: 'house', iconType: 'solid', path: '/' },
+        { name: 'LICENSE', icon: 'book', iconType: 'solid', path: '/driving-license' },
+        { name: 'SIMULATION', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
+        { name: 'FORUM', icon: 'message', iconType: 'solid', path: '/forum' },
+        { name: 'LEARNING', icon: 'book-open', iconType: 'solid', path: '/learning' },
 
-        // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
-        // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
-        // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
-        // { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
+        { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
+        { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
+        { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
+        { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 
     // useEffect(() => {
