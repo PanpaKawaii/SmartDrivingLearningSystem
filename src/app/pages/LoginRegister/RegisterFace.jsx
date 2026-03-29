@@ -1,13 +1,171 @@
+import { useState } from 'react';
+import { postData } from '../../../mocks/CallingAPI.js';
+import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
+import CheckValidation from './CheckValidation.jsx';
 
 import './RegisterFace.css';
 
 export default function RegisterFace({
     setRotate = () => { },
 }) {
+    console.log('Register');
+    const { user } = useAuth();
+
+    const ResetRegisterInputs = () => {
+        var inputs = document.querySelectorAll('input');
+        inputs.forEach(function (input) {
+            input.value = '';
+        });
+        setAccept(false);
+        setRegisterError({ value: '', name: '' });
+        setRegisterSuccess('');
+    };
+
+    const [accept, setAccept] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [registerError, setRegisterError] = useState({ value: '', name: '' });
+    const [registerSuccess, setRegisterSuccess] = useState(null);
+
+    const Register = async (Email, Name, Phone, Gender, Password, Confirm, Accept) => {
+        const Validate = CheckValidation(Email, Name, Phone, Gender, Password, Confirm, Accept);
+        console.log('Validate: ', Validate);
+        if (Validate.value != 'OK') {
+            console.log('Validation is false');
+            setRegisterError(Validate);
+            setRegisterSuccess('');
+            return;
+        }
+
+        const RegisterData = {
+            id: '',
+            roleId: '',
+            email: Email,
+            password: Password,
+            name: Name,
+            avatar: 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg',
+            phone: Phone,
+            gender: Gender,
+            description: '',
+            dateOfBirth: '',
+            licenseType: '',
+        };
+        console.log('RegisterData:', RegisterData);
+
+        try {
+            setLoading(true);
+            const token = user?.token || '';
+            const result = await postData('api/user', RegisterData, token);
+            console.log('result', result);
+
+            setRegisterSuccess('Đăng ký thành công!');
+            setRegisterError({ value: '', name: '' });
+        } catch (error) {
+            console.log('Register failed:', error);
+            setRegisterError({ value: 'Đăng ký thất bại, hãy thử lại sau', name: 'Email, Name, Phone, Password, Confirm, Accept' });
+            setRegisterSuccess('');
+        } finally {
+            setLoading(false);
+        };
+    };
+
+    const handleSubmitRegister = (e) => {
+        e.preventDefault();
+        setRegisterError({ value: '', name: '' });
+        setRegisterSuccess('');
+        const Email = e.target.email.value;
+        const Name = e.target.name.value;
+        const Phone = e.target.phone.value;
+        const Gender = e.target.gender.value;
+        const Password = e.target.password.value;
+        const Confirm = e.target.confirm.value;
+        console.log({
+            Email,
+            Name,
+            Phone,
+            Gender,
+            Password,
+            Confirm,
+            accept,
+        });
+        Register(
+            Email,
+            Name,
+            Phone,
+            Gender,
+            Password,
+            Confirm,
+            accept,
+        );
+    };
+
+    const handleAccept = () => {
+        setAccept(p => !p);
+    };
+
     return (
         <div className='register-face-container'>
-            <h1>REGISTER</h1>
-            <button onClick={() => setRotate(0)}>To Login</button>
+            <h1>ĐĂNG KÝ</h1>
+            <form onSubmit={handleSubmitRegister}>
+                <div className='form-group'>
+                    <input type='text' name='email' placeholder='' />
+                    <label htmlFor={'email'} style={{ color: registerError.name.includes('Email') && '#ff4d4f', }}>Email</label>
+                </div>
+                <div className='form-group'>
+                    <input type='text' name='name' placeholder='' />
+                    <label htmlFor={'name'} style={{ color: registerError.name.includes('Name') && '#ff4d4f', }}>Họ tên</label>
+                </div>
+                <div className='form-group'>
+                    <input type='text' name='phone' placeholder='' />
+                    <label htmlFor={'phone'} style={{ color: registerError.name.includes('Phone') && '#ff4d4f', }}>Số điện thoại</label>
+                </div>
+                <div className='gender-group'>
+                    {['Nam', 'Nữ'].map((gender, index) => (
+                        <label key={index} className='radio-label' style={{ border: registerError.name.includes('Gender') && '2px solid #ff4d4f', }} >
+                            <input
+                                type='radio'
+                                name='gender'
+                                value={gender}
+                                className='hidden-radio'
+                            />
+                            <span className='radio-box'>{gender}</span>
+                        </label>
+                    ))}
+                </div>
+                <div className='form-group'>
+                    <input type='password' name='password' placeholder='' />
+                    <label htmlFor={'password'} style={{ color: registerError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
+                </div>
+                <div className='form-group'>
+                    <input type='password' name='confirm' placeholder='' />
+                    <label htmlFor={'confirm'} style={{ color: registerError.name.includes('Confirm') && '#ff4d4f', }}>Xác nhận mật khẩu</label>
+                </div>
+                <div className='form-check'>
+                    <a href='https://docs.google.com/document/d/1gpc5I74B66ldC76mSZsafEXuumeYlhSbV1ocqHCrrR4/edit?tab=t.0' className='provision' target='_blank'><b>ĐIỀU KHOẢN</b></a>
+
+                    <div className='checkbox-container'>
+                        <label style={{ borderBottom: (registerError.name.includes('Accept') && !accept) && '1px solid #ff4d4f', color: (registerError.name.includes('Accept') && !accept) && '#ff4d4f', }}>
+                            <input type='checkbox' checked={accept} onChange={handleAccept} />
+                            Chấp nhận điều khoản
+                        </label>
+                    </div>
+                </div>
+
+                {registerError.value && <div className='message error-message'>{registerError.value}</div>}
+                {registerSuccess && <div className='message success-message'>{registerSuccess}</div>}
+                {!registerError.value && !registerSuccess && <div className='message'></div>}
+
+                <div className='btn-box'>
+                    <button type='submit' className='btn-submit' disabled={!accept || loading}>
+                        {loading ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ'}
+                    </button>
+                    <button type='reset' className='btn-reset' onClick={ResetRegisterInputs}>XÓA</button>
+                </div>
+            </form>
+
+            <div className='link-box'>
+                <div className=''>Đã có tài khoản?</div>
+                <div className='link' onClick={() => setRotate(0)}>Đăng nhập ngay!</div>
+            </div>
         </div>
     )
 }

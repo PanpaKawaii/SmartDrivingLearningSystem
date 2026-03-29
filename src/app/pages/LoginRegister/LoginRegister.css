@@ -21,26 +21,26 @@
         justify-content: center;
         align-items: center;
         transform-style: preserve-3d;
-        transition: all 1.5s ease;
+        transition: all 1.5s ease-in-out;
 
         --CardWidth: 400px;
-        --CardHeight: 600px;
-        --CardThickness: 40px;
+        --CardHeight: 680px;
+        --CardThickness: 60px;
         --CardBorder: 20px;
 
         .face {
             position: absolute;
             background: linear-gradient(135deg, #111827d8, #5f6a7cd8);
-            border: 1px solid var(--gray-3);
+            border: 1px solid var(--gray-4);
             border-radius: var(--CardBorder);
             corner-shape: bevel;
             box-sizing: border-box;
             width: var(--CardWidth);
             height: var(--CardHeight);
-            max-height: 600px;
+            max-height: 700px;
             overflow-y: scroll;
             scrollbar-width: none;
-            transition: all 1s ease;
+            transition: all 2s ease;
 
             &.face-login {
                 transform: rotateY(0deg) translateZ(calc(var(--CardThickness) / 2));
@@ -160,7 +160,7 @@
 
             label {
                 position: absolute;
-                top: 10px;
+                top: 12px;
                 left: 12px;
                 color: var(--text-secondary);
                 background-color: var(--gray-2);
@@ -193,7 +193,10 @@
             justify-content: space-between;
             align-items: center;
 
-            .form-remember {
+            .checkbox-container {
+                box-sizing: border-box;
+                height: 22px;
+
                 label {
                     display: flex;
                     align-items: center;
@@ -201,7 +204,7 @@
 
                     input {
                         cursor: pointer;
-                        margin: 0 8px 0 0;
+                        margin: 0 6px 0 0;
                     }
                 }
             }
@@ -253,6 +256,7 @@
     }
 
     .link-box {
+        margin: 20px 0 0;
         display: flex;
         justify-content: center;
         gap: 4px;

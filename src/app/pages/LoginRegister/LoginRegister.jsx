@@ -23,7 +23,7 @@ export default function LoginRegister({
                 </div>
 
                 {[...Array(8)].map((_, index) => (
-                    <div className={`face face-border f${index + 1}`}>
+                    <div key={index} className={`face face-border f${index + 1}`}>
                         {/* Face-{index + 1} */}
                     </div>
                 ))}

@@ -20,44 +20,44 @@ export default function LoginFace({
         setLoginError({ value: '', name: '' });
     };
 
-    const [Remember, setRemember] = useState(false);
+    const [remember, setRemember] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [LoginError, setLoginError] = useState({ value: '', name: '' });
+    const [loginError, setLoginError] = useState({ value: '', name: '' });
 
-    const Login = async (Username, Password) => {
-        if (!Username) {
+    const Login = async (Email, Password) => {
+        if (!Email) {
             console.error('Invalid value');
-            setLoginError({ value: 'Invalid username', name: 'Username' });
+            setLoginError({ value: 'Vui lòng nhập email', name: 'Email' });
             return;
         }
         if (!Password) {
             console.error('Invalid value');
-            setLoginError({ value: 'Invalid password', name: 'Password' });
+            setLoginError({ value: 'Vui lòng nhập mật khẩu', name: 'Password' });
             return;
         }
 
         const LoginData = {
-            username: Username,
+            email: Email,
             password: Password,
         };
         console.log('LoginData:', LoginData);
 
         try {
             setLoading(true);
-            const result = await postData('api/user/loginusername', LoginData, '');
+            const result = await postData('api/user/login', LoginData, '');
             console.log('result', result);
 
-            if (result?.role == 'Disable') {
-                console.error('This user was disabled');
-                setLoginError({ value: 'This user was disabled', name: 'Username or Password' });
+            if (result?.status == 0) {
+                console.error('Tài khoản này đã bị vô hiệu hóa');
+                setLoginError({ value: 'Tài khoản này đã bị vô hiệu hóa', name: 'Email, Password' });
                 return;
             }
 
             login(result);
             navigate('/profile');
         } catch (error) {
-            console.log('Login failed:', error);
-            setLoginError({ value: 'Login failed', name: 'Username or Password' });
+            console.error('Login failed:', error);
+            setLoginError({ value: 'Đăng nhập thất bại', name: 'Email, Password' });
         } finally {
             setLoading(false);
         };
@@ -66,10 +66,10 @@ export default function LoginFace({
     const handleSubmitLogin = (e) => {
         e.preventDefault();
         setLoginError({ value: '', name: '' });
-        const Username = e.target.username.value;
+        const Email = e.target.email.value;
         const Password = e.target.password.value;
-        console.log({ Username, Password });
-        Login(Username, Password);
+        console.log({ Email, Password });
+        Login(Email, Password);
     };
 
     const handleRemember = () => {
@@ -78,38 +78,40 @@ export default function LoginFace({
 
     return (
         <div className='login-face-container'>
-            <h1>LOGIN</h1>
+            <h1>ĐĂNG NHẬP</h1>
             <form onSubmit={handleSubmitLogin}>
                 <div className='form-group'>
-                    <input type='text' name='username' placeholder='' />
-                    <label htmlFor={'username'} style={{ color: LoginError.name.includes('Username') && '#ff4d4f', }}>Username</label>
+                    <input type='text' name='email' placeholder='' />
+                    <label htmlFor={'email'} style={{ color: loginError.name.includes('Email') && '#ff4d4f', }}>Email</label>
                 </div>
                 <div className='form-group'>
                     <input type='password' name='password' placeholder='' />
-                    <label htmlFor={'password'} style={{ color: LoginError.name.includes('Password') && '#ff4d4f', }}>Password</label>
+                    <label htmlFor={'password'} style={{ color: loginError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
                 </div>
                 <div className='form-check'>
-                    <div className='form-remember'>
-                        <label className='label-remember'>
-                            <input type='checkbox' id='checkbox-remember' checked={Remember} onChange={handleRemember} />
-                            Remember me
+                    <div className='checkbox-container'>
+                        <label>
+                            <input type='checkbox' checked={remember} onChange={handleRemember} />
+                            Lưu đăng nhập
                         </label>
                     </div>
-                    <a href='#' className='forget-link'>Forgot password?</a>
+                    <a href='#' className='forget-link'>Quên mật khẩu?</a>
                 </div>
 
-                {LoginError && <div className='message error-message'>{LoginError.value}</div>}
-                {!LoginError && <div className='message error-message'></div>}
+                {loginError && <div className='message error-message'>{loginError.value}</div>}
+                {!loginError && <div className='message error-message'></div>}
 
                 <div className='btn-box'>
-                    <button type='submit' className='btn-submit'>SUBMIT</button>
-                    <button type='reset' className='btn-reset' onClick={ResetLoginInputs}>CLEAR</button>
+                    <button type='submit' className='btn-submit' disabled={loading}>
+                        {loading ? 'ĐANG XỬ LÝ...' : 'ĐĂNG NHẬP'}
+                    </button>
+                    <button type='reset' className='btn-reset' onClick={ResetLoginInputs}>XÓA</button>
                 </div>
             </form>
-            <div className='other-method'>Or</div>
+            <div className='other-method'>Hoặc</div>
             <div className='link-box'>
-                <div>Have no accounts yet?</div>
-                <div className='link' onClick={() => setRotate(-180)}>Sign up now!</div>
+                <div>Chưa có tài khoản?</div>
+                <div className='link' onClick={() => setRotate(-180)}>Đăng ký ngay!</div>
             </div>
         </div>
     )
