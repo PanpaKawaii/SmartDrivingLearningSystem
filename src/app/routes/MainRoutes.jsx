@@ -47,6 +47,8 @@ import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.
 
 import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
 
+import BoxChat from '../components/BoxChat/BoxChat.jsx'
+
 export default function MainRoutes() {
     return (
         <BrowserRouter>
@@ -95,8 +97,7 @@ export default function MainRoutes() {
                     <Route path='lesson-management' element={<LessonManagement />} />
                 </Route>
             </Routes>
-
-
+            <BoxChat />
             {/* <UserLayout>
                 <Routes>
                     <Route path='/' element={<Home />} />

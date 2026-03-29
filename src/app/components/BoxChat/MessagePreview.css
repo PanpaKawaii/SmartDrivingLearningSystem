@@ -1,0 +1,36 @@
+.message-preview {
+    position: absolute;
+    bottom: 40px;
+    right: 120px;
+    width: 300px;
+    height: fit-content;
+    padding: 8px 16px;
+    color: #68FCFF;
+    background-color: #48939bee;
+    border: 2px solid #68FCFFFF;
+    border-radius: 8px 0 8px 8px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 16px #00000080;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    animation: messagePreviewFadeInOut 3s ease forwards;
+}
+
+@keyframes messagePreviewFadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+}

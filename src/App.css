@@ -116,7 +116,7 @@ h6 {
 
 ::-webkit-scrollbar {
   width: 12px;
-  background-color: var(--green-light);
+  /* background-color: var(--green-light); */
 }
 
 ::-webkit-scrollbar-track {
