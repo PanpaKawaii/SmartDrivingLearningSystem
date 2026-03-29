@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import CheckValidation from './CheckValidation.jsx';
@@ -25,6 +25,7 @@ export default function RegisterFace({
     const [loading, setLoading] = useState(false);
     const [registerError, setRegisterError] = useState({ value: '', name: '' });
     const [registerSuccess, setRegisterSuccess] = useState(null);
+    const [successSendOTP, setSuccessSendOTP] = useState(false);
 
     const Register = async (Email, Name, Phone, Gender, Password, Confirm, Accept) => {
         const Validate = CheckValidation(Email, Name, Phone, Gender, Password, Confirm, Accept);
@@ -102,6 +103,46 @@ export default function RegisterFace({
         setAccept(p => !p);
     };
 
+
+
+    // OTP
+    const inputsRef = useRef([]);
+
+    const handleChange = (e, index) => {
+        const value = e.target.value;
+
+        // Chỉ cho nhập số
+        if (!/^[0-9]?$/.test(value)) return;
+
+        e.target.value = value;
+
+        // Tự động chuyển sang ô tiếp theo
+        if (value && index < 5) {
+            inputsRef.current[index + 1].focus();
+        }
+    };
+
+    const handleKeyDown = (e, index) => {
+        // Backspace quay lại ô trước
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+            inputsRef.current[index - 1].focus();
+        }
+    };
+
+    const handlePaste = (e) => {
+        const pasteData = e.clipboardData.getData('text').slice(0, 6);
+
+        if (!/^[0-9]+$/.test(pasteData)) return;
+
+        pasteData.split('').forEach((char, index) => {
+            if (inputsRef.current[index]) {
+                inputsRef.current[index].value = char;
+            }
+        });
+
+        inputsRef.current[pasteData.length - 1]?.focus();
+    };
+
     return (
         <div className='register-face-container'>
             <h1>ĐĂNG KÝ</h1>
@@ -166,6 +207,43 @@ export default function RegisterFace({
                 <div className=''>Đã có tài khoản?</div>
                 <div className='link' onClick={() => setRotate(0)}>Đăng nhập ngay!</div>
             </div>
+
+            <button onClick={() => setSuccessSendOTP(true)}>OTP</button>
+
+            {successSendOTP &&
+                <div className='form-otp'>
+                    <div className='otp-container' onPaste={handlePaste}>
+                        <button onClick={() => setSuccessSendOTP(false)} className='close-otp'>
+                            <i className='fa-solid fa-arrow-left' />
+                            <span>Quay lại</span>
+                        </button>
+
+                        <h2>XÁC THỰC OTP</h2>
+                        <div className='otp-inputs'>
+                            {[...Array(6)].map((_, index) => (
+                                <input
+                                    key={index}
+                                    type='text'
+                                    maxLength='1'
+                                    className='otp-input'
+                                    ref={(el) => (inputsRef.current[index] = el)}
+                                    onChange={(e) => handleChange(e, index)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                />
+                            ))}
+                        </div>
+                        <button
+                            className='submit-btn'
+                            onClick={() => {
+                                const otp = inputsRef.current.map((input) => input.value).join('');
+                                alert('OTP: ' + otp);
+                            }}
+                        >
+                            Xác nhận
+                        </button>
+                    </div>
+                </div>
+            }
         </div>
     )
 }
