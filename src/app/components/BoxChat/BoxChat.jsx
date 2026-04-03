@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { block1, block2, block3, block4, block5, block6 } from '../../../mocks/blocks.js';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import Cube from '../Cube/Cube.jsx';
@@ -175,7 +176,12 @@ export default function BoxChat() {
                 onMouseDown={handleMouseDown}
             >
                 <MessagePreview visible={visible} message={Messages?.[Messages.length - 1]} />
-                <Cube color={'#68FCFF'} onClickCube={() => setDisplayChat(p => !p)} />
+                <Cube
+                    color={'#68FCFF'}
+                    onClickCube={() => setDisplayChat(p => !p)}
+                    name='tetrahedron'
+                    faces={block5}
+                />
             </div>
             {DisplayChat &&
                 <div className='chat-box' style={chatStyle}>
