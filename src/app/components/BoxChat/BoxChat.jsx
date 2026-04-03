@@ -140,8 +140,8 @@ export default function BoxChat() {
         const x = e.clientX - offset.current.x;
         const y = e.clientY - offset.current.y;
 
-        iconRef.current.style.left = `${x}px`;
-        iconRef.current.style.top = `${y}px`;
+        iconRef.current.style.left = `${Math.max(0, Math.min(window.innerWidth - iconRef.current.offsetWidth, x))}px`;
+        iconRef.current.style.top = `${Math.max(0, Math.min(window.innerHeight - iconRef.current.offsetHeight, y))}px`;
     };
 
     const handleMouseUp = () => {

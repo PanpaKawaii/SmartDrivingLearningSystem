@@ -203,6 +203,7 @@ CREATE TABLE [SimulationChapter] (
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
+    index       INT DEFAULT 1,
 );
 
 -- 5.SimulationCategory OK
@@ -237,6 +238,7 @@ CREATE TABLE [SimulationScenario] (
     totalTime   INT NOT NULL,
     startPoint  INT NOT NULL,
     endPoint    INT NOT NULL,
+    index       INT DEFAULT 1,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
@@ -358,6 +360,7 @@ CREATE TABLE [QuestionChapter] (
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
+    index       INT DEFAULT 1,
     FOREIGN KEY (drivingLicenseId) REFERENCES [DrivingLicense](id),
 );
 
@@ -371,6 +374,7 @@ CREATE TABLE [QuestionLesson] (
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
     content     NVARCHAR(MAX),
+    index       INT DEFAULT 1,
     FOREIGN KEY (questionChapterId) REFERENCES [QuestionChapter](id),
 );
 
@@ -431,6 +435,7 @@ CREATE TABLE [Question] (
     image       NVARCHAR(255),
     explanation NVARCHAR(255),
     type        NVARCHAR(20),
+    index       INT DEFAULT 1,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
@@ -669,6 +674,7 @@ CREATE TABLE [TrafficSign] (
     description NVARCHAR(255),
     vectorData  NVARCHAR(255),
     image       NVARCHAR(255),
+    index       INT DEFAULT 1,
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
