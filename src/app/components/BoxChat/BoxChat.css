@@ -33,7 +33,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        border: 1px solid #ffffff33;
+        /* border: 1px solid #ffffff33; */
         box-sizing: border-box;
         border-radius: 24px;
         overflow: hidden;
@@ -108,7 +108,6 @@
             div {
                 display: flex;
                 align-items: center;
-                gap: 6px;
             }
 
             i {
@@ -119,7 +118,7 @@
                 font-size: 14px;
                 cursor: pointer;
                 border-radius: 8px;
-                margin: 6px 4px;
+                margin: 4px;
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                 position: relative;
                 overflow: hidden;
@@ -271,12 +270,12 @@
                     .logo-bot {
                         width: 20px;
                         height: 20px;
-                        color: #dfbfff;
+                        color: #FFC800;
                         font-size: .625rem;
                         font-weight: bold;
                         text-align: center;
                         align-content: center;
-                        text-shadow: 1px 1px 1px #5e3b81;
+                        text-shadow: 1px 1px 1px #FF960080;
                         overflow: hidden;
                         border-radius: 50%;
                         background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
@@ -304,12 +303,12 @@
                 .logo-bot {
                     width: 20px;
                     height: 20px;
-                    color: #dfbfff;
-                    font-size: 13px;
+                    color: #FFC800;
+                    font-size: .625rem;
                     font-weight: bold;
                     text-align: center;
                     align-content: center;
-                    text-shadow: 1px 1px 1px #5e3b81;
+                    text-shadow: 1px 1px 1px #FF960080;
                     overflow: hidden;
                     border-radius: 50%;
                     background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);

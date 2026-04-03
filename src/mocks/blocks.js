@@ -1806,14 +1806,15 @@ export const block5 = [
 export const block6 = [
     {
         "id": "8cd8457a-dd26-497a-9b8c-9cc55cf6779c",
-        "name": "Face 1",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -1829,22 +1830,22 @@ export const block6 = [
             {
                 "id": "6c014054-27b1-4067-84a2-d37d37e95774",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "2f031619-8ad8-42f2-a6b6-d99a81c06b67",
-        "name": "Face 2",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -1866,22 +1867,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "36730ed8-033f-41d7-8486-ac2e7a1daf8a",
-        "name": "Face 3",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -1903,22 +1904,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "9d5a77fe-1b0e-422e-aa49-e6b5321d13e7",
-        "name": "Face 4",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -1940,22 +1941,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "4a2207a5-1178-410e-be72-34a741c83da8",
-        "name": "Face 5",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -1977,22 +1978,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "19ea961b-0478-412f-ad4a-80a3a5d01f3b",
-        "name": "Face 6",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2014,22 +2015,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "03bad423-351f-45b1-a5ff-7e4280cb7cd0",
-        "name": "Face 7",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2045,22 +2046,22 @@ export const block6 = [
             {
                 "id": "6c014054-27b1-4067-84a2-d37d37e95774",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "843b309f-1a3f-497f-8ce9-0aec8f8b9070",
-        "name": "Face 8",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2082,22 +2083,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "fd756074-85d1-4fd2-96c1-251278b00e0f",
-        "name": "Face 9",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2119,22 +2120,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "e4efaa78-116e-420b-a340-0135451f18ea",
-        "name": "Face 10",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2156,22 +2157,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "6e2a5599-ad7a-456e-a6f5-1f9bbfca6219",
-        "name": "Face 11",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2193,22 +2194,22 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "9d28338b-ea0d-4553-ae6c-39061ac7a344",
-        "name": "Face 12",
-        "width": 200,
-        "height": 200,
+        "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#184BB420",
-        "nameColor": "#4ABDBEFF",
+        "nameColor": "#68FCFFFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
         "nameVisible": 1,
@@ -2230,25 +2231,25 @@ export const block6 = [
             {
                 "id": "bbf1e244-9069-4271-b94d-3b454a2c5d48",
                 "type": "translateZ",
-                "value": "233",
+                "value": "58.25",
                 "visible": 1
             }
-        ],
-        "shape": "100,14.935 180.902,73.713 150,168.819 50,168.819 19.098,73.713"
+        ]
     },
     {
         "id": "4d9ab43f-524f-440c-b0f8-77f4eba8083a",
-        "name": "Face 13",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2267,25 +2268,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "89a48a7b-36d4-42f3-88be-bea07233effd",
-        "name": "Face 14",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2304,25 +2305,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "8a3023be-151c-488e-81c2-e5186e5399c7",
-        "name": "Face 15",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2341,25 +2342,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "8f9bdc3d-cabb-4535-b698-a7665fd5b396",
-        "name": "Face 16",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2378,25 +2379,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "8be06029-9988-4fab-914c-06dbe009242b",
-        "name": "Face 17",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2415,25 +2416,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "5e207267-f0c0-4a9e-9626-81ff41ba6575",
-        "name": "Face 18",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2452,25 +2453,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "bbb85a0b-47b9-431f-9404-31cebe50aca6",
-        "name": "Face 19",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2489,25 +2490,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "940ceffb-2814-4e99-a361-be02e1c5e0cb",
-        "name": "Face 20",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2526,25 +2527,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "2a956d8a-795a-4df9-bb84-5b5ee6e95403",
-        "name": "Face 21",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2563,25 +2564,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "d20d42cd-dbba-44c2-8e8e-bd62678d0536",
-        "name": "Face 22",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2600,25 +2601,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "1a0eb4ea-1ce5-4c73-9264-0aec4e9232cf",
-        "name": "Face 23",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2637,25 +2638,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "6b5aca05-0b51-4aad-82a0-04af036bca32",
-        "name": "Face 24",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2674,25 +2675,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "5803a0c1-1111-498d-9c61-120e6734400c",
-        "name": "Face 25",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2711,25 +2712,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "26d863f8-5a44-4156-9cf0-942efb8dda16",
-        "name": "Face 26",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2748,25 +2749,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "6d70ec06-06c6-4ddb-af7b-1f2269316565",
-        "name": "Face 27",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2785,25 +2786,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "45a1a14b-7523-44fc-905d-092770fa14df",
-        "name": "Face 28",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2822,25 +2823,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "dd49e1e6-c959-4957-a349-c52657b4a0af",
-        "name": "Face 29",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2859,25 +2860,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "da3b270a-1526-4acf-a3fe-e9f6dc7ae9ca",
-        "name": "Face 30",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2896,25 +2897,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "913b77e8-887f-4f39-b964-e4ad4afe7d83",
-        "name": "Face 31",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2933,25 +2934,25 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     },
     {
         "id": "bdbb9c49-2aae-4e84-95ec-4688e6c70858",
-        "name": "Face 32",
-        "width": 200,
-        "height": 200,
+        "shape": "0,25 12.5,3.349 37.5,3.349 50,25 37.5,46.651 12.5,46.651",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
         "glow": 4,
-        "nameSize": 32,
+        "nameSize": 24,
         "borderWidth": 2,
         "color": "#68FCFF80",
         "nameColor": "#4ABDBEFF",
         "borderColor": "#68FCFFFF",
         "visible": 1,
-        "nameVisible": 1,
+        "nameVisible": 0,
         "borderVisible": 1,
         "glowVisible": 1,
         "steps": [
@@ -2970,10 +2971,9 @@ export const block6 = [
             {
                 "id": "cfbc9f5a-aeff-4046-9c31-98b54d54a376",
                 "type": "translateZ",
-                "value": "227",
+                "value": "56.75",
                 "visible": 1
             }
-        ],
-        "shape": "0,100 50,13.397 150,13.397 200,100 150,186.603 50,186.603"
+        ]
     }
 ]

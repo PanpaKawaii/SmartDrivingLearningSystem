@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import './Cube.css';
 
@@ -7,40 +7,6 @@ export default function Cube({
     onClickCube = () => { },
     faces = [],
 }) {
-    const containerRef = useRef(null);
-    const objectRef = useRef(null);
-    // const dragging = useRef(false);
-    // const rotation = useRef({ x: 0, y: 0 });
-
-    // const applyRotation = () => {
-    //     const { x, y } = rotation.current;
-    //     objectRef.current.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
-    // };
-
-    // useEffect(() => {
-    //     const container = containerRef.current;
-
-    //     const down = () => (dragging.current = true);
-    //     const up = () => (dragging.current = false);
-
-    //     const move = (e) => {
-    //         if (!dragging.current) return;
-    //         rotation.current.y += e.movementX * 0.5;
-    //         rotation.current.x -= e.movementY * 0.5;
-    //         applyRotation();
-    //     };
-
-    //     container.addEventListener('pointerdown', down);
-    //     window.addEventListener('pointerup', up);
-    //     window.addEventListener('pointermove', move);
-
-    //     return () => {
-    //         container.removeEventListener('pointerdown', down);
-    //         window.removeEventListener('pointerup', up);
-    //         window.removeEventListener('pointermove', move);
-    //     };
-    // }, []);
-
     const polygonToPath = (points) => {
         if (!points) return '';
         const coords = points.trim().split(/\s+/);
@@ -50,32 +16,25 @@ export default function Cube({
         }
         return d + ' Z';
     };
-
-    const text = 'AI';
     return (
         <div className='cube-container'>
-            <div
-                ref={containerRef}
+            {/* <div
                 className='scene-cube'
                 style={{ '--color1': color, '--color2': color + '80' }}
             >
                 <div
-                    ref={objectRef}
                     className='cube'
                 >
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className={`face f${i + 1}`} onClick={onClickCube}>{text}</div>
                     ))}
                 </div>
-            </div>
-            <div style={{ width: '80px', height: '80px' }}></div>
+            </div> */}
             <div
-                ref={containerRef}
                 className='scene-object'
                 style={{ '--color1': color, '--color2': color + '80' }}
             >
                 <div
-                    ref={objectRef}
                     className='object'
                 >
                     {faces.map((face, index) => {

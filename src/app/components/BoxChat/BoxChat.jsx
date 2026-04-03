@@ -179,7 +179,7 @@ export default function BoxChat() {
                 <Cube
                     color={'#68FCFF'}
                     onClickCube={() => setDisplayChat(p => !p)}
-                    faces={block5}
+                    faces={block1}
                 />
             </div>
             {DisplayChat &&
@@ -216,7 +216,7 @@ export default function BoxChat() {
                                 className={`message ${idx % 2 === 0 ? 'bot-message' : 'user-message'}`}
                             >
                                 <div>{renderFormattedText(msg)}</div>
-                                <div className='logo-bot'>GL</div>
+                                <div className='logo-bot'><i className='fa-solid fa-star'></i></div>
                             </div>
                         ))}
                         {loading && (
@@ -224,7 +224,7 @@ export default function BoxChat() {
                                 <div className='dot'></div>
                                 <div className='dot'></div>
                                 <div className='dot'></div>
-                                <div className='logo-bot'>GL</div>
+                                <div className='logo-bot'><i className='fa-solid fa-star'></i></div>
                             </div>
                         )}
                     </div>
