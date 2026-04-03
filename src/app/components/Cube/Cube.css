@@ -93,13 +93,12 @@
         filter: drop-shadow(0 0 20px var(--color1));
 
         .object {
-            /* transition: all 0.1s ease; */
             position: relative;
             width: fit-content;
             height: fit-content;
             transform-style: preserve-3d;
             transition: all 1s ease;
-            transform: rotateX(0deg) rotateY(60deg) rotateZ(0deg);
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
             animation: rotate_1x_2y 10s linear infinite;
 
             display: flex;
