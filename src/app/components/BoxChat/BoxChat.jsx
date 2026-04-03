@@ -14,6 +14,7 @@ export default function BoxChat() {
     const [WidthFull, setWidthFull] = useState(false);
     const [HeightFull, setHeightFull] = useState(false);
     const [DisplayChat, setDisplayChat] = useState(false);
+    const [blockIndex, setBlockIndex] = useState(1);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -95,6 +96,11 @@ export default function BoxChat() {
     } else if (HeightFull) {
         chatStyle = StyleHeight;
     }
+
+    const blocks = [block1, block2, block3, block4, block5, block6];
+    const changeBlock = () => {
+        setBlockIndex((prev) => (prev + 1) % blocks.length);
+    };
 
     const renderFormattedText = (text) => {
         // Bước 1: Tách từng dòng theo dấu `*`
@@ -179,7 +185,7 @@ export default function BoxChat() {
                 <Cube
                     color={'#68FCFF'}
                     onClickCube={() => setDisplayChat(p => !p)}
-                    faces={block1}
+                    faces={blocks?.[blockIndex ?? 1] || []}
                 />
             </div>
             {DisplayChat &&
@@ -189,6 +195,7 @@ export default function BoxChat() {
                             <span>GREENLIGHT AI</span>
                         </div>
                         <div>
+                            <i className='fa-solid fa-arrow-left-arrow-right' onClick={changeBlock} title='Đóng'></i>
                             {WidthFull ?
                                 <i className='fa-solid fa-compress-arrows-alt' onClick={() => setWidthFull(false)} title='Thu nhỏ'></i>
                                 :
