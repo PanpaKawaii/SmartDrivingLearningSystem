@@ -48,13 +48,30 @@ import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.
 import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
+/* Instructor CMS Pages */
+import InstructorLayout from '../components/InstructorComponent/InstructorLayout.jsx'
+import InsDashboard from '../pages/InstructorPages/Dashboard/Dashboard.jsx'
+import InsQuestionBank from '../pages/InstructorPages/QuestionBank/QuestionBank.jsx'
+import InsLessonMgmt from '../pages/InstructorPages/LessonManagement/LessonManagement.jsx'
+import InsChapterMgmt from '../pages/InstructorPages/ChapterManagement/ChapterManagement.jsx'
+import InsLicenseMgmt from '../pages/InstructorPages/LicenseManagement/LicenseManagement.jsx'
+import InsVehicleMgmt from '../pages/InstructorPages/VehicleManagement/VehicleManagement.jsx'
+import InsTrafficSignBank from '../pages/InstructorPages/TrafficSignBank/TrafficSignBank.jsx'
+import InsSimulationBank from '../pages/InstructorPages/SimulationBank/SimulationBank.jsx'
+import InsExamMgmt from '../pages/InstructorPages/ExamManagement/ExamManagement.jsx'
+import InsPendingPosts from '../pages/InstructorPages/PendingPosts/PendingPosts.jsx'
+import InsMyPosts from '../pages/InstructorPages/MyPosts/MyPosts.jsx'
+import InsCommunityReports from '../pages/InstructorPages/CommunityReports/CommunityReports.jsx'
+import InsContentErrorReports from '../pages/InstructorPages/ContentErrorReports/ContentErrorReports.jsx'
+import InsChangeRequests from '../pages/InstructorPages/ChangeRequests/ChangeRequests.jsx'
+import InsReportProcessing from '../pages/InstructorPages/ReportProcessing/ReportProcessing.jsx'
 
 export default function MainRoutes() {
     return (
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
-                <Route path='/' element={<UserLayout />} >
+                 <Route path='/' element={<UserLayout />} >
                     <Route index element={<Home />} />
 
                     <Route path='driving-license' element={<DrivingLicense />} />
@@ -78,14 +95,14 @@ export default function MainRoutes() {
                     <Route path='learning/theory-question' element={<CoreLearning />} />
                     <Route path='learning/question-flashcard' element={<LearningQuestion />} />
                     <Route path='learning/list-traffic-sign' element={<LearningSign />} />
-                    {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} /> */}
+                     {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} />  */}
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
                     <Route path='learning/list-simulation' element={<ControlledVideo />} />
-                    {/* <Route path='learning/list-simulation/:id' element={<ControlledVideo />} /> */}
+                     {/* <Route path='learning/list-simulation/:id' element={<ControlledVideo />} />  */}
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
-                </Route>
+                </Route>  
 
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
@@ -95,6 +112,27 @@ export default function MainRoutes() {
                     <Route path='user-management' element={<UserManagement />} />
                     <Route path='question-management' element={<QuestionManagement />} />
                     <Route path='lesson-management' element={<LessonManagement />} />
+                </Route>
+
+                {/* Instructor CMS Routes */}
+                <Route path='/instructor' element={<InstructorLayout />} >
+                    <Route index element={<Navigate to='dashboard' replace />} />
+                    <Route path='dashboard' element={<InsDashboard />} />
+                    <Route path='question-bank' element={<InsQuestionBank />} />
+                    <Route path='lesson-management' element={<InsLessonMgmt />} />
+                    <Route path='chapter-management' element={<InsChapterMgmt />} />
+                    <Route path='license-management' element={<InsLicenseMgmt />} />
+                    <Route path='vehicle-management' element={<InsVehicleMgmt />} />
+                    <Route path='traffic-sign-bank' element={<InsTrafficSignBank />} />
+                    <Route path='simulation-bank' element={<InsSimulationBank />} />
+                    <Route path='exam-management' element={<InsExamMgmt />} />
+                    <Route path='pending-posts' element={<InsPendingPosts />} />
+                    <Route path='my-posts' element={<InsMyPosts />} />
+                    <Route path='my-posts-list' element={<InsMyPosts />} />
+                    <Route path='community-reports' element={<InsCommunityReports />} />
+                    <Route path='content-error-reports' element={<InsContentErrorReports />} />
+                    <Route path='change-requests' element={<InsChangeRequests />} />
+                    <Route path='report-processing' element={<InsReportProcessing />} />
                 </Route>
             </Routes>
             <BoxChat />

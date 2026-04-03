@@ -26,10 +26,23 @@ export default function LearningLesson() {
 
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
     const [LESSONPROGRESSes, setLESSONPROGRESSes] = useState([]);
+    const [dataSourceInfo, setDataSourceInfo] = useState({
+        lesson: 'api',
+        apiQuestions: 0,
+        sampleQuestions: 0,
+    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
+
+    const mergeWithSource = (apiList, sampleList, idKey = 'id') => {
+        const apiWithSource = apiList.map((item) => ({ ...item, dataSource: 'api' }));
+        const apiIdSet = new Set(apiWithSource.map((item) => String(item?.[idKey])));
+        const sampleWithSource = sampleList
+            .filter((item) => !apiIdSet.has(String(item?.[idKey])))
+            .map((item) => ({ ...item, dataSource: 'sample' }));
+        return [...apiWithSource, ...sampleWithSource];
+    };
 
     useEffect(() => {
         (async () => {
@@ -89,6 +102,17 @@ export default function LearningLesson() {
                 console.log('QuestionLesson', QuestionLesson);
                 setThisQuestionLesson(QuestionLesson);
 
+                setDataSourceInfo({
+                    lesson: questionLessonDetail?.dataSource || 'api',
+                    apiQuestions: apiQuestions.length,
+                    sampleQuestions: mergedQuestions.filter((item) => item.dataSource === 'sample').length,
+                });
+
+                if (!QuestionLesson) {
+                    setError('Error');
+                    return;
+                }
+
                 // ==FIX==
                 const userId = 1;
                 const LessonProgress = LessonProgressResponse.filter(lp => lp.questionLessonId == questionLessonId && lp.userId == userId)?.sort((a, b) => (b?.score) - (a?.score));
@@ -120,6 +144,9 @@ export default function LearningLesson() {
                 <div className='lesson-header'>
                     <h1>{ThisQuestionLesson?.name}</h1>
                     <p>{ThisQuestionLesson?.description}</p>
+                    <p className='data-source-note'>
+                        Demo data sources - Lesson: {dataSourceInfo.lesson === 'sample' ? 'DataSample' : 'API'}, Questions(API/DataSample): {dataSourceInfo.apiQuestions}/{dataSourceInfo.sampleQuestions}
+                    </p>
                 </div>
 
                 <div className='content-grid'>

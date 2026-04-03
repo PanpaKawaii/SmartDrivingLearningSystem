@@ -1,0 +1,84 @@
+.ins-stats-card {
+    background-color: var(--ins-surface);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: background-color 0.2s ease;
+    min-width: 0;
+}
+
+.ins-stats-card:hover {
+    background-color: var(--ins-surface-high);
+}
+
+.ins-stats-card .stats-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ins-stats-card .stats-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.ins-stats-card .stats-card-icon.blue {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.ins-stats-card .stats-card-icon.green {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+}
+
+.ins-stats-card .stats-card-icon.yellow {
+    background-color: rgba(250, 173, 20, 0.15);
+    color: #fbbf24;
+}
+
+.ins-stats-card .stats-card-icon.red {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.ins-stats-card .stats-card-icon.purple {
+    background-color: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.ins-stats-card .stats-card-trend {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ins-stats-card .stats-card-trend.up {
+    color: #4ade80;
+}
+
+.ins-stats-card .stats-card-trend.down {
+    color: #f87171;
+}
+
+.ins-stats-card .stats-card-value {
+    font-family: var(--ins-font-headline);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+    line-height: 1;
+}
+
+.ins-stats-card .stats-card-label {
+    font-size: 0.8125rem;
+    color: var(--ins-on-surface-variant);
+    font-weight: 500;
+}

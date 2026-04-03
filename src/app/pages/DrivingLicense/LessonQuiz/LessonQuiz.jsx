@@ -21,10 +21,23 @@ export default function LessonQuiz() {
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [selectedQuestionId, setSelectedQuestionId] = useState(QUESTIONs?.[0]?.id);
     const [myAnswers, setMyAnswers] = useState([]);
+    const [dataSourceInfo, setDataSourceInfo] = useState({
+        apiQuestions: 0,
+        sampleQuestions: 0,
+        sampleAnswers: 0,
+    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
+
+    const mergeWithSource = (apiList, sampleList, idKey = 'id') => {
+        const apiWithSource = apiList.map((item) => ({ ...item, dataSource: 'api' }));
+        const apiIdSet = new Set(apiWithSource.map((item) => String(item?.[idKey])));
+        const sampleWithSource = sampleList
+            .filter((item) => !apiIdSet.has(String(item?.[idKey])))
+            .map((item) => ({ ...item, dataSource: 'sample' }));
+        return [...apiWithSource, ...sampleWithSource];
+    };
 
     useEffect(() => {
         (async () => {
@@ -72,6 +85,16 @@ export default function LessonQuiz() {
 
                 setQUESTIONs(QuestionsAnswers);
                 setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
+
+                setDataSourceInfo({
+                    apiQuestions: apiQuestionList.length,
+                    sampleQuestions: mergedQuestions.filter((question) => question.dataSource === 'sample').length,
+                    sampleAnswers: sampleAnswerCount,
+                });
+
+                if (QuestionsAnswers.length === 0) {
+                    setError('Error');
+                }
             } catch (error) {
                 setError('Error');
             } finally {
@@ -181,6 +204,9 @@ export default function LessonQuiz() {
                             <div className='text'>
                                 Câu hỏi {index + 1} trong số {QUESTIONs?.length} câu hỏi
                             </div>
+                            <div className='data-source-note'>
+                                Demo data sources - Questions(API/DataSample): {dataSourceInfo.apiQuestions}/{dataSourceInfo.sampleQuestions}, Answers from DataSample: {dataSourceInfo.sampleAnswers}
+                            </div>
                             {/* <div className='bar'>
                                 <div
                                     className='fill'
@@ -195,6 +221,9 @@ export default function LessonQuiz() {
                         <div className='card'>
                             <div className='title'>
                                 <div className='index'>Câu hỏi {selectedQuestion?.index}: </div>
+                                <div className={`data-source-badge-inline ${selectedQuestion?.dataSource || 'api'}`}>
+                                    {selectedQuestion?.dataSource === 'sample' ? 'DataSample' : 'API'}
+                                </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
                             </div>
                             <div className='grid-answer'>

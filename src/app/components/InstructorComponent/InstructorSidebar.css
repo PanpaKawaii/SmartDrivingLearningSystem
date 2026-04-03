@@ -1,0 +1,191 @@
+.instructor-sidebar {
+    width: 280px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    background-color: var(--ins-surface-low);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: none;
+    user-select: none;
+}
+
+.instructor-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Logo area */
+.instructor-sidebar .sidebar-logo {
+    padding: 24px 24px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.instructor-sidebar .sidebar-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.instructor-sidebar .sidebar-logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.instructor-sidebar .sidebar-logo-title {
+    font-family: var(--ins-font-headline);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+    letter-spacing: -0.01em;
+}
+
+.instructor-sidebar .sidebar-logo-subtitle {
+    font-size: 0.6875rem;
+    color: var(--ins-on-surface-variant);
+    letter-spacing: 0.02em;
+}
+
+/* Navigation */
+.instructor-sidebar .sidebar-nav {
+    flex: 1;
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.instructor-sidebar .sidebar-section-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--ins-on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 16px 12px 8px;
+    font-family: var(--ins-font-body);
+}
+
+.instructor-sidebar .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--ins-on-surface-variant);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--ins-font-headline);
+    transition: all 0.2s ease;
+    position: relative;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.instructor-sidebar .sidebar-nav-item:hover {
+    background-color: var(--ins-surface);
+    color: var(--ins-on-surface);
+}
+
+.instructor-sidebar .sidebar-nav-item.active {
+    color: var(--ins-on-surface);
+    font-weight: 700;
+    background-color: var(--ins-surface);
+}
+
+.instructor-sidebar .sidebar-nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 20px;
+    background: var(--ins-primary);
+    border-radius: 0 3px 3px 0;
+}
+
+.instructor-sidebar .sidebar-nav-item .nav-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.instructor-sidebar .sidebar-nav-item.active .nav-icon {
+    opacity: 1;
+}
+
+/* User section */
+.instructor-sidebar .sidebar-user {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid rgba(95, 117, 165, 0.15);
+    margin-top: auto;
+}
+
+.instructor-sidebar .sidebar-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-container));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ins-bg);
+    flex-shrink: 0;
+}
+
+.instructor-sidebar .sidebar-user-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.instructor-sidebar .sidebar-user-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ins-on-surface);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.instructor-sidebar .sidebar-user-role {
+    font-size: 0.6875rem;
+    color: var(--ins-on-surface-variant);
+}
+
+.instructor-sidebar .sidebar-logout {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--ins-on-surface-variant);
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.instructor-sidebar .sidebar-logout:hover {
+    background-color: var(--ins-surface);
+    color: var(--ins-error);
+}

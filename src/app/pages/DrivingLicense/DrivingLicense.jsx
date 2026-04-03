@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchData } from '../../../mocks/CallingAPI';
+import { drivingLicenses as sampleDrivingLicenses, questionChapters as sampleQuestionChapters } from '../../../mocks/DataSample';
+import { normalizeListResponse } from '../../../lib/apiResponseHelpers';
 import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
@@ -14,16 +16,21 @@ export default function DrivingLicense() {
     const { user } = useAuth();
 
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
+    const [dataSourceInfo, setDataSourceInfo] = useState({
+        apiLicenses: 0,
+        sampleLicenses: 0,
+    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getListFromResponse = (response) => {
-        if (Array.isArray(response)) return response;
-        if (Array.isArray(response?.items)) return response.items;
-        if (Array.isArray(response?.data)) return response.data;
-        if (Array.isArray(response?.result)) return response.result;
-        return [];
+    const mergeWithSource = (apiList, sampleList, idKey = 'id') => {
+        const apiWithSource = apiList.map((item) => ({ ...item, dataSource: 'api' }));
+        const apiIdSet = new Set(apiWithSource.map((item) => String(item?.[idKey])));
+        const sampleWithSource = sampleList
+            .filter((item) => !apiIdSet.has(String(item?.[idKey])))
+            .map((item) => ({ ...item, dataSource: 'sample' }));
+        return [...apiWithSource, ...sampleWithSource];
     };
 
     useEffect(() => {
@@ -72,6 +79,10 @@ export default function DrivingLicense() {
                 }));
 
                 setDRIVINGLICENSEs(DrivingLicense);
+                setDataSourceInfo({
+                    apiLicenses: apiDrivingLicenses.length,
+                    sampleLicenses: mergedDrivingLicenses.filter((item) => item.dataSource === 'sample').length,
+                });
             } catch (error) {
                 setError('Error');
             } finally {
@@ -94,6 +105,9 @@ export default function DrivingLicense() {
                     Select a license program to start your journey. Each program includes
                     comprehensive theory lessons and practice exams.
                 </p>
+                <p className='data-source-note'>
+                    Demo data sources - API: {dataSourceInfo.apiLicenses}, DataSample: {dataSourceInfo.sampleLicenses}
+                </p>
             </div>
 
             <div className='license-grid'>
@@ -108,6 +122,9 @@ export default function DrivingLicense() {
                             <div className='image'>
                                 {/* <img src={license.image_url || 'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={license.name} /> */}
                                 <div className='overlay'></div>
+                                <div className={`data-source-badge ${license.dataSource || 'api'}`}>
+                                    {license.dataSource === 'sample' ? 'DataSample' : 'API'}
+                                </div>
                                 <h3>{license.name}</h3>
                             </div>
 
