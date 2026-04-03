@@ -5,7 +5,6 @@ import './Cube.css';
 export default function Cube({
     color = '',
     onClickCube = () => { },
-    name = 'cube',
     faces = [],
 }) {
     const containerRef = useRef(null);
@@ -55,19 +54,25 @@ export default function Cube({
     const text = 'AI';
     return (
         <div className='cube-container'>
-            {/* <div className='scene-cube'
+            <div
                 ref={containerRef}
-                style={{ '--color1': color, '--color2': color + '80' }}>
-                <div className={`block ${name}`}
-                    ref={objectRef}>
-                    {name == 'cube' && [...Array(faceNumber)].map((_, i) => (
+                className='scene-cube'
+                style={{ '--color1': color, '--color2': color + '80' }}
+            >
+                <div
+                    ref={objectRef}
+                    className='cube'
+                >
+                    {[...Array(6)].map((_, i) => (
                         <div key={i} className={`face f${i + 1}`} onClick={onClickCube}>{text}</div>
                     ))}
                 </div>
-            </div> */}
+            </div>
+            <div style={{ width: '80px', height: '80px' }}></div>
             <div
                 ref={containerRef}
                 className='scene-object'
+                style={{ '--color1': color, '--color2': color + '80' }}
             >
                 <div
                     ref={objectRef}
@@ -97,7 +102,7 @@ export default function Cube({
                                     style={styleObj}
                                     onClick={onClickCube}
                                 >
-                                    {face.glowVisible &&
+                                    {/* {face.glowVisible &&
                                         <defs>
                                             <filter
                                                 id={`glow-${face.id}`}
@@ -113,7 +118,7 @@ export default function Cube({
                                                 </feMerge>
                                             </filter>
                                         </defs>
-                                    }
+                                    } */}
                                     <path
                                         d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : `M 0 0 L ${face.width} 0 L ${face.width} ${face.height} L 0 ${face.height} Z`}
                                         fill={face.color || '#FFFFFF'}

@@ -179,8 +179,7 @@ export default function BoxChat() {
                 <Cube
                     color={'#68FCFF'}
                     onClickCube={() => setDisplayChat(p => !p)}
-                    name='tetrahedron'
-                    faces={block5}
+                    faces={block1}
                 />
             </div>
             {DisplayChat &&
