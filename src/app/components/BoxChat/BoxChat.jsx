@@ -179,7 +179,7 @@ export default function BoxChat() {
                 <Cube
                     color={'#68FCFF'}
                     onClickCube={() => setDisplayChat(p => !p)}
-                    faces={block4}
+                    faces={block5}
                 />
             </div>
             {DisplayChat &&

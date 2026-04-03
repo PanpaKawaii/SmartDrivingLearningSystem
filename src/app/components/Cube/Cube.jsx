@@ -147,8 +147,7 @@ export default function Cube({
                                         fill={face.nameColor}
                                         fontSize={face.nameSize}
                                     >
-                                        {/* {face.nameVisible === 1 ? face.name : ''} */}
-                                        {text}
+                                        {face.nameVisible === 1 ? face.name : ''}
                                     </text>
                                 </svg>
                             </React.Fragment>
