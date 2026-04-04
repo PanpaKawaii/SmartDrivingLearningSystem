@@ -5,9 +5,9 @@ import AutoResizeTextarea from '../../components/AutoResizeTextarea.jsx';
 import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 
-import './ForumPopup.css';
+import './ForumComment.css';
 
-export default function ForumPopup({
+export default function ForumComment({
     SelectedPost = { id: 1 }
 }) {
     const { user } = useAuth();
@@ -20,7 +20,7 @@ export default function ForumPopup({
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const [COMMENTs, setCOMMENTs] = useState(comments || []);
-    const [InputComment, setInputComment] = useState(null);
+    const [inputComment, setInputComment] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -145,7 +145,7 @@ export default function ForumPopup({
                             <div key={i} className='content'>
                                 <div className='image head-block'>
                                     <img src={comment.user?.image || DefaultAvatar} alt={comment.user?.email} />
-                                    <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length != 0 || comment.id == InputComment) ? 'line-img' : 'no-line'}`}></div>
+                                    <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
                                 </div>
                                 <div>
                                     {/* ==FIX== */}
@@ -156,13 +156,13 @@ export default function ForumPopup({
                                     </div>
                                     <div className='commentdate-btn'>
                                         <div className='commentdate'>{comment.commentDate}</div>
-                                        <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == InputComment ? 'Hủy' : 'Trả lời'}</button>
+                                        <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
                                         {/* ==FIX== */}
                                         {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
                                     </div>
                                 </div>
                             </div>
-                            {comment.id == InputComment &&
+                            {comment.id == inputComment &&
                                 <div className='questions'>
                                     <div className='head-block'>
                                         <div className={`vertical-line ${COMMENTs.filter(c => c.answer == comment.id)?.length == 0 ? 'no-line' : 'line-full'}`}></div>
@@ -175,7 +175,7 @@ export default function ForumPopup({
                                             </div>
                                             <form className='comment-area'>
                                                 <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
-                                                <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
+                                                <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, inputComment)}>
                                                     ĐĂNG
                                                 </button>
                                             </form>
@@ -196,7 +196,7 @@ export default function ForumPopup({
     // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
-        <div className='forum-popup-container'>
+        <div className='forum-comment-container'>
             <div className='forum-content'>
                 {getChildrenComment(null, 0)}
             </div>

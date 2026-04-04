@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
-import ForumCard from './ForumCard';
-import ForumPopup from './ForumPopup';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
+import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import ForumCard from './ForumCard';
+import ForumComment from './ForumComment';
 
 import './Forum.css';
 
@@ -11,8 +12,12 @@ import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
 //TEST DEMO RICH TEXT EDITOR
 
 export default function Forum() {
+    const { user } = useAuth();
+
     const [FORUMPOSTs, setFORUMPOSTs] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
+    const [openCreatePost, setOpenCreatePost] = useState(false);
+    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     //TEST DEMO RICH TEXT EDITOR
     const [htmlContent, setHtmlContent] = useState('');
@@ -50,6 +55,27 @@ export default function Forum() {
             <div className='left'></div>
             <div className='center'>
                 <div className='list'>
+                    <div className='control-header'>
+                        <div className='create-post'>
+                            <div className='image'>
+                                <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                            </div>
+                            <button className='btn' onClick={() => setOpenCreatePost(true)}>
+                                Tạo bài viết mới
+                            </button>
+                        </div>
+                        <div className='filters'>
+                            <select>
+                                <option value=''>Tất cả</option>
+                                <option value=''>Đã thích</option>
+                                <option value=''>Của tôi</option>
+                            </select>
+                            <select>
+                                <option value=''>Tất cả</option>
+                                <option value=''>Topic</option>
+                            </select>
+                        </div>
+                    </div>
                     {ListPost.map((post, i) => (
                         <React.Fragment key={i}>
                             <ForumCard post={post} setSelectedPost={setSelectedPost} />
@@ -78,11 +104,20 @@ export default function Forum() {
             </div>
             <div className='right'></div>
 
-            {selectedPost && (
-                <PopupContainer onClose={setSelectedPost}>
+            {openCreatePost && (
+                <PopupContainer onClose={() => setOpenCreatePost(false)}>
                     <div className='inner-popup'>
                         <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} />
-                        <ForumPopup SelectedPost={selectedPost} />
+                        <ForumComment SelectedPost={selectedPost} />
+                    </div>
+                </PopupContainer>
+            )}
+
+            {selectedPost && (
+                <PopupContainer onClose={() => setSelectedPost(null)}>
+                    <div className='inner-popup'>
+                        <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} />
+                        <ForumComment SelectedPost={selectedPost} />
                     </div>
                 </PopupContainer>
             )}

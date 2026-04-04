@@ -42,7 +42,7 @@ import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagem
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
 
 import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
-import ForumPopup from '../pages/Forum/ForumPopup.jsx'
+import ForumComment from '../pages/Forum/ForumComment.jsx'
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
 import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
