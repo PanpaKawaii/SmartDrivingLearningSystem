@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { deleteData, fetchData, postData } from '../../../mocks/CallingAPI.js';
 import { comments } from '../../../mocks/DataSample.js';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea.jsx';
+import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 
 import './ForumPopup.css';
@@ -20,24 +21,27 @@ export default function ForumPopup({
 
     const [COMMENTs, setCOMMENTs] = useState(comments || []);
     const [InputComment, setInputComment] = useState(null);
-    const [YourText, setYourText] = useState('');
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
+    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
+    // ==FIX==
     useEffect(() => {
-        const token = user?.token || '';
         (async () => {
-            console.log('loading');
-            if (!user?.id || !token || !SelectedPost?.id || loading) return;
-            console.log('access');
+            setError(null);
+            setLoading(true);
+            const token = user?.token || '';
             try {
-                setLoading(true);
+                console.log('loading');
+                if (!user?.id || !token || !SelectedPost?.id) return;
+                console.log('access');
                 const listuser = await fetchData('listuser', token);
                 const commentData = await fetchData(`api/comment/question/${SelectedPost?.id}`, token);
                 console.log('commentData', commentData);
 
+                // ==FIX==
                 const mergedListComment = commentData.map(comment => {
                     const matchedUser = listuser.find(user => user.id == comment.userId);
                     return {
@@ -48,13 +52,15 @@ export default function ForumPopup({
 
                 // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.commentDate) - new Date(b.commentDate)));
             } catch (error) {
+                console.error('Error', error);
                 setError(error);
             } finally {
                 setLoading(false);
             };
         })();
-    }, [user?.id, refresh]);
+    }, [refresh, user?.id]);
 
+    // ==FIX==
     const SubmitComment = async (Content, Answer) => {
         const CommentData = {
             id: crypto.randomUUID(),
@@ -67,43 +73,45 @@ export default function ForumPopup({
         console.log('CommentData:', CommentData);
         setCOMMENTs(prev => [...prev, CommentData]);
 
+        setLoading(true);
         const token = user?.token || '';
         try {
             const result = await postData('api/comment', CommentData, token);
             console.log('result', result);
 
             setRefresh(p => p + 1);
-
             await sleep(500);
-
-            const el = document.getElementById(result?.id);
-            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } catch (error) {
+            console.error('Error', error);
             setError(error);
         } finally {
             setLoading(false);
+            const el = document.getElementById(CommentData?.id);
+            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         };
     };
 
+    // ==FIX==
     const TakeDownComment = async (CommentId) => {
         setCOMMENTs(prev => prev.filter(comment => comment.id != CommentId));
 
+        setLoading(true);
         const token = user?.token || '';
         try {
-            // setLoading(true);
             const result = await deleteData(`api/comment/${CommentId}`, token);
             console.log('result', result);
 
             setRefresh(p => p + 1);
         } catch (error) {
+            console.error('Error', error);
             setError(error);
         } finally {
             setLoading(false);
         };
     };
 
-    const handleSetAnswer = async (CommentId) => {
-        await setInputComment(p => CommentId == InputComment ? null : CommentId);
+    const handleSetReplyParent = async (CommentId) => {
+        await setInputComment(p => p == CommentId ? null : CommentId);
         refReply.current?.focus();
     };
 
@@ -121,10 +129,6 @@ export default function ForumPopup({
         refComment.current.style.height = 'auto';
     };
 
-    const handleTakeDownComment = (CommentId) => {
-        TakeDownComment(CommentId);
-    };
-
     function getChildrenComment(Id, num) {
         const ChildrenComment = COMMENTs.filter(comment => comment.answer == Id);
         return (
@@ -140,7 +144,7 @@ export default function ForumPopup({
                         <div className='next-reply'>
                             <div key={i} className='content'>
                                 <div className='image head-block'>
-                                    <img src={comment.user?.image} alt={comment.user?.email} />
+                                    <img src={comment.user?.image || DefaultAvatar} alt={comment.user?.email} />
                                     <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length != 0 || comment.id == InputComment) ? 'line-img' : 'no-line'}`}></div>
                                 </div>
                                 <div>
@@ -152,9 +156,9 @@ export default function ForumPopup({
                                     </div>
                                     <div className='commentdate-btn'>
                                         <div className='commentdate'>{comment.commentDate}</div>
-                                        <button className='btn' onClick={() => handleSetAnswer(comment.id)}>{comment.id == InputComment ? 'Hủy' : 'Trả lời'}</button>
+                                        <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == InputComment ? 'Hủy' : 'Trả lời'}</button>
                                         {/* ==FIX== */}
-                                        {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Gỡ</button>}
+                                        {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +171,7 @@ export default function ForumPopup({
                                     <div className='next-reply'>
                                         <div className='content input-reply'>
                                             <div className='image head-block'>
-                                                <img src={user?.image} alt={user?.email} />
+                                                <img src={user?.image || DefaultAvatar} alt={user?.email} />
                                             </div>
                                             <form className='comment-area'>
                                                 <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
@@ -189,6 +193,8 @@ export default function ForumPopup({
         )
     };
 
+    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-popup-container'>
             <div className='forum-content'>
@@ -197,7 +203,7 @@ export default function ForumPopup({
 
             <div className='content input-comment'>
                 <div className='image head-block'>
-                    <img src={user?.image} alt={user?.email} />
+                    <img src={user?.image || DefaultAvatar} alt={user?.email} />
                 </div>
                 <form className='comment-area'>
                     <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />

@@ -16,7 +16,7 @@ export default function UserManagement() {
 
     const [USERs, setUSERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
     const [editing, setEditing] = useState(null);
