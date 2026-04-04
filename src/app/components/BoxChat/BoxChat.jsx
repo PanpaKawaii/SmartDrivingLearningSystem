@@ -192,26 +192,26 @@ export default function BoxChat() {
                 <div className='chat-box' style={chatStyle}>
                     <div className='heading'>
                         <div className='name'>
-                            <span>GREENLIGHT AI</span>
+                            GREENLIGHT
                         </div>
-                        <div>
-                            <i className='fa-solid fa-arrow-left-arrow-right' onClick={changeBlock} title='Đóng'></i>
+                        <div className='controls'>
+                            <i className='fa-solid fa-arrow-right-arrow-left' onClick={changeBlock} title='Đổi hình khối' />
                             {WidthFull ?
-                                <i className='fa-solid fa-compress-arrows-alt' onClick={() => setWidthFull(false)} title='Thu nhỏ'></i>
+                                <i className='fa-solid fa-compress-arrows-alt' onClick={() => setWidthFull(false)} title='Thu nhỏ' />
                                 :
-                                <i className='fa-solid fa-arrows-alt' onClick={() => setWidthFull(true)} title='Mở rộng'></i>
+                                <i className='fa-solid fa-arrows-alt' onClick={() => setWidthFull(true)} title='Mở rộng' />
                             }
                             {HeightFull ?
-                                <i className='fa-solid fa-arrows-alt-v fa-rotate-90' onClick={() => setHeightFull(false)} title='Thu nhỏ chiều cao'></i>
+                                <i className='fa-solid fa-arrows-alt-v' onClick={() => setHeightFull(false)} title='Thu nhỏ chiều cao' />
                                 :
-                                <i className='fa-solid fa-arrows-alt-v' onClick={() => setHeightFull(true)} title='Mở rộng chiều cao'></i>
+                                <i className='fa-solid fa-arrows-alt-v' onClick={() => setHeightFull(true)} title='Mở rộng chiều cao' />
                             }
-                            <i className='fa-solid fa-times' onClick={() => { setDisplayChat(false), setVisible(false) }} title='Đóng'></i>
+                            <i className='fa-solid fa-times' onClick={() => { setDisplayChat(false), setVisible(false) }} title='Đóng' />
                         </div>
                     </div>
                     <div ref={chatContainerRef} className='chat-content'>
                         <div className='welcome-message'>
-                            <i className='fa-solid fa-comments welcome-icon'></i>
+                            <i className='fa-solid fa-comments welcome-icon' />
                             <div className='welcome-text'>
                                 <h3>Chào mừng bạn đến với GREENLIGHT AI!</h3>
                                 <p>Hãy bắt đầu cuộc trò chuyện bằng cách nhập tin nhắn bên dưới.</p>
@@ -223,7 +223,7 @@ export default function BoxChat() {
                                 className={`message ${idx % 2 === 0 ? 'bot-message' : 'user-message'}`}
                             >
                                 <div>{renderFormattedText(msg)}</div>
-                                <div className='logo-bot'><i className='fa-solid fa-star'></i></div>
+                                <div className='logo-bot'><i className='fa-solid fa-star' /></div>
                             </div>
                         ))}
                         {loading && (
@@ -231,13 +231,13 @@ export default function BoxChat() {
                                 <div className='dot'></div>
                                 <div className='dot'></div>
                                 <div className='dot'></div>
-                                <div className='logo-bot'><i className='fa-solid fa-star'></i></div>
+                                <div className='logo-bot'><i className='fa-solid fa-star' /></div>
                             </div>
                         )}
                     </div>
                     <form onSubmit={handleSend}>
                         <div className='form-group'>
-                            <i className='fa-solid fa-comment-dots input-icon'></i>
+                            <i className='fa-solid fa-comment-dots input-icon' />
                             <input
                                 type='text'
                                 id='chat'
@@ -248,9 +248,9 @@ export default function BoxChat() {
                         </div>
                         <button className='btn' type='submit' disabled={loading} title='Gửi tin nhắn'>
                             {loading ? (
-                                <i className='fa-solid fa-spinner fa-spin'></i>
+                                <i className='fa-solid fa-spinner fa-spin' />
                             ) : (
-                                <i className='fa-solid fa-paper-plane'></i>
+                                <i className='fa-solid fa-paper-plane' />
                             )}
                         </button>
                     </form>

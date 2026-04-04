@@ -32,7 +32,7 @@ export default function Cube({
             </div> */}
             <div
                 className='scene-object'
-                style={{ '--color1': color, '--color2': color + '80' }}
+                style={{ '--color1': color }}
             >
                 <div
                     className='object'
