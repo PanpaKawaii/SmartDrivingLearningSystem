@@ -17,17 +17,17 @@
         max-height: 90vh;
         overflow-y: scroll;
         /* scrollbar-width: none; */
-        background-color: var(--gray-2);
-        border-radius: 12px;
-        border: 2px solid var(--gray-3);
+        background: #0f172ab3;
+        border: 2px solid #374e6e80;
+        border-radius: 16px;
         box-sizing: border-box;
 
         .close-btn {
-            position: sticky;
+            position: absolute;
             color: #fff;
             background-color: transparent;
             top: 0;
-            left: 100%;
+            right: 0;
         }
     }
 }

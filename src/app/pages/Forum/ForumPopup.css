@@ -16,9 +16,9 @@
 
                 .vertical-line {
                     width: 21px;
-                    border-left: 2px solid #ccc;
+                    border-left: 2px solid #374e6e;
                     box-sizing: border-box;
-                    border-color: #ccc;
+                    border-color: #374e6e;
                     position: absolute;
                     right: 0;
                 }
@@ -44,16 +44,20 @@
                 .horizon-line {
                     width: 21px;
                     height: 20px;
-                    border-bottom: 2px solid #ccc;
-                    border-left: 2px solid #ccc;
+                    border-bottom: 2px solid #374e6e;
+                    border-left: 2px solid #374e6e;
                     border-radius: 0 0 0 16px;
-                    border-color: #ccc;
+                    border-color: #374e6e;
                     /* border-color: #ff0000; */
                     box-sizing: border-box;
                     position: absolute;
                     top: 0;
                     right: 0;
                 }
+            }
+
+            .next-reply {
+                flex: 1;
             }
         }
     }
@@ -68,7 +72,11 @@
             img {
                 width: 40px;
                 height: 40px;
-                border: 2px solid #cccccc80;
+                max-width: 40px;
+                max-height: 40px;
+                min-width: 40px;
+                min-height: 40px;
+                border: 2px solid #374e6e80;
                 box-sizing: border-box;
                 border-radius: 50%;
             }
@@ -77,11 +85,24 @@
         .name-comment {
             padding: 4px 12px;
             box-sizing: border-box;
-            background-color: #eee;
+            background: #0f172ab3;
+            border: 2px solid #374e6e80;
             border-radius: 12px;
+            transition: .1s;
+
+            &:hover {
+                border-color: #3b82f666;
+                background: #3b82f620;
+                box-shadow: 0 0 20px 8px #3b82f633;
+            }
 
             &.my-comment {
-                background-color: #d0ffbb;
+                border-color: #3b82f666;
+                background: #3b82f640;
+
+                &:hover {
+                    background: #3b82f660;
+                }
             }
 
             .name {
@@ -94,7 +115,7 @@
         .commentdate-btn {
             margin: 2px 0 10px 20px;
             display: flex;
-            color: #999;
+            color: var(--text-secondary);
             font-size: 12px;
             font-weight: 600;
             gap: 20px;
@@ -103,7 +124,7 @@
                 padding: 0;
                 font-size: 12px;
                 background-color: transparent;
-                color: #999;
+                color: var(--text-secondary);
 
                 &.btn-takedown {
                     color: var(--red-light);
@@ -115,20 +136,24 @@
         &.input-comment {
 
             &.input-comment {
+                word-break: keep-all;
                 position: sticky;
                 bottom: 0;
-                background-color: #fff;
-                box-shadow: 0 0 12px 12px #fff;
+                background-color: #0f172a;
+                box-shadow: 0 0 12px 12px #0f172a;
                 z-index: 1;
             }
 
             .comment-area {
-                width: 100%;
+                flex: 1;
                 display: flex;
                 gap: 8px;
+                height: fit-content;
 
                 .btn {
-                    height: fit-content;
+                    height: 40px;
+                    color: #fff;
+                    background: linear-gradient(to right, #3b82f6, #06b6d4);
                 }
             }
         }

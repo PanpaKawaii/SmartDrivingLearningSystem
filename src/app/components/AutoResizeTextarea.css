@@ -9,4 +9,7 @@
     overflow: hidden;
 
     box-sizing: border-box;
+    color: #fff;
+    background-color: #0f172ab3;
+    border: 2px solid #3b82f666;
 }
