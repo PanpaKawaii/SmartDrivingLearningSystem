@@ -58,7 +58,7 @@ export default function ForumComment({
                 setLoading(false);
             };
         })();
-    }, [refresh, user?.id]);
+    }, [refresh, user?.token]);
 
     // ==FIX==
     const SubmitComment = async (Content, Answer) => {

@@ -68,7 +68,7 @@ export default function LearningLesson() {
                 setLoading(false);
             };
         })();
-    }, [refresh, user?.id]);
+    }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>

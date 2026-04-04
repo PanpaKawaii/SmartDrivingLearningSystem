@@ -63,7 +63,7 @@ export default function LessonQuiz() {
                 setLoading(false);
             };
         })();
-    }, [refresh, user?.id]);
+    }, [refresh, user?.token]);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     console.log('selectedQuestion', selectedQuestion);

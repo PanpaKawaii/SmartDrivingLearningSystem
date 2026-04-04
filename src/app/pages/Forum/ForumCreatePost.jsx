@@ -3,15 +3,13 @@ import AutoResizeTextarea from '../../components/AutoResizeTextarea';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './ForumCreatePost.css';
-import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput';
-import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect';
 
 export default function ForumCreatePost() {
     const { user } = useAuth();
 
     const refComment = useRef(null);
 
-    const [name, setName] = useState('');
+    const [title, setTitle] = useState('');
     const [topic, setTopic] = useState('');
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
@@ -21,12 +19,10 @@ export default function ForumCreatePost() {
                 <div className='image'>
                     <img src={user?.image || DefaultAvatar} alt={user?.email} />
                 </div>
-                <div>
-                    <div>{user?.name || user?.email}</div>
-                </div>
+                <div className='name'>{user?.name || user?.email}</div>
             </div>
             <div className='post-information'>
-                <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Tên bài viết' />
+                <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Tên bài viết' />
                 <select value={topic} onChange={(e) => setTopic(e.target.value)}>
                     <option value='' disabled>Chọn chủ đề</option>
                     <option value='giao-thong'>Giao thông</option>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchData } from '../../../mocks/CallingAPI';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
@@ -8,49 +9,66 @@ import ForumCreatePost from './ForumCreatePost';
 
 import './Forum.css';
 
-//TEST DEMO RICH TEXT EDITOR
-// import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
-//TEST DEMO RICH TEXT EDITOR
-
 export default function Forum() {
     const { user } = useAuth();
 
     const [FORUMPOSTs, setFORUMPOSTs] = useState([]);
+    const [refresh, setRefresh] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const [selectedPost, setSelectedPost] = useState(null);
     const [openCreatePost, setOpenCreatePost] = useState(false);
+
     const [selectedType, setSelectedType] = useState('');
     const [selectedTopic, setSelectedTopic] = useState('');
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
-    //TEST DEMO RICH TEXT EDITOR
-    const [htmlContent, setHtmlContent] = useState('');
-    //TEST DEMO RICH TEXT EDITOR
+    useEffect(() => {
+        (async () => {
+            setError(null);
+            setLoading(true);
+            const token = user?.token || '';
+            try {
+                const forumPostQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const forumTopicQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const postReactQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const ForumPostResponse = await fetchData(`ForumPosts?${forumPostQuery.toString()}`, token);
+                const ForumTopicResponse = await fetchData(`ForumTopics?${forumTopicQuery.toString()}`, token);
+                const PostReactResponse = await fetchData(`PostReacts?${postReactQuery.toString()}`, token);
+                console.log('ForumPostResponse', ForumPostResponse);
+                console.log('ForumTopicResponse', ForumTopicResponse);
+                console.log('PostReactResponse', PostReactResponse);
+                const ForumPostItems = ForumPostResponse?.items;
+                const ForumTopicItems = ForumTopicResponse?.items;
+                const PostReactItems = PostReactResponse?.items;
 
-    const ListPost = [
-        {
-            id: 1,
-            title: 'Forum 1',
-            content: 'Content 1',
-        },
-        {
-            id: 2,
-            title: 'Forum 2',
-            content: 'Content 2',
-        },
-    ];
+                const ForumPost = ForumPostItems.map(fp => ({
+                    ...fp,
+                    forumTopic: ForumTopicItems.find(ft => ft.id == fp.forumTopicId) || null,
+                    postReacts: PostReactItems.filter(pr => pr.forumPostId == fp.id),
+                }));
 
-    //TEST DEMO RICH TEXT EDITOR
-    const handleHtmlChange = (value) => {
-        // Chỉ nhận string HTML, còn lại set rỗng
-        setHtmlContent(typeof value === 'string' ? value : '');
-    };
+                setFORUMPOSTs(ForumPost);
+            } catch (error) {
+                console.error('Error', error);
+                setError('Error');
+            } finally {
+                setLoading(false);
+            };
+        })();
+    }, [refresh, user?.token]);
 
-    const getContent = () => {
-        if (typeof htmlContent !== 'string') return null;
-        const html = htmlContent.trim();
-        return html ? html : null;
-    };
-    //TEST DEMO RICH TEXT EDITOR
+    console.log('FORUMPOSTs', FORUMPOSTs);
 
     return (
         <div className='forum-container'>
@@ -81,31 +99,12 @@ export default function Forum() {
                             </select>
                         </div>
                     </div>
-                    {ListPost.map((post, i) => (
+                    {FORUMPOSTs.map((post, i) => (
                         <React.Fragment key={i}>
-                            <ForumCard post={post} setSelectedPost={setSelectedPost} />
+                            <ForumCard post={post} setSelectedPost={setSelectedPost} showReportButton={true} />
                         </React.Fragment>
                     ))}
                 </div>
-                {/* TEST DEMO RICH TEXT EDITOR */}
-                {/* <RichTextEditor
-          initialHtml='<h2>Tiêu đề</h2><ul><li value='1'>chấm</li></ul><p><br></p><ol><li value='1'>số</li></ol><p><br></p><h1><strong>IN ĐÂM</strong></h1>' //test prefill
-          onHtmlChange={handleHtmlChange}
-          placeholder='Viết bình luận của bạn...'
-          autoFocus
-        /> */}
-                {/* <button
-          onClick={() =>
-            console.log(
-              'Editor content:',
-              getContent(),
-            )
-          }
-        >
-          {' '}
-          Log Content{' '}
-        </button> */}
-                {/* TEST DEMO RICH TEXT EDITOR */}
             </div>
             <div className='right'></div>
 
@@ -120,7 +119,7 @@ export default function Forum() {
             {selectedPost && (
                 <PopupContainer onClose={() => setSelectedPost(null)}>
                     <div className='inner-popup'>
-                        <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} />
+                        <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} showReportButton={false} />
                         <ForumComment SelectedPost={selectedPost} />
                     </div>
                 </PopupContainer>
