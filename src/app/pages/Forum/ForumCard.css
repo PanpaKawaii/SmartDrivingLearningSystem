@@ -36,8 +36,9 @@
             }
 
             .name {
-                font-size: 1.125rem;
                 margin: 0 0 4px;
+                font-size: 1.125rem;
+                font-weight: bold;
             }
 
             .topic {

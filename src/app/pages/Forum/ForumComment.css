@@ -3,6 +3,7 @@
     padding: 20px 20px 0;
 
     .forum-content {
+        min-height: 400px;
 
         .questions {
             display: flex;
@@ -109,6 +110,11 @@
                 /* white-space: nowrap; */
                 font-size: 18px;
                 font-weight: bold;
+                margin: 0 0 4px;
+            }
+
+            .commentcontent {
+                font-size: .875rem;
             }
         }
 

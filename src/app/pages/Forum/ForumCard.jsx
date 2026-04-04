@@ -73,8 +73,6 @@ export default function ForumCard({
         }))
         .sort((a, b) => b.count - a.count);
 
-    console.log('postReacts', postReacts);
-
     return (
         <div className='forum-card-container'>
             <div className='user-information'>

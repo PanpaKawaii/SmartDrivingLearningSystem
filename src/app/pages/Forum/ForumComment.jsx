@@ -8,52 +8,79 @@ import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import './ForumComment.css';
 
 export default function ForumComment({
-    SelectedPost = { id: 1 }
+    post = {},
 }) {
     const { user } = useAuth();
 
     const refReply = useRef(null);
     const refComment = useRef(null);
 
-    console.log('SelectedPost', SelectedPost);
+    console.log('post', post);
 
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    const [COMMENTs, setCOMMENTs] = useState(comments || []);
+    const [COMMENTs, setCOMMENTs] = useState([]);
     const [inputComment, setInputComment] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     // ==FIX==
+    // useEffect(() => {
+    //     (async () => {
+    //         setError(null);
+    //         setLoading(true);
+    //         const token = user?.token || '';
+    //         try {
+    //             console.log('loading');
+    //             if (!user?.id || !token || !post?.id) return;
+    //             console.log('access');
+    //             const listuser = await fetchData('listuser', token);
+    //             const commentData = await fetchData(`api/comment/question/${post?.id}`, token);
+    //             console.log('commentData', commentData);
+
+    //             // ==FIX==
+    //             const mergedListComment = commentData.map(comment => {
+    //                 const matchedUser = listuser.find(user => user.id == comment.userId);
+    //                 return {
+    //                     ...comment,
+    //                     user: matchedUser
+    //                 };
+    //             });
+
+    //             // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.commentDate) - new Date(b.commentDate)));
+    //         } catch (error) {
+    //             console.error('Error', error);
+    //             setError(error);
+    //         } finally {
+    //             setLoading(false);
+    //         };
+    //     })();
+    // }, [refresh, user?.token]);
+
     useEffect(() => {
         (async () => {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
             try {
-                console.log('loading');
-                if (!user?.id || !token || !SelectedPost?.id) return;
-                console.log('access');
-                const listuser = await fetchData('listuser', token);
-                const commentData = await fetchData(`api/comment/question/${SelectedPost?.id}`, token);
-                console.log('commentData', commentData);
-
-                // ==FIX==
-                const mergedListComment = commentData.map(comment => {
-                    const matchedUser = listuser.find(user => user.id == comment.userId);
-                    return {
-                        ...comment,
-                        user: matchedUser
-                    };
+                const forumCommentQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
                 });
+                const ForumCommentResponse = await fetchData(`ForumComments?${forumCommentQuery.toString()}`, token);
+                console.log('ForumCommentResponse', ForumCommentResponse);
+                const ForumCommentItems = ForumCommentResponse?.items;
 
-                // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.commentDate) - new Date(b.commentDate)));
+                const ForumComment = ForumCommentItems.filter(fc => fc.forumPostId == post?.id).map(fp => ({
+                    ...fp,
+                }));
+
+                setCOMMENTs(ForumComment);
             } catch (error) {
                 console.error('Error', error);
-                setError(error);
+                setError('Error');
             } finally {
                 setLoading(false);
             };
@@ -66,7 +93,7 @@ export default function ForumComment({
             id: crypto.randomUUID(),
             content: Content,
             answer: Answer,
-            questionId: SelectedPost?.id,
+            questionId: post?.id,
             userId: user?.id,
             commentDate: new Date().toLocaleDateString()
         };
@@ -150,8 +177,8 @@ export default function ForumComment({
                                 <div>
                                     {/* ==FIX== */}
                                     <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
-                                        <div className='name'>{comment.user?.name}---CMT:{comment.id}</div>
-                                        <div>{comment.content}</div>
+                                        <div className='name'>{comment.user?.name}</div>
+                                        <div className='commentcontent'>{comment.content}</div>
                                         {/* <div>num:{num} - i:{i} - parent-child:{ChildrenComment.length} - {comment.content}</div> */}
                                     </div>
                                     <div className='commentdate-btn'>
@@ -193,8 +220,8 @@ export default function ForumComment({
         )
     };
 
-    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>
             <div className='forum-content'>

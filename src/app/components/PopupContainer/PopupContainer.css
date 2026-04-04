@@ -21,6 +21,7 @@
         border: 2px solid #374e6e80;
         border-radius: 16px;
         box-sizing: border-box;
+        backdrop-filter: blur(8px);
 
         .close-btn {
             position: absolute;

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData } from '../../../mocks/CallingAPI';
+import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ForumCard from './ForumCard';
 import ForumComment from './ForumComment';
@@ -68,8 +70,8 @@ export default function Forum() {
         })();
     }, [refresh, user?.token]);
 
-    console.log('FORUMPOSTs', FORUMPOSTs);
-
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-container'>
             <StarsBackground />
@@ -120,7 +122,7 @@ export default function Forum() {
                 <PopupContainer onClose={() => setSelectedPost(null)}>
                     <div className='inner-popup'>
                         <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} showReportButton={false} />
-                        <ForumComment SelectedPost={selectedPost} />
+                        <ForumComment post={selectedPost} />
                     </div>
                 </PopupContainer>
             )}
