@@ -118,6 +118,7 @@ export default function ForumPopup({
         SubmitComment(Content, Answer);
         setInputComment(null);
         refComment.current.value = '';
+        refComment.current.style.height = 'auto';
     };
 
     const handleTakeDownComment = (CommentId) => {
@@ -136,39 +137,46 @@ export default function ForumPopup({
                                 <div className='horizon-line'></div>
                             </div>
                         }
-                        <div style={{ width: `calc(100% - ${(num <= 5 && num > 0) ? 40 : 0}px)` }}>
+                        <div className='next-reply'>
                             <div key={i} className='content'>
                                 <div className='image head-block'>
                                     <img src={comment.user?.image} alt={comment.user?.email} />
-                                    {/* <div className={`vertical-line ${(ChildrenComment.length == 1 || num == 2) ? ((ChildrenComment.length == 1 && num == 2) ? 'line-full' : 'no-line') : 'line-full'}`}></div> */}
                                     <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length != 0 || comment.id == InputComment) ? 'line-img' : 'no-line'}`}></div>
                                 </div>
                                 <div>
-                                    <div className={`name-comment ${(user?.id && comment.user?.id == user?.id) ? 'my-comment' : ''}`}>
+                                    {/* ==FIX== */}
+                                    <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
                                         <div className='name'>{comment.user?.name}---CMT:{comment.id}</div>
                                         <div>{comment.content}</div>
+                                        {/* <div>num:{num} - i:{i} - parent-child:{ChildrenComment.length} - {comment.content}</div> */}
                                     </div>
                                     <div className='commentdate-btn'>
-                                        {/* <div className='commentdate'>{comment.commentDate?.split('T')[0]}</div> */}
                                         <div className='commentdate'>{comment.commentDate}</div>
                                         <button className='btn' onClick={() => handleSetAnswer(comment.id)}>{comment.id == InputComment ? 'Hủy' : 'Trả lời'}</button>
-                                        {user?.id && comment.user?.id == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Gỡ</button>}
+                                        {/* ==FIX== */}
+                                        {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => handleTakeDownComment(comment.id)}>Gỡ</button>}
                                     </div>
                                 </div>
                             </div>
                             {comment.id == InputComment &&
-                                <div className='content input-reply'>
-                                    <div className='image head-block'>
-                                        <img src={user?.image} alt={user?.email} />
-                                        {/* <div className={`vertical-line ${(ChildrenComment.length == 1 || num == 2) ? ((ChildrenComment.length == 1 && num == 2) ? 'line-full' : 'no-line') : 'line-full'}`}></div> */}
-                                        <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length == 0) ? 'no-line' : 'line-img'}`}></div>
+                                <div className='questions'>
+                                    <div className='head-block'>
+                                        <div className={`vertical-line ${COMMENTs.filter(c => c.answer == comment.id)?.length == 0 ? 'no-line' : 'line-full'}`}></div>
+                                        <div className='horizon-line'></div>
                                     </div>
-                                    <form className='comment-area'>
-                                        <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
-                                        <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
-                                            Submit
-                                        </button>
-                                    </form>
+                                    <div className='next-reply'>
+                                        <div className='content input-reply'>
+                                            <div className='image head-block'>
+                                                <img src={user?.image} alt={user?.email} />
+                                            </div>
+                                            <form className='comment-area'>
+                                                <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
+                                                <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, InputComment)}>
+                                                    ĐĂNG
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             }
                             <div>
@@ -182,7 +190,7 @@ export default function ForumPopup({
     };
 
     return (
-        <div className='forum-popup-container container'>
+        <div className='forum-popup-container'>
             <div className='forum-content'>
                 {getChildrenComment(null, 0)}
             </div>
@@ -194,7 +202,7 @@ export default function ForumPopup({
                 <form className='comment-area'>
                     <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
                     <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
-                        Submit
+                        ĐĂNG
                     </button>
                 </form>
             </div>

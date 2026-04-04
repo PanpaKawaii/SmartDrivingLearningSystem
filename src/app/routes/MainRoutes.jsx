@@ -83,10 +83,10 @@ export default function MainRoutes() {
                     <Route path='simulation' element={<SimulationIntroduction />} />
                     <Route path='simulation/scenarios' element={<SimulationScenario />} />
 
+                    <Route path='forum' element={<Forum />} />
+
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam' element={<ListExam />} />
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam/exam/:examId' element={<ExamTemp />} />
-
-                    <Route path='forum' element={<Forum />} />
 
                     <Route path='learning' element={<Learning />} />
 

@@ -81,8 +81,9 @@ export default function ControlledVideo({
     console.log('percent', percent);
     const maxScore = 10;
     const minScore = 2;
-    const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ? maxScore - (maxScore - minScore) * percent : 0;
-    console.log('point', point);
+    const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ?
+        maxScore - Math.floor((maxScore - minScore + 1) * percent)
+        : 0;
 
     return (
         <div className='controlled-video-container'>

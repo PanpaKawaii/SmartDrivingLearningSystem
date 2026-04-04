@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchData } from '../../../mocks/CallingAPI';
-import { drivingLicenses as sampleDrivingLicenses, questionChapters as sampleQuestionChapters } from '../../../mocks/DataSample';
-import { normalizeListResponse } from '../../../lib/apiResponseHelpers';
+import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
-import { drivingLicenses, questionChapters } from '../../../mocks/DataSample';
-import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 
 import './DrivingLicense.css';
 
@@ -21,17 +18,8 @@ export default function DrivingLicense() {
         sampleLicenses: 0,
     });
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const mergeWithSource = (apiList, sampleList, idKey = 'id') => {
-        const apiWithSource = apiList.map((item) => ({ ...item, dataSource: 'api' }));
-        const apiIdSet = new Set(apiWithSource.map((item) => String(item?.[idKey])));
-        const sampleWithSource = sampleList
-            .filter((item) => !apiIdSet.has(String(item?.[idKey])))
-            .map((item) => ({ ...item, dataSource: 'sample' }));
-        return [...apiWithSource, ...sampleWithSource];
-    };
 
     useEffect(() => {
         (async () => {
@@ -39,43 +27,25 @@ export default function DrivingLicense() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const drivingLicenseQuery = new URLSearchParams({
-                //     page: '1',
-                //     pageSize: '200',
-                // });
-                // const chapterQuery = new URLSearchParams({
-                //     page: '1',
-                //     pageSize: '500',
-                // });
-
-                // const DrivingLicenseResponse = await fetchData(`api/drivinglicenses?${drivingLicenseQuery.toString()}`, token);
-                // console.log('DrivingLicenseResponse', DrivingLicenseResponse);
-                // const QuestionChapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
-
-                // const drivingLicenses = getListFromResponse(DrivingLicenseResponse);
-                // const questionChapters = getListFromResponse(QuestionChapterResponse);
-
-                // const DrivingLicense = drivingLicenses.map(dl => ({
-                //     ...dl,
-                //     chapters: questionChapters.filter(qc => qc.drivingLicenseId == dl.id),
-                // }));
-
-                // setDRIVINGLICENSEs(DrivingLicense);
-
-
-
-
-
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-
-                // const QuestionChapterResponse = await data here; // ==FIX==
-                // const DrivingLicenseResponse = await data here; // ==FIX==
-                const QuestionChapterResponse = [...questionChapters];
-                const DrivingLicenseResponse = [...drivingLicenses];
-                const DrivingLicense = DrivingLicenseResponse.map(dl => ({
+                const drivingLicenseQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const questionChapterQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const DrivingLicenseResponse = await fetchData(`DrivingLicenses?${drivingLicenseQuery.toString()}`, token);
+                const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
+                console.log('DrivingLicenseResponse', DrivingLicenseResponse);
+                console.log('QuestionChapterResponse', QuestionChapterResponse);
+                const DrivingLicenseItems = DrivingLicenseResponse?.items;
+                const QuestionChapterItems = QuestionChapterResponse?.items;
+                // const DrivingLicenseItems = [...drivingLicenses];
+                // const QuestionChapterItems = [...questionChapters];
+                const DrivingLicense = DrivingLicenseItems.map(dl => ({
                     ...dl,
-                    chapters: QuestionChapterResponse.filter(qc => qc.drivingLicenseId == dl.id),
+                    chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
                 setDRIVINGLICENSEs(DrivingLicense);
@@ -84,6 +54,7 @@ export default function DrivingLicense() {
                     sampleLicenses: mergedDrivingLicenses.filter((item) => item.dataSource === 'sample').length,
                 });
             } catch (error) {
+                console.error('Error', error);
                 setError('Error');
             } finally {
                 setLoading(false);

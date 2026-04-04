@@ -9,7 +9,7 @@ export default function AutoResizeTextarea({
         const textarea = refer.current;
         if (!textarea) return;
         textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
+        textarea.style.height = textarea.scrollHeight + 4 + 'px';
     };
 
     return (

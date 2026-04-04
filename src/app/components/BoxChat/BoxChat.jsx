@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { block1, block2, block3, block4, block5, block6 } from '../../../mocks/blocks.js';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import Cube from '../Cube/Cube.jsx';
@@ -13,6 +14,7 @@ export default function BoxChat() {
     const [WidthFull, setWidthFull] = useState(false);
     const [HeightFull, setHeightFull] = useState(false);
     const [DisplayChat, setDisplayChat] = useState(false);
+    const [blockIndex, setBlockIndex] = useState(1);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -95,6 +97,11 @@ export default function BoxChat() {
         chatStyle = StyleHeight;
     }
 
+    const blocks = [block1, block2, block3, block4, block5, block6];
+    const changeBlock = () => {
+        setBlockIndex((prev) => (prev + 1) % blocks.length);
+    };
+
     const renderFormattedText = (text) => {
         // Bước 1: Tách từng dòng theo dấu `*`
         const lines = text.split(/(?<=\s)\*(?=\s)/);
@@ -175,31 +182,36 @@ export default function BoxChat() {
                 onMouseDown={handleMouseDown}
             >
                 <MessagePreview visible={visible} message={Messages?.[Messages.length - 1]} />
-                <Cube color={'#68FCFF'} onClickCube={() => setDisplayChat(p => !p)} />
+                <Cube
+                    color={'#68FCFF'}
+                    onClickCube={() => setDisplayChat(p => !p)}
+                    faces={blocks?.[blockIndex ?? 1] || []}
+                />
             </div>
             {DisplayChat &&
                 <div className='chat-box' style={chatStyle}>
                     <div className='heading'>
                         <div className='name'>
-                            <span>GREENLIGHT AI</span>
+                            GREENLIGHT
                         </div>
-                        <div>
+                        <div className='controls'>
+                            <i className='fa-solid fa-arrow-right-arrow-left' onClick={changeBlock} title='Đổi hình khối' />
                             {WidthFull ?
-                                <i className='fa-solid fa-compress-arrows-alt' onClick={() => setWidthFull(false)} title='Thu nhỏ'></i>
+                                <i className='fa-solid fa-compress-arrows-alt' onClick={() => setWidthFull(false)} title='Thu nhỏ' />
                                 :
-                                <i className='fa-solid fa-arrows-alt' onClick={() => setWidthFull(true)} title='Mở rộng'></i>
+                                <i className='fa-solid fa-arrows-alt' onClick={() => setWidthFull(true)} title='Mở rộng' />
                             }
                             {HeightFull ?
-                                <i className='fa-solid fa-arrows-alt-v fa-rotate-90' onClick={() => setHeightFull(false)} title='Thu nhỏ chiều cao'></i>
+                                <i className='fa-solid fa-arrows-alt-v' onClick={() => setHeightFull(false)} title='Thu nhỏ chiều cao' />
                                 :
-                                <i className='fa-solid fa-arrows-alt-v' onClick={() => setHeightFull(true)} title='Mở rộng chiều cao'></i>
+                                <i className='fa-solid fa-arrows-alt-v' onClick={() => setHeightFull(true)} title='Mở rộng chiều cao' />
                             }
-                            <i className='fa-solid fa-times' onClick={() => { setDisplayChat(false), setVisible(false) }} title='Đóng'></i>
+                            <i className='fa-solid fa-times' onClick={() => { setDisplayChat(false), setVisible(false) }} title='Đóng' />
                         </div>
                     </div>
                     <div ref={chatContainerRef} className='chat-content'>
                         <div className='welcome-message'>
-                            <i className='fa-solid fa-comments welcome-icon'></i>
+                            <i className='fa-solid fa-comments welcome-icon' />
                             <div className='welcome-text'>
                                 <h3>Chào mừng bạn đến với GREENLIGHT AI!</h3>
                                 <p>Hãy bắt đầu cuộc trò chuyện bằng cách nhập tin nhắn bên dưới.</p>
@@ -211,7 +223,7 @@ export default function BoxChat() {
                                 className={`message ${idx % 2 === 0 ? 'bot-message' : 'user-message'}`}
                             >
                                 <div>{renderFormattedText(msg)}</div>
-                                <div className='logo-bot'>GL</div>
+                                <div className='logo-bot'><i className='fa-solid fa-star' /></div>
                             </div>
                         ))}
                         {loading && (
@@ -219,13 +231,13 @@ export default function BoxChat() {
                                 <div className='dot'></div>
                                 <div className='dot'></div>
                                 <div className='dot'></div>
-                                <div className='logo-bot'>GL</div>
+                                <div className='logo-bot'><i className='fa-solid fa-star' /></div>
                             </div>
                         )}
                     </div>
                     <form onSubmit={handleSend}>
                         <div className='form-group'>
-                            <i className='fa-solid fa-comment-dots input-icon'></i>
+                            <i className='fa-solid fa-comment-dots input-icon' />
                             <input
                                 type='text'
                                 id='chat'
@@ -236,9 +248,9 @@ export default function BoxChat() {
                         </div>
                         <button className='btn' type='submit' disabled={loading} title='Gửi tin nhắn'>
                             {loading ? (
-                                <i className='fa-solid fa-spinner fa-spin'></i>
+                                <i className='fa-solid fa-spinner fa-spin' />
                             ) : (
-                                <i className='fa-solid fa-paper-plane'></i>
+                                <i className='fa-solid fa-paper-plane' />
                             )}
                         </button>
                     </form>

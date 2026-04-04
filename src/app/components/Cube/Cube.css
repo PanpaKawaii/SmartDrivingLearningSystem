@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    perspective: 600px;
 
     .scene-cube {
         width: fit-content;
@@ -14,7 +15,6 @@
         justify-content: center;
         align-items: center;
         justify-self: center;
-        /* transform: scale(5); */
 
         filter: drop-shadow(0 0 20px var(--color1));
 
@@ -27,7 +27,7 @@
             height: var(--Distance);
             transform-style: preserve-3d;
             transition: all 1s ease;
-            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            transform: rotateX(0deg) rotateY(60deg) rotateZ(0deg);
             animation: cube_rotate 3s linear infinite;
 
             display: flex;
@@ -39,7 +39,7 @@
                 width: var(--Distance);
                 height: var(--Distance);
                 background: var(--color2);
-                color: #4abdbe;
+                color: #4ABDBE;
                 transition: all 1s ease;
 
                 box-sizing: border-box;
@@ -79,6 +79,51 @@
             }
         }
     }
+
+    .scene-object {
+        width: fit-content;
+        height: fit-content;
+        perspective: 600px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-self: center;
+
+        filter: drop-shadow(0 0 20px var(--color1));
+
+        .object {
+            position: relative;
+            width: fit-content;
+            height: fit-content;
+            transform-style: preserve-3d;
+            transition: all 1s ease;
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            animation: rotate_1x_2y 10s linear infinite;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .face-svg,
+            .dot-svg,
+            .vector-svg,
+            .line-svg {
+                position: absolute;
+                overflow: initial;
+
+                transform-style: preserve-3d;
+                transition: all 1s ease;
+
+                box-sizing: border-box;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                user-select: none;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 @keyframes cube_rotate {
@@ -88,5 +133,15 @@
 
     100% {
         transform: rotateX(90deg) rotateZ(360deg);
+    }
+}
+
+@keyframes rotate_1x_2y {
+    0% {
+        transform: rotateX(90deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateX(450deg) rotateZ(720deg);
     }
 }

@@ -1,6 +1,15 @@
 .forum-card-container {
-    background-color: var(--gray-2);
-    border-radius: 8px;
+    background: #0f172ab3;
+    border: 2px solid #374e6e80;
+    border-radius: 12px;
+    box-sizing: border-box;
+    transition: .15s;
+
+    &:hover {
+        border-color: #3b82f666;
+        background: #3b82f620;
+        box-shadow: 0 20px 50px #3b82f633;
+    }
 
     .content {
         padding: 20px;
@@ -59,7 +68,7 @@
                 left: 100%;
                 display: flex;
                 justify-content: center;
-                background-color: var(--gray-3);
+                background-color: #0f172ab3;
                 border-radius: 999px;
                 box-shadow: 0 6px 20px #00000026;
                 animation: slideInUpForum .4s forwards;
@@ -112,7 +121,7 @@
             .main-btn {
                 width: 100%;
                 color: var(--text-secondary);
-                background-color: #2D3644;
+                background-color: #ffffff20;
                 font-size: 1.5rem;
                 box-sizing: border-box;
 
@@ -121,7 +130,6 @@
                 align-items: center;
 
                 .fa-solid {
-                    padding: 2px;
                     background-clip: text;
                     background: var(--background);
                     -webkit-background-clip: text;
@@ -149,7 +157,7 @@
 
                 &:hover {
                     color: var(--text-primary);
-                    background-color: #ffffff10;
+                    background-color: #ffffff40;
                 }
             }
         }

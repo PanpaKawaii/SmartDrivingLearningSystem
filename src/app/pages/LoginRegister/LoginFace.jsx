@@ -21,6 +21,7 @@ export default function LoginFace({
     };
 
     const [remember, setRemember] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState({ value: '', name: '' });
 
@@ -76,6 +77,15 @@ export default function LoginFace({
         setRemember(p => !p);
     };
 
+    // const changePasswordType = () => {
+    //     const passwordInput = document.querySelector('input[name="password"]');
+    //     if (passwordInput.type === 'password') {
+    //         passwordInput.type = 'text';
+    //     } else {
+    //         passwordInput.type = 'password';
+    //     }
+    // };
+
     return (
         <div className='login-face-container'>
             <h1>ĐĂNG NHẬP</h1>
@@ -85,8 +95,9 @@ export default function LoginFace({
                     <label htmlFor={'email'} style={{ color: loginError.name.includes('Email') && '#ff4d4f', }}>Email</label>
                 </div>
                 <div className='form-group'>
-                    <input type='password' name='password' placeholder='' />
+                    <input type={passwordVisible ? 'text' : 'password'} name='password' placeholder='' />
                     <label htmlFor={'password'} style={{ color: loginError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
+                    <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'}`} onClick={() => setPasswordVisible(p => !p)} />
                 </div>
                 <div className='form-check'>
                     <div className='checkbox-container'>
