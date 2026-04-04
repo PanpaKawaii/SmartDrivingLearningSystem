@@ -4,11 +4,12 @@ import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ForumCard from './ForumCard';
 import ForumComment from './ForumComment';
+import ForumCreatePost from './ForumCreatePost';
 
 import './Forum.css';
 
 //TEST DEMO RICH TEXT EDITOR
-import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
+// import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
 //TEST DEMO RICH TEXT EDITOR
 
 export default function Forum() {
@@ -17,6 +18,8 @@ export default function Forum() {
     const [FORUMPOSTs, setFORUMPOSTs] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [openCreatePost, setOpenCreatePost] = useState(false);
+    const [selectedType, setSelectedType] = useState('');
+    const [selectedTopic, setSelectedTopic] = useState('');
     const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     //TEST DEMO RICH TEXT EDITOR
@@ -60,19 +63,21 @@ export default function Forum() {
                             <div className='image'>
                                 <img src={user?.image || DefaultAvatar} alt={user?.email} />
                             </div>
-                            <button className='btn' onClick={() => setOpenCreatePost(true)}>
+                            <button className='btn' onClick={() => setOpenCreatePost(true)} disabled={!user}>
                                 Tạo bài viết mới
                             </button>
                         </div>
                         <div className='filters'>
-                            <select>
+                            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
                                 <option value=''>Tất cả</option>
-                                <option value=''>Đã thích</option>
-                                <option value=''>Của tôi</option>
+                                <option value='likes'>Đã thích</option>
+                                <option value='mine'>Của tôi</option>
                             </select>
-                            <select>
+                            <select value={selectedTopic} onChange={(e) => setSelectedTopic(e.target.value)}>
                                 <option value=''>Tất cả</option>
-                                <option value=''>Topic</option>
+                                <option value='giao-thong'>Giao thông</option>
+                                <option value='luat-lai-xe'>Luật lái xe</option>
+                                <option value='kinh-nghiem-lai-xe'>Kinh nghiệm lái xe</option>
                             </select>
                         </div>
                     </div>
@@ -104,11 +109,10 @@ export default function Forum() {
             </div>
             <div className='right'></div>
 
-            {openCreatePost && (
+            {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)}>
                     <div className='inner-popup'>
-                        <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} />
-                        <ForumComment SelectedPost={selectedPost} />
+                        <ForumCreatePost />
                     </div>
                 </PopupContainer>
             )}

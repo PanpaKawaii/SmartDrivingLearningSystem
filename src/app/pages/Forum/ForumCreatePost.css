@@ -1,0 +1,68 @@
+.forum-create-post-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .user-information {
+        display: flex;
+        align-items: start;
+        gap: 12px;
+
+        .image {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #374e6e80;
+            box-sizing: border-box;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .post-information {
+        display: flex;
+        gap: 20px;
+
+        input {
+            flex: 2;
+            color: #fff;
+            background-color: #0E1527;
+            border: 2px solid #374e6e80;
+            box-sizing: border-box;
+        }
+
+        select {
+            flex: 1;
+            color: #fff;
+            background-color: #0E1527;
+            border: 2px solid #374e6e80;
+
+            option {
+                background-color: #0f172a;
+            }
+        }
+    }
+
+    .comment-area {
+        flex: 1;
+        display: flex;
+        gap: 8px;
+        height: fit-content;
+
+        .auto-textarea {
+            margin: 0;
+            background-color: #0E1527bf;
+        }
+
+        .btn {
+            height: 40px;
+            color: #fff;
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+        }
+    }
+}
