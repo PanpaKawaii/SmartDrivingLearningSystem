@@ -17,8 +17,8 @@
     .icon-box {
         position: fixed;
         pointer-events: all;
-        bottom: 20px;
-        right: 10px;
+        bottom: 100px;
+        right: 90px;
         user-select: none;
         width: fit-content;
         height: fit-content;
