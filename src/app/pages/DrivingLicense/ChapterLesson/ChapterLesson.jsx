@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
-import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
-import StarsBackground from '../../../components/StarsBackground/StarsBackground';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
-import { drivingLicenses, questionChapters, questionLessons } from '../../../../mocks/DataSample';
 import SelectedChapter from './SelectedChapter';
-import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 
 import './ChapterLesson.css';
 
@@ -25,16 +22,8 @@ export default function ChapterLesson() {
     const [ThisDrivingLicense, setThisDrivingLicense] = useState(null);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const getListFromResponse = (response) => {
-        if (Array.isArray(response)) return response;
-        if (Array.isArray(response?.items)) return response.items;
-        if (Array.isArray(response?.data)) return response.data;
-        if (Array.isArray(response?.result)) return response.result;
-        return [];
-    };
 
     const [selectedChapterId, setSelectedChapterId] = useState(questionChapterId || '');
 
@@ -44,68 +33,40 @@ export default function ChapterLesson() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const chapterQuery = new URLSearchParams({
-                //     drivingLicenseId: String(drivingLicenseId),
-                //     page: '1',
-                //     pageSize: '500',
-                // });
+                const questionChapterQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const questionLessonQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                });
+                const ThisDrivingLicenseResponse = await fetchData(`DrivingLicenses/${drivingLicenseId}`, token);
+                const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
+                const QuestionLessonResponse = await fetchData(`QuestionLessons?${questionLessonQuery.toString()}`, token);
+                console.log('ThisDrivingLicenseResponse', ThisDrivingLicenseResponse);
+                console.log('QuestionChapterResponse', QuestionChapterResponse);
+                console.log('QuestionLessonResponse', QuestionLessonResponse);
+                const QuestionChapterItems = QuestionChapterResponse?.items;
+                const QuestionLessonItems = QuestionLessonResponse?.items;
 
-                // const chapterResponse = await fetchData(`api/questionchapters?${chapterQuery.toString()}`, token);
-                // const chapterList = getListFromResponse(chapterResponse);
-
-                // const QuestionChapters = await Promise.all(chapterList.map(async (chapter) => {
-                //     const lessonQuery = new URLSearchParams({
-                //         questionChapterId: String(chapter.id),
-                //         page: '1',
-                //         pageSize: '500',
-                //     });
-
-                //     const lessonResponse = await fetchData(`api/questionlessons?${lessonQuery.toString()}`, token);
-                //     const questionLessons = getListFromResponse(lessonResponse);
-
-                //     return {
-                //         ...chapter,
-                //         questionLessons,
-                //     };
-                // }));
-                // console.log('QuestionChapters', QuestionChapters);
-
-                // const DrivingLicenseRawResponse = await fetchData(`api/drivinglicenses/${drivingLicenseId}`, token);
-                // const DrivingLicenseResponse = normalizeDetailResponse(DrivingLicenseRawResponse);
-                // console.log('ThisDrivingLicense', ThisDrivingLicense);
-
-                // setQUESTIONCHAPTERs(QuestionChapters);
-                // setThisDrivingLicense(DrivingLicenseResponse);
-
-
-
-
-
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-
-                const QuestionChapters = questionChapters.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
+                const QuestionChapters = QuestionChapterItems.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
                     ...qc,
-                    questionLessons: questionLessons.filter(ql => ql.questionChapterId == qc.id),
-                    drivingLicense: drivingLicenses.find(dl => dl.id == qc.drivingLicenseId) || null,
+                    questionLessons: QuestionLessonItems.filter(ql => ql.questionChapterId == qc.id),
+                    drivingLicense: ThisDrivingLicenseResponse || null,
                 }));
                 console.log('QuestionChapters', QuestionChapters);
 
-                const DrivingLicenseResponse = drivingLicenses?.find(d => d.id == drivingLicenseId);
-                console.log('ThisDrivingLicense', ThisDrivingLicense);
-
                 setQUESTIONCHAPTERs(QuestionChapters);
-                setThisDrivingLicense(DrivingLicenseResponse);
+                setThisDrivingLicense(ThisDrivingLicenseResponse);
             } catch (error) {
+                console.error('Error', error);
                 setError('Error');
             } finally {
                 setLoading(false);
             }
         })();
-    }, [drivingLicenseId, refresh, user?.token]);
+    }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
@@ -126,7 +87,6 @@ export default function ChapterLesson() {
                     <p>{ThisDrivingLicense?.description}</p>
                 </div>
             </div>
-
             <div className='container'>
                 <div className='section-header'>
                     <h2>Course Chapters</h2>

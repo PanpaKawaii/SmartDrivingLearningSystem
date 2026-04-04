@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
-import { normalizeDetailResponse } from '../../../../lib/apiResponseHelpers';
-import { lessonProgresses, questionLessons, questions } from '../../../../mocks/DataSample';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import LessonContent from './LessonContent';
 import PracticeExams from './PracticeExams';
 import ProgressOverview from './ProgressOverview';
-import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 
 import './LearningLesson.css';
 
@@ -17,6 +15,7 @@ export default function LearningLesson() {
     const { user } = useAuth();
 
     const Params = useParams();
+
     const questionChapterId = Params?.chapterId;
     console.log('questionChapterId', questionChapterId);
     const drivingLicenseId = Params?.licenseId;
@@ -27,80 +26,49 @@ export default function LearningLesson() {
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
     const [LESSONPROGRESSes, setLESSONPROGRESSes] = useState([]);
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
 
+    // ==FIX== LessonProgress
     useEffect(() => {
         (async () => {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
+            const userId = user?.id || '';
             try {
-                // const QuestionLessonRawResponse = await fetchData(`api/questionlessons/${questionLessonId}`, token);
-                // const QuestionLessonResponse = normalizeDetailResponse(QuestionLessonRawResponse);
-
-                // const questionQuery = new URLSearchParams({
-                //     lessonId: String(questionLessonId),
-                //     page: '1',
-                //     pageSize: '500',
-                // });
-                // const QuestionResponseRaw = await fetchData(`api/questions?${questionQuery.toString()}`, token);
-                // const QuestionResponse = Array.isArray(QuestionResponseRaw) ? QuestionResponseRaw : [];
-                // console.log('QuestionResponse', QuestionResponse);
-                // console.log('QuestionLessonResponse', QuestionLessonResponse);
-                // const LessonProgressResponse = [...lessonProgresses];
-                // console.log('LessonProgressResponse', LessonProgressResponse);
-
-                // const QuestionLesson = QuestionLessonResponse ? {
-                //     ...QuestionLessonResponse,
-                //     questions: QuestionResponse,
-                // } : null;
-                // console.log('QuestionLesson', QuestionLesson);
-                // setThisQuestionLesson(QuestionLesson);
-
-                // // ==FIX==
-                // const userId = 1;
-                // const LessonProgress = LessonProgressResponse.filter(lp => lp.questionLessonId == questionLessonId && lp.userId == userId)?.sort((a, b) => (b?.score) - (a?.score));
-                // console.log('LessonProgress', LessonProgress);
-                // setLESSONPROGRESSes(LessonProgress);
-
-
-
-
-
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-                // const QuestionLessonResponse = await fetchData(`lessons/${questionLessonId}`, token);
-                const QuestionResponse = [...questions];
+                const questionQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '1000',
+                });
+                const ThisQuestionLessonResponse = await fetchData(`QuestionLessons/${questionLessonId}`, token);
+                const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
+                // const LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}`, token);
+                console.log('ThisQuestionLessonResponse', ThisQuestionLessonResponse);
                 console.log('QuestionResponse', QuestionResponse);
-                const QuestionLessonResponse = questionLessons.find(ql => ql.id == questionLessonId);
-                console.log('QuestionLessonResponse', QuestionLessonResponse);
-                const LessonProgressResponse = [...lessonProgresses];
-                console.log('LessonProgressResponse', LessonProgressResponse);
+                // console.log('LessonProgressResponse', LessonProgressResponse);
+                const QuestionItems = QuestionResponse?.items;
+                // const LessonProgressItems = LessonProgressResponse?.items;
 
                 const QuestionLesson = {
-                    ...QuestionLessonResponse,
-                    questions: QuestionResponse.filter(q => q.questionLessonId == QuestionLessonResponse.id),
+                    ...ThisQuestionLessonResponse,
+                    questions: QuestionItems.filter(q => q.questionLessonId == questionLessonId),
                 };
                 console.log('QuestionLesson', QuestionLesson);
                 setThisQuestionLesson(QuestionLesson);
 
-                // ==FIX==
-                const userId = 1;
-                const LessonProgress = LessonProgressResponse.filter(lp => lp.questionLessonId == questionLessonId && lp.userId == userId)?.sort((a, b) => (b?.score) - (a?.score));
-                console.log('LessonProgress', LessonProgress);
-                setLESSONPROGRESSes(LessonProgress);
+                // const LessonProgress = LessonProgressItems.filter(lp => lp.questionLessonId == questionLessonId)?.sort((a, b) => (b?.score) - (a?.score));
+                // console.log('LessonProgress', LessonProgress);
+                // setLESSONPROGRESSes(LessonProgress);
             } catch (error) {
+                console.error('Error', error);
                 setError('Error');
             } finally {
                 setLoading(false);
             };
         })();
-    }, [refresh, questionLessonId, questionChapterId, drivingLicenseId, user?.id]);
+    }, [refresh, user?.id]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>

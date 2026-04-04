@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { simulationCategories, simulationChapters, simulationDifficultyLevels, simulationScenarios } from '../../../mocks/DataSample';
+import { fetchData } from '../../../mocks/CallingAPI';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ControlledVideo from '../ControlledVideo/ControlledVideo';
@@ -25,12 +25,6 @@ export default function SimulationScenario() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-
                 const SimulationScenarioResponse = [...simulationScenarios];
                 const SimulationChapterResponse = [...simulationChapters];
                 const SimulationCategoryResponse = [...simulationCategories];
@@ -42,16 +36,26 @@ export default function SimulationScenario() {
                     difficultyLevel: SimulationDifficultyLevelResponse.find(difficultyLevel => ss.simulationDifficultyLevelId == difficultyLevel.id),
                 }));
                 console.log('SimulationScenario', SimulationScenario);
-
                 setSIMULATIONSCENARIOs(SimulationScenario);
+
+                // const simulationScenarioQuery = new URLSearchParams({
+                //     page: '1',
+                //     pageSize: '500',
+                // });
+                // const SimulationScenarioResponse = await fetchData(`SimulationScenarios?${simulationScenarioQuery.toString()}`, token);
+                // console.log('SimulationScenarioResponse', SimulationScenarioResponse);
+                // const SimulationScenarioItems = SimulationScenarioResponse?.items;
+                // setSIMULATIONSCENARIOs(SimulationScenarioItems);
+
                 // setSelectedScenarioId(SimulationScenario?.[0]?.id);
             } catch (error) {
+                console.error('Error', error);
                 setError('Error');
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh]);
+    }, [refresh, user?.token]);
 
     const selectedScenario = SIMULATIONSCENARIOs.find(ss => ss.id == selectedScenarioId);
     console.log('selectedScenario', selectedScenario);

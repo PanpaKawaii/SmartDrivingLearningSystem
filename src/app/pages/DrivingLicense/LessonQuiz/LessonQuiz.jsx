@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { answers, questions } from '../../../../mocks/DataSample';
+import { fetchData } from '../../../../mocks/CallingAPI';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import ProgressBar from '../../../components/ProgressBar';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import ListGridButton from '../../FlashCard/ListGridButton';
-import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 
 import './LessonQuiz.css';
 
 export default function LessonQuiz() {
     const { user } = useAuth();
-    const navigate = useNavigate();
 
     const Params = useParams();
+    const navigate = useNavigate();
+
     const questionLessonId = Params?.lessonId;
     console.log('questionLessonId', questionLessonId);
 
@@ -22,7 +23,7 @@ export default function LessonQuiz() {
     const [selectedQuestionId, setSelectedQuestionId] = useState(QUESTIONs?.[0]?.id);
     const [myAnswers, setMyAnswers] = useState([]);
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
 
@@ -32,47 +33,31 @@ export default function LessonQuiz() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                // const questionQuery = new URLSearchParams({
-                //     lessonId: String(questionLessonId),
-                //     page: '1',
-                //     pageSize: '500',
-                // });
-                // const QuestionRawResponse = await fetchData(`/questions?${questionQuery.toString()}`, token);
-                // const QuestionResponse = Array.isArray(QuestionRawResponse) ? QuestionRawResponse : [];
-                // console.log('QuestionResponse', QuestionResponse);
-
-                // const QuestionsAnswers = QuestionResponse.map((q, i) => {
-                //     const relatedAnswers = q.answers || q.questionAnswers || q.options || [];
-                //     return { ...q, answers: relatedAnswers, index: i + 1 };
-                // });
-                // console.log('QuestionsAnswers', QuestionsAnswers);
-
-                // setQUESTIONs(QuestionsAnswers);
-                // setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
-
-
-
-
-                // const LicenseResponse = await getSheetData('./greenlight_data.xlsx', 'License');
-                // console.log('LicenseResponse', LicenseResponse);
-                // setDRIVINGLICENSEs(LicenseResponse);
-                // const LicenseResponse = await fetchData('licenses', token);
-                // console.log('LicenseResponse', LicenseResponse);
-                // const QuestionLessonResponse = await fetchData(`lessons/${questionLessonId}`, token);
-                const QuestionResponse = questions.filter(q => q.questionLessonId == questionLessonId);
+                const questionQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '1000',
+                });
+                const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
-                const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
-                console.log('AnswerResponse', AnswerResponse);
+                const QuestionItems = QuestionResponse?.items;
 
-                const QuestionsAnswers = QuestionResponse.map((q, i) => {
-                    const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
-                    return { ...q, answers: relatedAnswers, index: i + 1 };
+                // const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
+                // console.log('AnswerResponse', AnswerResponse);
+
+                const QuestionsAnswers = QuestionItems.filter(q => q.questionLessonId == questionLessonId).map((q, i) => {
+                    // const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
+                    return {
+                        ...q,
+                        // answers: relatedAnswers,
+                        index: i + 1,
+                    };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
                 setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
             } catch (error) {
+                console.error('Error', error);
                 setError('Error');
             } finally {
                 setLoading(false);
@@ -194,7 +179,7 @@ export default function LessonQuiz() {
 
                         <div className='card'>
                             <div className='title'>
-                                <div className='index'>Câu hỏi {selectedQuestion?.index}: </div>
+                                <div className='index'>Câu hỏi {index + 1}: </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
                             </div>
                             <div className='grid-answer'>
