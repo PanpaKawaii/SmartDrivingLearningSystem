@@ -29,6 +29,8 @@ const menuSections = [
             { name: 'Ngân hàng Câu hỏi', icon: 'fa-question-circle', path: '/instructor/question-bank' },
             { name: 'Bài thi thử', icon: 'fa-clipboard-check', path: '/instructor/exam-management' },
             { name: 'Ngân hàng Biển báo', icon: 'fa-triangle-exclamation', path: '/instructor/traffic-sign-bank' },
+            { name: 'Ngân hàng Mô phỏng', icon: 'fa-video', path: '/instructor/simulation-bank' },
+            { name: 'Đề thi Mô phỏng', icon: 'fa-film', path: '/instructor/simulation-exam-management' },
         ],
     },
 ];

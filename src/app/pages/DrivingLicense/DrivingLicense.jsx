@@ -43,6 +43,7 @@ export default function DrivingLicense() {
                 const QuestionChapterItems = QuestionChapterResponse?.items;
                 // const DrivingLicenseItems = [...drivingLicenses];
                 // const QuestionChapterItems = [...questionChapters];
+
                 const DrivingLicense = DrivingLicenseItems.map(dl => ({
                     ...dl,
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),

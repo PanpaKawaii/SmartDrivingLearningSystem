@@ -1,24 +1,29 @@
 import { useState } from 'react';
 import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
 import InstructorModal from '../../../components/InstructorComponent/InstructorModal';
+import { QUIZ_DATA } from '../../../../mocks/QUIZ_DATA.js';
 import '../InstructorPages.css';
 
-const mockQuestions = [
-    { id: 1, content: 'Khi gặp biển báo cấm, người lái xe phải?', chapter: 'Luật giao thông', license: 'B2', difficulty: 'Dễ', status: 'active' },
-    { id: 2, content: 'Xe ô tô được phép quay đầu ở đâu?', chapter: 'Luật giao thông', license: 'B2', difficulty: 'Trung bình', status: 'active' },
-    { id: 3, content: 'Khoảng cách an toàn khi chạy 60km/h là?', chapter: 'Kỹ thuật lái xe', license: 'B1', difficulty: 'Khó', status: 'active' },
-    { id: 4, content: 'Biển báo hình tròn viền đỏ có ý nghĩa gì?', chapter: 'Biển báo', license: 'A1', difficulty: 'Dễ', status: 'active' },
-    { id: 5, content: 'Khi lái xe trong mưa, cần chú ý điều gì?', chapter: 'Kỹ thuật lái xe', license: 'B2', difficulty: 'Trung bình', status: 'active' },
-    { id: 6, content: 'Tốc độ tối đa trong khu dân cư?', chapter: 'Luật giao thông', license: 'B2', difficulty: 'Dễ', status: 'active' },
-    { id: 7, content: 'Đèn vàng nhấp nháy có ý nghĩa gì?', chapter: 'Biển báo', license: 'A2', difficulty: 'Trung bình', status: 'active' },
-    { id: 8, content: 'Cách xử lý khi xe bị nổ lốp?', chapter: 'Kỹ thuật lái xe', license: 'B2', difficulty: 'Khó', status: 'active' },
-];
+const questions = Object.values(QUIZ_DATA).map((q) => ({
+    id: q.number,
+    content: q.question,
+    category: q.category,
+    isDiemLiet: q.isDiemLiet,
+    type: q.answers.length > 3 ? 'MULTI' : 'SINGLE',
+    difficulty: q.number <= 200 ? 'Dễ' : q.number <= 400 ? 'Trung bình' : 'Khó',
+}));
+
 
 const columns = [
     { key: 'id', label: 'STT', width: '60px' },
     { key: 'content', label: 'Nội dung câu hỏi' },
-    { key: 'chapter', label: 'Chương' },
-    { key: 'license', label: 'Hạng', width: '80px' },
+    { key: 'category', label: 'Chương', width: '140px' },
+    { key: 'isDiemLiet', label: 'Điểm liệt', width: '90px', render: (val) => (
+        <span className={`ins-status-chip ${val ? 'rejected' : 'approved'}`}>
+            <span className='chip-dot'></span>{val ? 'Có' : 'Không'}
+        </span>
+    )},
+    { key: 'type', label: 'Loại', width: '80px' },
     { key: 'difficulty', label: 'Độ khó', width: '100px', render: (val) => (
         <span className={`ins-status-chip ${val === 'Dễ' ? 'approved' : val === 'Trung bình' ? 'pending' : 'rejected'}`}>
             <span className='chip-dot'></span>{val}
@@ -45,9 +50,9 @@ export default function QuestionBank() {
             </div>
 
             <InstructorDataTable
-                title={`Hiển thị ${mockQuestions.length} câu hỏi`}
+                title={`Hiển thị ${questions.length} câu hỏi (600 câu)`}
                 columns={columns}
-                data={mockQuestions}
+                data={questions}
                 actions={
                     <>
                         <button className='ins-btn ins-btn-secondary' onClick={() => {}}>

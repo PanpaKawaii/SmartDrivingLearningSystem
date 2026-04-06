@@ -65,6 +65,7 @@ import InsCommunityReports from '../pages/InstructorPages/CommunityReports/Commu
 import InsContentErrorReports from '../pages/InstructorPages/ContentErrorReports/ContentErrorReports.jsx'
 import InsChangeRequests from '../pages/InstructorPages/ChangeRequests/ChangeRequests.jsx'
 import InsReportProcessing from '../pages/InstructorPages/ReportProcessing/ReportProcessing.jsx'
+import InsSimulationExamMgmt from '../pages/InstructorPages/SimulationExamManagement/SimulationExamManagement.jsx'
 
 export default function MainRoutes() {
     return (
@@ -133,6 +134,7 @@ export default function MainRoutes() {
                     <Route path='content-error-reports' element={<InsContentErrorReports />} />
                     <Route path='change-requests' element={<InsChangeRequests />} />
                     <Route path='report-processing' element={<InsReportProcessing />} />
+                    <Route path='simulation-exam-management' element={<InsSimulationExamMgmt />} />
                 </Route>
             </Routes>
             <BoxChat />

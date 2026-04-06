@@ -1,0 +1,337 @@
+/* ============================================================
+   SimulationExamManagement — CSS riêng cho module đề thi mô phỏng
+   Sử dụng CSS variables từ InstructorPages.css + InstructorLayout.css
+   ============================================================ */
+
+/* ── Layout 2 cột cho Create / Detail modal ── */
+.sim-exam-create-grid,
+.sim-exam-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    min-height: 420px;
+}
+
+.sim-exam-create-left,
+.sim-exam-detail-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-right: 1px solid var(--ins-outline-variant);
+    padding-right: 24px;
+}
+
+.sim-exam-create-right,
+.sim-exam-detail-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ── Section label ── */
+.ins-section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ins-on-surface-variant);
+    margin-bottom: 12px;
+}
+
+/* ── Form helpers ── */
+.ins-form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.ins-form-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.ins-form-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--ins-primary);
+    cursor: pointer;
+}
+
+.ins-form-hint {
+    font-size: 12px;
+    color: var(--ins-on-surface-variant);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Search box tình huống ── */
+.sim-scenario-search {
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.sim-scenario-search i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ins-on-surface-variant);
+    font-size: 13px;
+}
+
+.sim-scenario-search input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    border: 1px solid var(--ins-outline-variant);
+    border-radius: 8px;
+    background: var(--ins-surface-variant);
+    color: var(--ins-on-surface);
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.sim-scenario-search input:focus {
+    border-color: var(--ins-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ins-primary) 15%, transparent);
+}
+
+/* ── Danh sách tình huống để chọn ── */
+.sim-scenario-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 340px;
+    padding-right: 4px;
+}
+
+.sim-scenario-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--ins-outline-variant);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--ins-surface);
+}
+
+.sim-scenario-item:hover {
+    border-color: var(--ins-primary);
+    background: color-mix(in srgb, var(--ins-primary) 5%, transparent);
+}
+
+.sim-scenario-item.selected {
+    border-color: var(--ins-primary);
+    background: color-mix(in srgb, var(--ins-primary) 10%, transparent);
+}
+
+.sim-scenario-check {
+    font-size: 16px;
+    color: var(--ins-primary);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.sim-scenario-info {
+    flex: 1;
+}
+
+.sim-scenario-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ins-on-surface);
+    margin: 0 0 4px 0;
+}
+
+.sim-scenario-meta {
+    font-size: 11px;
+    color: var(--ins-on-surface-variant);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Chips đã chọn ── */
+.sim-selected-summary {
+    margin-top: 12px;
+    border-top: 1px solid var(--ins-outline-variant);
+    padding-top: 12px;
+}
+
+.sim-selected-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: color-mix(in srgb, var(--ins-primary) 12%, transparent);
+    color: var(--ins-primary);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    margin: 3px;
+}
+
+.sim-selected-chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ins-primary);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+}
+
+/* ── Stats bar ── */
+.sim-exam-stats {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--ins-surface-variant);
+    border-radius: 10px;
+}
+
+.sim-exam-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--ins-on-surface-variant);
+}
+
+.sim-exam-stat-item i {
+    color: var(--ins-primary);
+    font-size: 14px;
+}
+
+/* ── Detail view fields ── */
+.sim-detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--ins-outline-variant);
+}
+
+.sim-detail-field:last-of-type {
+    border-bottom: none;
+}
+
+.sim-detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ins-on-surface-variant);
+}
+
+.sim-detail-value {
+    font-size: 14px;
+    color: var(--ins-on-surface);
+    font-weight: 500;
+}
+
+/* ── Detail scenarios list header ── */
+.sim-detail-scenarios-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ── Danh sách tình huống trong detail ── */
+.sim-scenario-detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 380px;
+    padding-right: 4px;
+}
+
+.sim-scenario-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--ins-outline-variant);
+    border-radius: 8px;
+    background: var(--ins-surface);
+    transition: border-color 0.15s;
+}
+
+.sim-scenario-detail-item:hover {
+    border-color: var(--ins-primary);
+}
+
+.sim-scenario-detail-index {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--ins-primary) 15%, transparent);
+    color: var(--ins-primary);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sim-scenario-detail-info {
+    flex: 1;
+}
+
+.sim-scenario-detail-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ins-on-surface);
+    margin: 0 0 3px 0;
+}
+
+.sim-scenario-detail-meta {
+    font-size: 11px;
+    color: var(--ins-on-surface-variant);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sim-scenario-detail-score {
+    flex-shrink: 0;
+}
+
+.sim-score-badge {
+    background: color-mix(in srgb, var(--ins-primary) 12%, transparent);
+    color: var(--ins-primary);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* ── Empty state ── */
+.sim-empty-scenarios {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--ins-on-surface-variant);
+    padding: 40px 0;
+}
+
+.sim-empty-scenarios p {
+    font-size: 14px;
+    margin: 0;
+}
