@@ -5,6 +5,7 @@ import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea.jsx';
 import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
+import ButtonList from '../../components/ButtonList/ButtonList.jsx';
 
 import './ForumComment.css';
 
@@ -177,7 +178,17 @@ export default function ForumComment({
                                 <div>
                                     {/* ==FIX== */}
                                     <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
-                                        <div className='name'>{comment.user?.name}</div>
+                                        <div className='name-btn-list'>
+                                            <div className='name'>{comment.user?.name}</div>
+                                            {/* ==FIX== */}
+                                            {comment.userId != user?.id &&
+                                                <ButtonList
+                                                    icon={'fa-solid fa-ellipsis-vertical'}
+                                                    onToggle={() => { }}
+                                                    list={['report', 'test']}
+                                                />
+                                            }
+                                        </div>
                                         <div className='commentcontent'>{comment.content}</div>
                                         {/* <div className='vote-icon'>
                                             <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length || 0}</div>

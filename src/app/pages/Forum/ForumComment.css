@@ -107,30 +107,16 @@
                 }
             }
 
-            /* .vote-icon {
-                position: absolute;
-                right: 8px;
-                top: 0;
-                transform: translateY(-50%);
+            .name-btn-list {
+                margin: 0 0 4px;
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                justify-content: space-between;
 
-                .vote-number {
-                    font-size: .75rem;
+                .name {
+                    /* white-space: nowrap; */
+                    font-weight: bold;
                 }
-
-                i {
-                    color: #538DFF;
-                    background-color: #fff;
-                    border-radius: 50%;
-                }
-            } */
-
-            .name {
-                /* white-space: nowrap; */
-                font-weight: bold;
-                margin: 0 0 2px;
             }
 
             .commentcontent {

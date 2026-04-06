@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
+import ButtonList from '../../components/ButtonList/ButtonList';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './ForumCard.css';
@@ -87,9 +88,11 @@ export default function ForumCard({
                     </div>
                 </div>
                 {/* ==FIX== */}
-                <button className='btn'>
-                    <i className='fa-solid fa-flag' />
-                </button>
+                <ButtonList
+                    icon={'fa-solid fa-ellipsis-vertical'}
+                    onToggle={() => { }}
+                    list={['report', 'test']}
+                />
             </div>
             <div className='content'>
                 <h2>{post.title}</h2>
