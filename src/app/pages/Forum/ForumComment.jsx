@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { deleteData, fetchData, postData } from '../../../mocks/CallingAPI.js';
 import { comments } from '../../../mocks/DataSample.js';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea.jsx';
 import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
@@ -24,7 +25,6 @@ export default function ForumComment({
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     // ==FIX==
     // useEffect(() => {

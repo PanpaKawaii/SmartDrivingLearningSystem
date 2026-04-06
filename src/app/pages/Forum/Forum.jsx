@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData } from '../../../mocks/CallingAPI';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
@@ -24,7 +25,6 @@ export default function Forum() {
 
     const [selectedType, setSelectedType] = useState('');
     const [selectedTopic, setSelectedTopic] = useState('');
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
         (async () => {

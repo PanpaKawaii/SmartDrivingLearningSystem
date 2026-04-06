@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
@@ -11,7 +12,6 @@ export default function ForumCreatePost() {
 
     const [title, setTitle] = useState('');
     const [topic, setTopic] = useState('');
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     return (
         <div className='forum-create-post-container'>

@@ -43,7 +43,7 @@ export default function RegisterFace({
             email: Email,
             password: Password,
             name: Name,
-            avatar: 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg',
+            avatar: 'https://i.pinimg.com/736x/af/59/b3/af59b36b88bdbea5172a618872f3bbc5.jpg',
             phone: Phone,
             gender: Gender,
             description: '',

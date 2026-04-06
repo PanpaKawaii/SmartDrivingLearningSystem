@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { postData, putData } from '../../../../mocks/CallingAPI';
+import DefaultAvatar from '../../../assets/DefaultAvatar.png';
 
 import '../EditModal.css';
 
@@ -10,7 +11,6 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     const Update = async (user) => {
         // const token = user?.token || ''; ==FIX==

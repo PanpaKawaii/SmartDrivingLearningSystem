@@ -8,6 +8,7 @@ import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSel
 import EditUserModal from './EditUserModal';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import DefaultAvatar from '../../../assets/DefaultAvatar.png';
 
 import './UserManagement.css';
 
@@ -22,7 +23,6 @@ export default function UserManagement() {
     const [editing, setEditing] = useState(null);
     const [creating, setCreating] = useState(false);
     const [popupProps, setPopupProps] = useState(null);
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
         (async () => {

@@ -24,7 +24,6 @@ export default function QuestionManagement() {
     const [editing, setEditing] = useState(null);
     const [creating, setCreating] = useState(false);
     const [popupProps, setPopupProps] = useState(null);
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
         (async () => {

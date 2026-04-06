@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './ForumCard.css';
@@ -12,7 +13,6 @@ export default function ForumCard({
 
     const [reaction, setReaction] = useState(null);
     const [open, setOpen] = useState(false);
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     // ==FIX==
     const handleClickReact = (reaction) => {
