@@ -1,4 +1,4 @@
-import ProgressBar from '../../components/ProgressBar';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
 
 import './Question.css';
 

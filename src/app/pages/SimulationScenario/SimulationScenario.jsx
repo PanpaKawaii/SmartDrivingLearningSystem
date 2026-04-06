@@ -4,7 +4,7 @@ import { fetchData } from '../../../mocks/CallingAPI';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
-import ControlledVideo from '../ControlledVideo/ControlledVideo';
+import ControlledVideo from './ControlledVideo/ControlledVideo';
 import ListScenario from './ListScenario';
 
 import './SimulationScenario.css';

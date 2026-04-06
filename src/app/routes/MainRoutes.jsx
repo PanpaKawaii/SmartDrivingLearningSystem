@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 
-import ControlledVideo from '../pages/ControlledVideo/ControlledVideo.jsx'
+import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/ControlledVideo.jsx'
 import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
 
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
@@ -81,8 +81,6 @@ export default function MainRoutes() {
                     {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} /> */}
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
-                    <Route path='learning/list-simulation' element={<ControlledVideo />} />
-                    {/* <Route path='learning/list-simulation/:id' element={<ControlledVideo />} /> */}
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
                 </Route>
@@ -107,7 +105,6 @@ export default function MainRoutes() {
                     <Route path='/list-exam' element={<ListExam />} />
                     <Route path='/list-exam/:id' element={<ExamTemp />} />
                     <Route path='/forum' element={<Forum />} />
-                    <Route path='/controlled-video' element={<ControlledVideo />} />
                     <Route path='/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='*' element={<></>} />
                 </Routes>

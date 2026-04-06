@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
-import ProgressBar from '../../../components/ProgressBar';
+import ProgressBar from '../../../components/ProgressBar/ProgressBar';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';

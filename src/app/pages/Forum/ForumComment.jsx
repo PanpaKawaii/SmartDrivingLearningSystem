@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { deleteData, fetchData, postData } from '../../../mocks/CallingAPI.js';
 import { comments } from '../../../mocks/DataSample.js';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
-import AutoResizeTextarea from '../../components/AutoResizeTextarea.jsx';
+import AutoResizeTextarea from '../../components/AutoResizeTextarea/AutoResizeTextarea.jsx';
 import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import ButtonList from '../../components/ButtonList/ButtonList.jsx';

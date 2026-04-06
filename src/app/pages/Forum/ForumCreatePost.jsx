@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
-import AutoResizeTextarea from '../../components/AutoResizeTextarea';
+import AutoResizeTextarea from '../../components/AutoResizeTextarea/AutoResizeTextarea';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './ForumCreatePost.css';
