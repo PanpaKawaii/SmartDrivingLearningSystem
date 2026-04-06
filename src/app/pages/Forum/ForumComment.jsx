@@ -49,7 +49,7 @@ export default function ForumComment({
     //                 };
     //             });
 
-    //             // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.commentDate) - new Date(b.commentDate)));
+    //             // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.createAt) - new Date(b.createAt)));
     //         } catch (error) {
     //             console.error('Error', error);
     //             setError(error);
@@ -95,7 +95,7 @@ export default function ForumComment({
             answer: Answer,
             questionId: post?.id,
             userId: user?.id,
-            commentDate: new Date().toLocaleDateString()
+            createAt: new Date().toLocaleDateString()
         };
         console.log('CommentData:', CommentData);
         setCOMMENTs(prev => [...prev, CommentData]);
@@ -179,10 +179,21 @@ export default function ForumComment({
                                     <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
                                         <div className='name'>{comment.user?.name}</div>
                                         <div className='commentcontent'>{comment.content}</div>
+                                        {/* <div className='vote-icon'>
+                                            <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length || 0}</div>
+                                            <i className='fa-solid fa-circle-arrow-up' />
+                                        </div> */}
                                         {/* <div>num:{num} - i:{i} - parent-child:{ChildrenComment.length} - {comment.content}</div> */}
                                     </div>
                                     <div className='commentdate-btn'>
-                                        <div className='commentdate'>{comment.commentDate}</div>
+                                        <div className='vote-icon'>
+                                            <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length || 0}</div>
+                                            {/* ==FIX== */}
+                                            <button className='vote-btn' onClick={() => { alert('Voted!') }}>
+                                                <i className={`fa-${comment.commentVotes?.some(c => c.userId == user?.id) ? 'solid' : 'regular'} fa-circle-up`} />
+                                            </button>
+                                        </div>
+                                        <div className='commentdate'>{comment.createAt}</div>
                                         <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
                                         {/* ==FIX== */}
                                         {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
@@ -220,8 +231,8 @@ export default function ForumComment({
         )
     };
 
-    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>
             <div className='forum-content'>

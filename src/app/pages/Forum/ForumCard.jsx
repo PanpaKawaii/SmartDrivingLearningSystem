@@ -7,7 +7,6 @@ import './ForumCard.css';
 export default function ForumCard({
     post = {},
     setSelectedPost = () => { },
-    showReportButton = false,
 }) {
     const { user } = useAuth();
 
@@ -88,11 +87,9 @@ export default function ForumCard({
                     </div>
                 </div>
                 {/* ==FIX== */}
-                {showReportButton && (
-                    <button className='btn'>
-                        <i className='fa-solid fa-flag' />
-                    </button>
-                )}
+                <button className='btn'>
+                    <i className='fa-solid fa-flag' />
+                </button>
             </div>
             <div className='content'>
                 <h2>{post.title}</h2>

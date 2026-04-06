@@ -77,7 +77,7 @@ export default function Forum() {
             <StarsBackground />
             <div className='left'></div>
             <div className='center'>
-                <div className='list'>
+                <div className='list-forum-card'>
                     <div className='control-header'>
                         <div className='create-post'>
                             <div className='image'>
@@ -103,7 +103,7 @@ export default function Forum() {
                     </div>
                     {FORUMPOSTs.map((post, i) => (
                         <React.Fragment key={i}>
-                            <ForumCard post={post} setSelectedPost={setSelectedPost} showReportButton={true} />
+                            <ForumCard post={post} setSelectedPost={setSelectedPost} />
                         </React.Fragment>
                     ))}
                 </div>
@@ -111,19 +111,15 @@ export default function Forum() {
             <div className='right'></div>
 
             {openCreatePost && user && (
-                <PopupContainer onClose={() => setOpenCreatePost(false)}>
-                    <div className='inner-popup'>
-                        <ForumCreatePost />
-                    </div>
+                <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCreatePost />
                 </PopupContainer>
             )}
 
             {selectedPost && (
-                <PopupContainer onClose={() => setSelectedPost(null)}>
-                    <div className='inner-popup'>
-                        <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} showReportButton={false} />
-                        <ForumComment post={selectedPost} />
-                    </div>
+                <PopupContainer onClose={() => setSelectedPost(null)} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} showReportButton={false} />
+                    <ForumComment post={selectedPost} />
                 </PopupContainer>
             )}
         </div>
