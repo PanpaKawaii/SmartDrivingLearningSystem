@@ -128,6 +128,8 @@
     padding: 40px 20px;
     box-sizing: border-box;
     transition: all 1s ease;
+    overflow-y: scroll;
+    scrollbar-width: none;
 
     h1 {
         margin: 0 0 32px;
@@ -185,6 +187,19 @@
                     background-color: #151D2C;
                     box-shadow: inset 1.8px 1.8px 0px #1D2533;
                 }
+            }
+
+            .eye-btn {
+                width: 20px;
+                height: 20px;
+                text-align: center;
+                align-content: center;
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: .825rem;
+                cursor: pointer;
             }
         }
 

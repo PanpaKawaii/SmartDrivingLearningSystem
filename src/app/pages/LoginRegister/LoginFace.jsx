@@ -45,7 +45,7 @@ export default function LoginFace({
 
         try {
             setLoading(true);
-            const result = await postData('api/user/login', LoginData, '');
+            const result = await postData('auth/login', LoginData, '');
             console.log('result', result);
 
             if (result?.status == 0) {
@@ -97,7 +97,7 @@ export default function LoginFace({
                 <div className='form-group'>
                     <input type={passwordVisible ? 'text' : 'password'} name='password' placeholder='' />
                     <label htmlFor={'password'} style={{ color: loginError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
-                    <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'}`} onClick={() => setPasswordVisible(p => !p)} />
+                    <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'} eye-btn`} onClick={() => setPasswordVisible(p => !p)} />
                 </div>
                 <div className='form-check'>
                     <div className='checkbox-container'>

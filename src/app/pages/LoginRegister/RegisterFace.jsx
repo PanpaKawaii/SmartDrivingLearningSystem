@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { postData } from '../../../mocks/CallingAPI.js';
-import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import CheckValidation from './CheckValidation.jsx';
 
 import './RegisterFace.css';
@@ -9,7 +8,8 @@ export default function RegisterFace({
     setRotate = () => { },
 }) {
     console.log('Register');
-    const { user } = useAuth();
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const ResetRegisterInputs = () => {
         var inputs = document.querySelectorAll('input');
@@ -21,11 +21,45 @@ export default function RegisterFace({
         setRegisterSuccess('');
     };
 
-    const [accept, setAccept] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [accept, setAccept] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [registerError, setRegisterError] = useState({ value: '', name: '' });
     const [registerSuccess, setRegisterSuccess] = useState(null);
+    const [otpError, setOtpError] = useState({ value: '', name: '' });
+    const [otpSuccess, setOtpSuccess] = useState(null);
     const [successSendOTP, setSuccessSendOTP] = useState(false);
+
+    const CheckOTP = async (Email, OTP) => {
+        setOtpError({ value: '', name: '' });
+        setOtpSuccess('');
+
+        const CheckOtpData = {
+            email: Email,
+            otp: OTP,
+        };
+        console.log('CheckOtpData:', CheckOtpData);
+
+        try {
+            setLoading(true);
+            // ==FIX==
+            // const result = await postData('auth/check-otp', OTP, '');
+            // console.log('result', result);
+            await sleep(1000);
+
+            setOtpSuccess('Đăng ký thành công!');
+            setOtpError({ value: '', name: '' });
+            await sleep(1000);
+            setSuccessSendOTP(false);
+            setRotate(0);
+        } catch (error) {
+            console.log('Check OTP failed:', error);
+            setOtpError({ value: 'OTP không chính xác', name: 'OTP' });
+            setOtpSuccess('');
+        } finally {
+            setLoading(false);
+        };
+    };
 
     const Register = async (Email, Name, Phone, Gender, Password, Confirm, Accept) => {
         const Validate = CheckValidation(Email, Name, Phone, Gender, Password, Confirm, Accept);
@@ -38,31 +72,34 @@ export default function RegisterFace({
         }
 
         const RegisterData = {
-            id: '',
-            roleId: '',
+            // id: '',
+            // roleId: '',
             email: Email,
             password: Password,
             name: Name,
-            avatar: 'https://i.pinimg.com/736x/af/59/b3/af59b36b88bdbea5172a618872f3bbc5.jpg',
             phone: Phone,
             gender: Gender,
-            description: '',
             dateOfBirth: '',
-            licenseType: '',
+            // avatar: 'https://i.pinimg.com/736x/af/59/b3/af59b36b88bdbea5172a618872f3bbc5.jpg',
+            // description: '',
+            // licenseType: '',
         };
         console.log('RegisterData:', RegisterData);
 
         try {
             setLoading(true);
-            const token = user?.token || '';
-            const result = await postData('api/user', RegisterData, token);
-            console.log('result', result);
+            // ==FIX==
+            // const result = await postData('auth/register', RegisterData, '');
+            // console.log('result', result);
+            await sleep(1000);
 
-            setRegisterSuccess('Đăng ký thành công!');
+            setRegisterSuccess('Đã gửi OTP đến gmail của bạn!');
             setRegisterError({ value: '', name: '' });
+            await sleep(1000);
+            setSuccessSendOTP(true);
         } catch (error) {
             console.log('Register failed:', error);
-            setRegisterError({ value: 'Đăng ký thất bại, hãy thử lại sau', name: 'Email, Name, Phone, Password, Confirm, Accept' });
+            setRegisterError({ value: 'Gửi OTP thất bại, hãy thử lại sau', name: 'Email, Name, Phone, Password, Confirm, Accept' });
             setRegisterSuccess('');
         } finally {
             setLoading(false);
@@ -73,6 +110,8 @@ export default function RegisterFace({
         e.preventDefault();
         setRegisterError({ value: '', name: '' });
         setRegisterSuccess('');
+        setOtpError({ value: '', name: '' });
+        setOtpSuccess('');
         const Email = e.target.email.value;
         const Name = e.target.name.value;
         const Phone = e.target.phone.value;
@@ -107,6 +146,7 @@ export default function RegisterFace({
 
     // OTP
     const inputsRef = useRef([]);
+    const refEmail = useRef(null);
 
     const handleChange = (e, index) => {
         const value = e.target.value;
@@ -148,7 +188,7 @@ export default function RegisterFace({
             <h1>ĐĂNG KÝ</h1>
             <form onSubmit={handleSubmitRegister}>
                 <div className='form-group'>
-                    <input type='text' name='email' placeholder='' />
+                    <input type='text' name='email' placeholder='' ref={refEmail} />
                     <label htmlFor={'email'} style={{ color: registerError.name.includes('Email') && '#ff4d4f', }}>Email</label>
                 </div>
                 <div className='form-group'>
@@ -177,8 +217,9 @@ export default function RegisterFace({
                     <label htmlFor={'password'} style={{ color: registerError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
                 </div>
                 <div className='form-group'>
-                    <input type='password' name='confirm' placeholder='' />
+                    <input type={passwordVisible ? 'text' : 'password'} name='confirm' placeholder='' />
                     <label htmlFor={'confirm'} style={{ color: registerError.name.includes('Confirm') && '#ff4d4f', }}>Xác nhận mật khẩu</label>
+                    <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'} eye-btn`} onClick={() => setPasswordVisible(p => !p)} />
                 </div>
                 <div className='form-check'>
                     <a href='https://docs.google.com/document/d/1gpc5I74B66ldC76mSZsafEXuumeYlhSbV1ocqHCrrR4/edit?tab=t.0' className='provision' target='_blank'><b>ĐIỀU KHOẢN</b></a>
@@ -213,7 +254,7 @@ export default function RegisterFace({
             {successSendOTP &&
                 <div className='form-otp'>
                     <div className='otp-container' onPaste={handlePaste}>
-                        <button onClick={() => setSuccessSendOTP(false)} className='close-otp'>
+                        <button onClick={() => setSuccessSendOTP(false)} className='close-otp' disabled={loading}>
                             <i className='fa-solid fa-arrow-left' />
                             <span>Quay lại</span>
                         </button>
@@ -232,11 +273,17 @@ export default function RegisterFace({
                                 />
                             ))}
                         </div>
+
+                        {otpError.value && <div className='message error-message'>{otpError.value}</div>}
+                        {otpSuccess && <div className='message success-message'>{otpSuccess}</div>}
+                        {!otpError.value && !otpSuccess && <div className='message'></div>}
+
                         <button
                             className='submit-btn'
                             onClick={() => {
+                                const email = refEmail.current.value;
                                 const otp = inputsRef.current.map((input) => input.value).join('');
-                                alert('OTP: ' + otp);
+                                CheckOTP(email, otp);
                             }}
                         >
                             Xác nhận
