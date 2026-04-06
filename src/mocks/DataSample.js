@@ -1,3 +1,5 @@
+import { QUIZ_DATA } from './QUIZ_DATA';
+
 // 1
 export const roles = [
     {
@@ -4082,6 +4084,13 @@ export const lessonProgresses = [
 
 // Instructor mock additions
 
+export const reportCategories = [
+    { id: 1, name: 'Lỗi nội dung câu hỏi', description: 'Báo cáo về lỗi nội dung, đáp án hoặc giải thích của câu hỏi' },
+    { id: 2, name: 'Lỗi hình ảnh/Video', description: 'Báo cáo về lỗi hiển thị hình ảnh, video, hoặc tài nguyên đa phương tiện' },
+    { id: 3, name: 'Lỗi bài viết/Bình luận', description: 'Báo cáo vi phạm quy tắc, nội dung không phù hợp trong cộng đồng' },
+    { id: 4, name: 'Yêu cầu cập nhật', description: 'Yêu cầu cập nhật nội dung, thêm bài học hoặc bằng cấp mới' },
+];
+
 export const reports = [
     {
         id: 1,
@@ -4159,6 +4168,80 @@ export const reports = [
         status: 1,
     },
 ];
+
+export const resolves = [
+    {
+        id: 901,
+        reportId: 4,
+        userId: 1,
+        title: 'Da tiep nhan va xu ly bao cao video mo phong #12',
+        content: 'Bao cao da duoc tiep nhan. Chung toi da chuyen noi dung nay sang bo phan ky thuat de kiem tra va sua loi am thanh.',
+        createAt: '2026-03-27 14:05:00',
+        updateAt: '2026-03-27 14:05:00',
+        status: 1,
+    },
+    {
+        id: 902,
+        reportId: 2,
+        userId: 1,
+        title: 'Da cap nhat hinh anh bien bao',
+        content: 'Cam on ban da bao loi. Hinh anh bien bao P.102 da duoc chinh sua va dong bo lai trong he thong.',
+        createAt: '2026-03-26 10:15:00',
+        updateAt: '2026-03-26 10:15:00',
+        status: 1,
+    },
+];
+
+// Helper: get report category name by id
+export const getReportCategoryName = (reportCategoryId) => {
+    const category = reportCategories.find((c) => c.id === reportCategoryId);
+    return category?.name || 'Khong xac dinh';
+};
+
+// Helper: drill down to linked entity details
+export const getReportEntityDetails = (report) => {
+    if (report.questionId) {
+        const question = Object.values(QUIZ_DATA).find((q) => q.number === report.questionId);
+        if (question) {
+            return {
+                type: 'Cau hoi',
+                label: `Cau hoi #${report.questionId}`,
+                content: question.question,
+                details: {
+                    'Danh muc': question.category,
+                    'Loai': report.questionId <= 200 ? 'Trac nghiem' : (report.questionId <= 400 ? 'Tran dap' : 'Long tinh'),
+                    'Do kho': report.questionId <= 200 ? 'De' : (report.questionId <= 400 ? 'Trung binh' : 'Kho'),
+                },
+            };
+        }
+    }
+    if (report.simulationId) {
+        return {
+            type: 'Tinh huong',
+            label: `Tinh huong mo phong #${report.simulationId}`,
+            content: `Tinh huong mo phong so ${report.simulationId}`,
+            details: { 'Loai': 'Mo phong (Video/3D simulation)' },
+        };
+    }
+    if (report.forumPostId) {
+        return {
+            type: 'Bai viet',
+            label: `Bai viet #${report.forumPostId}`,
+            content: 'Bai viet tren dien dan cong dong',
+            details: { 'Loai': 'Forum Post' },
+        };
+    }
+    if (report.forumCommentId) {
+        return {
+            type: 'Binh luan',
+            label: `Binh luan #${report.forumCommentId}`,
+            content: 'Binh luan tren dien dan cong dong',
+            details: { 'Loai': 'Forum Comment' },
+        };
+    }
+    return null;
+};
+
 
 export const changeRequests = [
     {
