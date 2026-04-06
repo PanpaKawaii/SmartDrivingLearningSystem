@@ -97,3 +97,123 @@
 .ins-empty-state p {
     font-size: 0.9rem;
 }
+
+.ins-detail-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: var(--ins-surface);
+    border: 1px solid rgba(95, 117, 165, 0.12);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.ins-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.ins-detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ins-detail-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ins-on-surface-variant);
+}
+
+.ins-detail-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ins-on-surface);
+}
+
+.ins-detail-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ins-detail-section h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+}
+
+.ins-detail-section p {
+    color: var(--ins-on-surface-variant);
+    line-height: 1.6;
+}
+
+.ins-answer-list {
+    display: grid;
+    gap: 12px;
+}
+
+.ins-answer-item {
+    border: 1px solid rgba(95, 117, 165, 0.12);
+    border-radius: 12px;
+    padding: 14px 16px;
+    background: var(--ins-surface-low);
+}
+
+.ins-answer-item.correct {
+    border-color: rgba(74, 222, 128, 0.35);
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.ins-answer-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+    margin-bottom: 6px;
+}
+
+.ins-answer-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(74, 222, 128, 0.16);
+    color: #16a34a;
+}
+
+.ins-answer-text {
+    color: var(--ins-on-surface-variant);
+    line-height: 1.55;
+}
+
+.ins-detail-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ins-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 320px;
+    border: 1px dashed rgba(95, 117, 165, 0.18);
+    border-radius: 16px;
+    background: var(--ins-surface);
+    color: var(--ins-on-surface-variant);
+    text-align: center;
+    padding: 24px;
+}
+
+.ins-detail-empty i {
+    font-size: 2rem;
+    color: #f59e0b;
+}

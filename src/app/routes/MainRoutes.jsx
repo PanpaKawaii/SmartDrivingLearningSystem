@@ -52,6 +52,7 @@ import BoxChat from '../components/BoxChat/BoxChat.jsx'
 import InstructorLayout from '../components/InstructorComponent/InstructorLayout.jsx'
 import InsDashboard from '../pages/InstructorPages/Dashboard/Dashboard.jsx'
 import InsQuestionBank from '../pages/InstructorPages/QuestionBank/QuestionBank.jsx'
+import InsQuestionDetail from '../pages/InstructorPages/QuestionBank/QuestionDetail.jsx'
 import InsLessonMgmt from '../pages/InstructorPages/LessonManagement/LessonManagement.jsx'
 import InsChapterMgmt from '../pages/InstructorPages/ChapterManagement/ChapterManagement.jsx'
 import InsLicenseMgmt from '../pages/InstructorPages/LicenseManagement/LicenseManagement.jsx'
@@ -120,6 +121,7 @@ export default function MainRoutes() {
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<InsDashboard />} />
                     <Route path='question-bank' element={<InsQuestionBank />} />
+                    <Route path='question-bank/:questionId' element={<InsQuestionDetail />} />
                     <Route path='lesson-management' element={<InsLessonMgmt />} />
                     <Route path='chapter-management' element={<InsChapterMgmt />} />
                     <Route path='license-management' element={<InsLicenseMgmt />} />
