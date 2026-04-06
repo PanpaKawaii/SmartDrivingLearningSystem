@@ -1,4 +1,4 @@
-.forum-create-post-container {
+.report-modal-container {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@
         }
     }
 
-    .post-information {
+    .report-information {
         display: flex;
         gap: 20px;
 

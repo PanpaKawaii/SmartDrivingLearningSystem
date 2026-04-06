@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import ButtonList from '../../components/ButtonList/ButtonList';
+import PopupContainer from '../../components/PopupContainer/PopupContainer';
+import ReportModal from '../../components/ReportModal/ReportModal';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './ForumCard.css';
@@ -13,6 +15,8 @@ export default function ForumCard({
 
     const [reaction, setReaction] = useState(null);
     const [open, setOpen] = useState(false);
+
+    const [openReport, setOpenReport] = useState(null);
 
     // ==FIX==
     const handleClickReact = (reaction) => {
@@ -89,9 +93,22 @@ export default function ForumCard({
                 </div>
                 {/* ==FIX== */}
                 <ButtonList
-                    icon={'fa-solid fa-ellipsis-vertical'}
-                    onToggle={() => { }}
-                    list={['report', 'test']}
+                    list={[
+                        {
+                            name: 'report',
+                            onToggle: () => setOpenReport({
+                                header: 'Báo cáo bài viết',
+                                simulationId: null,
+                                forumPostId: post.id,
+                                forumCommentId: null,
+                                questionId: null,
+                            }),
+                        },
+                        {
+                            name: 'test',
+                            onToggle: () => { },
+                        }
+                    ]}
                 />
             </div>
             <div className='content'>
@@ -170,6 +187,12 @@ export default function ForumCard({
                     </button>
                 </div>
             </div>
+
+            {openReport &&
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bài viết`} modalStyle={{ scrollbarWidth: 'none' }} innerStyle={{ width: 600 }}>
+                    <ReportModal data={openReport} />
+                </PopupContainer>
+            }
         </div>
     )
 }

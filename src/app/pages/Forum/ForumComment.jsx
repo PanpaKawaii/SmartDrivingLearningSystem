@@ -6,6 +6,8 @@ import AutoResizeTextarea from '../../components/AutoResizeTextarea/AutoResizeTe
 import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import ButtonList from '../../components/ButtonList/ButtonList.jsx';
+import PopupContainer from '../../components/PopupContainer/PopupContainer.jsx';
+import ReportModal from '../../components/ReportModal/ReportModal.jsx';
 
 import './ForumComment.css';
 
@@ -26,6 +28,8 @@ export default function ForumComment({
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [openReport, setOpenReport] = useState(null);
 
     // ==FIX==
     // useEffect(() => {
@@ -183,9 +187,22 @@ export default function ForumComment({
                                             {/* ==FIX== */}
                                             {comment.userId != user?.id &&
                                                 <ButtonList
-                                                    icon={'fa-solid fa-ellipsis-vertical'}
-                                                    onToggle={() => { }}
-                                                    list={['report', 'test']}
+                                                    list={[
+                                                        {
+                                                            name: 'report',
+                                                            onToggle: () => setOpenReport({
+                                                                header: 'Báo cáo bình luận',
+                                                                simulationId: null,
+                                                                forumPostId: null,
+                                                                forumCommentId: comment.id,
+                                                                questionId: null,
+                                                            }),
+                                                        },
+                                                        {
+                                                            name: 'test',
+                                                            onToggle: () => { },
+                                                        }
+                                                    ]}
                                                 />
                                             }
                                         </div>
@@ -261,6 +278,12 @@ export default function ForumComment({
                     </button>
                 </form>
             </div>
+
+            {openReport &&
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bình luận`} modalStyle={{ scrollbarWidth: 'none' }} innerStyle={{ width: 600 }}>
+                    <ReportModal data={openReport} />
+                </PopupContainer>
+            }
         </div>
     )
 }

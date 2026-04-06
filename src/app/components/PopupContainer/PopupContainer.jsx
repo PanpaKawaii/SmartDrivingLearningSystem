@@ -18,6 +18,7 @@ export default function PopupContainer({
                 <div className='inner-popup' style={innerStyle}>
                     {children}
                 </div>
+                <div className='popup-footer'></div>
             </div>
         </div>
     )
