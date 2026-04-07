@@ -27,7 +27,6 @@ export default function LessonQuiz() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -45,14 +44,9 @@ export default function LessonQuiz() {
                 console.log('QuestionResponse', QuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
 
-                // const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
-                // console.log('AnswerResponse', AnswerResponse);
-
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
-                    // const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
                     return {
                         ...q,
-                        // answers: relatedAnswers,
                         index: i + 1,
                     };
                 });
@@ -131,7 +125,6 @@ export default function LessonQuiz() {
                 a => a.answerId == answerId
             );
             const isMultiple = selectedQuestion?.correctAnswer > 1;
-            console.log('isMultiple', isMultiple);
 
             // Không phải dạng multiple → thay thế luôn
 
@@ -214,7 +207,9 @@ export default function LessonQuiz() {
                                     </button>
                                 ))}
                             </div>
-                            <div className={`explanation no-explanation`}>Giải thích: {selectedQuestion?.explanation || 'Không có giải thích'}</div>
+                            <div className={`explanation ${selectedQuestion?.explanation ? '' : 'no-explanation'}`}>
+                                {selectedQuestion?.explanation ? 'Giải thích: ' + selectedQuestion?.explanation : 'Không có giải thích'}
+                            </div>
                         </div>
                         <div className='btns'>
                             <button className='btn-left' onClick={() => handleMoveCard('left')}>Câu trước</button>
