@@ -21,34 +21,29 @@ export default function Hero() {
                         <i className='fa-solid fa-zap' />
                         <span>AI-Powered Training System</span>
                     </div>
-
                     <div className='title'>
                         <h1>
                             <span>Master The Road</span>
                             <span className='gradient'>Drive With Confidence</span>
                         </h1>
                     </div>
-
                     <p className='description'>
                         Experience the future of driver education with AI-powered simulations and personalized learning paths
                     </p>
-
                     <div className='actions'>
-                        <Link to='/learn'>
+                        <Link to='/driving-license'>
                             <button className='primary-btn'>
                                 <i className='fa-solid fa-book-open' />
                                 <span>Start Learning</span>
                             </button>
                         </Link>
-
-                        <Link to='/simulator'>
+                        <Link to='/simulation'>
                             <button className='secondary-btn'>
                                 <i className='fa-solid fa-gamepad' />
                                 <span>Try Simulator</span>
                             </button>
                         </Link>
                     </div>
-
                     <div className='stats'>
                         {stats.map((stat, index) => (
                             <div key={index} className='stat-card'>

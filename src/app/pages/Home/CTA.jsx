@@ -11,18 +11,15 @@ export default function CTA() {
                         <div>Ready to Master</div>
                         <div>the Road?</div>
                     </h2>
-
                     <p className='subtitle'>
                         Join 10,000+ successful learners and start your journey today
                     </p>
-
                     <p className='note'>
                         Free access to all learning materials. No credit card required.
                     </p>
                 </div>
-
                 <div className='actions'>
-                    <Link to='/learn'>
+                    <Link to='/driving-license'>
                         <button className='primary-btn'>
                             <i className='fa-solid fa-zap' />
                             <span>Start Learning Now</span>

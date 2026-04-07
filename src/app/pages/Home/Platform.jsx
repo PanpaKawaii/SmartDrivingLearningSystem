@@ -1,4 +1,3 @@
-
 import './Platform.css';
 
 export default function Platform() {
@@ -43,10 +42,8 @@ export default function Platform() {
     return (
         <div className='platform-container'>
             <section className='container'>
-
                 <div className='glow glow-left' />
                 <div className='glow glow-right' />
-
                 <div className='wrapper'>
                     <div className='header'>
                         <div className='badge'>
@@ -60,7 +57,6 @@ export default function Platform() {
                             Six powerful modules working together to transform you from beginner to confident driver
                         </p>
                     </div>
-
                     <div className='features'>
                         {features.map((feature, index) => (
                             <div

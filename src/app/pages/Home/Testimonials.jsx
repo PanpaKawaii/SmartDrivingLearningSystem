@@ -1,4 +1,3 @@
-
 import './Testimonials.css';
 
 export default function Testimonials() {
@@ -25,12 +24,10 @@ export default function Testimonials() {
     return (
         <div className='testimonials-container'>
             <section className='container'>
-
                 <div className='background'>
                     <div className='glow glow-left' />
                     <div className='glow glow-right' />
                 </div>
-
                 <div className='wrapper'>
                     <div className='header'>
                         <div className='badge'>
@@ -41,7 +38,6 @@ export default function Testimonials() {
                             See what our students say about their experience
                         </p>
                     </div>
-
                     <div className='testimonials'>
                         {testimonials.map((testimonial, index) => (
                             <div
