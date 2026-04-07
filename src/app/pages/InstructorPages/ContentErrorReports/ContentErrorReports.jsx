@@ -1,20 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
-import { postData } from '../../../../mocks/CallingAPI.js';
-import { reportCategories, reports, resolves } from '../../../../mocks/DataSample.js';
+import { fetchData, postData } from '../../../../mocks/CallingAPI.js';
 import '../InstructorPages.css';
 
-const nowAsTimestamp = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-const getReportCategoryName = (reportCategoryId) => {
-    const category = reportCategories.find((item) => item.id === reportCategoryId);
-    return category?.name || 'Khong xac dinh';
+const normalizeItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.items)) return payload.items;
+    return [];
 };
-
-const isCommunityReport = (report) => Boolean(report?.forumPostId || report?.forumCommentId);
 
 const getEntityRoute = (report) => {
     if (report?.questionId) return `/instructor/report-entity/question/${report.questionId}`;
@@ -24,11 +20,35 @@ const getEntityRoute = (report) => {
 
 export default function ContentErrorReports() {
     const { user } = useAuth();
+    const [refresh, setRefresh] = useState(0);
+    const [queryParams, setQueryParams] = useState({
+        page: 1,
+        pageSize: 10,
+    });
+    const [pagingMeta, setPagingMeta] = useState({
+        page: 0,
+        pageSize: 0,
+        totalCount: 0,
+        totalPages: 0,
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const [reportItems, setReportItems] = useState(() => reports.filter((report) => !isCommunityReport(report) && report.reportCategoryId !== 4));
-    const [resolveItems, setResolveItems] = useState(() => [...resolves]);
+    
+    const [reportItems, setReportItems] = useState([]);
+    const [resolveItems, setResolveItems] = useState([]);
+    const [reportCategoryItems, setReportCategoryItems] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [modalMode, setModalMode] = useState('view');
+
+    const reportCategoryNameById = useMemo(() => {
+        return reportCategoryItems.reduce((accumulator, item) => {
+            accumulator[item.id] = item.name;
+            return accumulator;
+        }, {});
+    }, [reportCategoryItems]);
+
+    const getReportCategoryName = (reportCategoryId) => reportCategoryNameById[reportCategoryId] || 'Khong xac dinh';
 
     const resolveByReportId = useMemo(() => {
         return resolveItems.reduce((accumulator, item) => {
@@ -37,8 +57,49 @@ export default function ContentErrorReports() {
         }, {});
     }, [resolveItems]);
 
+    useEffect(() => {
+        (async () => {
+            setError(null);
+            setLoading(true);
+            const token = user?.token || '';
+            try {
+                const query = new URLSearchParams({
+                    page: String(queryParams.page),
+                    pageSize: String(queryParams.pageSize),
+                });
+
+                const [reportCategoriesResponse, reportsResponse, resolvesResponse] = await Promise.all([
+                    fetchData(`ReportCategories?${query.toString()}`, token),
+                    fetchData(`Reports?${query.toString()}`, token),
+                    fetchData(`Resolves?${query.toString()}`, token),
+                ]);
+
+                const reportCategoryApiItems = normalizeItems(reportCategoriesResponse);
+                const reportApiItems = normalizeItems(reportsResponse);
+                const resolveApiItems = normalizeItems(resolvesResponse);
+
+                const contentErrorReports = reportApiItems.filter((report) => Boolean(report?.questionId || report?.simulationId));
+
+                setReportCategoryItems(reportCategoryApiItems);
+                setReportItems(contentErrorReports);
+                setResolveItems(resolveApiItems);
+                setPagingMeta({
+                    page: Number(reportsResponse?.page || queryParams.page),
+                    pageSize: Number(reportsResponse?.pageSize || queryParams.pageSize),
+                    totalCount: Number(reportsResponse?.totalCount || contentErrorReports.length),
+                    totalPages: Math.max(1, Number(reportsResponse?.totalPages || 1)),
+                });
+            } catch (err) {
+                console.error('Error loading content error reports:', err);
+                setError('Khong the tai du lieu bao cao loi noi dung.');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [refresh, user?.token, queryParams.page, queryParams.pageSize]);
+
     const columns = [
-        { key: 'id', label: 'STT', width: '60px' },
+        { key: 'totalCount', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Tiêu đề báo cáo' },
         { key: 'content', label: 'Nội dung' },
         { key: 'userId', label: 'Người báo', width: '110px', render: (val) => `User #${val}` },
@@ -100,30 +161,20 @@ export default function ContentErrorReports() {
             return { error: error?.message || 'Gui resolve that bai.' };
         }
 
-        const timestamp = nowAsTimestamp();
-        const oldResolve = resolveItems.find((item) => Number(item.reportId) === Number(selectedReport.id));
-        const resolveRecord = {
-            id: oldResolve?.id || Date.now(),
-            reportId: selectedReport.id,
-            userId: 1,
-            title,
-            content,
-            createAt: oldResolve?.createAt || timestamp,
-            updateAt: timestamp,
-            status: 1,
-        };
-
-        setResolveItems((current) => [resolveRecord, ...current.filter((item) => Number(item.reportId) !== Number(selectedReport.id))]);
-
-        setReportItems((current) => current.map((item) => (
-            Number(item.id) === Number(selectedReport.id)
-                ? { ...item, status: 1, updateAt: timestamp }
-                : item
-        )));
-
         handleCloseModal();
+        setRefresh((current) => current + 1);
         return { ok: true };
     };
+
+    if (error) {
+        return (
+            <div className='ins-page'>
+                <div className='ins-page-header'>
+                    <div><h1>Báo cáo lỗi nội dung</h1><p>{error}</p></div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className='ins-page'>
@@ -131,7 +182,14 @@ export default function ContentErrorReports() {
                 <div><h1>Báo cáo lỗi nội dung</h1><p>Danh sách lỗi nội dung được báo cáo từ người dùng.</p></div>
             </div>
 
-            <InstructorDataTable title={`Báo cáo lỗi (${reportItems.length})`} columns={columns} data={reportItems} />
+            <InstructorDataTable
+                title={`Báo cáo lỗi (${pagingMeta.totalCount})`}
+                columns={columns}
+                data={reportItems}
+                loading={loading}
+                serverPagination={pagingMeta}
+                onPageChange={(nextPage) => setQueryParams((current) => ({ ...current, page: nextPage }))}
+            />
 
             <ReportFeedbackModal
                 isOpen={!!selectedReport}

@@ -2,7 +2,16 @@ import { useState } from 'react';
 import './InstructorDataTable.css';
 
 export default function InstructorDataTable({
-    title, subtitle, columns, data, actions, onSearch, pageSize = 10
+    title,
+    subtitle,
+    columns,
+    data,
+    actions,
+    onSearch,
+    pageSize = 10,
+    loading = false,
+    serverPagination = null,
+    onPageChange,
 }) {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
@@ -14,14 +23,38 @@ export default function InstructorDataTable({
         })
     );
 
-    const totalPages = Math.ceil(filtered.length / pageSize);
-    const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+    const isServerPagination = Boolean(serverPagination);
+    const currentPage = isServerPagination ? Number(serverPagination?.page || 1) : page;
+    const currentPageSize = isServerPagination ? Number(serverPagination?.pageSize || pageSize) : pageSize;
+    const totalPages = isServerPagination
+        ? Number(serverPagination?.totalPages || 1)
+        : Math.max(1, Math.ceil(filtered.length / currentPageSize));
+    const totalCount = isServerPagination ? Number(serverPagination?.totalCount || 0) : filtered.length;
+
+    const paged = isServerPagination
+        ? data
+        : filtered.slice((currentPage - 1) * currentPageSize, currentPage * currentPageSize);
+
+    const paginationStart = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
+    const paginationButtons = Array.from(
+        { length: Math.min(totalPages, 5) },
+        (_, i) => paginationStart + i,
+    );
 
     const handleSearch = (e) => {
         const val = e.target.value;
         setSearch(val);
         setPage(1);
         if (onSearch) onSearch(val);
+    };
+
+    const goToPage = (nextPage) => {
+        const clamped = Math.max(1, Math.min(totalPages, nextPage));
+        if (isServerPagination) {
+            if (onPageChange) onPageChange(clamped);
+            return;
+        }
+        setPage(clamped);
     };
 
     return (
@@ -56,7 +89,13 @@ export default function InstructorDataTable({
                     </tr>
                 </thead>
                 <tbody>
-                    {paged.length === 0 ? (
+                    {loading ? (
+                        <tr>
+                            <td colSpan={columns.length} style={{ textAlign: 'center', padding: '40px', color: 'var(--ins-on-surface-variant)' }}>
+                                Dang tai du lieu...
+                            </td>
+                        </tr>
+                    ) : paged.length === 0 ? (
                         <tr>
                             <td colSpan={columns.length} style={{ textAlign: 'center', padding: '40px', color: 'var(--ins-on-surface-variant)' }}>
                                 Không có dữ liệu
@@ -67,7 +106,7 @@ export default function InstructorDataTable({
                             <tr key={rIdx}>
                                 {columns.map((col, cIdx) => (
                                     <td key={cIdx}>
-                                        {col.render ? col.render(row[col.key], row) : row[col.key]}
+                                        {col.render ? col.render(row[col.key], row, rIdx, currentPage, currentPageSize) : row[col.key]}
                                     </td>
                                 ))}
                             </tr>
@@ -78,22 +117,25 @@ export default function InstructorDataTable({
 
             <div className='ins-data-table-footer'>
                 <div className='ins-data-table-info'>
-                    Hiển thị {paged.length} trong tổng số {filtered.length} kết quả
+                    {loading
+                        ? 'Dang tai du lieu...'
+                        : `Trang ${currentPage}, pageSize ${currentPageSize}, tong ${totalCount} ket qua`}
                 </div>
                 <div className='ins-data-table-pagination'>
-                    <button onClick={() => setPage(Math.max(1, page - 1))} disabled={page === 1}>
+                    <button onClick={() => goToPage(currentPage - 1)} disabled={loading || currentPage === 1}>
                         <i className='fa-solid fa-chevron-left'></i>
                     </button>
-                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map((p) => (
+                    {paginationButtons.map((p) => (
                         <button
                             key={p}
-                            className={page === p ? 'active' : ''}
-                            onClick={() => setPage(p)}
+                            className={currentPage === p ? 'active' : ''}
+                            disabled={loading}
+                            onClick={() => goToPage(p)}
                         >
                             {p}
                         </button>
                     ))}
-                    <button onClick={() => setPage(Math.min(totalPages, page + 1))} disabled={page === totalPages}>
+                    <button onClick={() => goToPage(currentPage + 1)} disabled={loading || currentPage === totalPages}>
                         <i className='fa-solid fa-chevron-right'></i>
                     </button>
                 </div>
