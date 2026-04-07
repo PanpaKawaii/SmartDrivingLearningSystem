@@ -218,23 +218,6 @@
                     box-shadow: 0 2px 10px #00000014;
                     backdrop-filter: blur(10px);
                     border: 1px solid #2563eb1a;
-
-                    .logo-bot {
-                        width: 20px;
-                        height: 20px;
-                        color: #FFC800;
-                        font-size: .625rem;
-                        font-weight: bold;
-                        text-align: center;
-                        align-content: center;
-                        text-shadow: 1px 1px 1px #FF960080;
-                        overflow: hidden;
-                        border-radius: 50%;
-                        background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
-                        position: absolute;
-                        top: -6px;
-                        left: -10px;
-                    }
                 }
             }
 
@@ -251,23 +234,6 @@
                 backdrop-filter: blur(10px);
                 border: 1px solid #2563eb1a;
                 box-shadow: 0 2px 10px #00000014;
-
-                .logo-bot {
-                    width: 20px;
-                    height: 20px;
-                    color: #FFC800;
-                    font-size: .625rem;
-                    font-weight: bold;
-                    text-align: center;
-                    align-content: center;
-                    text-shadow: 1px 1px 1px #FF960080;
-                    overflow: hidden;
-                    border-radius: 50%;
-                    background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
-                    position: absolute;
-                    top: -6px;
-                    left: -10px;
-                }
 
                 .dot {
                     width: 6px;
@@ -288,6 +254,26 @@
                     &:nth-child(3) {
                         animation-delay: 0s;
                     }
+                }
+            }
+
+            .message,
+            .typing-indicator {
+                .logo-bot {
+                    width: 20px;
+                    height: 20px;
+                    color: #80FCFF;
+                    font-size: .625rem;
+                    font-weight: bold;
+                    text-align: center;
+                    align-content: center;
+                    text-shadow: 0 0 4px #80FCFF40;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
+                    position: absolute;
+                    top: -6px;
+                    left: -10px;
                 }
             }
         }

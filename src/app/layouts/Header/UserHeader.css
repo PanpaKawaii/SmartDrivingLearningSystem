@@ -79,16 +79,17 @@
             }
         }
 
-        .user-profile {
+        .user-profile-link {
             display: flex;
-            align-items: center;
+            align-items: start;
             gap: 8px;
+            cursor: pointer;
 
             .avatar {
-                width: 48px;
-                height: 48px;
-                min-width: 48px;
-                min-height: 48px;
+                width: 44px;
+                height: 44px;
+                min-width: 44px;
+                min-height: 44px;
                 border-radius: 50%;
                 border: 2px solid #80808080;
                 box-sizing: border-box;
@@ -100,12 +101,22 @@
                 }
             }
 
-            span {
-                background-color: #ff8000;
-                width: 100px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .name-role {
+
+                .name {
+                    width: 200px;
+                    color: var(--text-primary);
+                    /* background-color: #ff8000; */
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .role {
+                    color: var(--text-secondary);
+                    /* background-color: #ff8080; */
+                    font-size: .75rem;
+                }
             }
         }
 

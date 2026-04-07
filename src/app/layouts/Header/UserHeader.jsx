@@ -6,12 +6,12 @@ import LOGO from '../../assets/Logo.png';
 import './UserHeader.css';
 
 export default function UserHeader({
-    setLoginOpen = () => {},
+    setLoginOpen = () => { },
 }) {
     const { logout, user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    // console.log('Header', location.pathname);
+    // console.log('UserHeader', location.pathname);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const menuItems = [
@@ -21,8 +21,8 @@ export default function UserHeader({
         { name: 'FORUM', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'LEARNING', icon: 'book-open', iconType: 'solid', path: '/learning' },
 
-        { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
-        { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
+        // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
+        // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
         { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
@@ -63,11 +63,14 @@ export default function UserHeader({
                 </div>
 
                 {/* ==FIX== */}
-                <div className='user-profile'>
+                <div className='user-profile-link'>
                     <div className='avatar'>
                         <img src={'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={user?.name} />
                     </div>
-                    <span>{user?.name || 'THIS IS USER NAME'}</span>
+                    <div className='name-role'>
+                        <div className='name'>{user?.name || 'THIS IS USER NAME'}</div>
+                        <div className='role'>{user?.role || 'This is role'}</div>
+                    </div>
                 </div>
 
                 <button className='login-btn' onClick={() => setLoginOpen(true)}>

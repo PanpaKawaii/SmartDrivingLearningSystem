@@ -6,7 +6,6 @@ import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/Control
 import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
 
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
-import Header from '../layouts/Header/Header.jsx'
 import UserHeader from '../layouts/Header/UserHeader.jsx'
 import Footer from '../layouts/Footer/Footer.jsx'
 
@@ -96,29 +95,6 @@ export default function MainRoutes() {
                 </Route>
             </Routes>
             <BoxChat />
-            {/* <UserLayout>
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/core-learning' element={<CoreLearning />} />
-                    <Route path='/learning-question' element={<LearningQuestion />} />
-                    <Route path='/learning-sign' element={<LearningSign />} />
-                    <Route path='/list-exam' element={<ListExam />} />
-                    <Route path='/list-exam/:id' element={<ExamTemp />} />
-                    <Route path='/forum' element={<Forum />} />
-                    <Route path='/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
-                    <Route path='*' element={<></>} />
-                </Routes>
-            </UserLayout>
-            <Routes>
-                <Route path='/three-scene' element={<ThreeScene />} />
-                <Route path='/car' element={<CarScene />} />
-
-                <Route path='admin' element={<AdminSideBar />} >
-                    <Route index element={<Navigate to='user-management' replace />} />
-                    <Route path='user-management' element={<UserManagement />} />
-                    <Route path='question-management' element={<QuestionManagement />} />
-                </Route>
-            </Routes> */}
         </BrowserRouter>
     )
 }

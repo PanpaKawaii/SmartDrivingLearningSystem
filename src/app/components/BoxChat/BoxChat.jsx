@@ -223,7 +223,7 @@ export default function BoxChat() {
                                 className={`message ${idx % 2 === 0 ? 'bot-message' : 'user-message'}`}
                             >
                                 <div>{renderFormattedText(msg)}</div>
-                                <div className='logo-bot'><i className='fa-solid fa-star' /></div>
+                                <div className='logo-bot'><i className='fa-solid fa-cube' /></div>
                             </div>
                         ))}
                         {loading && (
@@ -231,7 +231,7 @@ export default function BoxChat() {
                                 <div className='dot'></div>
                                 <div className='dot'></div>
                                 <div className='dot'></div>
-                                <div className='logo-bot'><i className='fa-solid fa-star' /></div>
+                                <div className='logo-bot'><i className='fa-solid fa-cube' /></div>
                             </div>
                         )}
                     </div>
