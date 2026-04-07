@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { deleteData, fetchData, postData } from '../../../mocks/CallingAPI.js';
-import { comments } from '../../../mocks/DataSample.js';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea/AutoResizeTextarea.jsx';
 import TrafficLight from '../../components/TrafficLight/TrafficLight.jsx';
@@ -13,6 +12,7 @@ import './ForumComment.css';
 
 export default function ForumComment({
     post = {},
+    setSelectedPost = () => { },
 }) {
     const { user } = useAuth();
 
@@ -94,25 +94,24 @@ export default function ForumComment({
         })();
     }, [refresh, user?.token]);
 
-    // ==FIX==
-    const SubmitComment = async (Content, Answer) => {
+    const SubmitComment = async (Content, ReplyId) => {
         const CommentData = {
-            id: crypto.randomUUID(),
             content: Content,
-            answer: Answer,
-            questionId: post?.id,
-            userId: user?.id,
-            createAt: new Date().toLocaleDateString()
+            replyId: ReplyId,
+            forumPostId: post?.id,
         };
         console.log('CommentData:', CommentData);
-        setCOMMENTs(prev => [...prev, CommentData]);
+        // setCOMMENTs(prev => [...prev, CommentData]);
 
         setLoading(true);
         const token = user?.token || '';
+        console.log('token', token);
+
         try {
-            const result = await postData('api/comment', CommentData, token);
+            const result = await postData('ForumComments', CommentData, token);
             console.log('result', result);
 
+            setSelectedPost(p => { return { ...p, commentCount: p.commentCount + 1 } });
             setRefresh(p => p + 1);
             await sleep(500);
         } catch (error) {
@@ -127,14 +126,15 @@ export default function ForumComment({
 
     // ==FIX==
     const TakeDownComment = async (CommentId) => {
-        setCOMMENTs(prev => prev.filter(comment => comment.id != CommentId));
+        // setCOMMENTs(prev => prev.filter(comment => comment.id != CommentId));
 
         setLoading(true);
         const token = user?.token || '';
         try {
-            const result = await deleteData(`api/comment/${CommentId}`, token);
+            const result = await deleteData(`ForumComments/${CommentId}`, token);
             console.log('result', result);
 
+            setSelectedPost(p => { return { ...p, commentCount: p.commentCount - 1 } });
             setRefresh(p => p + 1);
         } catch (error) {
             console.error('Error', error);
@@ -149,22 +149,22 @@ export default function ForumComment({
         refReply.current?.focus();
     };
 
-    const handleSubmitComment = (refReplyContent, answerInputComment) => {
+    const handleSubmitComment = (refReplyContent, replyInputComment) => {
         const Content = refReplyContent;
-        const Answer = answerInputComment;
+        const ReplyId = replyInputComment;
         console.log({
             Content,
-            Answer,
+            ReplyId,
         });
         if (!Content) return;
-        SubmitComment(Content, Answer);
+        SubmitComment(Content, ReplyId);
         setInputComment(null);
         refComment.current.value = '';
         refComment.current.style.height = 'auto';
     };
 
     function getChildrenComment(Id, num) {
-        const ChildrenComment = COMMENTs.filter(comment => comment.answer == Id);
+        const ChildrenComment = COMMENTs.filter(comment => comment.replyId == Id);
         return (
             <>
                 {ChildrenComment.map((comment, i) => (
@@ -179,9 +179,9 @@ export default function ForumComment({
                             <div key={i} className='content'>
                                 <div className='image head-block'>
                                     <img src={comment.user?.image || DefaultAvatar} alt={comment.user?.email} />
-                                    <div className={`vertical-line ${(COMMENTs.filter(c => c.answer == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
+                                    <div className={`vertical-line ${(COMMENTs.filter(c => c.replyId == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
                                 </div>
-                                <div>
+                                <div className='comment-block'>
                                     {/* ==FIX== */}
                                     <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
                                         <div className='name-btn-list'>
@@ -209,21 +209,16 @@ export default function ForumComment({
                                             }
                                         </div>
                                         <div className='commentcontent'>{comment.content}</div>
-                                        {/* <div className='vote-icon'>
-                                            <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length || 0}</div>
-                                            <i className='fa-solid fa-circle-arrow-up' />
-                                        </div> */}
-                                        {/* <div>num:{num} - i:{i} - parent-child:{ChildrenComment.length} - {comment.content}</div> */}
                                     </div>
                                     <div className='commentdate-btn'>
                                         <div className='vote-icon'>
                                             <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length?.toLocaleString() || 0}</div>
                                             {/* ==FIX== */}
-                                            <button className='vote-btn' onClick={() => { alert('Voted!') }}>
+                                            <button className='vote-btn' onClick={() => { alert('Voted!') }} disabled={!user}>
                                                 <i className={`fa-${comment.commentVotes?.some(c => c.userId == user?.id) ? 'solid' : 'regular'} fa-circle-up`} />
                                             </button>
                                         </div>
-                                        <div className='commentdate'>{comment.createAt}</div>
+                                        <div className='commentdate'>{comment.createAt?.split('T')?.[0]}</div>
                                         <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
                                         {/* ==FIX== */}
                                         {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
@@ -233,7 +228,7 @@ export default function ForumComment({
                             {comment.id == inputComment &&
                                 <div className='questions'>
                                     <div className='head-block'>
-                                        <div className={`vertical-line ${COMMENTs.filter(c => c.answer == comment.id)?.length == 0 ? 'no-line' : 'line-full'}`}></div>
+                                        <div className={`vertical-line ${COMMENTs.filter(c => c.replyId == comment.id)?.length == 0 ? 'no-line' : 'line-full'}`}></div>
                                         <div className='horizon-line'></div>
                                     </div>
                                     <div className='next-reply'>
@@ -273,16 +268,16 @@ export default function ForumComment({
                 <div className='image head-block'>
                     <img src={user?.image || DefaultAvatar} alt={user?.email} />
                 </div>
-                <form className='comment-area'>
+                <div className='comment-area'>
                     <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
                     <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
                         ĐĂNG
                     </button>
-                </form>
+                </div>
             </div>
 
             {openReport &&
-                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bình luận`} modalStyle={{ scrollbarWidth: 'none' }} innerStyle={{ width: 600 }}>
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bình luận`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
                     <ReportModal data={openReport} />
                 </PopupContainer>
             }

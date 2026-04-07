@@ -122,7 +122,7 @@ export default function Forum() {
             {selectedPost && (
                 <PopupContainer onClose={() => setSelectedPost(null)} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
                     <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} showReportButton={false} />
-                    <ForumComment post={selectedPost} />
+                    <ForumComment post={selectedPost} setSelectedPost={setSelectedPost} />
                 </PopupContainer>
             )}
         </div>

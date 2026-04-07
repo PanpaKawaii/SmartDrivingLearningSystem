@@ -36,7 +36,7 @@
             }
 
             .name {
-                margin: 0 0 4px;
+                margin: 0 0 2px;
                 font-weight: bold;
             }
 
@@ -74,39 +74,62 @@
         }
     }
 
-    .react-count {
-        padding: 0 20px;
+    .reacts-comments {
         display: flex;
-        justify-content: start;
-        align-items: center;
-        background-color: transparent;
 
-        .count {
-            margin: 0 0 0 8px;
-            color: var(--text-secondary);
+        .react-count {
+            padding: 0 20px;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            background-color: transparent;
+
+            .count {
+                margin: 0 0 0 8px;
+                color: var(--text-secondary);
+            }
+
+            i {
+                margin-left: -8px;
+                padding: 2px;
+                font-size: 1.2rem;
+                background-clip: text;
+                background: var(--background);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                filter: drop-shadow(0 0 4px #00000080);
+                position: relative;
+
+                &.fa-circle::after {
+                    content: '';
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    width: .37rem;
+                    height: .37rem;
+                    background-color: #FFDA72;
+                    border-radius: 50%;
+                }
+            }
         }
 
-        i {
-            margin-left: -8px;
-            padding: 2px;
-            font-size: 1.2rem;
-            background-clip: text;
-            background: var(--background);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 4px #00000080);
-            position: relative;
+        .comment-count {
+            padding: 0 20px;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            background-color: transparent;
 
-            &.fa-circle::after {
-                content: '';
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                width: .37rem;
-                height: .37rem;
-                background-color: #FFDA72;
-                border-radius: 50%;
+            .count {
+                margin: 0 0 0 8px;
+                color: var(--text-secondary);
+            }
+
+            i {
+                padding: 2px;
+                font-size: 1.2rem;
+                color: var(--text-secondary);
             }
         }
     }

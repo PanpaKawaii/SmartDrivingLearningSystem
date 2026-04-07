@@ -85,9 +85,7 @@ export default function ForumCard({
                         <img src={post.user?.image || DefaultAvatar} alt={post.user?.email} />
                     </div>
                     <div>
-                        {/* ==FIX== */}
-                        {/* <div className='name'>{post.user?.name || post.user?.email}</div> */}
-                        <div className='name'>{user?.name || user?.email}</div>
+                        <div className='name'>{post?.user?.name}</div>
                         <div className='topic'>{post.forumTopic?.name}</div>
                     </div>
                 </div>
@@ -121,7 +119,7 @@ export default function ForumCard({
                 </div>
             </div>
             {/* ==FIX== */}
-            {post.postReacts?.length !== 0 &&
+            <div className='reacts-comments'>
                 <button className='react-count' onClick={() => setSelectedPost(post)}>
                     {postReacts?.map((react, index) => (
                         <span
@@ -137,9 +135,15 @@ export default function ForumCard({
                             />
                         </span>
                     ))}
-                    <span className='count'>{post.postReacts?.length?.toLocaleString()}</span>
+                    <span className='count'>{post.postReacts?.length?.toLocaleString() || 0}</span>
                 </button>
-            }
+                <button className='comment-count' onClick={() => setSelectedPost(post)}>
+                    <span>
+                        <i className='fa-solid fa-comment' />
+                    </span>
+                    <span className='count'>{post.commentCount?.toLocaleString() || 0}</span>
+                </button>
+            </div>
             <div className='react-comment'>
                 <div
                     className='button-wrapper'
@@ -150,6 +154,7 @@ export default function ForumCard({
                         className='main-btn'
                         style={{ backgroundColor: reaction ? reaction?.color + '66' : '#ffffff20' }}
                         onClick={() => handleClickReact({ id: 'Like', icon: 'fa-solid fa-thumbs-up', color: '#538DFF', background: 'linear-gradient(to bottom, #538DFF, #538DFF)', force: false, })}
+                        disabled={!user}
                     >
                         {reaction ?
                             <>
@@ -173,6 +178,7 @@ export default function ForumCard({
                                         className='btn-item'
                                         style={{ animationDelay: `${index * 0.1}s` }}
                                         onClick={() => handleClickReact(item)}
+                                        disabled={!user}
                                     >
                                         <i className={item.icon} style={{ color: item.color, animationDelay: `${index * 0.1}s`, '--background': item.background }} />
                                     </button>
@@ -189,7 +195,7 @@ export default function ForumCard({
             </div>
 
             {openReport &&
-                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bài viết`} modalStyle={{ scrollbarWidth: 'none' }} innerStyle={{ width: 600 }}>
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bài viết`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
                     <ReportModal data={openReport} />
                 </PopupContainer>
             }
