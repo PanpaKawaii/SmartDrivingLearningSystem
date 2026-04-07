@@ -1,6 +1,8 @@
 const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
-console.log(apiUrl);
+if (import.meta.env.DEV) {
+    console.log('API URL:', apiUrl);
+}
 
 // Hàm gọi API GET
 export const fetchData = async (endpoint, token) => {

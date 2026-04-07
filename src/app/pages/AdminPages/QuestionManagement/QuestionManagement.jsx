@@ -18,13 +18,12 @@ export default function QuestionManagement() {
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
     const [QUESTIONCATEGORIes, setQUESTIONCATEGORIes] = useState([]);
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
     const [editing, setEditing] = useState(null);
     const [creating, setCreating] = useState(false);
     const [popupProps, setPopupProps] = useState(null);
-    const DefaultAvatar = 'https://static.vecteezy.com/system/resources/previews/048/044/477/non_2x/pixel-art-traffic-light-game-asset-design-vector.jpg';
 
     useEffect(() => {
         (async () => {

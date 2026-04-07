@@ -2,11 +2,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 
-import ControlledVideo from '../pages/ControlledVideo/ControlledVideo.jsx'
+import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/ControlledVideo.jsx'
 import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
 
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
-import Header from '../layouts/Header/Header.jsx'
 import UserHeader from '../layouts/Header/UserHeader.jsx'
 import Footer from '../layouts/Footer/Footer.jsx'
 
@@ -42,7 +41,7 @@ import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagem
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
 
 import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
-import ForumPopup from '../pages/Forum/ForumPopup.jsx'
+import ForumComment from '../pages/Forum/ForumComment.jsx'
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
 import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
@@ -100,8 +99,6 @@ export default function MainRoutes() {
                      {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} />  */}
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
-                    <Route path='learning/list-simulation' element={<ControlledVideo />} />
-                     {/* <Route path='learning/list-simulation/:id' element={<ControlledVideo />} />  */}
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
                 </Route>  
@@ -140,30 +137,6 @@ export default function MainRoutes() {
                 </Route>
             </Routes>
             <BoxChat />
-            {/* <UserLayout>
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/core-learning' element={<CoreLearning />} />
-                    <Route path='/learning-question' element={<LearningQuestion />} />
-                    <Route path='/learning-sign' element={<LearningSign />} />
-                    <Route path='/list-exam' element={<ListExam />} />
-                    <Route path='/list-exam/:id' element={<ExamTemp />} />
-                    <Route path='/forum' element={<Forum />} />
-                    <Route path='/controlled-video' element={<ControlledVideo />} />
-                    <Route path='/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
-                    <Route path='*' element={<></>} />
-                </Routes>
-            </UserLayout>
-            <Routes>
-                <Route path='/three-scene' element={<ThreeScene />} />
-                <Route path='/car' element={<CarScene />} />
-
-                <Route path='admin' element={<AdminSideBar />} >
-                    <Route index element={<Navigate to='user-management' replace />} />
-                    <Route path='user-management' element={<UserManagement />} />
-                    <Route path='question-management' element={<QuestionManagement />} />
-                </Route>
-            </Routes> */}
         </BrowserRouter>
     )
 }

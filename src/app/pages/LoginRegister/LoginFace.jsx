@@ -45,17 +45,21 @@ export default function LoginFace({
 
         try {
             setLoading(true);
-            const result = await postData('api/user/login', LoginData, '');
+            const loginQuery = new URLSearchParams(LoginData);
+            const result = await postData(`auth/login?${loginQuery}`, LoginData, '');
             console.log('result', result);
 
-            if (result?.status == 0) {
+            if (result?.user?.status == 0) {
                 console.error('Tài khoản này đã bị vô hiệu hóa');
                 setLoginError({ value: 'Tài khoản này đã bị vô hiệu hóa', name: 'Email, Password' });
                 return;
             }
 
-            login(result);
-            navigate('/profile');
+            login({ ...result?.user, token: result?.accessToken, refreshToken: result?.refreshToken });
+
+            if (result.user.roleName == 'User') navigate('/profile');
+            else if (result.user.roleName == 'Instructor') navigate('/instructor');
+            else if (result.user.roleName == 'Admin') navigate('/admin');
         } catch (error) {
             console.error('Login failed:', error);
             setLoginError({ value: 'Đăng nhập thất bại', name: 'Email, Password' });
@@ -77,15 +81,6 @@ export default function LoginFace({
         setRemember(p => !p);
     };
 
-    // const changePasswordType = () => {
-    //     const passwordInput = document.querySelector('input[name="password"]');
-    //     if (passwordInput.type === 'password') {
-    //         passwordInput.type = 'text';
-    //     } else {
-    //         passwordInput.type = 'password';
-    //     }
-    // };
-
     return (
         <div className='login-face-container'>
             <h1>ĐĂNG NHẬP</h1>
@@ -97,7 +92,7 @@ export default function LoginFace({
                 <div className='form-group'>
                     <input type={passwordVisible ? 'text' : 'password'} name='password' placeholder='' />
                     <label htmlFor={'password'} style={{ color: loginError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
-                    <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'}`} onClick={() => setPasswordVisible(p => !p)} />
+                    <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'} eye-btn`} onClick={() => setPasswordVisible(p => !p)} />
                 </div>
                 <div className='form-check'>
                     <div className='checkbox-container'>

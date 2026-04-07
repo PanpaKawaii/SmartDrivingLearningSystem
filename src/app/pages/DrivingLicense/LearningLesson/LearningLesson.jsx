@@ -54,6 +54,7 @@ export default function LearningLesson() {
                 const questionQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
+                    status: 1,
                 });
                 const ThisQuestionLessonResponse = await fetchData(`QuestionLessons/${questionLessonId}`, token);
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
@@ -81,7 +82,7 @@ export default function LearningLesson() {
                 setLoading(false);
             };
         })();
-    }, [refresh, user?.id]);
+    }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>

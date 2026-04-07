@@ -3,16 +3,4 @@
         width: 200px;
         height: 200px;
     }
-
-    i {
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        align-content: center;
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: .825rem;
-    }
 }

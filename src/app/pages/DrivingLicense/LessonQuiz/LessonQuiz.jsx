@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
-import ProgressBar from '../../../components/ProgressBar';
+import ProgressBar from '../../../components/ProgressBar/ProgressBar';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -49,6 +49,8 @@ export default function LessonQuiz() {
                 const questionQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
+                    lessonId: questionLessonId,
+                    status: 1,
                 });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
@@ -57,7 +59,7 @@ export default function LessonQuiz() {
                 // const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
                 // console.log('AnswerResponse', AnswerResponse);
 
-                const QuestionsAnswers = QuestionItems.filter(q => q.questionLessonId == questionLessonId).map((q, i) => {
+                const QuestionsAnswers = QuestionItems.map((q, i) => {
                     // const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
                     return {
                         ...q,
@@ -86,7 +88,7 @@ export default function LessonQuiz() {
                 setLoading(false);
             };
         })();
-    }, [refresh, user?.id]);
+    }, [refresh, user?.token]);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     console.log('selectedQuestion', selectedQuestion);

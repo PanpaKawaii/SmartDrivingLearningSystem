@@ -4,7 +4,7 @@ import { fetchData } from '../../../mocks/CallingAPI';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
-import ControlledVideo from '../ControlledVideo/ControlledVideo';
+import ControlledVideo from './ControlledVideo/ControlledVideo';
 import ListScenario from './ListScenario';
 
 import './SimulationScenario.css';
@@ -15,7 +15,7 @@ export default function SimulationScenario() {
     const [SIMULATIONSCENARIOs, setSIMULATIONSCENARIOs] = useState([]);
     const [selectedScenarioId, setSelectedScenarioId] = useState(null);
     const [refresh, setRefresh] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [errorFunction, setErrorFunction] = useState(null);
 
@@ -41,6 +41,7 @@ export default function SimulationScenario() {
                 // const simulationScenarioQuery = new URLSearchParams({
                 //     page: '1',
                 //     pageSize: '500',
+                //     status: 1,
                 // });
                 // const SimulationScenarioResponse = await fetchData(`SimulationScenarios?${simulationScenarioQuery.toString()}`, token);
                 // console.log('SimulationScenarioResponse', SimulationScenarioResponse);

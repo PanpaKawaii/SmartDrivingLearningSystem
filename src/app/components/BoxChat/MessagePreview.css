@@ -1,7 +1,7 @@
 .message-preview {
     position: absolute;
-    bottom: 40px;
-    right: 120px;
+    bottom: 0;
+    right: 80px;
     width: 300px;
     height: fit-content;
     padding: 8px 16px;
@@ -14,7 +14,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    animation: messagePreviewFadeInOut 3s ease forwards;
+    animation: messagePreviewFadeInOut 5s ease forwards;
 }
 
 @keyframes messagePreviewFadeInOut {
@@ -28,6 +28,28 @@
         opacity: 1;
         transform: translateX(0);
     }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        opacity: 0.7;
+    }
+
+    30%,
+    50%,
+    70% {
+        opacity: 1;
+    }
+
+    /* 30%,
+    70% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    } */
 
     100% {
         opacity: 0;

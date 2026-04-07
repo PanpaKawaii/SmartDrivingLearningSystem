@@ -1,4 +1,3 @@
-
 import './Journey.css';
 
 export default function Journey() {
@@ -29,7 +28,6 @@ export default function Journey() {
                     <div className='glow glow-top' />
                     <div className='glow glow-bottom' />
                 </div>
-
                 <div className='wrapper'>
                     <div className='header'>
                         <div className='badge'>
@@ -43,7 +41,6 @@ export default function Journey() {
                             Master driving faster with our proven learning methodology
                         </p>
                     </div>
-
                     <div className='steps'>
                         <div className='line' />
                         {steps.map((item, index) => (

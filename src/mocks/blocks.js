@@ -166,6 +166,12 @@ export const block2 = [
                 "type": "translateZ",
                 "value": "41",
                 "visible": 1
+            },
+            {
+                "id": "59a0f545-16f4-42ab-8245-e5e67f23af28",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
             }
         ]
     },
@@ -228,6 +234,12 @@ export const block2 = [
                 "type": "translateZ",
                 "value": "41",
                 "visible": 1
+            },
+            {
+                "id": "a02d7869-a99f-45e6-8b72-f732b6f44a6b",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
             }
         ]
     },
@@ -258,6 +270,12 @@ export const block2 = [
                 "id": "d0db72fd-5551-4e5d-a7ef-9e671e61ae06",
                 "type": "translateZ",
                 "value": "41",
+                "visible": 1
+            },
+            {
+                "id": "a02d7869-a99f-45e6-8b72-f732b6f44a6b",
+                "type": "rotateZ",
+                "value": "90",
                 "visible": 1
             }
         ]

@@ -1,18 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import LOGO from '../../assets/Logo.png';
 
 import './UserHeader.css';
 
 export default function UserHeader({
-    setLoginOpen = () => {},
+    setLoginOpen = () => { },
 }) {
     const { logout, user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    // console.log('Header', location.pathname);
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [showProfileList, setShowProfileList] = useState(false);
+
+    const handleClick = (item) => {
+        item.onToggle();
+        setShowProfileList(false);
+    };
+
+    const profileList = [
+        { name: 'Profile', onToggle: () => navigate('profile'), },
+        { name: 'Logout', onToggle: () => logout(), },
+    ];
 
     const menuItems = [
         { name: 'HOME', icon: 'house', iconType: 'solid', path: '/' },
@@ -21,25 +33,26 @@ export default function UserHeader({
         { name: 'FORUM', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'LEARNING', icon: 'book-open', iconType: 'solid', path: '/learning' },
 
-        { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
-        { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
+        // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
+        // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
         { name: 'INSTRUCTOR', icon: 'chalkboard-user', iconType: 'solid', path: '/instructor' },
         { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 
-    // useEffect(() => {
-    //     const UserSession = localStorage.getItem('user');
-    //     if (!UserSession) navigate('/');
-    //     else if (user?.role === 'admin') navigate('/admin/user-management');
-    // }, [user?.id]);
+    useEffect(() => {
+        const UserSession = localStorage.getItem('user');
+        if (!UserSession) navigate('/');
+        else if (user?.roleName == 'Instructor') navigate('/instructor');
+        else if (user?.roleName == 'Admin') navigate('/admin');
+    }, [user?.id]);
 
     return (
         <nav className='user-header-container'>
             <div className='nav-wrapper'>
                 <Link to='/'>
-                    <div className='logo-icon'>
-                        <i className='fa-solid fa-car' />
+                    <div className='logo'>
+                        <img src={LOGO} />
                     </div>
                     <span className='logo-text'>GREENLIGHT</span>
                 </Link>
@@ -64,17 +77,29 @@ export default function UserHeader({
                 </div>
 
                 {/* ==FIX== */}
-                <div className='user-profile'>
-                    <div className='avatar'>
-                        <img src={'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={user?.name} />
+                {user ?
+                    <div className='user-profile-link' onClick={() => setShowProfileList(p => !p)}>
+                        <div className='avatar'>
+                            <img src={user?.avatar || DefaultAvatar} alt={user?.name} />
+                        </div>
+                        <div className='name-role'>
+                            <div className='name'>{user?.name || 'THIS IS USER NAME'}</div>
+                            <div className='role'>{user?.roleName || 'This is role'}</div>
+                        </div>
+                        <div className='list-button'>
+                            {showProfileList && profileList?.map((item, index) => (
+                                <button className='item' key={index} onClick={() => handleClick(item)}>
+                                    {item.name?.toUpperCase()}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                    <span>{user?.name || 'THIS IS USER NAME'}</span>
-                </div>
-
-                <button className='login-btn' onClick={() => setLoginOpen(true)}>
-                    <i className='fa-solid fa-user' />
-                    <span>LOGIN</span>
-                </button>
+                    :
+                    <button className='login-btn' onClick={() => setLoginOpen(true)}>
+                        <i className='fa-solid fa-user' />
+                        <span>LOGIN</span>
+                    </button>
+                }
 
                 <button
                     className='mobile-toggle'

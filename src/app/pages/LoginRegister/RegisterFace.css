@@ -1,6 +1,7 @@
 .register-face-container {
     form {
         .gender-group {
+            margin: 0 0 4px;
             display: flex;
             justify-content: space-between;
             gap: 12px;
@@ -52,7 +53,7 @@
     }
 
     .form-otp {
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         bottom: 0;
@@ -65,12 +66,12 @@
         align-items: center;
         padding: 40px;
         box-sizing: border-box;
+        backdrop-filter: blur(4px);
 
         .otp-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
 
             .close-otp {
                 position: absolute;
@@ -82,6 +83,10 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
+            }
+
+            h2 {
+                margin: 0 0 20px;
             }
 
             .otp-inputs {
@@ -107,8 +112,22 @@
                 }
             }
 
+            .message {
+                height: 20px;
+                margin: 8px 0;
+                font-weight: bold;
+
+                &.error-message {
+                    color: #ff4d4f;
+                }
+
+                &.success-message {
+                    color: #52c41a;
+                }
+            }
+
             .submit-btn {
-                padding: 10px 20px;
+                padding: 10px 80px;
                 color: #fff;
                 background: linear-gradient(90deg, #2563eb, #0891b2);
                 border-radius: 6px;
