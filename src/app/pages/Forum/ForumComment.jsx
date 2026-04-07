@@ -13,6 +13,7 @@ import './ForumComment.css';
 export default function ForumComment({
     post = {},
     setSelectedPost = () => { },
+    setRefreshParent = () => { },
 }) {
     const { user } = useAuth();
 
@@ -30,39 +31,6 @@ export default function ForumComment({
     const [error, setError] = useState(null);
 
     const [openReport, setOpenReport] = useState(null);
-
-    // ==FIX==
-    // useEffect(() => {
-    //     (async () => {
-    //         setError(null);
-    //         setLoading(true);
-    //         const token = user?.token || '';
-    //         try {
-    //             console.log('loading');
-    //             if (!user?.id || !token || !post?.id) return;
-    //             console.log('access');
-    //             const listuser = await fetchData('listuser', token);
-    //             const commentData = await fetchData(`api/comment/question/${post?.id}`, token);
-    //             console.log('commentData', commentData);
-
-    //             // ==FIX==
-    //             const mergedListComment = commentData.map(comment => {
-    //                 const matchedUser = listuser.find(user => user.id == comment.userId);
-    //                 return {
-    //                     ...comment,
-    //                     user: matchedUser
-    //                 };
-    //             });
-
-    //             // setCOMMENTs(mergedListComment.sort((a, b) => new Date(a.createAt) - new Date(b.createAt)));
-    //         } catch (error) {
-    //             console.error('Error', error);
-    //             setError(error);
-    //         } finally {
-    //             setLoading(false);
-    //         };
-    //     })();
-    // }, [refresh, user?.token]);
 
     useEffect(() => {
         (async () => {
@@ -82,7 +50,7 @@ export default function ForumComment({
 
                 const ForumComment = ForumCommentItems.map(fp => ({
                     ...fp,
-                }));
+                })).sort((a, b) => new Date(a.updateAt) - new Date(b.updateAt));
 
                 setCOMMENTs(ForumComment);
             } catch (error) {
@@ -101,7 +69,6 @@ export default function ForumComment({
             forumPostId: post?.id,
         };
         console.log('CommentData:', CommentData);
-        // setCOMMENTs(prev => [...prev, CommentData]);
 
         setLoading(true);
         const token = user?.token || '';
@@ -122,23 +89,20 @@ export default function ForumComment({
         };
     };
 
-    // ==FIX==
     const TakeDownComment = async (CommentId) => {
-        // setCOMMENTs(prev => prev.filter(comment => comment.id != CommentId));
-
         setLoading(true);
         const token = user?.token || '';
         try {
             const result = await deleteData(`ForumComments/${CommentId}`, token);
             console.log('result', result);
 
-            setSelectedPost(p => { return { ...p, commentCount: p.commentCount - 1 } });
             setRefresh(p => p + 1);
+            setRefreshParent(p => p + 1);
         } catch (error) {
             console.error('Error', error);
             setError(error);
         } finally {
-            setLoading(false);
+            // setLoading(false);
         };
     };
 
@@ -180,7 +144,6 @@ export default function ForumComment({
                                     <div className={`vertical-line ${(COMMENTs.filter(c => c.replyId == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
                                 </div>
                                 <div className='comment-block'>
-                                    {/* ==FIX== */}
                                     <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
                                         <div className='name-btn-list'>
                                             <div className='name'>{comment.user?.name}</div>
@@ -218,7 +181,6 @@ export default function ForumComment({
                                         </div>
                                         <div className='commentdate'>{comment.createAt?.split('T')?.[0]}</div>
                                         <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
-                                        {/* ==FIX== */}
                                         {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
                                     </div>
                                 </div>

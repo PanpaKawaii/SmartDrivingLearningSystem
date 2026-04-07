@@ -63,6 +63,7 @@ export default function Forum() {
 
                 setFORUMPOSTs(ForumPost);
                 setFORUMTOPICs(ForumTopicItems);
+                setSelectedPost(p => ForumPost.find(f => f.id == p?.id));
             } catch (error) {
                 console.error('Error', error);
                 setError('Error');
@@ -73,11 +74,6 @@ export default function Forum() {
     }, [refresh, user?.token]);
 
     const filteredFORUMPOSTs = FORUMPOSTs.filter(fp => {
-        // const matchStatus = (!selectedStatus && !([-1, 0].includes(fp.status))) || (['-2', '1', '2', '3'].includes(selectedStatus));
-        // const matchTopic = !selectedTopicId || fp.forumTopicId == selectedTopicId;
-        // const matchMine = !(['-1', '1', '2', '3'].includes(selectedStatus)) || ((['-1', '1', '2', '3'].includes(selectedStatus)) && fp.userId == user?.id);
-        // const matchLiked = selectedStatus != '-2' || (selectedStatus == '-2' && fp.postReacts?.some(r => r.userId == user?.id));
-
         let match = false;
         if (selectedStatus == '') match = !([-1, 0].includes(fp.status));
         else if (selectedStatus == '1') match = fp.userId == user?.id && fp.status == '1';
@@ -87,7 +83,7 @@ export default function Forum() {
         const matchTopic = !selectedTopicId || fp.forumTopicId == selectedTopicId;
 
         return match && matchTopic;
-    }).sort((a, b) => b.createAt - a.createAt);
+    }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
 
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
 
@@ -137,14 +133,14 @@ export default function Forum() {
 
             {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
-                    <ForumCreatePost onClose={() => setOpenCreatePost(false)} />
+                    <ForumCreatePost onClose={() => setOpenCreatePost(false)} setRefreshParent={setRefresh} />
                 </PopupContainer>
             )}
 
             {selectedPost && (
                 <PopupContainer onClose={() => setSelectedPost(null)} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
                     <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} setRefresh={setRefresh} parentLoading={loading} />
-                    <ForumComment post={selectedPost} setSelectedPost={setSelectedPost} />
+                    <ForumComment post={selectedPost} setSelectedPost={setSelectedPost} setRefreshParent={setRefresh} />
                 </PopupContainer>
             )}
         </div>

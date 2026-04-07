@@ -8,6 +8,7 @@ import './ForumCreatePost.css';
 
 export default function ForumCreatePost({
     onClose = () => { },
+    setRefreshParent = () => { },
 }) {
     const { user } = useAuth();
 
@@ -65,6 +66,7 @@ export default function ForumCreatePost({
             const result = await postData('ForumPosts', PostData, token);
             console.log('result', result);
 
+            setRefreshParent(p => p + 1);
             onClose();
         } catch (error) {
             console.error('Error', error);
