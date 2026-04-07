@@ -5,7 +5,6 @@ export default function PracticeExams({
     lesson = {},
     progress = [],
 }) {
-    console.log('progress', progress);
     const maxScore = progress?.[0]?.score;
     const isLocked = progress?.length == 0;
     const isPassed = maxScore >= 50;
@@ -46,7 +45,6 @@ export default function PracticeExams({
                                 <p className='value'>~{(lesson?.questions?.length * 10 / 60 || 0)?.toFixed(0)} mins</p>
                             </div>
                         </div>
-                        {/* ==FIX== 50% */}
                         <div className='stat'>
                             <i className='fa-solid fa-bullseye green' />
                             <div>
@@ -61,7 +59,7 @@ export default function PracticeExams({
                             <span>Complete theory sections to unlock</span>
                         </div>
                     ) : (
-                        <Link to={`./quiz`}>
+                        <Link to={`./quiz/${progress?.[0]?.id}`}>
                             <button className='start-button'>
                                 Start Exam
                             </button>

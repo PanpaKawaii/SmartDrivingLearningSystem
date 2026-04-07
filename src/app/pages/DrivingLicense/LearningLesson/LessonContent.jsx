@@ -1,49 +1,44 @@
+import { useState } from 'react';
+import { postData } from '../../../../mocks/CallingAPI';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+
 import './LessonContent.css';
 
 export default function LessonContent({
   lesson = {},
   progress = null,
+  questionLessonId = '',
+  setRefreshParent = () => { },
 }) {
+  const { user } = useAuth();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const maxScore = progress?.[0]?.score;
   const isLocked = progress?.length == 0;
   const isPassed = maxScore >= 50;
 
   const markLessonContentComplete = async () => {
-    // const currentUserId = Number(user?.id || 1);
-    // const currentLessonId = Number(ThisQuestionLesson?.id || lessonId);
+    const LessonProgressData = {
+      questionLessonId: questionLessonId,
+      score: 0,
+    };
+    console.log('LessonProgressData:', LessonProgressData);
 
-    // // API-ready (enable when backend is available):
-    // // await putData(`lesson-progress/${currentLessonId}`, { status: 1 }, user?.token || '');
+    setLoading(true);
+    const token = user?.token || '';
+    try {
+      const result = await postData('LessonProgresses', LessonProgressData, token);
+      console.log('result', result);
 
-    // setLessonProgressList(prev => {
-    //   const existing = prev.find(
-    //     lp => Number(lp.userId) === currentUserId && Number(lp.questionLessonId) === currentLessonId,
-    //   );
-
-    //   if (existing) {
-    //     return prev.map(lp => (
-    //       Number(lp.userId) === currentUserId && Number(lp.questionLessonId) === currentLessonId
-    //         ? { ...lp, status: 1 }
-    //         : lp
-    //     ));
-    //   }
-
-    //   return [
-    //     ...prev,
-    //     {
-    //       id: Date.now(),
-    //       userId: currentUserId,
-    //       questionLessonId: currentLessonId,
-    //       status: 1,
-    //     },
-    //   ];
-    // });
-
-    // setProgress(prev => ({
-    //   ...(prev || {}),
-    //   status: 1,
-    //   theory_completed: true,
-    // }));
+      setRefreshParent(p => p + 1);
+    } catch (error) {
+      console.error('Error', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    };
   };
 
   return (
@@ -80,6 +75,7 @@ export default function LessonContent({
               <button
                 onClick={markLessonContentComplete}
                 className='complete-button compact'
+                disabled={loading}
               >
                 <i className='fa-regular fa-check-circle' />
                 <span>Mark Complete</span>

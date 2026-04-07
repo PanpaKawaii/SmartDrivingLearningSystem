@@ -17,20 +17,18 @@ export default function LearningLesson() {
     const Params = useParams();
 
     const questionChapterId = Params?.chapterId;
-    console.log('questionChapterId', questionChapterId);
+    // console.log('questionChapterId', questionChapterId);
     const drivingLicenseId = Params?.licenseId;
-    console.log('drivingLicenseId', drivingLicenseId);
+    // console.log('drivingLicenseId', drivingLicenseId);
     const questionLessonId = Params?.lessonId;
-    console.log('questionLessonId', questionLessonId);
+    // console.log('questionLessonId', questionLessonId);
 
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
     const [LESSONPROGRESSes, setLESSONPROGRESSes] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
 
-    // ==FIX== LessonProgress
     useEffect(() => {
         (async () => {
             setError(null);
@@ -43,14 +41,16 @@ export default function LearningLesson() {
                     pageSize: '1000',
                     status: 1,
                 });
+                const lessonProgressQuery = new URLSearchParams({
+                    status: 1,
+                });
                 const ThisQuestionLessonResponse = await fetchData(`QuestionLessons/${questionLessonId}`, token);
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
-                // const LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}`, token);
+                const LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}?${lessonProgressQuery}`, token);
                 console.log('ThisQuestionLessonResponse', ThisQuestionLessonResponse);
                 console.log('QuestionResponse', QuestionResponse);
-                // console.log('LessonProgressResponse', LessonProgressResponse);
+                console.log('LessonProgressResponse', LessonProgressResponse);
                 const QuestionItems = QuestionResponse?.items;
-                // const LessonProgressItems = LessonProgressResponse?.items;
 
                 const QuestionLesson = {
                     ...ThisQuestionLessonResponse,
@@ -59,9 +59,9 @@ export default function LearningLesson() {
                 console.log('QuestionLesson', QuestionLesson);
                 setThisQuestionLesson(QuestionLesson);
 
-                // const LessonProgress = LessonProgressItems.filter(lp => lp.questionLessonId == questionLessonId)?.sort((a, b) => (b?.score) - (a?.score));
-                // console.log('LessonProgress', LessonProgress);
-                // setLESSONPROGRESSes(LessonProgress);
+                const LessonProgress = LessonProgressResponse.filter(lp => lp.questionLessonId == questionLessonId)?.sort((a, b) => (b?.score) - (a?.score));
+                console.log('LessonProgress', LessonProgress);
+                setLESSONPROGRESSes(LessonProgress);
             } catch (error) {
                 console.error('Error', error);
                 setError('Error');
@@ -96,6 +96,8 @@ export default function LearningLesson() {
                         <LessonContent
                             lesson={ThisQuestionLesson}
                             progress={LESSONPROGRESSes}
+                            questionLessonId={questionLessonId}
+                            setRefreshParent={setRefresh}
                         />
 
                         <PracticeExams

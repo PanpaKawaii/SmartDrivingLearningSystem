@@ -32,6 +32,7 @@ export default function ChapterLesson() {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
+            const userId = user?.id || '';
             try {
                 const questionChapterQuery = new URLSearchParams({
                     page: '1',
@@ -44,18 +45,29 @@ export default function ChapterLesson() {
                     pageSize: '500',
                     status: 1,
                 });
+                const lessonProgressQuery = new URLSearchParams({
+                    status: 1,
+                });
                 const ThisDrivingLicenseResponse = await fetchData(`DrivingLicenses/${drivingLicenseId}`, token);
                 const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
                 const QuestionLessonResponse = await fetchData(`QuestionLessons?${questionLessonQuery.toString()}`, token);
+                const LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}?${lessonProgressQuery}`, token);
                 console.log('ThisDrivingLicenseResponse', ThisDrivingLicenseResponse);
                 console.log('QuestionChapterResponse', QuestionChapterResponse);
                 console.log('QuestionLessonResponse', QuestionLessonResponse);
+                console.log('LessonProgressResponse', LessonProgressResponse);
                 const QuestionChapterItems = QuestionChapterResponse?.items;
                 const QuestionLessonItems = QuestionLessonResponse?.items;
 
+                const QuestionLessons = QuestionLessonItems.map(ql => ({
+                    ...ql,
+                    lessonProgresses: LessonProgressResponse.filter(lp => lp.questionLessonId == ql.id),
+                }));
+                console.log('QuestionLessons', QuestionLessons);
+
                 const QuestionChapters = QuestionChapterItems.map(qc => ({
                     ...qc,
-                    questionLessons: QuestionLessonItems.filter(ql => ql.questionChapterId == qc.id),
+                    questionLessons: QuestionLessons.filter(ql => ql.questionChapterId == qc.id),
                     drivingLicense: ThisDrivingLicenseResponse || null,
                 }));
                 console.log('QuestionChapters', QuestionChapters);
@@ -105,7 +117,7 @@ export default function ChapterLesson() {
                     </button>
                     {QUESTIONCHAPTERs.map((chapter, index_chapter) => {
                         const lesson = chapter.questionLessons?.length || 0;
-                        const completed = 0 || 0; // ==FIX==
+                        const completed = chapter.questionLessons?.filter(ql => ql.lessonProgresses?.some(lp => Number(lp.score) >= 50))?.length || 0;
                         return (
                             <button
                                 key={index_chapter}
@@ -123,7 +135,7 @@ export default function ChapterLesson() {
                     <div className='chapter-grid'>
                         {QUESTIONCHAPTERs.map((chapter, index_chapter) => {
                             const lesson = chapter.questionLessons?.length || 0;
-                            const completed = 0 || 0; // ==FIX==
+                            const completed = chapter.questionLessons?.filter(ql => ql.lessonProgresses?.some(lp => Number(lp.score) >= 50))?.length || 0;
                             const progress = lesson > 0 ? (completed / lesson) * 100 : 0;
                             return (
                                 <div

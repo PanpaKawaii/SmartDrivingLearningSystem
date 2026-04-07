@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchData } from '../../../../mocks/CallingAPI';
+import { fetchData, putData } from '../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import ProgressBar from '../../../components/ProgressBar/ProgressBar';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
@@ -17,10 +17,12 @@ export default function LessonQuiz() {
     const navigate = useNavigate();
 
     const questionLessonId = Params?.lessonId;
-    console.log('questionLessonId', questionLessonId);
+    // console.log('questionLessonId', questionLessonId);
+    const lessonProgressId = Params?.progressId;
+    // console.log('lessonProgressId', lessonProgressId);
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
-    const [selectedQuestionId, setSelectedQuestionId] = useState(QUESTIONs?.[0]?.id);
+    const [selectedQuestionId, setSelectedQuestionId] = useState('');
     const [myAnswers, setMyAnswers] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -68,7 +70,7 @@ export default function LessonQuiz() {
     }, [refresh, user?.token]);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
-    console.log('selectedQuestion', selectedQuestion);
+    // console.log('selectedQuestion', selectedQuestion);
 
     const index = QUESTIONs.findIndex(q => q.id == selectedQuestionId);
     const firstThreeWithIndexMiddle = QUESTIONs.slice(Math.max(0, index - 1), Math.min(QUESTIONs.length, index + 2));
@@ -77,13 +79,38 @@ export default function LessonQuiz() {
         setSelectedQuestionId(direction == 'left' ? firstThreeWithIndexMiddle?.[0]?.id : firstThreeWithIndexMiddle?.[firstThreeWithIndexMiddle.length - 1]?.id);
     };
 
-    const handleEndQuiz = () => {
-        navigate('./result');
+    const handleEndQuiz = async () => {
+        console.log('QUESTIONs', QUESTIONs);
+        console.log('myAnswers', myAnswers);
+        const correctCount = myAnswers?.filter(m => m.answers?.some(a => a.isCorrect == true))?.length || 0;
+        console.log('correctCount:', correctCount);
+        const correctPercent = Number((100 * correctCount / (QUESTIONs?.length || 1))?.toFixed(0));
+        console.log('correctPercent:', correctPercent);
+
+        const LessonProgressData = {
+            questionLessonId: questionLessonId,
+            score: correctPercent,
+            status: 1,
+        };
+        console.log('LessonProgressData:', LessonProgressData);
+
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            const result = await putData(`LessonProgresses/${lessonProgressId}`, LessonProgressData, token);
+            console.log('result', result);
+
+            navigate('./../..');
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        };
     };
 
-    const toggleAnswerInMyAnswers = (questionId, answerId) => {
+    const toggleAnswerInMyAnswers = (questionId, answerId, answerIsCorrect) => {
         setMyAnswers(prev => {
-            console.log('prev');
             const index = prev.findIndex(
                 item => item.questionId == questionId
             );
@@ -94,7 +121,7 @@ export default function LessonQuiz() {
                     ...prev,
                     {
                         questionId: questionId,
-                        answers: [{ answerId: answerId }]
+                        answers: [{ answerId: answerId, isCorrect: answerIsCorrect }]
                     }
                 ];
             }
@@ -111,8 +138,8 @@ export default function LessonQuiz() {
             const newAnswers = isExist ?
                 current.answers.filter(a => a.answerId !== answerId)
                 : (isMultiple ?
-                    [...current.answers, { answerId: answerId }]
-                    : [{ answerId: answerId }]
+                    [...current.answers, { answerId: answerId, isCorrect: answerIsCorrect }]
+                    : [{ answerId: answerId, isCorrect: answerIsCorrect }]
                 );
 
             // Không còn đáp án → xóa question
@@ -147,8 +174,6 @@ export default function LessonQuiz() {
         return '';
     };
 
-    console.log('myAnswers', myAnswers);
-
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
@@ -182,7 +207,7 @@ export default function LessonQuiz() {
                                         key={answer.id}
                                         className={`${getAnswerStatus(selectedQuestion, answer, myAnswers)}`}
                                         style={{ animationDelay: `${aIndex * 0.1}s` }}
-                                        onClick={() => toggleAnswerInMyAnswers(selectedQuestion?.id, answer.id)}
+                                        onClick={() => toggleAnswerInMyAnswers(selectedQuestion?.id, answer.id, answer.isCorrect)}
                                         disabled={myAnswers.some(a => a.questionId == selectedQuestionId)}
                                     >
                                         {aIndex + 1}. {answer.content}
