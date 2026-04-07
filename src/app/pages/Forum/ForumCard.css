@@ -122,6 +122,10 @@
             align-items: center;
             background-color: transparent;
 
+            &.react-zero {
+                padding-left: 12px;
+            }
+
             .count {
                 margin: 0 0 0 4px;
                 color: var(--text-secondary);

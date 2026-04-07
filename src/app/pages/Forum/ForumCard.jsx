@@ -10,7 +10,7 @@ import './ForumCard.css';
 
 export default function ForumCard({
     post = {},
-    setSelectedPost = () => { },
+    setSelectedPostId = () => { },
     setRefresh = () => { },
     parentLoading = false,
 }) {
@@ -156,7 +156,7 @@ export default function ForumCard({
             </div>
             <div className='reacts-comments'>
                 {postReacts?.length !== 0 ?
-                    <button className='react-count' onClick={() => setSelectedPost(post)}>
+                    <button className='react-count' onClick={() => setSelectedPostId(post.id)}>
                         {postReacts?.map((react, index) => (
                             <span
                                 key={index}
@@ -174,7 +174,7 @@ export default function ForumCard({
                         <span className='count'>{post.postReacts?.length?.toLocaleString() || 0}</span>
                     </button>
                     :
-                    <button className='react-zero' onClick={() => setSelectedPost(post)}>
+                    <button className='react-zero' onClick={() => setSelectedPostId(post.id)}>
                         <span>
                             <i className='fa-solid fa-thumbs-up' />
                         </span>
@@ -186,7 +186,7 @@ export default function ForumCard({
                         <i className='fa-solid fa-thumps-up' />
                     </span>
                 }
-                <button className='comment-count' onClick={() => setSelectedPost(post)}>
+                <button className='comment-count' onClick={() => setSelectedPostId(post.id)}>
                     <span>
                         <i className='fa-solid fa-comment' />
                     </span>
@@ -237,7 +237,7 @@ export default function ForumCard({
                     )}
                 </div>
                 <div className='button-wrapper'>
-                    <button className='main-btn' onClick={() => setSelectedPost(post)}>
+                    <button className='main-btn' onClick={() => setSelectedPostId(post.id)}>
                         <i className='fa-regular fa-comment' />
                     </button>
                 </div>

@@ -19,7 +19,7 @@ export default function Forum() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedPostId, setSelectedPostId] = useState(null);
     const [openCreatePost, setOpenCreatePost] = useState(false);
 
     const [selectedStatus, setSelectedStatus] = useState('');
@@ -63,7 +63,6 @@ export default function Forum() {
 
                 setFORUMPOSTs(ForumPost);
                 setFORUMTOPICs(ForumTopicItems);
-                setSelectedPost(p => ForumPost.find(f => f.id == p?.id));
             } catch (error) {
                 console.error('Error', error);
                 setError('Error');
@@ -86,6 +85,7 @@ export default function Forum() {
     }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
 
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
+    const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
 
     return (
         <div className='forum-container'>
@@ -124,7 +124,7 @@ export default function Forum() {
                     </div>
                     {filteredFORUMPOSTs.map((post, i) => (
                         <React.Fragment key={i}>
-                            <ForumCard post={post} setSelectedPost={setSelectedPost} setRefresh={setRefresh} parentLoading={loading} />
+                            <ForumCard post={post} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
                         </React.Fragment>
                     ))}
                 </div>
@@ -138,9 +138,9 @@ export default function Forum() {
             )}
 
             {selectedPost && (
-                <PopupContainer onClose={() => setSelectedPost(null)} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
-                    <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} setRefresh={setRefresh} parentLoading={loading} />
-                    <ForumComment post={selectedPost} setSelectedPost={setSelectedPost} setRefreshParent={setRefresh} />
+                <PopupContainer onClose={() => setSelectedPostId('')} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCard post={selectedPost} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
+                    <ForumComment post={selectedPost} setRefreshParent={setRefresh} />
                 </PopupContainer>
             )}
         </div>

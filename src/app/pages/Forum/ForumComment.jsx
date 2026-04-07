@@ -12,7 +12,6 @@ import './ForumComment.css';
 
 export default function ForumComment({
     post = {},
-    setSelectedPost = () => { },
     setRefreshParent = () => { },
 }) {
     const { user } = useAuth();
@@ -76,8 +75,8 @@ export default function ForumComment({
             const result = await postData('ForumComments', CommentData, token);
             console.log('result', result);
 
-            setSelectedPost(p => { return { ...p, commentCount: p.commentCount + 1 } });
             setRefresh(p => p + 1);
+            setRefreshParent(p => p + 1);
             await sleep(500);
         } catch (error) {
             console.error('Error', error);
@@ -216,7 +215,7 @@ export default function ForumComment({
         )
     };
 
-    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>
