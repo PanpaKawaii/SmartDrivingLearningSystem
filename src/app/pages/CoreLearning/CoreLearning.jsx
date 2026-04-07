@@ -14,6 +14,7 @@ export default function CoreLearning() {
     const { user } = useAuth();
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
+    const [SAVEDQUESTIONs, setSAVEDQUESTIONs] = useState([]);
     const [selectedQuestionId, setSelectedQuestionId] = useState('');
     const [myAnswers, setMyAnswers] = useState([]);
     const [refresh, setRefresh] = useState(0);
@@ -31,19 +32,37 @@ export default function CoreLearning() {
                     pageSize: '1000',
                     status: 1,
                 });
+                const tagQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '200',
+                    status: 1,
+                });
+                const savedQuestionQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '200',
+                    status: 1,
+                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
+                const TagResponse = await fetchData(`Tags?${tagQuery.toString()}`, token);
+                const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
+                console.log('TagResponse', TagResponse);
+                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
+                const TagItems = TagResponse?.items;
+                const SavedQuestionItems = SavedQuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
                         ...q,
                         index: i + 1,
+                        tags: TagItems.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
+                setSAVEDQUESTIONs(SavedQuestionItems);
                 setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
             } catch (error) {
                 console.error('Error', error);
@@ -121,6 +140,9 @@ export default function CoreLearning() {
         return '';
     };
 
+    const SavedQuestions = SAVEDQUESTIONs.map(sq => sq.questionId);
+    console.log('SavedQuestions', SavedQuestions);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
@@ -138,7 +160,14 @@ export default function CoreLearning() {
                     <div className='question-card'>
                         <div className='card'>
                             <div className='title'>
-                                <div className='index'>Câu hỏi {index + 1}: </div>
+                                <div className='index-tags'>
+                                    <div className='index'>Câu hỏi {index + 1}: </div>
+                                    <div className='tags'>
+                                        {selectedQuestion?.tags?.map((tag, index) => (
+                                            <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
+                                        ))}
+                                    </div>
+                                </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
                             </div>
                             <div className='grid-answer'>

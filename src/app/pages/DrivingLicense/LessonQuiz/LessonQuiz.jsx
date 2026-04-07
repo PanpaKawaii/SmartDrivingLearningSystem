@@ -40,14 +40,23 @@ export default function LessonQuiz() {
                     lessonId: questionLessonId,
                     status: 1,
                 });
+                const tagQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '200',
+                    status: 1,
+                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
+                const TagResponse = await fetchData(`Tags?${tagQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
+                console.log('TagResponse', TagResponse);
                 const QuestionItems = QuestionResponse?.items;
+                const TagItems = TagResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
                         ...q,
                         index: i + 1,
+                        tags: TagItems.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
@@ -191,7 +200,14 @@ export default function LessonQuiz() {
 
                         <div className='card'>
                             <div className='title'>
-                                <div className='index'>Câu hỏi {index + 1}: </div>
+                                <div className='index-tags'>
+                                    <div className='index'>Câu hỏi {index + 1}: </div>
+                                    <div className='tags'>
+                                        {selectedQuestion?.tags?.map((tag, index) => (
+                                            <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
+                                        ))}
+                                    </div>
+                                </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
                             </div>
                             <div className='grid-answer'>

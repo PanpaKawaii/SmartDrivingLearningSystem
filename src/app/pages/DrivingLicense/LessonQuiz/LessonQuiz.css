@@ -51,9 +51,28 @@
                 .title {
                     font-size: 20px;
 
-                    .index {
-                        font-weight: bold;
-                        margin: 0 0 4px;
+                    .index-tags {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .index {
+                            font-weight: bold;
+                            margin: 0 0 4px;
+                        }
+
+                        .tags {
+                            display: flex;
+                            gap: 8px;
+
+                            .tag {
+                                height: fit-content;
+                                padding: 2px 4px;
+                                color: #fff;
+                                font-size: .875rem;
+                                border-radius: 4px;
+                                text-shadow: 1px 1px 0 #000, 0px 0px 1px #000;
+                            }
+                        }
                     }
                 }
 
