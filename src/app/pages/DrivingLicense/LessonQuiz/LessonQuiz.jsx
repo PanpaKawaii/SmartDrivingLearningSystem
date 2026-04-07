@@ -22,6 +22,7 @@ export default function LessonQuiz() {
     // console.log('lessonProgressId', lessonProgressId);
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
+    const [SAVEDQUESTIONs, setSAVEDQUESTIONs] = useState([]);
     const [selectedQuestionId, setSelectedQuestionId] = useState('');
     const [myAnswers, setMyAnswers] = useState([]);
     const [refresh, setRefresh] = useState(0);
@@ -45,12 +46,20 @@ export default function LessonQuiz() {
                     pageSize: '200',
                     status: 1,
                 });
+                const savedQuestionQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '200',
+                    status: 1,
+                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 const TagResponse = await fetchData(`Tags?${tagQuery.toString()}`, token);
+                const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
+                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
                 const TagItems = TagResponse?.items;
+                const SavedQuestionItems = SavedQuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
@@ -62,6 +71,7 @@ export default function LessonQuiz() {
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
+                setSAVEDQUESTIONs(SavedQuestionItems);
                 setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
             } catch (error) {
                 console.error('Error', error);
@@ -74,6 +84,8 @@ export default function LessonQuiz() {
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     // console.log('selectedQuestion', selectedQuestion);
+    const SavedQuestions = SAVEDQUESTIONs.map(sq => sq.questionId);
+    // console.log('SavedQuestions', SavedQuestions);
 
     const index = QUESTIONs.findIndex(q => q.id == selectedQuestionId);
     const firstThreeWithIndexMiddle = QUESTIONs.slice(Math.max(0, index - 1), Math.min(QUESTIONs.length, index + 2));
@@ -184,6 +196,7 @@ export default function LessonQuiz() {
             <div className='container'>
                 <ListGridButton
                     list={QUESTIONs}
+                    mark={SavedQuestions}
                     selectedQuestionId={selectedQuestionId}
                     setSelectedQuestionId={setSelectedQuestionId}
                     myAnswers={myAnswers}

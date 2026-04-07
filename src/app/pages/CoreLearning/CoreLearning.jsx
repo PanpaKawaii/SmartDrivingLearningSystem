@@ -74,6 +74,9 @@ export default function CoreLearning() {
     }, [refresh, user?.token]);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
+    // console.log('selectedQuestion', selectedQuestion);
+    const SavedQuestions = SAVEDQUESTIONs.map(sq => sq.questionId);
+    // console.log('SavedQuestions', SavedQuestions);
 
     const index = QUESTIONs.findIndex(q => q.id == selectedQuestionId);
     const firstThreeWithIndexMiddle = QUESTIONs.slice(Math.max(0, index - 1), Math.min(QUESTIONs.length, index + 2));
@@ -140,9 +143,6 @@ export default function CoreLearning() {
         return '';
     };
 
-    const SavedQuestions = SAVEDQUESTIONs.map(sq => sq.questionId);
-    console.log('SavedQuestions', SavedQuestions);
-
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
@@ -151,6 +151,7 @@ export default function CoreLearning() {
             <div className='container'>
                 <ListGridButton
                     list={QUESTIONs}
+                    mark={SavedQuestions}
                     selectedQuestionId={selectedQuestionId}
                     setSelectedQuestionId={setSelectedQuestionId}
                     myAnswers={myAnswers}
@@ -161,7 +162,7 @@ export default function CoreLearning() {
                         <div className='card'>
                             <div className='title'>
                                 <div className='index-tags'>
-                                    <div className='index'>Câu hỏi {index + 1}: </div>
+                                    <div className='index'>Câu hỏi {index + 1}: {selectedQuestion?.id}</div>
                                     <div className='tags'>
                                         {selectedQuestion?.tags?.map((tag, index) => (
                                             <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
