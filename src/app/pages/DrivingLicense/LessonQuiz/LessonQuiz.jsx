@@ -168,14 +168,6 @@ export default function LessonQuiz() {
                             <div className='text'>
                                 Câu hỏi {index + 1} trong số {QUESTIONs?.length} câu hỏi
                             </div>
-                            {/* <div className='bar'>
-                                <div
-                                    className='fill'
-                                    style={{
-                                        width: `${((index + 1) / QUESTIONs?.length) * 100}%`
-                                    }}
-                                ></div>
-                            </div> */}
                             <ProgressBar current={myAnswers?.filter(q => q.answers)?.length || 0} total={QUESTIONs?.length || 1} showValue={false} height={'8px'} />
                         </div>
 

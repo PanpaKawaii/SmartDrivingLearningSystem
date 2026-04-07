@@ -21,6 +21,7 @@
             height: 100%;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
             transition: width 0.4s ease, background-color 0.4s ease;
         }
 
@@ -30,7 +31,7 @@
             top: 0;
             right: 0;
             overflow: hidden;
-            background-color: #45546C;
+            background-color: #2d3d55;
             transition: width 0.4s ease, background-color 0.4s ease;
             z-index: 1;
         }
@@ -46,7 +47,6 @@
                     rgba(255, 255, 255, 0.8),
                     transparent);
             animation: progress_bar_light_move 2s linear infinite;
-            /* animation: name duration timing-function delay iteration-count direction fill-mode; */
         }
     }
 }
