@@ -12,6 +12,21 @@ const normalizeItems = (payload) => {
     return [];
 };
 
+const normalizeUserName = (user) => user?.name || user?.fullName || user?.userName || user?.displayName || 'Khong xac dinh';
+
+const formatDateTimeLines = (value) => {
+    if (!value) return { time: '', date: '' };
+
+    const normalizedValue = String(value).replace('T', ' ').trim();
+    const [datePart = '', timePart = ''] = normalizedValue.split(' ');
+    const [year = '', month = '', day = ''] = datePart.split('-');
+
+    return {
+        time: timePart.slice(0, 5),
+        date: day && month && year ? `${day}/${month}/${year}` : datePart,
+    };
+};
+
 const getEntityRoute = (report) => {
     if (report?.questionId) return `/instructor/report-entity/question/${report.questionId}`;
     if (report?.simulationId) return `/instructor/report-entity/simulation/${report.simulationId}`;
@@ -38,6 +53,7 @@ export default function ContentErrorReports() {
     const [reportItems, setReportItems] = useState([]);
     const [resolveItems, setResolveItems] = useState([]);
     const [reportCategoryItems, setReportCategoryItems] = useState([]);
+    const [userItems, setUserItems] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [modalMode, setModalMode] = useState('view');
 
@@ -47,6 +63,13 @@ export default function ContentErrorReports() {
             return accumulator;
         }, {});
     }, [reportCategoryItems]);
+
+    const userNameById = useMemo(() => {
+        return userItems.reduce((accumulator, item) => {
+            accumulator[item.id] = normalizeUserName(item);
+            return accumulator;
+        }, {});
+    }, [userItems]);
 
     const getReportCategoryName = (reportCategoryId) => reportCategoryNameById[reportCategoryId] || 'Khong xac dinh';
 
@@ -74,13 +97,22 @@ export default function ContentErrorReports() {
                     fetchData(`Resolves?${query.toString()}`, token),
                 ]);
 
+                let usersResponse = null;
+                try {
+                    usersResponse = await fetchData(`Users?${query.toString()}`, token);
+                } catch (usersError) {
+                    console.warn('Could not load users for report names:', usersError);
+                }
+
                 const reportCategoryApiItems = normalizeItems(reportCategoriesResponse);
                 const reportApiItems = normalizeItems(reportsResponse);
                 const resolveApiItems = normalizeItems(resolvesResponse);
+                const userApiItems = normalizeItems(usersResponse);
 
                 const contentErrorReports = reportApiItems.filter((report) => Boolean(report?.questionId || report?.simulationId));
 
                 setReportCategoryItems(reportCategoryApiItems);
+                setUserItems(userApiItems);
                 setReportItems(contentErrorReports);
                 setResolveItems(resolveApiItems);
                 setPagingMeta({
@@ -91,19 +123,27 @@ export default function ContentErrorReports() {
                 });
             } catch (err) {
                 console.error('Error loading content error reports:', err);
-                setError('Khong the tai du lieu bao cao loi noi dung.');
+                //setError('Khong the tai du lieu bao cao loi noi dung.');
             } finally {
                 setLoading(false);
             }
         })();
     }, [refresh, user?.token, queryParams.page, queryParams.pageSize]);
-
+    console.log('reportItems', reportItems);
     const columns = [
         { key: 'totalCount', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Tiêu đề báo cáo' },
         { key: 'content', label: 'Nội dung' },
-        { key: 'userId', label: 'Người báo', width: '110px', render: (val) => `User #${val}` },
-        { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => val?.split(' ')[0] },
+        { key: 'userId', label: 'Người báo', width: '140px', render: (val, row) => userNameById[val] || normalizeUserName(row?.user) },
+        { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
+            const { time, date } = formatDateTimeLines(val);
+            return (
+                <div style={{ lineHeight: '1.2' }}>
+                    <div>{time}</div>
+                    <div>{date}</div>
+                </div>
+            );
+        } },
         { key: 'status', label: 'Trạng thái', width: '130px', render: (val) => (
             <span className={`ins-status-chip ${val === 1 ? 'rejected' : 'approved'}`}>
                 <span className='chip-dot'></span>{val === 1 ? 'Chua xu ly' : 'Da xu ly'}
