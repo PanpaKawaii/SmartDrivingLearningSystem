@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
-import InstructorModal from '../../../components/InstructorComponent/InstructorModal';
+import InstructorModal from '../InstructorComponent/InstructorModal.jsx';
 
 export default function ReportFeedbackModal({
     isOpen,
     mode,
     report,
     reportCategoryName,
-    entityDetails,
     resolve,
+    onOpenEntity,
     onClose,
     onSubmit,
 }) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [error, setError] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -21,6 +22,7 @@ export default function ReportFeedbackModal({
         setTitle(resolve?.title || '');
         setContent(resolve?.content || '');
         setError('');
+        setSubmitting(false);
     }, [isOpen, resolve, mode, report]);
 
     if (!report) return null;
@@ -28,7 +30,7 @@ export default function ReportFeedbackModal({
     const isViewMode = mode === 'view';
     const isValid = title.trim().length >= 3 && content.trim().length >= 10;
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (isViewMode) {
             onClose();
             return;
@@ -44,23 +46,33 @@ export default function ReportFeedbackModal({
             return;
         }
 
-        onSubmit({ title: title.trim(), content: content.trim() });
+        setSubmitting(true);
+        setError('');
+
+        try {
+            const result = await onSubmit({ title: title.trim(), content: content.trim() });
+            if (result?.error) {
+                setError(result.error);
+            }
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
         <InstructorModal
             isOpen={isOpen}
             onClose={onClose}
-            title={isViewMode ? 'Chi tiet bao cao loi noi dung' : 'Xu ly bao cao loi noi dung'}
+            title={isViewMode ? 'Chi tiet bao cao' : 'Xu ly bao cao'}
             wide
             footer={
                 <>
-                    <button className='ins-btn ins-btn-secondary' onClick={onClose}>
+                    <button className='ins-btn ins-btn-secondary' onClick={onClose} disabled={submitting}>
                         {isViewMode ? 'Dong' : 'Huy'}
                     </button>
                     {!isViewMode && (
-                        <button className='ins-btn ins-btn-primary' onClick={handleSubmit} disabled={!isValid}>
-                            Gui phan hoi
+                        <button className='ins-btn ins-btn-primary' onClick={handleSubmit} disabled={!isValid || submitting}>
+                            {submitting ? 'Dang gui...' : 'Gui phan hoi'}
                         </button>
                     )}
                 </>
@@ -81,23 +93,12 @@ export default function ReportFeedbackModal({
                 <div className='ins-form-static'>{report.content}</div>
             </div>
 
-            {entityDetails && (
+            {onOpenEntity && (
                 <div className='ins-form-group'>
-                    <label className='ins-form-label'>Chi tiet doi tuong lien quan ({entityDetails.type})</label>
-                    <div className='ins-report-entity-detail'>
-                        <div className='entity-header'>{entityDetails.label}</div>
-                        <div className='entity-content'>{entityDetails.content}</div>
-                        {entityDetails.details && Object.keys(entityDetails.details).length > 0 && (
-                            <div className='entity-meta'>
-                                {Object.entries(entityDetails.details).map(([key, value]) => (
-                                    <div key={key} className='meta-row'>
-                                        <span className='meta-label'>{key}:</span>
-                                        <span className='meta-value'>{value}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                    <label className='ins-form-label'>Doi tuong lien quan</label>
+                    <button className='ins-btn ins-btn-secondary' type='button' onClick={onOpenEntity}>
+                        Xem chi tiet doi tuong
+                    </button>
                 </div>
             )}
 
@@ -136,6 +137,7 @@ export default function ReportFeedbackModal({
                                 setError('');
                             }}
                             placeholder='Nhap tieu de phan hoi...'
+                            disabled={submitting}
                         />
                     </div>
                     <div className='ins-form-group'>
@@ -148,6 +150,7 @@ export default function ReportFeedbackModal({
                                 setError('');
                             }}
                             placeholder='Nhap phan hoi cho nguoi bao cao...'
+                            disabled={submitting}
                         ></textarea>
                     </div>
                     {error && <div style={{ color: 'var(--ins-error)', fontSize: '0.875rem' }}>{error}</div>}

@@ -4167,6 +4167,66 @@ export const reports = [
         updateAt: '2026-03-23 12:00:01',
         status: 1,
     },
+    {
+        id: 6,
+        simulationId: null,
+        forumPostId: null,
+        forumCommentId: null,
+        questionId: 245,
+        reportCategoryId: 4,
+        userId: 2,
+        title: 'Cap nhat cau hoi #245 theo quy dinh moi',
+        content: 'Can cap nhat dap an va giai thich cho cau hoi #245 theo tai lieu 2025.',
+        image: null,
+        createAt: '2026-03-27 08:00:00',
+        updateAt: '2026-03-27 08:00:01',
+        status: 1,
+    },
+    {
+        id: 7,
+        simulationId: 12,
+        forumPostId: null,
+        forumCommentId: null,
+        questionId: null,
+        reportCategoryId: 4,
+        userId: 2,
+        title: 'Thay video mo phong #12',
+        content: 'Video mo phong #12 can thay bang file moi do loi am thanh.',
+        image: null,
+        createAt: '2026-03-26 09:00:00',
+        updateAt: '2026-03-26 09:00:01',
+        status: 1,
+    },
+    {
+        id: 8,
+        simulationId: null,
+        forumPostId: null,
+        forumCommentId: null,
+        questionId: 18,
+        reportCategoryId: 4,
+        userId: 2,
+        title: 'Yeu cau bo sung giai thich cho cau hoi #18',
+        content: 'Can bo sung phan giai thich de hoc vien de hieu ly do dap an dung.',
+        image: null,
+        createAt: '2026-03-24 11:00:00',
+        updateAt: '2026-03-24 11:00:01',
+        status: 2,
+    },
+    {
+        id: 9,
+        simulationId: null,
+        forumPostId: null,
+        forumCommentId: null,
+        questionId: 75,
+        reportCategoryId: 4,
+        userId: 2,
+        title: 'Cap nhat noi dung bai hoc chuong bien bao',
+        content: 'De nghi cap nhat noi dung bai hoc de dong bo voi bo bien bao moi.',
+        image: null,
+        createAt: '2026-03-23 12:00:00',
+        updateAt: '2026-03-27 14:00:00',
+        status: 2,
+    },
 ];
 
 export const resolves = [
@@ -4189,108 +4249,6 @@ export const resolves = [
         createAt: '2026-03-26 10:15:00',
         updateAt: '2026-03-26 10:15:00',
         status: 1,
-    },
-];
-
-// Helper: get report category name by id
-export const getReportCategoryName = (reportCategoryId) => {
-    const category = reportCategories.find((c) => c.id === reportCategoryId);
-    return category?.name || 'Khong xac dinh';
-};
-
-// Helper: drill down to linked entity details
-export const getReportEntityDetails = (report) => {
-    if (report.questionId) {
-        const question = Object.values(QUIZ_DATA).find((q) => q.number === report.questionId);
-        if (question) {
-            return {
-                type: 'Cau hoi',
-                label: `Cau hoi #${report.questionId}`,
-                content: question.question,
-                details: {
-                    'Danh muc': question.category,
-                    'Loai': report.questionId <= 200 ? 'Trac nghiem' : (report.questionId <= 400 ? 'Tran dap' : 'Long tinh'),
-                    'Do kho': report.questionId <= 200 ? 'De' : (report.questionId <= 400 ? 'Trung binh' : 'Kho'),
-                },
-            };
-        }
-    }
-    if (report.simulationId) {
-        return {
-            type: 'Tinh huong',
-            label: `Tinh huong mo phong #${report.simulationId}`,
-            content: `Tinh huong mo phong so ${report.simulationId}`,
-            details: { 'Loai': 'Mo phong (Video/3D simulation)' },
-        };
-    }
-    if (report.forumPostId) {
-        return {
-            type: 'Bai viet',
-            label: `Bai viet #${report.forumPostId}`,
-            content: 'Bai viet tren dien dan cong dong',
-            details: { 'Loai': 'Forum Post' },
-        };
-    }
-    if (report.forumCommentId) {
-        return {
-            type: 'Binh luan',
-            label: `Binh luan #${report.forumCommentId}`,
-            content: 'Binh luan tren dien dan cong dong',
-            details: { 'Loai': 'Forum Comment' },
-        };
-    }
-    return null;
-};
-
-
-export const changeRequests = [
-    {
-        id: 201,
-        reportCategoryId: 4,
-        userId: 2,
-        title: 'Cap nhat noi dung bai hoc Luat giao thong',
-        content: 'Can cap nhat bai hoc theo Luat Trat tu, an toan giao thong duong bo 2025 moi nhat.',
-        type: 'Bai hoc',
-        priority: 'Cao',
-        createAt: '2026-03-27 8:00:00',
-        updateAt: '2026-03-27 8:00:01',
-        status: 1,
-    },
-    {
-        id: 202,
-        reportCategoryId: 4,
-        userId: 2,
-        title: 'Sua dap an cau hoi #245',
-        content: 'Dap an hien tai la B nhung theo tai lieu moi thi dap an dung la C.',
-        type: 'Cau hoi',
-        priority: 'Trung binh',
-        createAt: '2026-03-26 9:00:00',
-        updateAt: '2026-03-26 9:00:01',
-        status: 1,
-    },
-    {
-        id: 203,
-        reportCategoryId: 4,
-        userId: 2,
-        title: 'Them bien bao moi theo Nghi dinh 100/2024',
-        content: 'Nghi dinh 100 bo sung them 12 loai bien bao moi can duoc them vao ngan hang.',
-        type: 'Bien bao',
-        priority: 'Thap',
-        createAt: '2026-03-24 11:00:00',
-        updateAt: '2026-03-24 11:00:01',
-        status: 2,
-    },
-    {
-        id: 204,
-        reportCategoryId: 4,
-        userId: 2,
-        title: 'Cap nhat video mo phong tinh huong #12',
-        content: 'Video tinh huong #12 bi loi am thanh, can thay the bang file moi.',
-        type: 'Mo phong',
-        priority: 'Cao',
-        createAt: '2026-03-23 12:00:00',
-        updateAt: '2026-03-27 14:00:00',
-        status: 2,
     },
 ];
 

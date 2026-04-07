@@ -36,7 +36,17 @@ export const postData = async (endpoint, data, token) => {
             body: JSON.stringify(data),
         });
         if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
+            let errorPayload = null;
+            try {
+                errorPayload = await response.json();
+            } catch {
+                errorPayload = null;
+            }
+
+            const error = new Error(errorPayload?.title || `Error: ${response.statusText}`);
+            error.status = response.status;
+            error.payload = errorPayload;
+            throw error;
         }
         return await response.json();
     } catch (error) {

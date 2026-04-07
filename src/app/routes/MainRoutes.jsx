@@ -66,6 +66,7 @@ import InsContentErrorReports from '../pages/InstructorPages/ContentErrorReports
 import InsChangeRequests from '../pages/InstructorPages/ChangeRequests/ChangeRequests.jsx'
 import InsReportProcessing from '../pages/InstructorPages/ReportProcessing/ReportProcessing.jsx'
 import InsSimulationExamMgmt from '../pages/InstructorPages/SimulationExamManagement/SimulationExamManagement.jsx'
+import InsReportEntityDetail from '../pages/InstructorPages/ReportEntityDetail/ReportEntityDetail.jsx'
 
 export default function MainRoutes() {
     return (
@@ -133,6 +134,7 @@ export default function MainRoutes() {
                     <Route path='content-error-reports' element={<InsContentErrorReports />} />
                     <Route path='change-requests' element={<InsChangeRequests />} />
                     <Route path='report-processing' element={<InsReportProcessing />} />
+                    <Route path='report-entity/:entityType/:entityId' element={<InsReportEntityDetail />} />
                     <Route path='simulation-exam-management' element={<InsSimulationExamMgmt />} />
                 </Route>
             </Routes>
