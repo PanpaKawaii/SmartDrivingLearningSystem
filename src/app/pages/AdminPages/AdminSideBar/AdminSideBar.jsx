@@ -9,7 +9,6 @@ export default function AdminSideBar() {
     const { logout, user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    console.log('AdminSideBar', location.pathname);
 
     const menuItems = [
         { name: 'USER', icon: 'user', path: '/admin/user-management' },
@@ -18,11 +17,12 @@ export default function AdminSideBar() {
         { name: 'LESSON', icon: 'pencil', path: '/admin/lesson-management', },
     ];
 
-    // useEffect(() => {
-    //     const UserSession = localStorage.getItem('user');
-    //     if (!UserSession) navigate('/');
-    //     else if (user?.role === 'user') navigate('/');
-    // }, [user?.id]);
+    useEffect(() => {
+        const UserSession = localStorage.getItem('user');
+        if (!UserSession) navigate('/');
+        else if (user?.roleName == 'User') navigate('/');
+        else if (user?.roleName == 'Instructor') navigate('/instructor');
+    }, [user?.id]);
 
     console.log('toJSON', new Date().toJSON());
     console.log('toString', new Date().toString());

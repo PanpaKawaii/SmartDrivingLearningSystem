@@ -8,7 +8,6 @@ export default function RegisterFace({
     setRotate = () => { },
 }) {
     console.log('Register');
-
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const ResetRegisterInputs = () => {
@@ -72,8 +71,6 @@ export default function RegisterFace({
         }
 
         const RegisterData = {
-            // id: '',
-            // roleId: '',
             email: Email,
             password: Password,
             name: Name,
@@ -81,8 +78,6 @@ export default function RegisterFace({
             gender: Gender,
             dateOfBirth: '',
             // avatar: 'https://i.pinimg.com/736x/af/59/b3/af59b36b88bdbea5172a618872f3bbc5.jpg',
-            // description: '',
-            // licenseType: '',
         };
         console.log('RegisterData:', RegisterData);
 
