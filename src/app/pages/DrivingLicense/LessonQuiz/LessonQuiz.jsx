@@ -36,6 +36,8 @@ export default function LessonQuiz() {
                 const questionQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
+                    lessonId: questionLessonId,
+                    status: 1,
                 });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
@@ -44,7 +46,7 @@ export default function LessonQuiz() {
                 // const AnswerResponse = answers.filter(a => QuestionResponse.some(q => q.id == a.questionId));
                 // console.log('AnswerResponse', AnswerResponse);
 
-                const QuestionsAnswers = QuestionItems.filter(q => q.questionLessonId == questionLessonId).map((q, i) => {
+                const QuestionsAnswers = QuestionItems.map((q, i) => {
                     // const relatedAnswers = AnswerResponse.filter(a => a.questionId == q.id);
                     return {
                         ...q,

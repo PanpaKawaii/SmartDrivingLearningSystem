@@ -26,10 +26,12 @@ export default function DrivingLicense() {
                 const drivingLicenseQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    status: 1,
                 });
                 const questionChapterQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    status: 1,
                 });
                 const DrivingLicenseResponse = await fetchData(`DrivingLicenses?${drivingLicenseQuery.toString()}`, token);
                 const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);

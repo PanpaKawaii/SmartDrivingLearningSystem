@@ -41,6 +41,7 @@ export default function SimulationScenario() {
                 // const simulationScenarioQuery = new URLSearchParams({
                 //     page: '1',
                 //     pageSize: '500',
+                //     status: 1,
                 // });
                 // const SimulationScenarioResponse = await fetchData(`SimulationScenarios?${simulationScenarioQuery.toString()}`, token);
                 // console.log('SimulationScenarioResponse', SimulationScenarioResponse);

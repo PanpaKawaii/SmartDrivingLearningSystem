@@ -73,12 +73,14 @@ export default function ForumComment({
                 const forumCommentQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    forumPostId: post?.id,
+                    status: 1,
                 });
                 const ForumCommentResponse = await fetchData(`ForumComments?${forumCommentQuery.toString()}`, token);
                 console.log('ForumCommentResponse', ForumCommentResponse);
                 const ForumCommentItems = ForumCommentResponse?.items;
 
-                const ForumComment = ForumCommentItems.filter(fc => fc.forumPostId == post?.id).map(fp => ({
+                const ForumComment = ForumCommentItems.map(fp => ({
                     ...fp,
                 }));
 
@@ -215,7 +217,7 @@ export default function ForumComment({
                                     </div>
                                     <div className='commentdate-btn'>
                                         <div className='vote-icon'>
-                                            <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length || 0}</div>
+                                            <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length?.toLocaleString() || 0}</div>
                                             {/* ==FIX== */}
                                             <button className='vote-btn' onClick={() => { alert('Voted!') }}>
                                                 <i className={`fa-${comment.commentVotes?.some(c => c.userId == user?.id) ? 'solid' : 'regular'} fa-circle-up`} />
@@ -259,7 +261,7 @@ export default function ForumComment({
         )
     };
 
-    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>

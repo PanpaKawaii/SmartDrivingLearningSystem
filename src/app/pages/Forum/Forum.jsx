@@ -35,14 +35,17 @@ export default function Forum() {
                 const forumPostQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    status: 1,
                 });
                 const forumTopicQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    status: 1,
                 });
                 const postReactQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    status: 1,
                 });
                 const ForumPostResponse = await fetchData(`ForumPosts?${forumPostQuery.toString()}`, token);
                 const ForumTopicResponse = await fetchData(`ForumTopics?${forumTopicQuery.toString()}`, token);

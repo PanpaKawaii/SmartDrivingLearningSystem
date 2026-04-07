@@ -137,7 +137,7 @@ export default function ForumCard({
                             />
                         </span>
                     ))}
-                    <span className='count'>{post.postReacts?.length}</span>
+                    <span className='count'>{post.postReacts?.length?.toLocaleString()}</span>
                 </button>
             }
             <div className='react-comment'>

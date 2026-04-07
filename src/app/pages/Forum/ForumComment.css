@@ -121,6 +121,7 @@
 
             .commentcontent {
                 font-size: .875rem;
+                word-break: keep-all;
             }
         }
 

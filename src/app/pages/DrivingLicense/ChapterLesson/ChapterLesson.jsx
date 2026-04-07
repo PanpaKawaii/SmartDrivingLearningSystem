@@ -36,10 +36,13 @@ export default function ChapterLesson() {
                 const questionChapterQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    drivingLicenseId: drivingLicenseId,
+                    status: 1,
                 });
                 const questionLessonQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
+                    status: 1,
                 });
                 const ThisDrivingLicenseResponse = await fetchData(`DrivingLicenses/${drivingLicenseId}`, token);
                 const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
@@ -50,7 +53,7 @@ export default function ChapterLesson() {
                 const QuestionChapterItems = QuestionChapterResponse?.items;
                 const QuestionLessonItems = QuestionLessonResponse?.items;
 
-                const QuestionChapters = QuestionChapterItems.filter(qc => qc.drivingLicenseId == drivingLicenseId).map(qc => ({
+                const QuestionChapters = QuestionChapterItems.map(qc => ({
                     ...qc,
                     questionLessons: QuestionLessonItems.filter(ql => ql.questionChapterId == qc.id),
                     drivingLicense: ThisDrivingLicenseResponse || null,

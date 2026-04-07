@@ -41,6 +41,7 @@ export default function LearningLesson() {
                 const questionQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
+                    status: 1,
                 });
                 const ThisQuestionLessonResponse = await fetchData(`QuestionLessons/${questionLessonId}`, token);
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
