@@ -120,23 +120,37 @@ export default function ForumCard({
             </div>
             {/* ==FIX== */}
             <div className='reacts-comments'>
-                <button className='react-count' onClick={() => setSelectedPost(post)}>
-                    {postReacts?.map((react, index) => (
-                        <span
-                            key={index}
-                            style={{ zIndex: actions?.length - index }}
-                        >
-                            <i
-                                className={react.icon}
-                                style={{
-                                    color: react.color,
-                                    '--background': react.background
-                                }}
-                            />
+                {postReacts?.length !== 0 ?
+                    <button className='react-count' onClick={() => setSelectedPost(post)}>
+                        {postReacts?.map((react, index) => (
+                            <span
+                                key={index}
+                                style={{ zIndex: actions?.length - index }}
+                            >
+                                <i
+                                    className={react.icon}
+                                    style={{
+                                        color: react.color,
+                                        '--background': react.background
+                                    }}
+                                />
+                            </span>
+                        ))}
+                        <span className='count'>{post.postReacts?.length?.toLocaleString() || 0}</span>
+                    </button>
+                    :
+                    <button className='react-zero' onClick={() => setSelectedPost(post)}>
+                        <span>
+                            <i className='fa-solid fa-thumbs-up' />
                         </span>
-                    ))}
-                    <span className='count'>{post.postReacts?.length?.toLocaleString() || 0}</span>
-                </button>
+                        <span className='count'>0</span>
+                    </button>
+                }
+                {(!postReacts || postReacts?.length == 0) &&
+                    <span>
+                        <i className='fa-solid fa-thumps-up' />
+                    </span>
+                }
                 <button className='comment-count' onClick={() => setSelectedPost(post)}>
                     <span>
                         <i className='fa-solid fa-comment' />

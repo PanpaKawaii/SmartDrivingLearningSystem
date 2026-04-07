@@ -105,8 +105,6 @@ export default function ForumComment({
 
         setLoading(true);
         const token = user?.token || '';
-        console.log('token', token);
-
         try {
             const result = await postData('ForumComments', CommentData, token);
             console.log('result', result);

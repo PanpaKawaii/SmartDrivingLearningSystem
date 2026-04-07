@@ -115,7 +115,7 @@ export default function Forum() {
 
             {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
-                    <ForumCreatePost />
+                    <ForumCreatePost onClose={() => setOpenCreatePost(false)} />
                 </PopupContainer>
             )}
 
