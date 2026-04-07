@@ -83,9 +83,9 @@ export default function Forum() {
 
         return match && matchTopic;
     }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
-
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
     const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
+    console.log('selectedPost', selectedPost);
 
     return (
         <div className='forum-container'>

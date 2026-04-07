@@ -39,7 +39,7 @@ export default function ForumComment({
             try {
                 const forumCommentQuery = new URLSearchParams({
                     page: '1',
-                    pageSize: '500',
+                    pageSize: '1000',
                     forumPostId: post?.id,
                     status: 1,
                 });
@@ -105,6 +105,27 @@ export default function ForumComment({
         };
     };
 
+    const VoteComment = async (CommentId, myVote) => {
+        const CommentVoteData = {
+            forumCommentId: CommentId,
+        };
+        console.log('CommentVoteData:', CommentVoteData);
+
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            if (myVote != null) await deleteData(`CommentVotes/${myVote?.id}`, token);
+            else if (myVote == null) await postData('CommentVotes', CommentVoteData, token);
+
+            setRefresh(p => p + 1);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        };
+    };
+
     const handleSetReplyParent = async (CommentId) => {
         await setInputComment(p => p == CommentId ? null : CommentId);
         refReply.current?.focus();
@@ -128,89 +149,92 @@ export default function ForumComment({
         const ChildrenComment = COMMENTs.filter(comment => comment.replyId == Id);
         return (
             <>
-                {ChildrenComment.map((comment, i) => (
-                    <div key={i} id={`${comment.id}`} className='questions'>
-                        {num <= 5 && num > 0 &&
-                            <div className='head-block'>
-                                <div className={`vertical-line ${i + 1 == ChildrenComment.length ? 'no-line' : 'line-full'}`}></div>
-                                <div className='horizon-line'></div>
-                            </div>
-                        }
-                        <div className='next-reply'>
-                            <div key={i} className='content'>
-                                <div className='image head-block'>
-                                    <img src={comment.user?.image || DefaultAvatar} alt={comment.user?.email} />
-                                    <div className={`vertical-line ${(COMMENTs.filter(c => c.replyId == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
-                                </div>
-                                <div className='comment-block'>
-                                    <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
-                                        <div className='name-btn-list'>
-                                            <div className='name'>{comment.user?.name}</div>
-                                            {/* ==FIX== */}
-                                            {comment.userId != user?.id &&
-                                                <ButtonList
-                                                    list={[
-                                                        {
-                                                            name: 'report',
-                                                            onToggle: () => setOpenReport({
-                                                                header: 'Báo cáo bình luận',
-                                                                simulationId: null,
-                                                                forumPostId: null,
-                                                                forumCommentId: comment.id,
-                                                                questionId: null,
-                                                            }),
-                                                        },
-                                                        {
-                                                            name: 'test',
-                                                            onToggle: () => { },
-                                                        }
-                                                    ]}
-                                                />
-                                            }
-                                        </div>
-                                        <div className='commentcontent'>{comment.content}</div>
-                                    </div>
-                                    <div className='commentdate-btn'>
-                                        <div className='vote-icon'>
-                                            <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length?.toLocaleString() || 0}</div>
-                                            {/* ==FIX== */}
-                                            <button className='vote-btn' onClick={() => { alert('Voted!') }} disabled={!user}>
-                                                <i className={`fa-${comment.commentVotes?.some(c => c.userId == user?.id) ? 'solid' : 'regular'} fa-circle-up`} />
-                                            </button>
-                                        </div>
-                                        <div className='commentdate'>{comment.createAt?.split('T')?.[0]}</div>
-                                        <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
-                                        {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
-                                    </div>
-                                </div>
-                            </div>
-                            {comment.id == inputComment &&
-                                <div className='questions'>
-                                    <div className='head-block'>
-                                        <div className={`vertical-line ${COMMENTs.filter(c => c.replyId == comment.id)?.length == 0 ? 'no-line' : 'line-full'}`}></div>
-                                        <div className='horizon-line'></div>
-                                    </div>
-                                    <div className='next-reply'>
-                                        <div className='content input-reply'>
-                                            <div className='image head-block'>
-                                                <img src={user?.image || DefaultAvatar} alt={user?.email} />
-                                            </div>
-                                            <form className='comment-area'>
-                                                <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
-                                                <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, inputComment)}>
-                                                    ĐĂNG
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
+                {ChildrenComment.map((comment, i) => {
+                    const myVote = comment.commentVotes?.find(v => v.userId == user?.id) || null;
+                    console.log('myVote', myVote);
+                    return (
+                        <div key={i} id={`${comment.id}`} className='questions'>
+                            {num <= 5 && num > 0 &&
+                                <div className='head-block'>
+                                    <div className={`vertical-line ${i + 1 == ChildrenComment.length ? 'no-line' : 'line-full'}`}></div>
+                                    <div className='horizon-line'></div>
                                 </div>
                             }
-                            <div>
-                                {getChildrenComment(comment.id, num + 1)}
+                            <div className='next-reply'>
+                                <div key={i} className='content'>
+                                    <div className='image head-block'>
+                                        <img src={comment.user?.image || DefaultAvatar} alt={comment.user?.email} />
+                                        <div className={`vertical-line ${(COMMENTs.filter(c => c.replyId == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
+                                    </div>
+                                    <div className='comment-block'>
+                                        <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
+                                            <div className='name-btn-list'>
+                                                <div className='name'>{comment.user?.name}</div>
+                                                {/* ==FIX== */}
+                                                {comment.userId != user?.id &&
+                                                    <ButtonList
+                                                        list={[
+                                                            {
+                                                                name: 'report',
+                                                                onToggle: () => setOpenReport({
+                                                                    header: 'Báo cáo bình luận',
+                                                                    simulationId: null,
+                                                                    forumPostId: null,
+                                                                    forumCommentId: comment.id,
+                                                                    questionId: null,
+                                                                }),
+                                                            },
+                                                            {
+                                                                name: 'test',
+                                                                onToggle: () => { },
+                                                            }
+                                                        ]}
+                                                    />
+                                                }
+                                            </div>
+                                            <div className='commentcontent'>{comment.content}</div>
+                                        </div>
+                                        <div className='commentdate-btn'>
+                                            <div className='vote-icon'>
+                                                <div className='vote-number'>{comment.commentVotes?.length >= 1000 ? '999+' : comment.commentVotes?.length?.toLocaleString() || 0}</div>
+                                                <button className='vote-btn' onClick={() => VoteComment(comment.id, myVote)} disabled={!user || loading}>
+                                                    <i className={`fa-${myVote ? 'solid' : 'regular'} fa-circle-up`} />
+                                                </button>
+                                            </div>
+                                            <div className='commentdate'>{comment.createAt?.split('T')?.[0]}</div>
+                                            <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
+                                            {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
+                                        </div>
+                                    </div>
+                                </div>
+                                {comment.id == inputComment &&
+                                    <div className='questions'>
+                                        <div className='head-block'>
+                                            <div className={`vertical-line ${COMMENTs.filter(c => c.replyId == comment.id)?.length == 0 ? 'no-line' : 'line-full'}`}></div>
+                                            <div className='horizon-line'></div>
+                                        </div>
+                                        <div className='next-reply'>
+                                            <div className='content input-reply'>
+                                                <div className='image head-block'>
+                                                    <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                                                </div>
+                                                <form className='comment-area'>
+                                                    <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
+                                                    <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, inputComment)}>
+                                                        ĐĂNG
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div>
+                                    {getChildrenComment(comment.id, num + 1)}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    )
+                })}
             </>
         )
     };
