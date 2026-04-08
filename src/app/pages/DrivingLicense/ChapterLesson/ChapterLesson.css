@@ -83,12 +83,6 @@
                 color: #94a3b8;
                 font-size: 20px;
             }
-
-            .data-source-note {
-                margin-top: 10px;
-                font-size: 14px;
-                color: #7dd3fc;
-            }
         }
 
         .chapter-tabs {
@@ -110,26 +104,6 @@
                 .progress {
                     font-size: .75rem;
                     color: #cbd5e1;
-                }
-
-                .data-source-badge-inline {
-                    font-size: .65rem;
-                    font-weight: 700;
-                    letter-spacing: .02em;
-                    border-radius: 999px;
-                    padding: .2rem .5rem;
-
-                    &.api {
-                        color: #dbeafe;
-                        background: rgba(37, 99, 235, .45);
-                        border: 1px solid rgba(147, 197, 253, .4);
-                    }
-
-                    &.sample {
-                        color: #ecfeff;
-                        background: rgba(14, 116, 144, .5);
-                        border: 1px solid rgba(103, 232, 249, .45);
-                    }
                 }
 
                 &:hover {

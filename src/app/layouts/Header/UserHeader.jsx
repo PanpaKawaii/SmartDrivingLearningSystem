@@ -18,7 +18,7 @@ export default function UserHeader({
 
     const handleClick = (item) => {
         item.onToggle();
-        setShowProfileList(false);
+        setShowProfileList(true);
     };
 
     const profileList = [
@@ -45,6 +45,8 @@ export default function UserHeader({
         else if (user?.roleName == 'Instructor') navigate('/instructor');
         else if (user?.roleName == 'Admin') navigate('/admin');
     }, [user?.id]);
+
+    // console.log('showProfileList', showProfileList);
 
     return (
         <nav className='user-header-container'>
