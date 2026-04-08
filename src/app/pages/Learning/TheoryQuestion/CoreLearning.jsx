@@ -259,10 +259,12 @@ export default function CoreLearning({
                                                         forumCommentId: null,
                                                         questionId: selectedQuestion?.id,
                                                     }),
+                                                    disabled: false,
                                                 },
                                                 {
-                                                    name: 'mark',
+                                                    name: SavedQuestions?.includes(selectedQuestion?.id) ? 'unmark' : 'mark',
                                                     onToggle: () => ToggleMarkQuestion(selectedQuestionId, SAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
+                                                    disabled: loading,
                                                 }
                                             ]}
                                         />

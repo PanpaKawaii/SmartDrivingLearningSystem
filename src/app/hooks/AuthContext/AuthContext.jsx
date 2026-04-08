@@ -53,7 +53,6 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem('user');
             setUser(null);
             console.log('User logged out');
-            window.location.href = '/';
         } catch (error) {
             console.error('Error removing user from localStorage:', error);
         }

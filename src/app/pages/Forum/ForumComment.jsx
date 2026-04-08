@@ -184,10 +184,12 @@ export default function ForumComment({
                                                                     forumCommentId: comment.id,
                                                                     questionId: null,
                                                                 }),
+                                                                disabled: false,
                                                             },
                                                             {
                                                                 name: 'test',
                                                                 onToggle: () => { },
+                                                                disabled: false,
                                                             }
                                                         ]}
                                                     />

@@ -60,13 +60,12 @@
                 }
 
                 &.front {
-                    /* background: lightblue; */
                     background: #3b82f620;
-                    border: 2px solid #374e6e80;
+                    border: 2px solid #3b82f666;
                     box-sizing: border-box;
 
                     &:hover {
-                        border-color: #3b82f666;
+                        border-color: #68FCFF;
                         box-shadow: 0 0 20px #3b82f633;
                     }
 
@@ -80,14 +79,13 @@
                 }
 
                 &.back {
-                    /* background: lightcoral; */
                     transform: rotateX(180deg);
                     background: #0f172ab3;
-                    border: 2px solid #374e6e80;
+                    border: 2px solid #3b82f666;
                     box-sizing: border-box;
 
                     &:hover {
-                        border-color: #3b82f666;
+                        border-color: #68FCFF;
                         box-shadow: 0 0 20px #3b82f633;
                     }
 

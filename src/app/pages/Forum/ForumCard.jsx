@@ -137,10 +137,12 @@ export default function ForumCard({
                                 forumCommentId: null,
                                 questionId: null,
                             }),
+                            disabled: false,
                         },
                         {
                             name: 'test',
                             onToggle: () => { },
+                            disabled: false,
                         }
                     ]}
                 />

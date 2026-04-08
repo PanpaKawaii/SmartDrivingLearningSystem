@@ -15,7 +15,7 @@ export default function ButtonList({
             <button className='btn-list' onClick={() => setShow(p => !p)}><i className='fa-solid fa-ellipsis-vertical' /></button>
             <div className='list-button'>
                 {show && list?.map((item, index) => (
-                    <button className='item' key={index} onClick={() => handleClick(item)}>
+                    <button className='item' key={index} onClick={() => handleClick(item)} disabled={item.disabled}>
                         {item.name?.toUpperCase()}
                     </button>
                 ))}
