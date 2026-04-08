@@ -70,7 +70,7 @@ export default function ChangeRequests() {
         {
             key: 'actions',
             label: '',
-            width: '100px',
+            width: '140px',
             render: (_, row) => (
                 <div className='ins-action-cell'>
                     <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
@@ -82,6 +82,10 @@ export default function ChangeRequests() {
                         setSelectedReport(row);
                         setModalMode('process');
                     }}><i className='fa-solid fa-check'></i></button>
+                    <button className='ins-action-btn delete' title='Từ chối' onClick={() => {
+                        setSelectedReport(row);
+                        setModalMode('reject');
+                    }}><i className='fa-solid fa-xmark'></i></button>
                 </div>
             ),
         },
@@ -91,6 +95,7 @@ export default function ChangeRequests() {
         setSelectedReport(null);
         setModalMode('view');
     };
+
 
     const handleSubmitFeedback = async ({ title, content }) => {
         if (!selectedReport) return { error: 'Khong tim thay bao cao can xu ly.' };
@@ -122,6 +127,8 @@ export default function ChangeRequests() {
 
         const timestamp = nowAsTimestamp();
         const oldResolve = resolveItems.find((item) => Number(item.reportId) === Number(selectedReport.id));
+        // status: 1 = approved, -1 = rejected
+        const status = modalMode === 'reject' ? -1 : 1;
         const resolveRecord = {
             id: oldResolve?.id || Date.now(),
             reportId: selectedReport.id,
@@ -130,14 +137,14 @@ export default function ChangeRequests() {
             content,
             createAt: oldResolve?.createAt || timestamp,
             updateAt: timestamp,
-            status: 1,
+            status,
         };
 
         setResolveItems((current) => [resolveRecord, ...current.filter((item) => Number(item.reportId) !== Number(selectedReport.id))]);
 
         setReportItems((current) => current.map((item) => (
             Number(item.id) === Number(selectedReport.id)
-                ? { ...item, status: 1, updateAt: timestamp }
+                ? { ...item, status, updateAt: timestamp }
                 : item
         )));
         handleCloseModal();

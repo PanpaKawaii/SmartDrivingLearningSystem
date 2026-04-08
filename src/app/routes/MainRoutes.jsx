@@ -5,6 +5,7 @@ import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/ControlledVideo.jsx'
 import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
 
+import InstructorLayout from '../layouts/InstructorLayout/InstructorLayout.jsx'
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
 import UserHeader from '../layouts/Header/UserHeader.jsx'
 import Footer from '../layouts/Footer/Footer.jsx'
@@ -48,7 +49,7 @@ import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapt
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 /* Instructor CMS Pages */
-import InstructorLayout from '../components/InstructorComponent/InstructorLayout.jsx'
+
 import InsDashboard from '../pages/InstructorPages/Dashboard/Dashboard.jsx'
 import InsQuestionBank from '../pages/InstructorPages/QuestionBank/QuestionBank.jsx'
 import InsQuestionDetail from '../pages/InstructorPages/QuestionBank/QuestionDetail.jsx'

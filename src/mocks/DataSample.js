@@ -4263,7 +4263,7 @@ export const pendingPosts = [
         viewCount: 0,
         createAt: '2026-03-27 8:00:00',
         updateAt: '2026-03-27 8:00:01',
-        status: 0,
+        status: 1,
     },
     {
         id: 102,
@@ -4275,7 +4275,7 @@ export const pendingPosts = [
         viewCount: 0,
         createAt: '2026-03-26 10:00:00',
         updateAt: '2026-03-26 10:00:01',
-        status: 0,
+        status: -1,
     },
     {
         id: 103,
@@ -4287,7 +4287,7 @@ export const pendingPosts = [
         viewCount: 0,
         createAt: '2026-03-25 9:00:00',
         updateAt: '2026-03-25 9:00:01',
-        status: 0,
+        status: 3,
     },
 ];
 
