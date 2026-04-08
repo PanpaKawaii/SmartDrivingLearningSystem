@@ -3,8 +3,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 import InstructorLayout from '../layouts/InstructorLayout/InstructorLayout.jsx'
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
-import UserHeader from '../layouts/Header/UserHeader.jsx'
-import Footer from '../layouts/Footer/Footer.jsx'
 
 import Home from '../pages/Home/Home.jsx'
 import UserProfile from '../pages/UserProfile/UserProfile.jsx'
@@ -25,7 +23,7 @@ import Learning from '../pages/Learning/Learning.jsx'
 
 import TheoryQuestion from '../pages/Learning/TheoryQuestion/TheoryQuestion.jsx'
 import QuestionFlashcard from '../pages/Learning/QuestionFlashcard/QuestionFlashcard.jsx'
-// 
+import ListTrafficSign from '../pages/Learning/ListTrafficSign/ListTrafficSign.jsx'
 // 
 import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/TrafficSignFlashcard.jsx'
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
@@ -43,8 +41,8 @@ import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagem
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
-/* Instructor CMS Pages */
 
+/* Instructor CMS Pages */
 import InsDashboard from '../pages/InstructorPages/Dashboard/Dashboard.jsx'
 import InsQuestionBank from '../pages/InstructorPages/QuestionBank/QuestionBank.jsx'
 import InsQuestionDetail from '../pages/InstructorPages/QuestionBank/QuestionDetail.jsx'
@@ -89,7 +87,7 @@ export default function MainRoutes() {
 
                     <Route path='learning/theory-question' element={<TheoryQuestion />} />
                     <Route path='learning/question-flashcard' element={<QuestionFlashcard />} />
-                    {/* <Route path='learning/list-traffic-sign' element={<ListTrafficSign />} /> */}
+                    <Route path='learning/list-traffic-sign' element={<ListTrafficSign />} />
                     {/* <Route path='learning/list-traffic-sign/:signId' element={<TrafficSignDetail />} /> */}
                     <Route path='learning/traffic-sign-flashcard' element={<TrafficSignFlashcard />} />
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />

@@ -25,11 +25,6 @@ export default function LearningLesson() {
 
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
     const [LESSONPROGRESSes, setLESSONPROGRESSes] = useState([]);
-    const [dataSourceInfo, setDataSourceInfo] = useState({
-        lesson: 'api',
-        apiQuestions: 0,
-        sampleQuestions: 0,
-    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -94,9 +89,6 @@ export default function LearningLesson() {
                 <div className='lesson-header'>
                     <h1>{ThisQuestionLesson?.name}</h1>
                     <p>{ThisQuestionLesson?.description}</p>
-                    <p className='data-source-note'>
-                        Demo data sources - Lesson: {dataSourceInfo.lesson === 'sample' ? 'DataSample' : 'API'}, Questions(API/DataSample): {dataSourceInfo.apiQuestions}/{dataSourceInfo.sampleQuestions}
-                    </p>
                 </div>
 
                 <div className='content-grid'>

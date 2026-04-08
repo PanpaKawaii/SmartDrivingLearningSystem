@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import './FlipCard.css';
 
 export default function FlipCard({
@@ -20,7 +21,6 @@ export default function FlipCard({
 
     const index = list.findIndex(q => q.id === selectedQuestionId);
     const firstThreeWithIndexMiddle = list.slice(Math.max(0, index - 1), Math.min(list.length, index + 2));
-    // console.log('firstThreeWithIndexMiddle', firstThreeWithIndexMiddle);
 
     return (
         <div className='flip-card-container'>

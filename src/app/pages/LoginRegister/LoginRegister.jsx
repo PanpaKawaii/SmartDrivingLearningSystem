@@ -14,7 +14,7 @@ export default function LoginRegister({
             <div className='login-register-modal-box' style={{ transform: `rotateY(${rotate}deg)` }}>
                 <div className={`face face-login ${rotate == 0 ? 'front' : 'back'}`}>
                     <button onClick={() => onClose(false)} className='close-btn'><i className='fa-solid fa-xmark' /></button>
-                    <LoginFace setRotate={setRotate} />
+                    <LoginFace setRotate={setRotate} onClose={onClose} />
                 </div>
 
                 <div className={`face face-register ${rotate == -180 ? 'front' : 'back'}`}>

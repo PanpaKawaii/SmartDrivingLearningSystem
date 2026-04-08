@@ -7,6 +7,7 @@ import './LoginFace.css';
 
 export default function LoginFace({
     setRotate = () => { },
+    onClose = () => { },
 }) {
     console.log('Login');
     const { login } = useAuth();
@@ -57,6 +58,7 @@ export default function LoginFace({
 
             login({ ...result?.user, token: result?.accessToken, refreshToken: result?.refreshToken });
 
+            // onClose(false);
             if (result.user.roleName == 'User') navigate('/');
             else if (result.user.roleName == 'Instructor') navigate('/instructor');
             else if (result.user.roleName == 'Admin') navigate('/admin');

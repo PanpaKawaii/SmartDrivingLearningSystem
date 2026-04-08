@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
-
-import StarsBackground from '../../../components/StarsBackground/StarsBackground';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import SelectedChapter from './SelectedChapter';
@@ -22,23 +21,9 @@ export default function ChapterLesson() {
 
     const [ThisDrivingLicense, setThisDrivingLicense] = useState(null);
     const [QUESTIONCHAPTERs, setQUESTIONCHAPTERs] = useState([]);
-    const [dataSourceInfo, setDataSourceInfo] = useState({
-        apiChapters: 0,
-        sampleChapters: 0,
-        apiLessons: 0,
-        sampleLessons: 0,
-    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const getListFromResponse = (response) => {
-        if (Array.isArray(response)) return response;
-        if (Array.isArray(response?.items)) return response.items;
-        if (Array.isArray(response?.data)) return response.data;
-        if (Array.isArray(response?.result)) return response.result;
-        return [];
-    };
 
     const [selectedChapterId, setSelectedChapterId] = useState(questionChapterId || '');
 
@@ -88,7 +73,7 @@ export default function ChapterLesson() {
                 console.log('QuestionChapters', QuestionChapters);
 
                 setQUESTIONCHAPTERs(QuestionChapters);
-                setThisDrivingLicense(DrivingLicenseResponse);
+                setThisDrivingLicense(ThisDrivingLicenseResponse);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -121,9 +106,6 @@ export default function ChapterLesson() {
                 <div className='section-header'>
                     <h2>Course Chapters</h2>
                     <p>Complete lessons and pass exams to progress</p>
-                    <p className='data-source-note'>
-                        Demo data sources - Chapters(API/DataSample): {dataSourceInfo.apiChapters}/{dataSourceInfo.sampleChapters}, Lessons(API/DataSample): {dataSourceInfo.apiLessons}/{dataSourceInfo.sampleLessons}
-                    </p>
                 </div>
 
                 <div className='chapter-tabs'>
@@ -143,9 +125,6 @@ export default function ChapterLesson() {
                                 onClick={() => setSelectedChapterId(chapter.id)}
                             >
                                 <div>{chapter.name}</div>
-                                <div className={`data-source-badge-inline ${chapter.dataSource || 'api'}`}>
-                                    {chapter.dataSource === 'sample' ? 'DataSample' : 'API'}
-                                </div>
                                 <div className='progress'>({completed}/{lesson})</div>
                             </button>
                         )

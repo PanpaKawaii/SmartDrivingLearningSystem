@@ -6,17 +6,18 @@ import './FlashCard.css';
 
 export default function FlashCard({
     list = [],
+    mark = [],
 }) {
     const [selectedQuestionId, setSelectedQuestionId] = useState(list?.[0]?.id);
-    // const selectedQuestion = list.find(q => q.id === selectedQuestionId);
-    // console.log('selectedQuestion', selectedQuestion);
 
     return (
         <div className='flash-card-container container'>
             <ListGridButton
                 list={list}
+                mark={mark}
                 selectedQuestionId={selectedQuestionId}
                 setSelectedQuestionId={setSelectedQuestionId}
+                myAnswers={[]}
                 column={4}
             />
             <FlipCard
