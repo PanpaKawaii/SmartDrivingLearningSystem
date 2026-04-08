@@ -24,7 +24,7 @@ import Learning from '../pages/Learning/Learning.jsx'
 import TheoryQuestion from '../pages/Learning/TheoryQuestion/TheoryQuestion.jsx'
 import QuestionFlashcard from '../pages/Learning/QuestionFlashcard/QuestionFlashcard.jsx'
 import ListTrafficSign from '../pages/Learning/ListTrafficSign/ListTrafficSign.jsx'
-// 
+import TrafficSignDetail from '../pages/Learning/ListTrafficSign/TrafficSignDetail.jsx'
 import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/TrafficSignFlashcard.jsx'
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
@@ -88,7 +88,7 @@ export default function MainRoutes() {
                     <Route path='learning/theory-question' element={<TheoryQuestion />} />
                     <Route path='learning/question-flashcard' element={<QuestionFlashcard />} />
                     <Route path='learning/list-traffic-sign' element={<ListTrafficSign />} />
-                    {/* <Route path='learning/list-traffic-sign/:signId' element={<TrafficSignDetail />} /> */}
+                    <Route path='learning/list-traffic-sign/:signId' element={<TrafficSignDetail />} />
                     <Route path='learning/traffic-sign-flashcard' element={<TrafficSignFlashcard />} />
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />

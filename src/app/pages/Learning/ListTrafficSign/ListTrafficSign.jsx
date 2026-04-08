@@ -106,33 +106,24 @@ export default function ListTrafficSign() {
     return (
         <div className='list-traffic-sign-container container'>
             <StarsBackground />
-            <div className='list-sign-heading'>
-                <div className='badge'>
-                    <span>aaaaaaaaaaaaaaaa</span>
-                </div>
-                <h1>aaaaaaa <span className='gradient'>aaaaaaaaaaaaa</span></h1>
-                <p>
-                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                </p>
-            </div>
-
             <div className='control-heading'>
-                <input type='text' value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder='Tìm theo tên...' />
                 <div className='result'>
                     {filteredTRAFFICSIGNs?.length}
                 </div>
-                <div className='filters'>
-                    <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-                        <option value=''>Tất cả</option>
-                        <option value='1'>Đã lưu</option>
-                    </select>
-                    <select value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
-                        <option value=''>Tất cả</option>
-                        {SIGNCATEGORIes?.map((category, index) => (
-                            <option key={index} value={category.id}>{category.name}</option>
-                        ))}
-                    </select>
-                </div>
+                <input type='text' value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder='Tìm theo tên...' />
+                <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
+                    <option value=''>Tất cả</option>
+                    <option value='1'>Đã lưu</option>
+                </select>
+                <select value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
+                    <option value=''>Tất cả</option>
+                    {SIGNCATEGORIes?.map((category, index) => (
+                        <option key={index} value={category.id}>{category.name}</option>
+                    ))}
+                </select>
+                <button className='btn' onClick={() => setRefresh(p => p + 1)} disabled={loading}>
+                    Refresh
+                </button>
             </div>
 
             <div className='sign-grid'>
