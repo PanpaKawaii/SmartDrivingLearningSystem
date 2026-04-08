@@ -5,6 +5,7 @@ import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput';
 import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 
 import './UserProfile.css';
 
@@ -69,12 +70,17 @@ export default function UserProfile() {
                     <div className='profile-sidebar'>
                         <div className='avatar-section'>
                             <div className='avatar-wrapper'>
-                                <img src={user?.avatar || DefaultAvatar} alt='User Avatar' />
-                                {(isEditing && activeTab === 'profile') && (
-                                    <button className='upload-btn' type='button'>
-                                        <i className='fa-solid fa-camera'></i>
-                                    </button>
-                                )}
+                                <ImageUpload
+                                    imageUrl={user?.avatar || DefaultAvatar}
+                                    onImageChange={({ file, preview }) => {
+                                        // TODO: Gọi API upload ở đây sau này
+                                        // Hiện tại chỉ đổi preview trên UI
+                                        setFormData(prev => ({ ...prev, avatar: preview }));
+                                    }}
+                                    disabled={!isEditing || activeTab !== 'profile'}
+                                    className='profile-avatar-upload'
+                                    label={isEditing ? 'Đổi ảnh đại diện' : ''}
+                                />
                             </div>
                             <h2 className='user-name'>{user?.name || 'Học viên'}</h2>
                             <span className='user-role glass-badge'>{user?.roleName || 'Student'}</span>
