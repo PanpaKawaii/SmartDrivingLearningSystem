@@ -21,7 +21,8 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {
-            setError('Error');
+            console.error('Error', error);
+            setError(error);
         } finally {
             setLoading(false);
         }
@@ -36,7 +37,8 @@ export default function EditUserModal({ userprop, onClose, setRefresh, action })
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {
-            setError('Error');
+            console.error('Error', error);
+            setError(error);
         } finally {
             setLoading(false);
         }

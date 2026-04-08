@@ -66,6 +66,15 @@
                     height: calc(var(--LightWidth) + var(--SpaceHorizontal) * 2);
                 }
 
+                &.status-face {
+                    width: calc(var(--LightWidth) * 3 + var(--SpaceVertical) * 4);
+                    height: calc(var(--LightWidth) + var(--SpaceHorizontal) * 2);
+
+                    color: #a1afc540;
+                    font-size: 8rem;
+                    font-weight: 800;
+                }
+
                 &.side-face {
                     width: calc(var(--LightWidth) + var(--SpaceHorizontal) * 2);
                     height: calc(var(--LightWidth) * 3 + var(--SpaceVertical) * 4);
@@ -84,7 +93,7 @@
                 }
 
                 &.f4 {
-                    transform: rotateZ(90deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
+                    transform: rotateZ(90deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(90deg);
                 }
 
                 &.f5 {
@@ -92,7 +101,7 @@
                 }
 
                 &.f6 {
-                    transform: rotateZ(270deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
+                    transform: rotateZ(270deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(90deg);
                 }
             }
 

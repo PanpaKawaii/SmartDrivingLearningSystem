@@ -44,7 +44,7 @@ export default function ForumCreatePost({
                 setFORUMTOPICs(ForumTopic);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             }

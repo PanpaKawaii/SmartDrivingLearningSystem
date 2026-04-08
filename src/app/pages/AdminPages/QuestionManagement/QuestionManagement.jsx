@@ -68,7 +68,8 @@ export default function QuestionManagement() {
                 setQUESTIONCHAPTERs(QuestionChapterResponse);
                 setQUESTIONCATEGORIes(QuestionCategoryResponse);
             } catch (error) {
-                setError('Error');
+                console.error('Error', error);
+                setError(error);
             } finally {
                 setLoading(false);
             }
@@ -113,7 +114,7 @@ export default function QuestionManagement() {
     };
 
     if (loading) return <div className='admin-container'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div className='admin-container'><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (error) return <div className='admin-container'><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='admin-container'>
             <div className='inner-container management-container question-management-container'>

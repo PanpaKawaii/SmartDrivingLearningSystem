@@ -15,6 +15,10 @@ export const fetchData = async (endpoint, token) => {
             },
         });
         if (!response.ok) {
+            const error = new Error(response.statusText);
+            error.status = response.status;
+            error.data = await response.json().catch(() => null);
+            throw error;
             throw new Error(`Error: ${response.statusText}`);
         }
         return await response.json();
@@ -36,17 +40,11 @@ export const postData = async (endpoint, data, token) => {
             body: JSON.stringify(data),
         });
         if (!response.ok) {
-            let errorPayload = null;
-            try {
-                errorPayload = await response.json();
-            } catch {
-                errorPayload = null;
-            }
-
-            const error = new Error(errorPayload?.title || `Error: ${response.statusText}`);
+            const error = new Error(response.statusText);
             error.status = response.status;
-            error.payload = errorPayload;
+            error.data = await response.json().catch(() => null);
             throw error;
+            throw new Error(`Error: ${response.statusText}`);
         }
         return await response.json();
     } catch (error) {
@@ -67,6 +65,10 @@ export const putData = async (endpoint, data, token) => {
             body: JSON.stringify(data),
         });
         if (!response.ok) {
+            const error = new Error(response.statusText);
+            error.status = response.status;
+            error.data = await response.json().catch(() => null);
+            throw error;
             throw new Error(`Error: ${response.statusText}`);
         }
         return await response.json();
@@ -88,6 +90,10 @@ export const patchData = async (endpoint, data, token) => {
             body: JSON.stringify(data),
         });
         if (!response.ok) {
+            const error = new Error(response.statusText);
+            error.status = response.status;
+            error.data = await response.json().catch(() => null);
+            throw error;
             throw new Error(`Error: ${response.statusText}`);
         }
         return;
@@ -108,6 +114,10 @@ export const deleteData = async (endpoint, token) => {
             },
         });
         if (!response.ok) {
+            const error = new Error(response.statusText);
+            error.status = response.status;
+            error.data = await response.json().catch(() => null);
+            throw error;
             throw new Error(`Error: ${response.statusText}`);
         }
         return await response.json();
