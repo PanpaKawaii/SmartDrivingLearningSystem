@@ -93,7 +93,7 @@ export default function ForumCard({
     // ];
 
     // B1: Đếm số lượng từng reactType
-    const reactCountMap = post.postReacts?.reduce((acc, item) => {
+    const reactCountMap = (post.postReacts ?? []).reduce((acc, item) => {
         acc[item.reactType] = (acc[item.reactType] || 0) + 1;
         return acc;
     }, {});

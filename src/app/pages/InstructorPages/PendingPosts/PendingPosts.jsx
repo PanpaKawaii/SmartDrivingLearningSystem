@@ -1,4 +1,6 @@
 import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import PopupContainer from '../../../components/PopupContainer/PopupContainer';
+import ForumCard from '../../Forum/ForumCard';
 import '../InstructorPages.css';
 import { useEffect, useState } from 'react';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
@@ -19,6 +21,9 @@ export default function PendingPosts() {
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
+
+    // State for view popup
+    const [selectedPostId, setSelectedPostId] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -129,7 +134,14 @@ export default function PendingPosts() {
             width: '120px',
             render: (_, row) => (
                 <div className='ins-action-cell'>
-                    <button className='ins-action-btn view' title='Xem' disabled><i className='fa-solid fa-eye'></i></button>
+                    <button
+                        className='ins-action-btn view'
+                        title='Xem'
+                        onClick={() => setSelectedPostId(row.id)}
+                        disabled={loading}
+                    >
+                        <i className='fa-solid fa-eye' ></i>
+                    </button>
                     <button className='ins-action-btn edit' title='Duyệt' onClick={() => handleApprove(row.id)} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
                     <button className='ins-action-btn delete' title='Từ chối' onClick={() => handleReject(row.id)} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
                 </div>
@@ -140,6 +152,9 @@ export default function PendingPosts() {
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
     };
+
+    // Find the selected post object
+    const selectedPost = items.find(item => item.id === selectedPostId);
 
     return (
         <div className='ins-page'>
@@ -158,6 +173,13 @@ export default function PendingPosts() {
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
             />
+
+            {/* View Popup */}
+            {selectedPost && (
+                <PopupContainer onClose={() => setSelectedPostId(null)} titleName={`Bài viết của ${selectedPost?.user?.name || ''}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCard post={selectedPost} parentLoading={loading} />
+                </PopupContainer>
+            )}
         </div>
     );
 }
