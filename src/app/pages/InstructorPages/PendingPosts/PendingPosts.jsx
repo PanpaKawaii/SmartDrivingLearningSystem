@@ -164,7 +164,7 @@ export default function PendingPosts() {
                     <p>Danh sách bài viết đang chờ phê duyệt từ giảng viên.</p>
                 </div>
             </div>
-            {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
+            {error && <div className='ins-error-banner'>{error}</div>}
             <InstructorDataTable
                 title={`Bài viết chờ duyệt (${serverPagination.totalCount})`}
                 columns={columns}

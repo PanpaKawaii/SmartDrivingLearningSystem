@@ -180,7 +180,7 @@ export default function ContentErrorReports() {
             <div className='ins-page-header'>
                 <div><h1>Báo cáo lỗi nội dung</h1><p>Danh sách lỗi nội dung được báo cáo từ người dùng.</p></div>
             </div>
-            {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
+            {error && <div className='ins-error-banner'>{error}</div>}
             <InstructorDataTable
                 title={`Báo cáo lỗi (${serverPagination.totalCount})`}
                 columns={columns}
