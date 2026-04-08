@@ -41,27 +41,24 @@ export default function Forum() {
                     status: 1,
                 });
                 const postReactQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
                     status: 1,
                 });
                 const ForumPostResponse = await fetchData(`ForumPosts?${forumPostQuery.toString()}`, token);
                 const ForumTopicResponse = await fetchData(`ForumTopics?${forumTopicQuery.toString()}`, token);
-                const PostReactResponse = await fetchData(`PostReacts?${postReactQuery.toString()}`, token);
+                const PostReactResponse = await fetchData(`PostReacts/all?${postReactQuery.toString()}`, token);
                 console.log('ForumPostResponse', ForumPostResponse);
                 console.log('ForumTopicResponse', ForumTopicResponse);
                 console.log('PostReactResponse', PostReactResponse);
                 const ForumPostItems = ForumPostResponse?.items;
                 const ForumTopicItems = ForumTopicResponse?.items;
-                const PostReactItems = PostReactResponse?.items;
 
-                const ForumPost = ForumPostItems.map(fp => ({
+                const ForumPosts = ForumPostItems.map(fp => ({
                     ...fp,
                     forumTopic: ForumTopicItems.find(ft => ft.id == fp.forumTopicId) || null,
-                    postReacts: PostReactItems.filter(pr => pr.forumPostId == fp.id),
+                    postReacts: PostReactResponse.filter(pr => pr.forumPostId == fp.id),
                 }));
 
-                setFORUMPOSTs(ForumPost);
+                setFORUMPOSTs(ForumPosts);
                 setFORUMTOPICs(ForumTopicItems);
             } catch (error) {
                 console.error('Error', error);
@@ -73,15 +70,15 @@ export default function Forum() {
     }, [refresh, user?.token]);
 
     const filteredFORUMPOSTs = FORUMPOSTs.filter(fp => {
-        let match = false;
-        if (selectedStatus == '') match = !([-1, 0].includes(fp.status));
-        else if (selectedStatus == '1') match = fp.userId == user?.id && fp.status == '1';
-        else if (selectedStatus == '-2') match = fp.postReacts?.some(r => r.userId == user?.id) && fp.status == '1';
-        else match = selectedStatus == fp.status;
+        let matchStatus = false;
+        if (selectedStatus == '') matchStatus = !([-1, 0].includes(fp.status));
+        else if (selectedStatus == '1') matchStatus = fp.userId == user?.id && fp.status == '1';
+        else if (selectedStatus == '-2') matchStatus = fp.postReacts?.some(r => r.userId == user?.id) && fp.status == '1';
+        else matchStatus = selectedStatus == fp.status;
 
         const matchTopic = !selectedTopicId || fp.forumTopicId == selectedTopicId;
 
-        return match && matchTopic;
+        return matchStatus && matchTopic;
     }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
     const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
@@ -93,7 +90,7 @@ export default function Forum() {
             <div className='left'></div>
             <div className='center'>
                 <div className='list-forum-card'>
-                    <div className='control-header'>
+                    <div className='control-heading'>
                         <div className='create-post'>
                             <div className='image'>
                                 <img src={user?.image || DefaultAvatar} alt={user?.email} />

@@ -31,7 +31,7 @@ export default function CoreLearning({
     // console.log('lessonProgressId', lessonProgressId);
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
-    const [SAVEDQUESTIONs, setSAVEDQUESTIONs] = useState([]);
+    const [mySAVEDQUESTIONs, setMySAVEDQUESTIONs] = useState([]);
     const [selectedQuestionId, setSelectedQuestionId] = useState('');
     const [myAnswers, setMyAnswers] = useState([]);
     const [refresh, setRefresh] = useState(0);
@@ -44,24 +44,22 @@ export default function CoreLearning({
             setError(null);
             setLoading(true);
             const token = user?.token || '';
+            const userId = user?.id || '';
             try {
                 const tagQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '200',
                     status: 1,
                 });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
-                const TagResponse = await fetchData(`Tags?${tagQuery.toString()}`, token);
+                const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
                 const QuestionItems = QuestionResponse?.items;
-                const TagItems = TagResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
                         ...q,
                         index: i + 1,
-                        tags: TagItems.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
+                        tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
@@ -71,14 +69,12 @@ export default function CoreLearning({
 
                 if (user?.token) {
                     const savedQuestionQuery = new URLSearchParams({
-                        page: '1',
-                        pageSize: '200',
+                        userId: userId,
                         status: 1,
                     });
-                    const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
+                    const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
                     console.log('SavedQuestionResponse', SavedQuestionResponse);
-                    const SavedQuestionItems = SavedQuestionResponse?.items;
-                    setSAVEDQUESTIONs(SavedQuestionItems);
+                    setMySAVEDQUESTIONs(SavedQuestionResponse);
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -91,8 +87,8 @@ export default function CoreLearning({
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     // console.log('selectedQuestion', selectedQuestion);
-    const SavedQuestions = SAVEDQUESTIONs.map(sq => sq.questionId);
-    // console.log('SavedQuestions', SavedQuestions);
+    const MySavedQuestions = mySAVEDQUESTIONs.map(sq => sq.questionId);
+    // console.log('MySavedQuestions', MySavedQuestions);
 
     const index = QUESTIONs.findIndex(q => q.id == selectedQuestionId);
     const firstThreeWithIndexMiddle = QUESTIONs.slice(Math.max(0, index - 1), Math.min(QUESTIONs.length, index + 2));
@@ -223,7 +219,7 @@ export default function CoreLearning({
             <div className='container'>
                 <ListGridButton
                     list={QUESTIONs}
-                    mark={SavedQuestions}
+                    mark={MySavedQuestions}
                     selectedQuestionId={selectedQuestionId}
                     setSelectedQuestionId={setSelectedQuestionId}
                     myAnswers={myAnswers}
@@ -262,8 +258,8 @@ export default function CoreLearning({
                                                     disabled: false,
                                                 },
                                                 {
-                                                    name: SavedQuestions?.includes(selectedQuestion?.id) ? 'unmark' : 'mark',
-                                                    onToggle: () => ToggleMarkQuestion(selectedQuestionId, SAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
+                                                    name: MySavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
+                                                    onToggle: () => ToggleMarkQuestion(selectedQuestionId, mySAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
                                                     disabled: loading,
                                                 }
                                             ]}

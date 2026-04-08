@@ -41,12 +41,12 @@ export default function DrivingLicense() {
                 const QuestionChapterItems = QuestionChapterResponse?.items;
                 // const DrivingLicenseItems = [...drivingLicenses];
                 // const QuestionChapterItems = [...questionChapters];
-                const DrivingLicense = DrivingLicenseItems.map(dl => ({
+                const DrivingLicenses = DrivingLicenseItems.map(dl => ({
                     ...dl,
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
-                setDRIVINGLICENSEs(DrivingLicense);
+                setDRIVINGLICENSEs(DrivingLicenses);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
