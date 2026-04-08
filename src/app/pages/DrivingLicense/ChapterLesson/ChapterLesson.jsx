@@ -76,7 +76,7 @@ export default function ChapterLesson() {
                 setThisDrivingLicense(ThisDrivingLicenseResponse);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             }
@@ -84,7 +84,7 @@ export default function ChapterLesson() {
     }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='chapter-lesson-container'>
             <div

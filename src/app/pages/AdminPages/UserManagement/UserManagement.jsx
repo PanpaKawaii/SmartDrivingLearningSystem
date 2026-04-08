@@ -47,7 +47,8 @@ export default function UserManagement() {
 
                 setUSERs(Users);
             } catch (error) {
-                setError('Error');
+                console.error('Error', error);
+                setError(error);
             } finally {
                 setLoading(false);
             }
@@ -104,7 +105,7 @@ export default function UserManagement() {
     // if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
     // if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
     if (loading) return <div className='admin-container'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div className='admin-container'><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (error) return <div className='admin-container'><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='admin-container'>
             {/* {JSON.stringify(usersFilter?.[0], null, 0)} */}

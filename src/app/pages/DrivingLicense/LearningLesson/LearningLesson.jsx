@@ -64,7 +64,7 @@ export default function LearningLesson() {
                 setLESSONPROGRESSes(LessonProgress);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             };
@@ -72,7 +72,7 @@ export default function LearningLesson() {
     }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='learning-lesson-container container'>
             <StarsBackground />

@@ -20,7 +20,8 @@ export default function EditQuestionModal({ questionprop, onClose, setRefresh, a
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {
-            setError('Error');
+            console.error('Error', error);
+            setError(error);
         } finally {
             setLoading(false);
         }
@@ -34,7 +35,8 @@ export default function EditQuestionModal({ questionprop, onClose, setRefresh, a
             onClose();
             setRefresh(p => p + 1);
         } catch (error) {
-            setError('Error');
+            console.error('Error', error);
+            setError(error);
         } finally {
             setLoading(false);
         }

@@ -65,7 +65,7 @@ export default function Forum() {
                 setFORUMTOPICs(ForumTopicItems);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             };

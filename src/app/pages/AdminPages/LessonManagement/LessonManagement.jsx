@@ -102,7 +102,8 @@ export default function LessonManagement() {
         setQUESTIONCHAPTERs(chapterResponse);
         setLESSONs(lessonsWithChapter);
       } catch (error) {
-        setError(error?.message || "Error");
+        console.error('Error', error);
+        setError(error);
       } finally {
         setLoading(false);
       }
@@ -208,13 +209,13 @@ export default function LessonManagement() {
   if (loading)
     return (
       <div className="admin-container">
-        <TrafficLight text={"loading"} setRefresh={() => {}} />
+        <TrafficLight text={'loading'} setRefresh={() => { }} />
       </div>
     );
   if (error)
     return (
       <div className="admin-container">
-        <TrafficLight text={"error"} setRefresh={setRefresh} />
+        <TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} />
       </div>
     );
 

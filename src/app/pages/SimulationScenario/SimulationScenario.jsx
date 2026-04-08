@@ -51,7 +51,7 @@ export default function SimulationScenario() {
                 // setSelectedScenarioId(SimulationScenario?.[0]?.id);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             }
@@ -62,7 +62,7 @@ export default function SimulationScenario() {
     console.log('selectedScenario', selectedScenario);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='simulation-scenario-container'>
             <CloudsBackground />

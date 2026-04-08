@@ -79,7 +79,7 @@ export default function CoreLearning({
                 setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             };
@@ -214,7 +214,7 @@ export default function CoreLearning({
     };
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='core-learning-container'>
             <div className='container'>

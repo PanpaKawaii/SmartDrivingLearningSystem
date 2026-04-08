@@ -4,12 +4,15 @@ import './TrafficLight.css';
 
 export default function TrafficLight({
     text = 'error',
+    status = '',
     setRefresh = () => { },
 }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
     const rotation = useRef({ x: 0, y: 0 });
+
+    console.log('status', status);
 
     const applyRotation = () => {
         const { x, y } = rotation.current;
@@ -49,9 +52,10 @@ export default function TrafficLight({
                     {[...Array(6)].map((_, i) => (
                         <div
                             key={i}
-                            className={`face f${i + 1} ${i < 2 ? 'updown-face' : 'side-face'}`}
+                            className={`face f${i + 1} ${i < 2 ? 'updown-face' : ((i + 1 == 4 || i + 1 == 6) ? 'status-face' : 'side-face')}`}
                             onClick={() => setRefresh(p => p + 1)}
                         >
+                            {(i + 1 == 4 || i + 1 == 6) && status}
                         </div>
                     ))}
                     {[...Array(2)].map((_, i) => (

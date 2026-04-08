@@ -54,7 +54,7 @@ export default function ForumComment({
                 setCOMMENTs(ForumComment);
             } catch (error) {
                 console.error('Error', error);
-                setError('Error');
+                setError(error);
             } finally {
                 setLoading(false);
             };
@@ -240,7 +240,7 @@ export default function ForumComment({
     };
 
     // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    // if (error) return <div><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    // if (error) return <div><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>
             <div className='forum-content'>

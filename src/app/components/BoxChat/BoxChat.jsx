@@ -50,6 +50,7 @@ export default function BoxChat() {
         } catch (error) {
             setMessages((prev) => [...prev, 'Kết nối không ổn định, bạn hãy thử lại sau nhé!']);
             setVisible(true);
+            console.error('Error', error);
             setError(error);
         } finally {
             setLoading(false);
