@@ -40,8 +40,11 @@ export default function PendingPosts() {
                 setItems(res?.items || []);
                 setServerPagination(prev => ({
                     ...prev,
+                    page: res?.page || prev.page,
+                    pageSize: res?.pageSize || prev.pageSize,
+                    totalCount: res?.totalCount || prev.totalCount,
                     totalPages: res?.totalPages || 1,
-                    totalCount: res?.totalCount || 0
+                    
                 }));
             } catch (err) {
                 setError('Lỗi tải dữ liệu');

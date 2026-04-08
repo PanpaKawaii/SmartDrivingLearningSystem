@@ -36,16 +36,7 @@ const getEntityRoute = (report) => {
 export default function ContentErrorReports() {
     const { user } = useAuth();
     const [refresh, setRefresh] = useState(0);
-    const [queryParams, setQueryParams] = useState({
-        page: 1,
-        pageSize: 10,
-    });
-    const [pagingMeta, setPagingMeta] = useState({
-        page: 0,
-        pageSize: 0,
-        totalCount: 0,
-        totalPages: 0,
-    });
+    const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -87,8 +78,8 @@ export default function ContentErrorReports() {
             const token = user?.token || '';
             try {
                 const query = new URLSearchParams({
-                    page: String(queryParams.page),
-                    pageSize: String(queryParams.pageSize),
+                    page: serverPagination.page,
+                    pageSize: serverPagination.pageSize,
                 });
 
                 const [reportCategoriesResponse, reportsResponse, resolvesResponse] = await Promise.all([
@@ -115,12 +106,13 @@ export default function ContentErrorReports() {
                 setUserItems(userApiItems);
                 setReportItems(contentErrorReports);
                 setResolveItems(resolveApiItems);
-                setPagingMeta({
-                    page: Number(reportsResponse?.page || queryParams.page),
-                    pageSize: Number(reportsResponse?.pageSize || queryParams.pageSize),
-                    totalCount: Number(reportsResponse?.totalCount || contentErrorReports.length),
-                    totalPages: Math.max(1, Number(reportsResponse?.totalPages || 1)),
-                });
+                setServerPagination(prev => ({
+                    ...prev,
+                    page: reportsResponse?.page || prev.page,
+                    pageSize: reportsResponse?.pageSize || prev.pageSize,
+                    totalCount: reportsResponse?.totalCount || prev.totalCount,
+                    totalPages: reportsResponse?.totalPages || 1,
+                }));
             } catch (err) {
                 console.error('Error loading content error reports:', err);
                 //setError('Khong the tai du lieu bao cao loi noi dung.');
@@ -128,7 +120,7 @@ export default function ContentErrorReports() {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, queryParams.page, queryParams.pageSize]);
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
     console.log('reportItems', reportItems);
     const columns = [
         { key: 'totalCount', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
@@ -216,6 +208,10 @@ export default function ContentErrorReports() {
         );
     }
 
+    const handlePageChange = (page) => {
+        setServerPagination(prev => ({ ...prev, page }));
+    };
+
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
@@ -223,12 +219,12 @@ export default function ContentErrorReports() {
             </div>
 
             <InstructorDataTable
-                title={`Báo cáo lỗi (${pagingMeta.totalCount})`}
+                title={`Báo cáo lỗi (${serverPagination.totalCount})`}
                 columns={columns}
                 data={reportItems}
                 loading={loading}
-                serverPagination={pagingMeta}
-                onPageChange={(nextPage) => setQueryParams((current) => ({ ...current, page: nextPage }))}
+                serverPagination={serverPagination}
+                onPageChange={handlePageChange}
             />
 
             <ReportFeedbackModal
