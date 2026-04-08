@@ -23,6 +23,7 @@ export default function QuestionFlashcard() {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
+            const userId = user?.id || '';
             try {
                 const questionQuery = new URLSearchParams({
                     page: '1',
@@ -30,23 +31,20 @@ export default function QuestionFlashcard() {
                     status: 1,
                 });
                 const tagQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '200',
                     status: 1,
                 });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
-                const TagResponse = await fetchData(`Tags?${tagQuery.toString()}`, token);
+                const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
                 const QuestionItems = QuestionResponse?.items;
-                const TagItems = TagResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
                         ...q,
                         index: i + 1,
                         showAnswer: true,
-                        tags: TagItems.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
+                        tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
@@ -55,7 +53,7 @@ export default function QuestionFlashcard() {
 
                 if (user?.token) {
                     const savedQuestionQuery = new URLSearchParams({
-                        userId: user?.id,
+                        userId: userId,
                         status: 1,
                     });
                     const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);

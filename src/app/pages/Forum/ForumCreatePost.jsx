@@ -30,18 +30,12 @@ export default function ForumCreatePost({
             const token = user?.token || '';
             try {
                 const forumTopicQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
                     status: 1,
                 });
-                const ForumTopicResponse = await fetchData(`ForumTopics?${forumTopicQuery.toString()}`, token);
+                const ForumTopicResponse = await fetchData(`ForumTopics/all?${forumTopicQuery.toString()}`, token);
                 console.log('ForumTopicResponse', ForumTopicResponse);
-                const ForumTopicItems = ForumTopicResponse?.items;
-                const ForumTopics = ForumTopicItems.map(ft => ({
-                    ...ft,
-                }));
 
-                setFORUMTOPICs(ForumTopics);
+                setFORUMTOPICs(ForumTopicResponse);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);

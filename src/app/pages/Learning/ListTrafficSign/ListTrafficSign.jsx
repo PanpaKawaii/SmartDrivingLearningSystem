@@ -13,31 +13,43 @@ export default function ListTrafficSign() {
     const { user } = useAuth();
 
     const [TRAFFICSIGNs, setTRAFFICSIGNs] = useState([]);
+    const [SIGNCATEGORIes, setSIGNCATEGORIes] = useState([]);
     const [mySAVEDTRAFFICSIGNs, setMySAVEDTRAFFICSIGNs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [inputName, setInputName] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
 
     useEffect(() => {
         (async () => {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
+            const userId = user?.id || '';
             try {
                 const trafficSignQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
                     status: 1,
                 });
+                const signCategoryQuery = new URLSearchParams({
+                    status: 1,
+                });
                 const TrafficSignResponse = await fetchData(`TrafficSigns?${trafficSignQuery.toString()}`, token);
+                const SignCategoryResponse = await fetchData(`SignCategories/all?${signCategoryQuery.toString()}`, token);
                 console.log('TrafficSignResponse', TrafficSignResponse);
+                console.log('SignCategoryResponse', SignCategoryResponse);
                 const TrafficSignItems = TrafficSignResponse?.items;
 
                 setTRAFFICSIGNs(TrafficSignItems);
+                setSIGNCATEGORIes(SignCategoryResponse);
 
                 if (user?.token) {
                     const savedTrafficSignQuery = new URLSearchParams({
-                        userId: user?.id,
+                        userId: userId,
                         status: 1,
                     });
                     const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
@@ -77,8 +89,20 @@ export default function ListTrafficSign() {
 
     const MySavedTrafficSigns = mySAVEDTRAFFICSIGNs.map(sq => sq.trafficSignId);
 
+    const filteredTRAFFICSIGNs = TRAFFICSIGNs.filter(ts => {
+        const matchName = ts.name?.toLowerCase()?.includes(inputName?.toLowerCase());
+        const matchStatus = !selectedStatus || (selectedStatus == '1' && MySavedTrafficSigns?.includes(ts.id))
+        const matchCategory = !selectedCategoryId || ts.signCategoryId == selectedCategoryId;
+
+        console.log('matchName', matchName);
+
+
+        return matchName && matchStatus && matchCategory;
+    });
+    console.log('filteredTRAFFICSIGNs', filteredTRAFFICSIGNs);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    // if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='list-traffic-sign-container container'>
             <StarsBackground />
@@ -92,8 +116,27 @@ export default function ListTrafficSign() {
                 </p>
             </div>
 
+            <div className='control-heading'>
+                <input type='text' value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder='Tìm theo tên...' />
+                <div className='result'>
+                    {filteredTRAFFICSIGNs?.length}
+                </div>
+                <div className='filters'>
+                    <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
+                        <option value=''>Tất cả</option>
+                        <option value='1'>Đã lưu</option>
+                    </select>
+                    <select value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
+                        <option value=''>Tất cả</option>
+                        {SIGNCATEGORIes?.map((category, index) => (
+                            <option key={index} value={category.id}>{category.name}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             <div className='sign-grid'>
-                {TRAFFICSIGNs.map((sign, index) => (
+                {filteredTRAFFICSIGNs.map((sign, index) => (
                     <div
                         key={sign.id}
                         className='sign-card'
@@ -111,6 +154,7 @@ export default function ListTrafficSign() {
                                 </button>
                             </div>
                             <p>{sign.description}</p>
+                            <div className='category'>{sign.signCategory?.name}</div>
                             <div className='code'>Code: {sign.code}</div>
                         </div>
                     </div>

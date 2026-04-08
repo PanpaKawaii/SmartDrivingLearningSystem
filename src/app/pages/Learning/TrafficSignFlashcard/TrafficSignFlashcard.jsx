@@ -22,6 +22,7 @@ export default function TrafficSignFlashcard() {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
+            const userId = user?.id || '';
             try {
                 const trafficSignQuery = new URLSearchParams({
                     page: '1',
@@ -36,7 +37,7 @@ export default function TrafficSignFlashcard() {
 
                 if (user?.token) {
                     const savedTrafficSignQuery = new URLSearchParams({
-                        userId: user?.id,
+                        userId: userId,
                         status: 1,
                     });
                     const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
