@@ -50,20 +50,12 @@ export default function CoreLearning({
                     pageSize: '200',
                     status: 1,
                 });
-                const savedQuestionQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '200',
-                    status: 1,
-                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 const TagResponse = await fetchData(`Tags?${tagQuery.toString()}`, token);
-                const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
-                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
                 const TagItems = TagResponse?.items;
-                const SavedQuestionItems = SavedQuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
@@ -75,8 +67,19 @@ export default function CoreLearning({
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
-                setSAVEDQUESTIONs(SavedQuestionItems);
                 setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
+
+                if (user?.token) {
+                    const savedQuestionQuery = new URLSearchParams({
+                        page: '1',
+                        pageSize: '200',
+                        status: 1,
+                    });
+                    const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
+                    console.log('SavedQuestionResponse', SavedQuestionResponse);
+                    const SavedQuestionItems = SavedQuestionResponse?.items;
+                    setSAVEDQUESTIONs(SavedQuestionItems);
+                }
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -214,7 +217,7 @@ export default function CoreLearning({
     };
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    // if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='core-learning-container'>
             <div className='container'>

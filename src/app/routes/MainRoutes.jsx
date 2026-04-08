@@ -3,8 +3,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
-import UserHeader from '../layouts/Header/UserHeader.jsx'
-import Footer from '../layouts/Footer/Footer.jsx'
 
 import Home from '../pages/Home/Home.jsx'
 
