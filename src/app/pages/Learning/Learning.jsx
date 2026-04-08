@@ -14,7 +14,7 @@ export default function Learning() {
             time: 'Tự học',
         },
         {
-            name: 'Học theo dạng Flashcard',
+            name: 'Học câu hỏi theo dạng Flashcard',
             link: 'learning/question-flashcard',
             icon: 'rectangle-list',
             description: 'Học 600+ câu hỏi dưới dạng Flashcard gồm câu hỏi và đáp án',

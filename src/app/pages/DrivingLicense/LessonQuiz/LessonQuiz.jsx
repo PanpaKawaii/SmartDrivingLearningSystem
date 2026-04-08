@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
-import CoreLearning from '../../TheoryQuestion/CoreLearning';
+import CoreLearning from '../../Learning/TheoryQuestion/CoreLearning';
 
 import './LessonQuiz.css';
 

@@ -2,9 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 
-import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/ControlledVideo.jsx'
-import TheoryQuestion from '../pages/TheoryQuestion/TheoryQuestion.jsx'
-
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
 import UserHeader from '../layouts/Header/UserHeader.jsx'
 import Footer from '../layouts/Footer/Footer.jsx'
@@ -15,8 +12,6 @@ import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
 import ChapterLesson from '../pages/DrivingLicense/ChapterLesson/ChapterLesson.jsx'
 import LearningLesson from '../pages/DrivingLicense/LearningLesson/LearningLesson.jsx'
 import LessonQuiz from '../pages/DrivingLicense/LessonQuiz/LessonQuiz.jsx'
-import ListExam from '../pages/ExamTemp/ListExam.jsx'
-import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 
 import SimulationIntroduction from '../pages/SimulationScenario/SimulationIntroduction.jsx'
 import SimulationScenario from '../pages/SimulationScenario/SimulationScenario.jsx'
@@ -27,9 +22,16 @@ import Learning from '../pages/Learning/Learning.jsx'
 
 
 
-import LearningQuestion from '../pages/LearningQuestion/LearningQuestion.jsx'
-import LearningSign from '../pages/LearningSign/LearningSign.jsx'
-import TrafficSignFlipBook from '../pages/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
+import TheoryQuestion from '../pages/Learning/TheoryQuestion/TheoryQuestion.jsx'
+import QuestionFlashcard from '../pages/Learning/QuestionFlashcard/QuestionFlashcard.jsx'
+// 
+// 
+import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/TrafficSignFlashcard.jsx'
+import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
+import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
+import QuestionExam from '../pages/Learning/QuestionExam/QuestionExam.jsx'
+
+import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
 import CarScene from '../pages/ThreeScene/CarScene.jsx'
 import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
@@ -38,12 +40,6 @@ import AdminSideBar from '../pages/AdminPages/AdminSideBar/AdminSideBar.jsx'
 import QuestionManagement from '../pages/AdminPages/QuestionManagement/QuestionManagement.jsx'
 import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagement.jsx'
 import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
-
-import StarsBackground from '../components/StarsBackground/StarsBackground.jsx'
-import ForumComment from '../pages/Forum/ForumComment.jsx'
-import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
-
-import SelectedChapter from '../pages/DrivingLicense/ChapterLesson/SelectedChapter.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -65,20 +61,18 @@ export default function MainRoutes() {
 
                     <Route path='forum' element={<Forum />} />
 
-                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam' element={<ListExam />} />
-                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/list-exam/exam/:examId' element={<ExamTemp />} />
-
                     <Route path='learning' element={<Learning />} />
 
 
 
                     <Route path='learning/theory-question' element={<TheoryQuestion />} />
-                    <Route path='learning/question-flashcard' element={<LearningQuestion />} />
-                    {/* <Route path='learning/list-traffic-sign' element={<LearningSign />} /> */}
-                    <Route path='learning/traffic-sign-flashcard' element={<LearningSign />} />
-                    {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} /> */}
+                    <Route path='learning/question-flashcard' element={<QuestionFlashcard />} />
+                    {/* <Route path='learning/list-traffic-sign' element={<ListTrafficSign />} /> */}
+                    {/* <Route path='learning/list-traffic-sign/:signId' element={<TrafficSignDetail />} /> */}
+                    <Route path='learning/traffic-sign-flashcard' element={<TrafficSignFlashcard />} />
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
+                    <Route path='learning/list-exam/:examId' element={<QuestionExam />} />
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
                 </Route>

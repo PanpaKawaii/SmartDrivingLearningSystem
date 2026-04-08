@@ -2,15 +2,15 @@
 // import { QUIZ_DATA } from '../../../mocks/QUIZ_DATA';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteData, fetchData, postData, putData } from '../../../mocks/CallingAPI';
-import ButtonList from '../../components/ButtonList/ButtonList';
-import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
-import PopupContainer from '../../components/PopupContainer/PopupContainer';
-import ProgressBar from '../../components/ProgressBar/ProgressBar';
-import ReportModal from '../../components/ReportModal/ReportModal';
-import TrafficLight from '../../components/TrafficLight/TrafficLight';
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
-import ListGridButton from '../FlashCard/ListGridButton';
+import { deleteData, fetchData, postData, putData } from '../../../../mocks/CallingAPI';
+import ButtonList from '../../../components/ButtonList/ButtonList';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
+import PopupContainer from '../../../components/PopupContainer/PopupContainer';
+import ProgressBar from '../../../components/ProgressBar/ProgressBar';
+import ReportModal from '../../../components/ReportModal/ReportModal';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import ListGridButton from '../../FlashCard/ListGridButton';
 
 import './CoreLearning.css';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import FlipBook from '../../components/FlipBook/FlipBook';
-import Page from '../../components/FlipBook/Page';
+import FlipBook from '../../../components/FlipBook/FlipBook';
+import Page from '../../../components/FlipBook/Page';
 
 import './TrafficSignFlipBook.css';
 

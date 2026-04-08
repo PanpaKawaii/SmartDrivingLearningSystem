@@ -1,4 +1,4 @@
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
+import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import CoreLearning from './CoreLearning';
 
 import './TheoryQuestion.css';

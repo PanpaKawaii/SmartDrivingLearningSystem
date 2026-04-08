@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { exams, questionChapters } from '../../../mocks/DataSample.js';
+import { exams, questionChapters } from '../../../../mocks/DataSample.js';
 
 import './ListExam.css';
 
@@ -51,7 +51,7 @@ export default function ListExam() {
     return (
         <div className='list-exam-container container'>
             {EXAMs.map((exam, index) => (
-                <Link key={exam.id} to={`exam/${exam.id}`}>
+                <Link key={exam.id} to={`${exam.id}`}>
                     <div className='exam'>
                         <div>{exam.title}</div>
                         <div>{exam.description}</div>
