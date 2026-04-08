@@ -88,15 +88,10 @@ export default function ChangeRequests() {
 
     const columns = [
         { key: '', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
-        { key: 'title', label: 'Nội dung yêu cầu' },
-        {
-            key: 'subjectType',
-            label: 'Loại',
-            width: '120px',
-            render: (_, row) => (
-                <span className='ins-status-chip active'><span className='chip-dot'></span>{getReportSubjectType(row)}</span>
-            ),
-        },
+        { key: 'title', label: 'Tiêu đề báo cáo' },
+        { key: 'content', label: 'Nội dung' },
+        { key: 'user', label: 'Người báo', width: '140px', render: (val, row) => row?.user?.name || '---' },
+        { key: 'reportCategory', label: 'Danh mục', width: '140px', render: (val, row) => row?.reportCategory?.name || '---' },
         { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
             const { time, date } = formatDateTimeLines(val);
             return (
@@ -111,38 +106,31 @@ export default function ChangeRequests() {
             label: 'Trạng thái',
             width: '120px',
             render: (val) => {
-                const cls = val === 1 ? 'approved' : val === 3 ? 'rejected' : 'pending';
-                return (
-                    <span className={`ins-status-chip ${cls}`}>
-                        <span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}
-                    </span>
-                );
+                let cls = 'pending';
+                if (val === 1) cls = 'approved';
+                else if (val === 3) cls = 'rejected';
+                return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
             },
         },
-        {
-            key: 'actions',
-            label: 'Thao tác',
-            width: '140px',
-            render: (_, row) => (
-                <div className='ins-action-cell'>
-                    <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
-                        const route = getEntityRoute(row);
-                        if (!route) return;
-                        navigate(route);
-                    }}><i className='fa-solid fa-eye'></i></button>
-                    <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
-                        setSelectedReport(row);
-                        setModalMode('process');
-                        setActionType('approve');
-                    }}><i className='fa-solid fa-check'></i></button>
-                    <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
-                        setSelectedReport(row);
-                        setModalMode('process');
-                        setActionType('disapprove');
-                    }}><i className='fa-solid fa-xmark'></i></button>
-                </div>
-            ),
-        },
+        { key: 'actions', label: 'Thao tác', width: '140px', render: (_, row) => (
+            <div className='ins-action-cell'>
+                <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
+                    const route = getEntityRoute(row);
+                    if (!route) return;
+                    navigate(route);
+                }}><i className='fa-solid fa-eye'></i></button>
+                <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
+                    setSelectedReport(row);
+                    setModalMode('process');
+                    setActionType('approve');
+                }}><i className='fa-solid fa-check'></i></button>
+                <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
+                    setSelectedReport(row);
+                    setModalMode('process');
+                    setActionType('disapprove');
+                }}><i className='fa-solid fa-xmark'></i></button>
+            </div>
+        )},
     ];
 
     const handleCloseModal = () => {
