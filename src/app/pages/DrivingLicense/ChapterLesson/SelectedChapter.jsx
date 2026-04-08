@@ -13,7 +13,7 @@ export default function SelectedChapter({
                 .filter(c => c.id == selectedChapterId)
                 .map(chapter => {
                     const lesson = chapter.questionLessons?.length || 0;
-                    const completed = 0 || 0; // ==FIX==
+                    const completed = chapter.questionLessons?.filter(ql => ql.lessonProgresses?.some(lp => Number(lp.score) >= 50))?.length || 0;
                     return (
                         <div key={chapter.name} className='chapter'>
                             <div className='header'>
@@ -45,9 +45,9 @@ export default function SelectedChapter({
                                                     <div className='lesson-number'>
                                                         <div
                                                             className={
-                                                                lesson.isCompleted
+                                                                lesson.lessonProgresses?.some(lp => Number(lp.score) >= 50)
                                                                     ? 'number completed'
-                                                                    : 'number' // ==FIX==
+                                                                    : 'number'
                                                             }
                                                         >
                                                             {index_lesson + 1}
@@ -76,17 +76,17 @@ export default function SelectedChapter({
                                                                             <i className='fa-regular fa-file-lines' />
                                                                             <span>Exam</span>
                                                                         </div>
-                                                                        {lesson.exam_score !== undefined &&
-                                                                            lesson.exam_score !== null && (
+                                                                        {lesson.lessonProgresses?.[0]?.score !== undefined &&
+                                                                            lesson.lessonProgresses?.[0]?.score !== null && (
                                                                                 <div className='score'>
-                                                                                    {/* ==FIX== */}
-                                                                                    Score: {lesson.exam_score || 0}%
+                                                                                    Score: {lesson.lessonProgresses?.[0]?.score || 0}%
                                                                                 </div>
-                                                                            )}
+                                                                            )
+                                                                        }
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {lesson.isCompleted ? ( // ==FIX==
+                                                            {lesson.lessonProgresses?.some(lp => Number(lp.score) >= 50) ? (
                                                                 <i className='fa-regular fa-check-circle status done' />
                                                             ) : (
                                                                 <i className='fa-regular fa-circle status' />

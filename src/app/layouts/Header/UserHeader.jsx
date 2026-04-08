@@ -32,7 +32,6 @@ export default function UserHeader({
         { name: 'SIMULATION', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
         { name: 'FORUM', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'LEARNING', icon: 'book-open', iconType: 'solid', path: '/learning' },
-
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
@@ -76,7 +75,6 @@ export default function UserHeader({
                     })}
                 </div>
 
-                {/* ==FIX== */}
                 {user ?
                     <div className='user-profile-link' onClick={() => setShowProfileList(p => !p)}>
                         <div className='avatar'>

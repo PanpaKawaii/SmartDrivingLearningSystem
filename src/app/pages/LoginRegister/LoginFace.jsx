@@ -57,7 +57,7 @@ export default function LoginFace({
 
             login({ ...result?.user, token: result?.accessToken, refreshToken: result?.refreshToken });
 
-            if (result.user.roleName == 'User') navigate('/profile');
+            if (result.user.roleName == 'User') navigate('/');
             else if (result.user.roleName == 'Instructor') navigate('/instructor');
             else if (result.user.roleName == 'Admin') navigate('/admin');
         } catch (error) {

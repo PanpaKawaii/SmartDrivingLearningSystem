@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
-import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ForumCard from './ForumCard';
 import ForumComment from './ForumComment';
@@ -16,15 +14,16 @@ export default function Forum() {
     const { user } = useAuth();
 
     const [FORUMPOSTs, setFORUMPOSTs] = useState([]);
+    const [FORUMTOPICs, setFORUMTOPICs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedPostId, setSelectedPostId] = useState(null);
     const [openCreatePost, setOpenCreatePost] = useState(false);
 
-    const [selectedType, setSelectedType] = useState('');
-    const [selectedTopic, setSelectedTopic] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedTopicId, setSelectedTopicId] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -35,7 +34,6 @@ export default function Forum() {
                 const forumPostQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
-                    status: 1,
                 });
                 const forumTopicQuery = new URLSearchParams({
                     page: '1',
@@ -64,6 +62,7 @@ export default function Forum() {
                 }));
 
                 setFORUMPOSTs(ForumPost);
+                setFORUMTOPICs(ForumTopicItems);
             } catch (error) {
                 console.error('Error', error);
                 setError('Error');
@@ -73,8 +72,21 @@ export default function Forum() {
         })();
     }, [refresh, user?.token]);
 
-    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
+    const filteredFORUMPOSTs = FORUMPOSTs.filter(fp => {
+        let match = false;
+        if (selectedStatus == '') match = !([-1, 0].includes(fp.status));
+        else if (selectedStatus == '1') match = fp.userId == user?.id && fp.status == '1';
+        else if (selectedStatus == '-2') match = fp.postReacts?.some(r => r.userId == user?.id) && fp.status == '1';
+        else match = selectedStatus == fp.status;
+
+        const matchTopic = !selectedTopicId || fp.forumTopicId == selectedTopicId;
+
+        return match && matchTopic;
+    }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
+    console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
+    const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
+    console.log('selectedPost', selectedPost);
+
     return (
         <div className='forum-container'>
             <StarsBackground />
@@ -87,26 +99,32 @@ export default function Forum() {
                                 <img src={user?.image || DefaultAvatar} alt={user?.email} />
                             </div>
                             <button className='btn' onClick={() => setOpenCreatePost(true)} disabled={!user}>
-                                Tạo bài viết mới
+                                Tạo bài viết
                             </button>
                         </div>
+                        <div className='result'>
+                            {filteredFORUMPOSTs?.length}
+                        </div>
                         <div className='filters'>
-                            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                            <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
                                 <option value=''>Tất cả</option>
-                                <option value='likes'>Đã thích</option>
-                                <option value='mine'>Của tôi</option>
+                                <option value='-2'>Đã thích</option>
+                                <option value='1'>Của tôi</option>
+                                <option value='2'>Bị gỡ</option>
+                                <option value='3'>Bị từ chối</option>
+                                <option value='-1'>Đang duyệt</option>
                             </select>
-                            <select value={selectedTopic} onChange={(e) => setSelectedTopic(e.target.value)}>
+                            <select value={selectedTopicId} onChange={(e) => setSelectedTopicId(e.target.value)}>
                                 <option value=''>Tất cả</option>
-                                <option value='giao-thong'>Giao thông</option>
-                                <option value='luat-lai-xe'>Luật lái xe</option>
-                                <option value='kinh-nghiem-lai-xe'>Kinh nghiệm lái xe</option>
+                                {FORUMTOPICs?.map((topic, index) => (
+                                    <option key={index} value={topic.id}>{topic.name}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
-                    {FORUMPOSTs.map((post, i) => (
+                    {filteredFORUMPOSTs.map((post, i) => (
                         <React.Fragment key={i}>
-                            <ForumCard post={post} setSelectedPost={setSelectedPost} />
+                            <ForumCard post={post} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
                         </React.Fragment>
                     ))}
                 </div>
@@ -115,14 +133,14 @@ export default function Forum() {
 
             {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
-                    <ForumCreatePost />
+                    <ForumCreatePost onClose={() => setOpenCreatePost(false)} setRefreshParent={setRefresh} />
                 </PopupContainer>
             )}
 
             {selectedPost && (
-                <PopupContainer onClose={() => setSelectedPost(null)} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
-                    <ForumCard post={selectedPost} setSelectedPost={setSelectedPost} showReportButton={false} />
-                    <ForumComment post={selectedPost} />
+                <PopupContainer onClose={() => setSelectedPostId('')} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCard post={selectedPost} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
+                    <ForumComment post={selectedPost} setRefreshParent={setRefresh} />
                 </PopupContainer>
             )}
         </div>

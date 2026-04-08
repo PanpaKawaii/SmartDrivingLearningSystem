@@ -15,29 +15,10 @@ export default function ProgressBar({
 
     return (
         <div className='progress-bar-container'>
-            <div
-                className='bar'
-                style={{ height: height }}
-            >
-                <div
-                    className='fill'
-                    style={{
-                        width: `${percent}%`,
-                        backgroundColor: `hsl(${percent}, ${100 - ((100 - 77) * percent / 100)}%, ${65 - ((65 - 44) * percent / 100)}%)`
-                    }}
-                >
-                </div>
-                <div
-                    className='lost'
-                    style={{
-                        width: `${100 - percent}%`
-                    }}
-                >
-                </div>
-                <div
-                    className='light'
-                    style={{ left: `${percent}%` }}
-                />
+            <div className='bar' style={{ height: height }}>
+                <div className='fill' style={{ width: `${percent}%` }} />
+                <div className='lost' style={{ width: `${100 - percent}%` }} />
+                <div className='light' style={{ left: `${percent}%` }} />
                 {showValue && <div className='label'>{percent}%</div>}
             </div>
         </div>

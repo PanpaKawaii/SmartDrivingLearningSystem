@@ -4,6 +4,7 @@
 
     .forum-content {
         min-height: 400px;
+        margin: 0 0 20px;
 
         .questions {
             display: flex;
@@ -64,7 +65,6 @@
     }
 
     .content {
-        word-break: break-all;
         display: flex;
         gap: 8px;
 
@@ -120,8 +120,10 @@
             }
 
             .commentcontent {
+                width: 100%;
                 font-size: .875rem;
-                word-break: keep-all;
+                overflow-wrap: break-word;
+                word-break: break-word;
             }
         }
 

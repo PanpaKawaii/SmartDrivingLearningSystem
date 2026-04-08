@@ -9,11 +9,13 @@
     overflow-y: scroll;
 
     .grid-btn {
+        position: relative;
         color: #80FCFF;
         background-color: transparent;
         border: 2px solid #68FCFF;
         box-shadow: 0 0 6px #38BDF899;
         transition: all 0.1s ease;
+        overflow: hidden;
 
         &.btn-correct {
             color: #fff;
@@ -83,6 +85,17 @@
 
         &.off {
             opacity: 0.4;
+        }
+
+        &.marked::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            transform: rotateZ(45deg);
+            width: 32px;
+            height: 32px;
+            background-color: #FF9600;
         }
     }
 }

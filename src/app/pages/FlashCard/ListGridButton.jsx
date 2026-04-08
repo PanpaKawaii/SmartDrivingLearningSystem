@@ -2,6 +2,7 @@ import './ListGridButton.css';
 
 export default function ListGridButton({
     list = [],
+    mark = [],
     selectedQuestionId = '',
     setSelectedQuestionId = () => { },
     myAnswers = [],
@@ -40,7 +41,7 @@ export default function ListGridButton({
             {list.map((question, bIndex) => (
                 <button
                     key={bIndex}
-                    className={`grid-btn ${selectedQuestionId == question.id ? 'btn-selected' : ''} ${getQuestionStatus(question, myAnswers)}`}
+                    className={`grid-btn ${selectedQuestionId == question.id ? 'btn-selected' : ''} ${getQuestionStatus(question, myAnswers)} ${mark.includes(question.id) ? 'marked' : ''}`}
                     onClick={() => setSelectedQuestionId(question.id)}
                 >
                     {bIndex + 1}

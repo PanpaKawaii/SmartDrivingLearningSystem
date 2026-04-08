@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 
 import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/ControlledVideo.jsx'
-import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
+import TheoryLearning from '../pages/TheoryLearning/TheoryLearning.jsx'
 
 import InstructorLayout from '../layouts/InstructorLayout/InstructorLayout.jsx'
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
@@ -16,7 +16,6 @@ import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
 import ChapterLesson from '../pages/DrivingLicense/ChapterLesson/ChapterLesson.jsx'
 import LearningLesson from '../pages/DrivingLicense/LearningLesson/LearningLesson.jsx'
 import LessonQuiz from '../pages/DrivingLicense/LessonQuiz/LessonQuiz.jsx'
-import QuizResult from '../pages/DrivingLicense/LessonQuiz/QuizResult.jsx'
 import ListExam from '../pages/ExamTemp/ListExam.jsx'
 import ExamTemp from '../pages/ExamTemp/ExamTemp.jsx'
 
@@ -80,8 +79,7 @@ export default function MainRoutes() {
                     <Route path='driving-license' element={<DrivingLicense />} />
                     <Route path='driving-license/:licenseId' element={<ChapterLesson />} />
                     <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId' element={<LearningLesson />} />
-                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/quiz' element={<LessonQuiz />} />
-                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/quiz/result' element={<QuizResult />} />
+                    <Route path='driving-license/:licenseId/chapter/:chapterId/lesson/:lessonId/quiz/:progressId' element={<LessonQuiz />} />
 
                     <Route path='simulation' element={<SimulationIntroduction />} />
                     <Route path='simulation/scenarios' element={<SimulationScenario />} />
@@ -95,7 +93,7 @@ export default function MainRoutes() {
 
 
 
-                    <Route path='learning/theory-question' element={<CoreLearning />} />
+                    <Route path='learning/theory-question' element={<TheoryLearning />} />
                     <Route path='learning/question-flashcard' element={<LearningQuestion />} />
                     <Route path='learning/list-traffic-sign' element={<LearningSign />} />
                      {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} />  */}
