@@ -1,3 +1,12 @@
+/* CommunityReports: custom label colors for post/comment */
+.ins-status-chip.post-label {
+    background: rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+}
+.ins-status-chip.comment-label {
+    background: rgba(251, 146, 60, 0.14);
+    color: #fb923c;
+}
 /* Shared styles for all instructor management pages */
 .ins-page {
     display: flex;

@@ -62,6 +62,14 @@
                 flex: 1;
             }
         }
+
+        .questions.reported-comment {
+            .name-comment {
+                border-color: #f97316;
+                background: rgba(251, 146, 60, 0.12);
+                box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.28);
+            }
+        }
     }
 
     .content {
