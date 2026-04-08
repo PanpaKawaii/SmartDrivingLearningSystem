@@ -123,12 +123,12 @@ export default function ChangeRequests() {
                     setSelectedReport(row);
                     setModalMode('process');
                     setActionType('approve');
-                }}><i className='fa-solid fa-check'></i></button>
+                }} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
                 <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
                     setSelectedReport(row);
                     setModalMode('process');
                     setActionType('disapprove');
-                }}><i className='fa-solid fa-xmark'></i></button>
+                }} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
             </div>
         )},
     ];
