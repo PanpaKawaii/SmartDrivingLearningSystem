@@ -12,7 +12,7 @@ export default function QuestionFlashcard() {
     const { user } = useAuth();
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
-    const [SAVEDQUESTIONs, setSAVEDQUESTIONs] = useState([]);
+    const [mySAVEDQUESTIONs, setMySAVEDQUESTIONs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -54,14 +54,12 @@ export default function QuestionFlashcard() {
 
                 if (user?.token) {
                     const savedQuestionQuery = new URLSearchParams({
-                        page: '1',
-                        pageSize: '1000000',
+                        userId: user?.id,
                         status: 1,
                     });
-                    const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
+                    const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
                     console.log('SavedQuestionResponse', SavedQuestionResponse);
-                    const SavedQuestionItems = SavedQuestionResponse?.items;
-                    setSAVEDQUESTIONs(SavedQuestionItems);
+                    setMySAVEDQUESTIONs(SavedQuestionResponse);
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -72,14 +70,14 @@ export default function QuestionFlashcard() {
         })();
     }, [refresh, user?.token]);
 
-    const SavedQuestions = SAVEDQUESTIONs.map(sq => sq.questionId);
+    const MySavedQuestions = mySAVEDQUESTIONs.map(sq => sq.questionId);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     // if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='question-flashcard-container'>
             <StarsBackground />
-            <FlashCard list={QUESTIONs} mark={SavedQuestions} />
+            <FlashCard list={QUESTIONs} mark={MySavedQuestions} />
         </div>
     )
 }

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteData, fetchData, postData } from '../../../../mocks/CallingAPI';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
-import ButtonList from '../../../components/ButtonList/ButtonList';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
@@ -77,7 +76,6 @@ export default function ListTrafficSign() {
     };
 
     const MySavedTrafficSigns = mySAVEDTRAFFICSIGNs.map(sq => sq.trafficSignId);
-    console.log('mySAVEDTRAFFICSIGNs:', mySAVEDTRAFFICSIGNs);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>

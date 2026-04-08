@@ -48,7 +48,6 @@
             display: flex;
             gap: 16px;
             border-radius: 24px;
-            /* overflow: hidden; */
             background: #0f172acc;
             border: 1px solid #ffffff0d;
             transition: .3s;
