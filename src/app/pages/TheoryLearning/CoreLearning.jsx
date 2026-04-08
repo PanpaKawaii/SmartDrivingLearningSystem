@@ -1,17 +1,35 @@
 // import { answers, questions } from '../../../mocks/DataSample';
 // import { QUIZ_DATA } from '../../../mocks/QUIZ_DATA';
 import { useEffect, useState } from 'react';
-import { fetchData } from '../../../mocks/CallingAPI';
+import { deleteData, fetchData, postData, putData } from '../../../mocks/CallingAPI';
+import ButtonList from '../../components/ButtonList/ButtonList';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
+import PopupContainer from '../../components/PopupContainer/PopupContainer';
+import ReportModal from '../../components/ReportModal/ReportModal';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ListGridButton from '../FlashCard/ListGridButton';
 
 import './CoreLearning.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
 
-export default function CoreLearning() {
+export default function CoreLearning({
+    grid = 1,
+    questionQuery = '',
+    disableAfterAnswer = false,
+    endQuizButton = false,
+}) {
     const { user } = useAuth();
+
+    const Params = useParams();
+    const navigate = useNavigate();
+
+    const questionLessonId = Params?.lessonId || '';
+    // console.log('questionLessonId', questionLessonId);
+    const lessonProgressId = Params?.progressId || '';
+    // console.log('lessonProgressId', lessonProgressId);
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [SAVEDQUESTIONs, setSAVEDQUESTIONs] = useState([]);
@@ -20,6 +38,7 @@ export default function CoreLearning() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [openReport, setOpenReport] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -27,11 +46,6 @@ export default function CoreLearning() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                const questionQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '1000',
-                    status: 1,
-                });
                 const tagQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '200',
@@ -63,7 +77,7 @@ export default function CoreLearning() {
 
                 setQUESTIONs(QuestionsAnswers);
                 setSAVEDQUESTIONs(SavedQuestionItems);
-                setSelectedQuestionId(QuestionsAnswers?.[0]?.id);
+                setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
             } catch (error) {
                 console.error('Error', error);
                 setError('Error');
@@ -85,12 +99,43 @@ export default function CoreLearning() {
         setSelectedQuestionId(direction == 'left' ? firstThreeWithIndexMiddle?.[0]?.id : firstThreeWithIndexMiddle?.[firstThreeWithIndexMiddle.length - 1]?.id);
     };
 
+    const handleEndQuiz = async () => {
+        console.log('QUESTIONs', QUESTIONs);
+        console.log('myAnswers', myAnswers);
+        const correctCount = myAnswers?.filter(m => m.answers?.some(a => a.isCorrect == true))?.length || 0;
+        console.log('correctCount:', correctCount);
+        const correctPercent = Number((100 * correctCount / (QUESTIONs?.length || 1))?.toFixed(0));
+        console.log('correctPercent:', correctPercent);
+
+        const LessonProgressData = {
+            questionLessonId: questionLessonId,
+            score: correctPercent,
+            status: 1,
+        };
+        console.log('LessonProgressData:', LessonProgressData);
+
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            const result = await putData(`LessonProgresses/${lessonProgressId}`, LessonProgressData, token);
+            console.log('result', result);
+
+            navigate('./../..');
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        };
+    };
+
     const toggleAnswerInMyAnswers = (questionId, answerId, answerIsCorrect) => {
         setMyAnswers(prev => {
             const index = prev.findIndex(
                 item => item.questionId == questionId
             );
 
+            // Chưa có question → thêm mới
             if (index == -1) {
                 return [
                     ...prev,
@@ -107,6 +152,7 @@ export default function CoreLearning() {
             );
             const isMultiple = selectedQuestion?.correctAnswer > 1;
 
+            // Không phải dạng multiple → thay thế luôn
             const newAnswers = isExist ?
                 current.answers.filter(a => a.answerId !== answerId)
                 : (isMultiple ?
@@ -114,10 +160,12 @@ export default function CoreLearning() {
                     : [{ answerId: answerId, isCorrect: answerIsCorrect }]
                 );
 
+            // Không còn đáp án → xóa question
             if (newAnswers.length == 0) {
                 return prev.filter((_, i) => i !== index);
             }
 
+            // Update question hiện tại
             return prev.map((item, i) =>
                 i == index
                     ? { ...item, answers: newAnswers }
@@ -134,6 +182,7 @@ export default function CoreLearning() {
         const isCorrect = answer.isCorrect == true;
         const isFull = selectedAnswerIds.length == question.correctAnswer;
 
+        // Không phải đáp án được chọn → không gán class
         if (!isSelected) return '';
         if (isCorrect && isFull) return 'btn-correct';
         if (!isCorrect && isFull) return 'btn-incorrect';
@@ -143,11 +192,32 @@ export default function CoreLearning() {
         return '';
     };
 
+    const ToggleMarkQuestion = async (questionId, mark) => {
+        const MarkQuestionData = {
+            questionId: questionId,
+        };
+        console.log('MarkQuestionData:', MarkQuestionData);
+        console.log('mark:', mark);
+
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            if (mark != null) await deleteData(`SavedQuestions/${mark?.id}`, token);
+            else if (mark == null) await postData('SavedQuestions', MarkQuestionData, token);
+
+            setRefresh(p => p + 1);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        };
+    };
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} setRefresh={setRefresh} /></div>
     return (
         <div className='core-learning-container'>
-            <StarsBackground />
             <div className='container'>
                 <ListGridButton
                     list={QUESTIONs}
@@ -155,18 +225,45 @@ export default function CoreLearning() {
                     selectedQuestionId={selectedQuestionId}
                     setSelectedQuestionId={setSelectedQuestionId}
                     myAnswers={myAnswers}
-                    column={6}
+                    column={grid}
                 />
                 {selectedQuestion && (
                     <div className='question-card'>
+                        <div className='top'>
+                            <div className='text'>
+                                Câu hỏi {index + 1} trong số {QUESTIONs?.length} câu hỏi
+                            </div>
+                            <ProgressBar current={myAnswers?.filter(q => q.answers)?.length || 0} total={QUESTIONs?.length || 1} showValue={false} height={'8px'} />
+                        </div>
                         <div className='card'>
                             <div className='title'>
                                 <div className='index-tags'>
-                                    <div className='index'>Câu hỏi {index + 1}: {selectedQuestion?.id}</div>
-                                    <div className='tags'>
-                                        {selectedQuestion?.tags?.map((tag, index) => (
-                                            <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
-                                        ))}
+                                    <div className='index'>Câu hỏi {index + 1}: </div>
+                                    <div className='left-detail'>
+                                        <div className='tags'>
+                                            {selectedQuestion?.tags?.map((tag, index) => (
+                                                <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
+                                            ))}
+                                        </div>
+                                        {/* ==FIX== */}
+                                        <ButtonList
+                                            list={[
+                                                {
+                                                    name: 'report',
+                                                    onToggle: () => setOpenReport({
+                                                        header: 'Báo cáo câu hỏi',
+                                                        simulationId: null,
+                                                        forumPostId: null,
+                                                        forumCommentId: null,
+                                                        questionId: selectedQuestion?.id,
+                                                    }),
+                                                },
+                                                {
+                                                    name: 'mark',
+                                                    onToggle: () => ToggleMarkQuestion(selectedQuestionId, SAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
+                                                }
+                                            ]}
+                                        />
                                     </div>
                                 </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
@@ -178,6 +275,7 @@ export default function CoreLearning() {
                                         className={`${getAnswerStatus(selectedQuestion, answer, myAnswers)}`}
                                         style={{ animationDelay: `${aIndex * 0.1}s` }}
                                         onClick={() => toggleAnswerInMyAnswers(selectedQuestion?.id, answer.id, answer.isCorrect)}
+                                        disabled={disableAfterAnswer && myAnswers.some(a => a.questionId == selectedQuestionId)}
                                     >
                                         {aIndex + 1}. {answer.content}
                                     </button>
@@ -189,7 +287,11 @@ export default function CoreLearning() {
                         </div>
                         <div className='btns'>
                             <button className='btn-left' onClick={() => handleMoveCard('left')}>Câu trước</button>
-                            <button className='btn-right' onClick={() => handleMoveCard('right')}>Câu sau</button>
+                            {(index < QUESTIONs.length - 1 || !endQuizButton) ?
+                                <button className='btn-right' onClick={() => handleMoveCard('right')}>Câu sau</button>
+                                :
+                                <button className='btn-end' onClick={() => handleEndQuiz()}>Kết thúc</button>
+                            }
                         </div>
                     </div>
                 )}
@@ -206,6 +308,12 @@ export default function CoreLearning() {
                     ))}
                 </div> */}
             </div>
+
+            {openReport &&
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo câu hỏi`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
+                    <ReportModal data={openReport} />
+                </PopupContainer>
+            }
         </div>
     )
 }

@@ -1,11 +1,6 @@
-.lesson-quiz-container {
+.core-learning-container {
     .container {
-        max-width: 1000px;
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-
-        /* .question-card {
+        .question-card {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -202,6 +197,6 @@
                     }
                 }
             }
-        } */
+        }
     }
 }

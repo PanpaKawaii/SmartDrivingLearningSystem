@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
 
 import ControlledVideo from '../pages/SimulationScenario/ControlledVideo/ControlledVideo.jsx'
-import CoreLearning from '../pages/CoreLearning/CoreLearning.jsx'
+import TheoryLearning from '../pages/TheoryLearning/TheoryLearning.jsx'
 
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
 import UserHeader from '../layouts/Header/UserHeader.jsx'
@@ -72,7 +72,7 @@ export default function MainRoutes() {
 
 
 
-                    <Route path='learning/theory-question' element={<CoreLearning />} />
+                    <Route path='learning/theory-question' element={<TheoryLearning />} />
                     <Route path='learning/question-flashcard' element={<LearningQuestion />} />
                     <Route path='learning/list-traffic-sign' element={<LearningSign />} />
                     {/* <Route path='learning/list-traffic-sign/:id' element={<LearningSign />} /> */}
