@@ -55,7 +55,7 @@ export default function QuestionFlashcard() {
                 if (user?.token) {
                     const savedQuestionQuery = new URLSearchParams({
                         page: '1',
-                        pageSize: '200',
+                        pageSize: '1000000',
                         status: 1,
                     });
                     const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);

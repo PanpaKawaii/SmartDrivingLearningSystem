@@ -37,11 +37,11 @@ export default function ForumCreatePost({
                 const ForumTopicResponse = await fetchData(`ForumTopics?${forumTopicQuery.toString()}`, token);
                 console.log('ForumTopicResponse', ForumTopicResponse);
                 const ForumTopicItems = ForumTopicResponse?.items;
-                const ForumTopic = ForumTopicItems.map(ft => ({
+                const ForumTopics = ForumTopicItems.map(ft => ({
                     ...ft,
                 }));
 
-                setFORUMTOPICs(ForumTopic);
+                setFORUMTOPICs(ForumTopics);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);

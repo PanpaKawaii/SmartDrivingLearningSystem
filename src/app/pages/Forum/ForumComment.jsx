@@ -47,11 +47,11 @@ export default function ForumComment({
                 console.log('ForumCommentResponse', ForumCommentResponse);
                 const ForumCommentItems = ForumCommentResponse?.items;
 
-                const ForumComment = ForumCommentItems.map(fp => ({
+                const ForumComments = ForumCommentItems.map(fp => ({
                     ...fp,
                 })).sort((a, b) => new Date(a.updateAt) - new Date(b.updateAt));
 
-                setCOMMENTs(ForumComment);
+                setCOMMENTs(ForumComments);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -184,11 +184,6 @@ export default function ForumComment({
                                                                     forumCommentId: comment.id,
                                                                     questionId: null,
                                                                 }),
-                                                                disabled: false,
-                                                            },
-                                                            {
-                                                                name: 'test',
-                                                                onToggle: () => { },
                                                                 disabled: false,
                                                             }
                                                         ]}

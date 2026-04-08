@@ -72,7 +72,7 @@ export default function CoreLearning({
                 if (user?.token) {
                     const savedQuestionQuery = new URLSearchParams({
                         page: '1',
-                        pageSize: '200',
+                        pageSize: '1000000',
                         status: 1,
                     });
                     const SavedQuestionResponse = await fetchData(`SavedQuestions?${savedQuestionQuery.toString()}`, token);
@@ -262,7 +262,7 @@ export default function CoreLearning({
                                                     disabled: false,
                                                 },
                                                 {
-                                                    name: SavedQuestions?.includes(selectedQuestion?.id) ? 'unmark' : 'mark',
+                                                    name: SavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
                                                     onToggle: () => ToggleMarkQuestion(selectedQuestionId, SAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
                                                     disabled: loading,
                                                 }

@@ -55,13 +55,13 @@ export default function Forum() {
                 const ForumTopicItems = ForumTopicResponse?.items;
                 const PostReactItems = PostReactResponse?.items;
 
-                const ForumPost = ForumPostItems.map(fp => ({
+                const ForumPosts = ForumPostItems.map(fp => ({
                     ...fp,
                     forumTopic: ForumTopicItems.find(ft => ft.id == fp.forumTopicId) || null,
                     postReacts: PostReactItems.filter(pr => pr.forumPostId == fp.id),
                 }));
 
-                setFORUMPOSTs(ForumPost);
+                setFORUMPOSTs(ForumPosts);
                 setFORUMTOPICs(ForumTopicItems);
             } catch (error) {
                 console.error('Error', error);
