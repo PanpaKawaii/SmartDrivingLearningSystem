@@ -13,6 +13,7 @@ import './ForumComment.css';
 export default function ForumComment({
     post = {},
     setRefreshParent = () => { },
+    highlightCommentId = null,
 }) {
     const { user } = useAuth();
 
@@ -60,6 +61,13 @@ export default function ForumComment({
             };
         })();
     }, [refresh, user?.token]);
+
+    useEffect(() => {
+        if (!highlightCommentId) return;
+
+        const targetElement = document.getElementById(String(highlightCommentId));
+        targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [highlightCommentId, COMMENTs]);
 
     const SubmitComment = async (Content, ReplyId) => {
         const CommentData = {
@@ -152,9 +160,10 @@ export default function ForumComment({
             <>
                 {ChildrenComment.map((comment, i) => {
                     const myVote = comment.commentVotes?.find(v => v.userId == user?.id) || null;
+                    const isReportedComment = Boolean(highlightCommentId) && String(comment.id) === String(highlightCommentId);
                     console.log('myVote', myVote);
                     return (
-                        <div key={i} id={`${comment.id}`} className='questions'>
+                        <div key={i} id={`${comment.id}`} className={`questions ${isReportedComment ? 'reported-comment' : ''}`}>
                             {num <= 5 && num > 0 &&
                                 <div className='head-block'>
                                     <div className={`vertical-line ${i + 1 == ChildrenComment.length ? 'no-line' : 'line-full'}`}></div>
