@@ -1,19 +1,18 @@
 // import { answers, questions } from '../../../mocks/DataSample';
 // import { QUIZ_DATA } from '../../../mocks/QUIZ_DATA';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { deleteData, fetchData, postData, putData } from '../../../mocks/CallingAPI';
 import ButtonList from '../../components/ButtonList/ButtonList';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import ReportModal from '../../components/ReportModal/ReportModal';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ListGridButton from '../FlashCard/ListGridButton';
 
 import './CoreLearning.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import ProgressBar from '../../components/ProgressBar/ProgressBar';
 
 export default function CoreLearning({
     grid = 1,
