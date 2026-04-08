@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import InstructorModal from '../InstructorComponent/InstructorModal.jsx';
+import Modal from '../Shared/Modal.jsx';
 
 export default function ReportFeedbackModal({
     isOpen,
@@ -61,7 +61,7 @@ export default function ReportFeedbackModal({
     };
 
     return (
-        <InstructorModal
+        <Modal
             isOpen={isOpen}
             onClose={onClose}
             title={isViewMode ? 'Chi tiet bao cao' : actionType === 'disapprove' ? 'Bo qua bao cao' : 'Duyet bao cao'}
@@ -161,6 +161,6 @@ export default function ReportFeedbackModal({
                     </div>
                 </>
             )}
-        </InstructorModal>
+        </Modal>
     );
 }

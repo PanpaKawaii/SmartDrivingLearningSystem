@@ -1,4 +1,4 @@
-import InstructorModal from '../InstructorComponent/InstructorModal.jsx';
+import Modal from '../Shared/Modal.jsx';
 import EntityDetails from './EntityDetails.jsx';
 
 const titleByType = {
@@ -10,7 +10,7 @@ const titleByType = {
 
 export default function ReportEntityDetailModal({ isOpen, onClose, entityType, entityId }) {
     return (
-        <InstructorModal
+        <Modal
             isOpen={isOpen}
             onClose={onClose}
             title={titleByType[entityType] || 'Chi tiet doi tuong bao cao'}
@@ -22,6 +22,6 @@ export default function ReportEntityDetailModal({ isOpen, onClose, entityType, e
             }
         >
             <EntityDetails entityType={entityType} entityId={entityId} />
-        </InstructorModal>
+        </Modal>
     );
 }

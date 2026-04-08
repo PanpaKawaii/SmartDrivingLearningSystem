@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import AddLessonModal from './AddLessonModal';
 import '../InstructorPages.css';
 
@@ -61,7 +61,7 @@ export default function LessonManagement() {
                     <i className='fa-solid fa-plus'></i> Thêm bài học
                 </button>
             </div>
-            <InstructorDataTable title='Danh sách bài học' columns={columns} data={lessons} />
+            <DataTable title='Danh sách bài học' columns={columns} data={lessons} />
             <AddLessonModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={handleSave} />
         </div>
     );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI.js';
@@ -183,7 +183,7 @@ export default function ChangeRequests() {
                 <div><h1>Duyệt yêu cầu thay đổi</h1><p>Xem xét và phê duyệt các yêu cầu thay đổi nội dung.</p></div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
-            <InstructorDataTable
+            <DataTable
                 title={`Yêu cầu thay đổi (${serverPagination.totalCount})`}
                 columns={columns}
                 data={reportItems}

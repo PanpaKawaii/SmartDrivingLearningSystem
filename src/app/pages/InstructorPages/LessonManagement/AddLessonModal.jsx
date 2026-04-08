@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import InstructorModal from '../../../components/InstructorComponent/InstructorModal';
+import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
 
 const chapterOptions = [
@@ -37,7 +37,7 @@ export default function AddLessonModal({ isOpen, onClose, onSave }) {
     };
 
     return (
-        <InstructorModal
+        <Modal
             isOpen={isOpen}
             onClose={onClose}
             title='Thêm bài học mới'
@@ -131,6 +131,6 @@ export default function AddLessonModal({ isOpen, onClose, onSave }) {
                     style={{ minHeight: '180px' }}
                 ></textarea>
             </div>
-        </InstructorModal>
+        </Modal>
     );
 }

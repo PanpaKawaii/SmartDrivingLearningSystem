@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI.js';
@@ -181,7 +181,7 @@ export default function ContentErrorReports() {
                 <div><h1>Báo cáo lỗi nội dung</h1><p>Danh sách lỗi nội dung được báo cáo từ người dùng.</p></div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
-            <InstructorDataTable
+            <DataTable
                 title={`Báo cáo lỗi (${serverPagination.totalCount})`}
                 columns={columns}
                 data={reportItems}

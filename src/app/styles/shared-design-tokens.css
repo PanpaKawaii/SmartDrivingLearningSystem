@@ -1,0 +1,19 @@
+:root {
+    --ins-bg: #070e1d;
+    --ins-surface-low: #081328;
+    --ins-surface: #091935;
+    --ins-surface-high: #091f42;
+    --ins-surface-highest: #082450;
+    --ins-surface-bright: #062a5f;
+    --ins-primary: #bdc7db;
+    --ins-primary-container: #3d4757;
+    --ins-on-surface: #dde5ff;
+    --ins-on-surface-variant: #95abde;
+    --ins-outline: #5f75a5;
+    --ins-outline-variant: #314774;
+    --ins-error: #ee7d77;
+    --ins-success: #52c41a;
+    --ins-warning: #faad14;
+    --ins-font-headline: 'Be Vietnam Pro', sans-serif;
+    --ins-font-body: 'Inter', sans-serif;
+}

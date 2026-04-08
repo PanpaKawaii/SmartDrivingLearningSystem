@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { myPosts } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -35,7 +35,7 @@ export default function MyPosts() {
                     <i className='fa-solid fa-plus'></i> Tạo bài viết
                 </button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${myPostItems.length} bài viết`} columns={columns} data={myPostItems} />
+            <DataTable title={`Hiển thị ${myPostItems.length} bài viết`} columns={columns} data={myPostItems} />
         </div>
     );
 }

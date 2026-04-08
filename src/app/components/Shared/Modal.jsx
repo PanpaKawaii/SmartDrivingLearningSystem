@@ -1,6 +1,6 @@
-import './InstructorModal.css';
+import './Modal.css';
 
-export default function InstructorModal({ isOpen, onClose, title, children, footer, wide }) {
+export default function Modal({ isOpen, onClose, title, children, footer, wide }) {
     if (!isOpen) return null;
 
     return (

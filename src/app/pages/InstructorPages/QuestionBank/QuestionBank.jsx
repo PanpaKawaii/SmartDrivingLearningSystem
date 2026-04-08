@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
-import InstructorModal from '../../../components/InstructorComponent/InstructorModal';
+import DataTable from '../../../components/Shared/DataTable';
+import Modal from '../../../components/Shared/Modal';
 import { QUIZ_DATA } from '../../../../mocks/QUIZ_DATA.js';
 import '../InstructorPages.css';
 
@@ -71,7 +71,7 @@ export default function QuestionBank() {
                 </div>
             </div>
 
-            <InstructorDataTable
+            <DataTable
                 title={`Hiển thị ${questions.length} câu hỏi (600 câu)`}
                 columns={columns}
                 data={questions}
@@ -87,7 +87,7 @@ export default function QuestionBank() {
                 }
             />
 
-            <InstructorModal
+            <Modal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
                 title='Thêm câu hỏi mới'
@@ -122,7 +122,7 @@ export default function QuestionBank() {
                         <option>Dễ</option><option>Trung bình</option><option>Khó</option>
                     </select>
                 </div>
-            </InstructorModal>
+            </Modal>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import InstructorStatsCard from '../../../components/InstructorComponent/InstructorStatsCard';
+import StatsCard from '../../../components/Shared/StatsCard';
 import './Dashboard.css';
 
 const pendingPosts = [
@@ -24,7 +24,7 @@ export default function Dashboard() {
             </div>
 
             <div className='dashboard-stats'>
-                <InstructorStatsCard
+                <StatsCard
                     icon='fa-solid fa-clock'
                     iconColor='yellow'
                     value='24'
@@ -32,7 +32,7 @@ export default function Dashboard() {
                     trend='+3 hôm nay'
                     trendDir='up'
                 />
-                <InstructorStatsCard
+                <StatsCard
                     icon='fa-solid fa-code-pull-request'
                     iconColor='blue'
                     value='12'
@@ -40,7 +40,7 @@ export default function Dashboard() {
                     trend='+2 hôm nay'
                     trendDir='up'
                 />
-                <InstructorStatsCard
+                <StatsCard
                     icon='fa-solid fa-bug'
                     iconColor='red'
                     value='08'
@@ -48,7 +48,7 @@ export default function Dashboard() {
                     trend='-1 hôm nay'
                     trendDir='down'
                 />
-                <InstructorStatsCard
+                <StatsCard
                     icon='fa-solid fa-users'
                     iconColor='purple'
                     value='15'

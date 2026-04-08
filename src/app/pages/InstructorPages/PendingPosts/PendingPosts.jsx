@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
 import '../InstructorPages.css';
@@ -165,7 +165,7 @@ export default function PendingPosts() {
                 </div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
-            <InstructorDataTable
+            <DataTable
                 title={`Bài viết chờ duyệt (${serverPagination.totalCount})`}
                 columns={columns}
                 data={items}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import './InstructorDataTable.css';
+import './DataTable.css';
 
-export default function InstructorDataTable({
+export default function DataTable({
     title,
     subtitle,
     columns,

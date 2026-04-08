@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { drivingLicenses } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -28,7 +28,7 @@ export default function LicenseManagement() {
                 <div><h1>Quản lý Bằng lái</h1><p>Quản lý danh sách các hạng giấy phép lái xe ({drivingLicenseItems.length} hạng).</p></div>
                 <button className='ins-btn ins-btn-primary'><i className='fa-solid fa-plus'></i> Thêm hạng</button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${drivingLicenseItems.length} hạng bằng lái`} columns={columns} data={drivingLicenseItems} />
+            <DataTable title={`Hiển thị ${drivingLicenseItems.length} hạng bằng lái`} columns={columns} data={drivingLicenseItems} />
         </div>
     );
 }

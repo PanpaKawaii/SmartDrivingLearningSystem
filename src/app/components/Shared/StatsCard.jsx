@@ -1,6 +1,6 @@
-import './InstructorStatsCard.css';
+import './StatsCard.css';
 
-export default function InstructorStatsCard({ icon, iconColor = 'blue', value, label, trend, trendDir }) {
+export default function StatsCard({ icon, iconColor = 'blue', value, label, trend, trendDir }) {
     return (
         <div className='ins-stats-card'>
             <div className='stats-card-header'>
