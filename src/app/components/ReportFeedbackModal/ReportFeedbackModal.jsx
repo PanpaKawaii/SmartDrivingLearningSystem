@@ -5,8 +5,9 @@ export default function ReportFeedbackModal({
     isOpen,
     mode,
     report,
-    reportCategoryName,
     resolve,
+    actionType,
+    initialTitle,
     onOpenEntity,
     onClose,
     onSubmit,
@@ -19,11 +20,11 @@ export default function ReportFeedbackModal({
     useEffect(() => {
         if (!isOpen) return;
 
-        setTitle(resolve?.title || '');
+        setTitle(resolve?.title || initialTitle || '');
         setContent(resolve?.content || '');
         setError('');
         setSubmitting(false);
-    }, [isOpen, resolve, mode, report]);
+    }, [isOpen, resolve, mode, report, initialTitle]);
 
     if (!report) return null;
 
@@ -63,7 +64,7 @@ export default function ReportFeedbackModal({
         <InstructorModal
             isOpen={isOpen}
             onClose={onClose}
-            title={isViewMode ? 'Chi tiet bao cao' : 'Xu ly bao cao'}
+            title={isViewMode ? 'Chi tiet bao cao' : actionType === 'disapprove' ? 'Bo qua bao cao' : 'Duyet bao cao'}
             wide
             footer={
                 <>
@@ -72,54 +73,55 @@ export default function ReportFeedbackModal({
                     </button>
                     {!isViewMode && (
                         <button className='ins-btn ins-btn-primary' onClick={handleSubmit} disabled={!isValid || submitting}>
-                            {submitting ? 'Dang gui...' : 'Gui phan hoi'}
+                            {submitting ? 'Dang gui...' : actionType === 'disapprove' ? 'Bo qua' : 'Duyet'}
                         </button>
                     )}
                 </>
             }
         >
+
             <div className='ins-form-group'>
-                <label className='ins-form-label'>Loai bao cao</label>
-                <div className='ins-form-static'>{reportCategoryName}</div>
+                <label className='ins-form-label'>Loại báo cáo</label>
+                <div className='ins-form-static'>{report?.reportCategory?.name ||'---'}</div>
             </div>
 
             <div className='ins-form-group'>
-                <label className='ins-form-label'>Tieu de bao cao</label>
-                <div className='ins-form-static'>{report.title}</div>
+                <label className='ins-form-label'>Tiêu đề báo cáo</label>
+                <div className='ins-form-static'>{report?.title}</div>
             </div>
 
             <div className='ins-form-group'>
-                <label className='ins-form-label'>Noi dung bao cao</label>
-                <div className='ins-form-static'>{report.content}</div>
+                <label className='ins-form-label'>Nội dung báo cáo</label>
+                <div className='ins-form-static'>{report?.content}</div>
             </div>
 
             {onOpenEntity && (
                 <div className='ins-form-group'>
-                    <label className='ins-form-label'>Doi tuong lien quan</label>
+                    <label className='ins-form-label'>Đối tượng liên quan</label>
                     <button className='ins-btn ins-btn-secondary' type='button' onClick={onOpenEntity}>
-                        Xem chi tiet doi tuong
+                        Xem chi tiết đối tượng
                     </button>
                 </div>
             )}
 
             <div className='ins-form-group'>
-                <label className='ins-form-label'>Nguoi bao cao</label>
-                <div className='ins-form-static'>User #{report.userId}</div>
+                <label className='ins-form-label'>Người báo cáo</label>
+                <div className='ins-form-static'>{report?.user?.name}</div>
             </div>
 
             <div className='ins-form-group'>
-                <label className='ins-form-label'>Trang thai</label>
-                <div className='ins-form-static'>{report.status === 1 ? 'Chua xu ly' : 'Da xu ly'}</div>
+                <label className='ins-form-label'>Trạng thái</label>
+                <div className='ins-form-static'>{report?.status === 1 ? 'Chưa xử lý' : 'Đã xử lý'}</div>
             </div>
 
             {resolve && (
                 <>
                     <div className='ins-form-group'>
-                        <label className='ins-form-label'>Phan hoi hien tai</label>
+                        <label className='ins-form-label'>Phản hồi hiện tại</label>
                         <div className='ins-form-static'>{resolve.title}</div>
                     </div>
                     <div className='ins-form-group'>
-                        <label className='ins-form-label'>Noi dung phan hoi hien tai</label>
+                        <label className='ins-form-label'>Nội dung phản hồi hiện tại</label>
                         <div className='ins-form-static'>{resolve.content}</div>
                     </div>
                 </>
@@ -155,7 +157,7 @@ export default function ReportFeedbackModal({
                     </div>
                     {error && <div style={{ color: 'var(--ins-error)', fontSize: '0.875rem' }}>{error}</div>}
                     <div style={{ fontSize: '0.8rem', color: 'var(--ins-on-surface-variant)' }}>
-                        {title.trim().length}/3 ky tu tieu de, {content.trim().length}/10 ky tu noi dung
+                        {content.trim().length}/10 ký tự (Tối thiểu 10 ký tự)
                     </div>
                 </>
             )}

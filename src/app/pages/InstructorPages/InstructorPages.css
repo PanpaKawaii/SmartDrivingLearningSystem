@@ -53,6 +53,20 @@
     white-space: pre-wrap;
 }
 
+.ins-error-banner {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    align-self: flex-start;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background-color: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #fecaca;
+    box-sizing: border-box;
+}
+
 .ins-action-cell {
     display: flex;
     align-items: center;

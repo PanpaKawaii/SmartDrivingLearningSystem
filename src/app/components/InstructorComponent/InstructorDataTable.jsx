@@ -119,7 +119,7 @@ export default function InstructorDataTable({
                 <div className='ins-data-table-info'>
                     {loading
                         ? 'Dang tai du lieu...'
-                        : `Trang ${currentPage}, pageSize ${currentPageSize}, tong ${totalCount} ket qua`}
+                        : `Trang ${currentPage}/${totalPages}`}
                 </div>
                 <div className='ins-data-table-pagination'>
                     <button onClick={() => goToPage(currentPage - 1)} disabled={loading || currentPage === 1}>

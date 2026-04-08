@@ -1,17 +1,28 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
-import { postData } from '../../../../mocks/CallingAPI.js';
-import { reportCategories, reports, resolves } from '../../../../mocks/DataSample.js';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI.js';
 import '../InstructorPages.css';
 
-const nowAsTimestamp = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
+const normalizeItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.items)) return payload.items;
+    return [];
+};
 
-const getReportCategoryName = (reportCategoryId) => {
-    const category = reportCategories.find((item) => item.id === reportCategoryId);
-    return category?.name || 'Khong xac dinh';
+const formatDateTimeLines = (value) => {
+    if (!value) return { time: '', date: '' };
+
+    const normalizedValue = String(value).replace('T', ' ').trim();
+    const [datePart = '', timePart = ''] = normalizedValue.split(' ');
+    const [year = '', month = '', day = ''] = datePart.split('-');
+
+    return {
+        time: timePart.slice(0, 5),
+        date: day && month && year ? `${day}/${month}/${year}` : datePart,
+    };
 };
 
 const getReportSubjectType = (report) => {
@@ -25,28 +36,58 @@ const getReportSubjectType = (report) => {
 const getEntityRoute = (report) => {
     if (report?.questionId) return `/instructor/report-entity/question/${report.questionId}`;
     if (report?.simulationId) return `/instructor/report-entity/simulation/${report.simulationId}`;
-    if (report?.forumPostId) return `/instructor/report-entity/forum-post/${report.forumPostId}`;
-    if (report?.forumCommentId) return `/instructor/report-entity/forum-comment/${report.forumCommentId}`;
     return null;
 };
 
 export default function ChangeRequests() {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [reportItems, setReportItems] = useState(() => reports.filter((report) => Number(report.reportCategoryId) === 4));
-    const [resolveItems, setResolveItems] = useState(() => [...resolves]);
+    const [refresh, setRefresh] = useState(0);
+    const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [reportItems, setReportItems] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [modalMode, setModalMode] = useState('view');
+    const [actionType, setActionType] = useState('approve');
 
-    const resolveByReportId = useMemo(() => {
-        return resolveItems.reduce((accumulator, item) => {
-            accumulator[item.reportId] = item;
-            return accumulator;
-        }, {});
-    }, [resolveItems]);
+    useEffect(() => {
+        (async () => {
+            setError(null);
+            setLoading(true);
+            const token = user?.token || '';
+            try {
+                const query = new URLSearchParams({
+                    page: serverPagination.page,
+                    pageSize: serverPagination.pageSize,
+                });
+                const res = await fetchData(`Reports?${query.toString()}`, token);
+                const requestReports = normalizeItems(res).filter((report) => report?.reportCategory?.name === 'Yêu cầu');
+
+                setReportItems(requestReports);
+                setServerPagination(prev => ({
+                    ...prev,
+                    page: res?.page || prev.page,
+                    pageSize: res?.pageSize || prev.pageSize,
+                    totalCount: res?.totalCount || prev.totalCount,
+                    totalPages: res?.totalPages || 1,
+                }));
+            } catch (err) {
+                setError('Lỗi tải dữ liệu');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
+
+    const STATUS_LABELS = {
+        '-1': 'Chờ duyệt',
+        '1': 'Đã duyệt',
+        '3': 'Đã bỏ qua',
+    };
 
     const columns = [
-        { key: 'id', label: 'STT', width: '60px' },
+        { key: '', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Nội dung yêu cầu' },
         {
             key: 'subjectType',
@@ -56,20 +97,31 @@ export default function ChangeRequests() {
                 <span className='ins-status-chip active'><span className='chip-dot'></span>{getReportSubjectType(row)}</span>
             ),
         },
-        { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => val?.split(' ')[0] },
+        { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
+            const { time, date } = formatDateTimeLines(val);
+            return (
+                <div style={{ lineHeight: '1.2' }}>
+                    <div>{time}</div>
+                    <div>{date}</div>
+                </div>
+            );
+        } },
         {
             key: 'status',
             label: 'Trạng thái',
             width: '120px',
-            render: (val) => (
-                <span className={`ins-status-chip ${val === 1 ? 'pending' : 'approved'}`}>
-                    <span className='chip-dot'></span>{val === 1 ? 'Chờ duyệt' : 'Đã duyệt'}
-                </span>
-            ),
+            render: (val) => {
+                const cls = val === 1 ? 'approved' : val === 3 ? 'rejected' : 'pending';
+                return (
+                    <span className={`ins-status-chip ${cls}`}>
+                        <span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}
+                    </span>
+                );
+            },
         },
         {
             key: 'actions',
-            label: '',
+            label: 'Thao tác',
             width: '140px',
             render: (_, row) => (
                 <div className='ins-action-cell'>
@@ -81,10 +133,12 @@ export default function ChangeRequests() {
                     <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
                         setSelectedReport(row);
                         setModalMode('process');
+                        setActionType('approve');
                     }}><i className='fa-solid fa-check'></i></button>
-                    <button className='ins-action-btn delete' title='Từ chối' onClick={() => {
+                    <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
                         setSelectedReport(row);
-                        setModalMode('reject');
+                        setModalMode('process');
+                        setActionType('disapprove');
                     }}><i className='fa-solid fa-xmark'></i></button>
                 </div>
             ),
@@ -94,6 +148,7 @@ export default function ChangeRequests() {
     const handleCloseModal = () => {
         setSelectedReport(null);
         setModalMode('view');
+        setActionType('approve');
     };
 
 
@@ -106,14 +161,14 @@ export default function ChangeRequests() {
         }
 
         try {
-            const result = await postData('api/Resolves', {
-                reportId: selectedReport.id,
-                title,
-                content,
-            }, token);
+            const endpoint = actionType === 'disapprove'
+                ? `Reports/${selectedReport.id}/disapprove`
+                : `Reports/${selectedReport.id}/approve`;
+
+            const result = await patchData(endpoint, { title, content }, token);
 
             if (result !== true) {
-                return { error: 'He thong khong xac nhan resolve thanh cong.' };
+                return { error: 'He thong khong xac nhan xu ly bao cao thanh cong.' };
             }
         } catch (error) {
             const apiErrors = error?.payload?.errors;
@@ -122,33 +177,16 @@ export default function ChangeRequests() {
                 const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
                 return { error: firstMessage || 'Du lieu khong hop le.' };
             }
-            return { error: error?.message || 'Gui resolve that bai.' };
+            return { error: error?.message || 'Xu ly bao cao that bai.' };
         }
 
-        const timestamp = nowAsTimestamp();
-        const oldResolve = resolveItems.find((item) => Number(item.reportId) === Number(selectedReport.id));
-        // status: 1 = approved, -1 = rejected
-        const status = modalMode === 'reject' ? -1 : 1;
-        const resolveRecord = {
-            id: oldResolve?.id || Date.now(),
-            reportId: selectedReport.id,
-            userId: 1,
-            title,
-            content,
-            createAt: oldResolve?.createAt || timestamp,
-            updateAt: timestamp,
-            status,
-        };
-
-        setResolveItems((current) => [resolveRecord, ...current.filter((item) => Number(item.reportId) !== Number(selectedReport.id))]);
-
-        setReportItems((current) => current.map((item) => (
-            Number(item.id) === Number(selectedReport.id)
-                ? { ...item, status, updateAt: timestamp }
-                : item
-        )));
+        setRefresh((current) => current + 1);
         handleCloseModal();
         return { ok: true };
+    };
+
+    const handlePageChange = (page) => {
+        setServerPagination(prev => ({ ...prev, page }));
     };
 
     return (
@@ -156,14 +194,25 @@ export default function ChangeRequests() {
             <div className='ins-page-header'>
                 <div><h1>Duyệt yêu cầu thay đổi</h1><p>Xem xét và phê duyệt các yêu cầu thay đổi nội dung.</p></div>
             </div>
-            <InstructorDataTable title={`Yêu cầu thay đổi (${reportItems.length})`} columns={columns} data={reportItems} />
+            {error && <div className='ins-error-banner'>{error}</div>}
+            <InstructorDataTable
+                title={`Yêu cầu thay đổi (${serverPagination.totalCount})`}
+                columns={columns}
+                data={reportItems}
+                loading={loading}
+                serverPagination={serverPagination}
+                onPageChange={handlePageChange}
+            />
 
             <ReportFeedbackModal
                 isOpen={!!selectedReport}
                 mode={modalMode}
                 report={selectedReport}
-                reportCategoryName={selectedReport ? getReportCategoryName(selectedReport.reportCategoryId) : ''}
-                resolve={selectedReport ? resolveByReportId[selectedReport.id] : null}
+                resolve={selectedReport?.resolves?.[0] || null}
+                actionType={actionType}
+                initialTitle={actionType === 'disapprove'
+                    ? '[Kết quả] Phản hồi về yêu cầu thay đổi nội dung ....'
+                    : '[Đã cập nhật] Xác nhận sửa đổi theo yêu cầu của bạn!'}
                 onOpenEntity={() => {
                     if (!selectedReport) return;
                     const route = getEntityRoute(selectedReport);
