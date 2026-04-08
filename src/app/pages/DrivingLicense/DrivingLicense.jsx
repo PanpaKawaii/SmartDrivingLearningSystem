@@ -13,6 +13,10 @@ export default function DrivingLicense() {
     const { user } = useAuth();
 
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
+    const [dataSourceInfo, setDataSourceInfo] = useState({
+        apiLicenses: 0,
+        sampleLicenses: 0,
+    });
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -41,12 +45,17 @@ export default function DrivingLicense() {
                 const QuestionChapterItems = QuestionChapterResponse?.items;
                 // const DrivingLicenseItems = [...drivingLicenses];
                 // const QuestionChapterItems = [...questionChapters];
+
                 const DrivingLicense = DrivingLicenseItems.map(dl => ({
                     ...dl,
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
                 setDRIVINGLICENSEs(DrivingLicense);
+                setDataSourceInfo({
+                    apiLicenses: apiDrivingLicenses.length,
+                    sampleLicenses: mergedDrivingLicenses.filter((item) => item.dataSource === 'sample').length,
+                });
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -70,6 +79,9 @@ export default function DrivingLicense() {
                     Select a license program to start your journey. Each program includes
                     comprehensive theory lessons and practice exams.
                 </p>
+                <p className='data-source-note'>
+                    Demo data sources - API: {dataSourceInfo.apiLicenses}, DataSample: {dataSourceInfo.sampleLicenses}
+                </p>
             </div>
 
             <div className='license-grid'>
@@ -84,6 +96,9 @@ export default function DrivingLicense() {
                             <div className='image'>
                                 {/* <img src={license.image_url || 'https://media.wired.com/photos/592675f6cefba457b079a0cd/3:2/w_2560%2Cc_limit/SCG003S-FRONTTA.jpg'} alt={license.name} /> */}
                                 <div className='overlay'></div>
+                                <div className={`data-source-badge ${license.dataSource || 'api'}`}>
+                                    {license.dataSource === 'sample' ? 'DataSample' : 'API'}
+                                </div>
                                 <h3>{license.name}</h3>
                             </div>
 

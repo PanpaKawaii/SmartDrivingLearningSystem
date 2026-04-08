@@ -1,0 +1,117 @@
+.instructor-header {
+    height: 64px;
+    background-color: rgba(7, 14, 29, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(95, 117, 165, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    box-sizing: border-box;
+}
+
+.instructor-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.instructor-header .header-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+}
+
+.instructor-header .breadcrumb-item {
+    color: var(--ins-on-surface-variant);
+}
+
+.instructor-header .breadcrumb-separator {
+    color: var(--ins-outline-variant);
+    font-size: 0.75rem;
+}
+
+.instructor-header .breadcrumb-current {
+    color: var(--ins-on-surface);
+    font-weight: 600;
+}
+
+.instructor-header .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.instructor-header .header-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.instructor-header .header-search input {
+    width: 240px;
+    padding: 8px 12px 8px 36px;
+    background-color: var(--ins-surface);
+    border: 1px solid rgba(95, 117, 165, 0.15);
+    border-radius: 8px;
+    color: var(--ins-on-surface);
+    font-size: 0.8125rem;
+    font-family: var(--ins-font-body);
+    transition: all 0.2s ease;
+    height: auto;
+}
+
+.instructor-header .header-search input::placeholder {
+    color: var(--ins-on-surface-variant);
+}
+
+.instructor-header .header-search input:focus {
+    border-color: var(--ins-outline);
+    background-color: var(--ins-surface-high);
+}
+
+.instructor-header .header-search .search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--ins-on-surface-variant);
+    font-size: 0.8125rem;
+    pointer-events: none;
+}
+
+.instructor-header .header-icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: none;
+    border: none;
+    color: var(--ins-on-surface-variant);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    font-size: 0.875rem;
+    padding: 0;
+}
+
+.instructor-header .header-icon-btn:hover {
+    background-color: var(--ins-surface);
+    color: var(--ins-on-surface);
+}
+
+.instructor-header .header-icon-btn .badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--ins-error);
+    border-radius: 50%;
+    border: 2px solid var(--ins-bg);
+}

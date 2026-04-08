@@ -35,6 +35,7 @@ export default function UserHeader({
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
+        { name: 'INSTRUCTOR', icon: 'chalkboard-user', iconType: 'solid', path: '/instructor' },
         { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 

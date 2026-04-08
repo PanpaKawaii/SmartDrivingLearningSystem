@@ -1,0 +1,108 @@
+.instructor-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.instructor-dashboard .dashboard-greeting {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.instructor-dashboard .dashboard-greeting h1 {
+    font-family: var(--ins-font-headline);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+}
+
+.instructor-dashboard .dashboard-greeting p {
+    font-size: 0.9rem;
+    color: var(--ins-on-surface-variant);
+}
+
+.instructor-dashboard .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.instructor-dashboard .dashboard-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.instructor-dashboard .dashboard-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.instructor-dashboard .dashboard-section-title {
+    font-family: var(--ins-font-headline);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+}
+
+.instructor-dashboard .dashboard-section-link {
+    font-size: 0.8125rem;
+    color: var(--ins-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.instructor-dashboard .dashboard-section-link:hover {
+    opacity: 0.8;
+}
+
+.instructor-dashboard .dashboard-table-card {
+    background-color: var(--ins-surface);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.instructor-dashboard .dashboard-table-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.instructor-dashboard .dashboard-table-card thead th {
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--ins-on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: var(--ins-surface-low);
+}
+
+.instructor-dashboard .dashboard-table-card tbody td {
+    padding: 14px 20px;
+    font-size: 0.8125rem;
+    color: var(--ins-on-surface);
+    border-bottom: 1px solid rgba(95, 117, 165, 0.06);
+}
+
+.instructor-dashboard .dashboard-table-card tbody tr:hover {
+    background-color: var(--ins-surface-high);
+}
+
+.instructor-dashboard .dashboard-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 1200px) {
+    .instructor-dashboard .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .instructor-dashboard .dashboard-columns {
+        grid-template-columns: 1fr;
+    }
+}
