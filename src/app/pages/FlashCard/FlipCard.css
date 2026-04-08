@@ -74,7 +74,19 @@
                     }
 
                     .question-content {
+                        margin: 0 0 12px;
+                    }
+
+                    .image {
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
                         margin: 0 0 20px;
+
+                        img {
+                            max-height: 320px;
+                            border-radius: 8px;
+                        }
                     }
                 }
 

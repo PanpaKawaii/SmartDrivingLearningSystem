@@ -45,6 +45,7 @@ export default function QuestionFlashcard() {
                     return {
                         ...q,
                         index: i + 1,
+                        showAnswer: true,
                         tags: TagItems.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });

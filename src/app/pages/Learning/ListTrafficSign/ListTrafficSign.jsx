@@ -106,7 +106,7 @@ export default function ListTrafficSign() {
                         <div className='sign-information'>
                             <div className='sign-heading'>
                                 <h2>{sign.name}</h2>
-                                <button className='btn' onClick={() => ToggleMarkTrafficSign(sign.id, mySAVEDTRAFFICSIGNs.find(sq => sq.trafficSignId == sign.id) || null)} disabled={loading}>
+                                <button className='btn' onClick={() => ToggleMarkTrafficSign(sign.id, mySAVEDTRAFFICSIGNs.find(sq => sq.trafficSignId == sign.id) || null)} disabled={!user || loading}>
                                     <i className={`fa-${MySavedTrafficSigns.includes(sign.id) ? 'solid' : 'regular'} fa-bookmark`} />
                                 </button>
                             </div>
