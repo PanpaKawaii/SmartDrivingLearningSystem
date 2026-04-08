@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { answers, questions } from '../../../mocks/DataSample.js';
-import Answer from './Answer';
-import Question from './Question';
+import { answers, questions } from '../../../../mocks/DataSample.js';
+import Answer from './Answer.jsx';
+import Question from './Question.jsx';
 
-import './ExamTemp.css';
+import './QuestionExam.css';
 
-export default function ExamTemp() {
+export default function QuestionExam() {
     const [QUESTIONs, setQUESTIONs] = useState(questions || []);
     const [ANSWERs, setANSWERs] = useState(answers || []);
     const [selectedQuestionId, setSelectedQuestionId] = useState(questions?.[0]?.id);
@@ -70,7 +70,7 @@ export default function ExamTemp() {
     console.log('selectedQuestion', selectedQuestion);
 
     return (
-        <div className='exam-temp-container container'>
+        <div className='question-exam-container container'>
             <Question
                 QuestionsAnswers={QuestionsAnswers}
                 selectedQuestion={selectedQuestion}

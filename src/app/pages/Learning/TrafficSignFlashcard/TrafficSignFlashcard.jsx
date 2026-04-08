@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { answers, questions } from '../../../mocks/DataSample';
-import FlashCard from '../FlashCard/FlashCard';
+import { answers, questions } from '../../../../mocks/DataSample';
+import FlashCard from '../../FlashCard/FlashCard';
 
-import './LearningSign.css';
+import './TrafficSignFlashcard.css';
 
-export default function LearningSign() {
+export default function TrafficSignFlashcard() {
     const [QUESTIONs, setQUESTIONs] = useState(questions || []);
     const [ANSWERs, setANSWERs] = useState(answers || []);
 
@@ -15,7 +15,7 @@ export default function LearningSign() {
     console.log('QuestionsAnswers', QuestionsAnswers);
 
     return (
-        <div className='learning-sign-container'>
+        <div className='traffic-sign-flashcard-container'>
             <FlashCard list={QuestionsAnswers} />
         </div>
     )

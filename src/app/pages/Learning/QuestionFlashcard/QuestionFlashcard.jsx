@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { answers, questions } from '../../../mocks/DataSample';
-import FlashCard from '../FlashCard/FlashCard';
+import { answers, questions } from '../../../../mocks/DataSample';
+import FlashCard from '../../FlashCard/FlashCard';
 
-import './LearningQuestion.css';
+import './QuestionFlashcard.css';
 
-export default function LearningQuestion() {
+export default function QuestionFlashcard() {
     const [QUESTIONs, setQUESTIONs] = useState(questions || []);
     const [ANSWERs, setANSWERs] = useState(answers || []);
 
@@ -15,7 +15,7 @@ export default function LearningQuestion() {
     console.log('QuestionsAnswers', QuestionsAnswers);
 
     return (
-        <div className='learning-question-container'>
+        <div className='question-flashcard-container'>
             <FlashCard list={QuestionsAnswers} />
         </div>
     )

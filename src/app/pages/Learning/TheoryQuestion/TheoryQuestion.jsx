@@ -1,9 +1,9 @@
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
+import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import CoreLearning from './CoreLearning';
 
-import './TheoryLearning.css';
+import './TheoryQuestion.css';
 
-export default function TheoryLearning() {
+export default function TheoryQuestion() {
 
     const questionQuery = new URLSearchParams({
         page: '1',
@@ -12,7 +12,7 @@ export default function TheoryLearning() {
     });
 
     return (
-        <div className='theory-learning-container'>
+        <div className='theory-question-container'>
             <StarsBackground />
             <CoreLearning
                 grid={6}

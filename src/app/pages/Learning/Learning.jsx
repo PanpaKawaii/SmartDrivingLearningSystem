@@ -7,47 +7,47 @@ export default function Learning() {
     const categories = [
         {
             name: '600+ Câu hỏi lý thuyết',
-            link: 'theory-question',
+            link: 'learning/theory-question',
             icon: 'question-circle',
             description: 'Bao gồm hơn 600 câu hỏi trắc nghiệm có hiển thị đáp án và giải thích sau khi chọn',
             type: 'Đa dạng câu hỏi',
             time: 'Tự học',
         },
         {
-            name: 'Học theo dạng Flashcard',
-            link: 'question-flashcard',
+            name: 'Học câu hỏi theo dạng Flashcard',
+            link: 'learning/question-flashcard',
             icon: 'rectangle-list',
             description: 'Học 600+ câu hỏi dưới dạng Flashcard gồm câu hỏi và đáp án',
             type: 'Đa dạng câu hỏi',
             time: 'Tự học',
         },
         {
-            name: 'wwwww+ Biển báo giao thông',
-            link: 'wwwww',
+            name: '300+ Biển báo giao thông',
+            link: 'learning/list-traffic-sign',
             icon: 'triangle-exclamation',
-            description: 'Bao gồm hơn wwwww biển báo có hình ảnh và nội dung chi tiết',
+            description: 'Bao gồm hơn 300 biển báo có hình ảnh và nội dung chi tiết',
             type: 'Đa dạng nội dung',
             time: 'Tự học',
         },
         {
             name: 'Học biển báo theo dạng Flashcard',
-            link: 'list-traffic-sign',
+            link: 'learning/traffic-sign-flashcard',
             icon: 'rectangle-list',
-            description: 'Học wwwww+ biển báo dưới dạng Flashcard gồm hình ảnh và nội dung chi tiết',
+            description: 'Học 300+ biển báo dưới dạng Flashcard gồm hình ảnh và nội dung chi tiết',
             type: 'Đa dạng câu hỏi',
             time: 'Tự học',
         },
         {
             name: 'Học biển báo theo dạng Flipbook',
-            link: 'traffic-sign-flip-book',
+            link: 'learning/traffic-sign-flip-book',
             icon: 'book',
-            description: 'Học wwwww+ biển báo dưới dạng sách lật sách',
+            description: 'Học 300+ biển báo dưới dạng sách lật sách',
             type: 'Đa dạng nội dung',
             time: 'Tự học',
         },
         {
             name: 'Làm đề thi thử',
-            link: 'list-exam',
+            link: 'learning/list-exam',
             icon: 'file-lines',
             description: 'Làm đề thi thử theo bộ đề có sẵn của hệ thống hoặc tự tạo bộ đề theo nhu cầu cá nhân',
             type: 'Bài kiểm tra',
@@ -55,9 +55,17 @@ export default function Learning() {
         },
         {
             name: 'Trải nghiệm mô phỏng',
-            link: 'list-simulation',
-            icon: 'car',
+            link: 'simulation',
+            icon: 'play',
             description: 'Trải nghiệm mô phỏng với hơn 120 tình huống khác nhau',
+            type: 'Đa dạng câu hỏi',
+            time: 'Tự học',
+        },
+        {
+            name: 'Học theo loại bằng lái',
+            link: 'driving-license',
+            icon: 'car',
+            description: 'Học nhiều loại bằng lái khác nhau theo hệ thống cây',
             type: 'Đa dạng câu hỏi',
             time: 'Tự học',
         },
@@ -81,7 +89,7 @@ export default function Learning() {
                     {categories.map((category, index) => (
                         <Link
                             key={index}
-                            to={`/learning/${category.link}`}
+                            to={`/${category.link}`}
                             className='category-link'
                             style={{ animationDelay: `${index * 0.1}s` }}
                         >
