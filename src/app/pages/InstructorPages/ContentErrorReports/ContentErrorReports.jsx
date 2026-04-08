@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
-import { fetchData, postData } from '../../../../mocks/CallingAPI.js';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI.js';
 import '../InstructorPages.css';
 
 const normalizeItems = (payload) => {
@@ -11,8 +11,6 @@ const normalizeItems = (payload) => {
     if (Array.isArray(payload?.items)) return payload.items;
     return [];
 };
-
-const normalizeUserName = (user) => user?.name || user?.fullName || user?.userName || user?.displayName || 'Khong xac dinh';
 
 const formatDateTimeLines = (value) => {
     if (!value) return { time: '', date: '' };
@@ -40,36 +38,10 @@ export default function ContentErrorReports() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    
     const [reportItems, setReportItems] = useState([]);
-    const [resolveItems, setResolveItems] = useState([]);
-    const [reportCategoryItems, setReportCategoryItems] = useState([]);
-    const [userItems, setUserItems] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [modalMode, setModalMode] = useState('view');
-
-    const reportCategoryNameById = useMemo(() => {
-        return reportCategoryItems.reduce((accumulator, item) => {
-            accumulator[item.id] = item.name;
-            return accumulator;
-        }, {});
-    }, [reportCategoryItems]);
-
-    const userNameById = useMemo(() => {
-        return userItems.reduce((accumulator, item) => {
-            accumulator[item.id] = normalizeUserName(item);
-            return accumulator;
-        }, {});
-    }, [userItems]);
-
-    const getReportCategoryName = (reportCategoryId) => reportCategoryNameById[reportCategoryId] || 'Khong xac dinh';
-
-    const resolveByReportId = useMemo(() => {
-        return resolveItems.reduce((accumulator, item) => {
-            accumulator[item.reportId] = item;
-            return accumulator;
-        }, {});
-    }, [resolveItems]);
+    const [actionType, setActionType] = useState('approve');
 
     useEffect(() => {
         (async () => {
@@ -81,52 +53,35 @@ export default function ContentErrorReports() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-
-                const [reportCategoriesResponse, reportsResponse, resolvesResponse] = await Promise.all([
-                    fetchData(`ReportCategories?${query.toString()}`, token),
-                    fetchData(`Reports?${query.toString()}`, token),
-                    fetchData(`Resolves?${query.toString()}`, token),
-                ]);
-
-                let usersResponse = null;
-                try {
-                    usersResponse = await fetchData(`Users?${query.toString()}`, token);
-                } catch (usersError) {
-                    console.warn('Could not load users for report names:', usersError);
-                }
-
-                const reportCategoryApiItems = normalizeItems(reportCategoriesResponse);
-                const reportApiItems = normalizeItems(reportsResponse);
-                const resolveApiItems = normalizeItems(resolvesResponse);
-                const userApiItems = normalizeItems(usersResponse);
-
-                const contentErrorReports = reportApiItems.filter((report) => Boolean(report?.questionId || report?.simulationId));
-
-                setReportCategoryItems(reportCategoryApiItems);
-                setUserItems(userApiItems);
-                setReportItems(contentErrorReports);
-                setResolveItems(resolveApiItems);
+                const res = await fetchData(`Reports?${query.toString()}`, token);
+                setReportItems(normalizeItems(res));
                 setServerPagination(prev => ({
                     ...prev,
-                    page: reportsResponse?.page || prev.page,
-                    pageSize: reportsResponse?.pageSize || prev.pageSize,
-                    totalCount: reportsResponse?.totalCount || prev.totalCount,
-                    totalPages: reportsResponse?.totalPages || 1,
+                    page: res?.page || prev.page,
+                    pageSize: res?.pageSize || prev.pageSize,
+                    totalCount: res?.totalCount || prev.totalCount,
+                    totalPages: res?.totalPages || 1,
                 }));
             } catch (err) {
-                console.error('Error loading content error reports:', err);
-                //setError('Khong the tai du lieu bao cao loi noi dung.');
+                setError('Lỗi tải dữ liệu');
             } finally {
                 setLoading(false);
             }
         })();
     }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
-    console.log('reportItems', reportItems);
+
+    const STATUS_LABELS = {
+    '-1': 'Chờ duyệt',
+    '1': 'Đã duyệt',
+    '3': 'Đã bỏ qua',
+    };
+
     const columns = [
-        { key: 'totalCount', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
+        { key: '', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Tiêu đề báo cáo' },
         { key: 'content', label: 'Nội dung' },
-        { key: 'userId', label: 'Người báo', width: '140px', render: (val, row) => userNameById[val] || normalizeUserName(row?.user) },
+        { key: 'user', label: 'Người báo', width: '140px', render: (val, row) => row?.user?.name || '---' },
+        { key: 'reportCategory', label: 'Danh mục', width: '140px', render: (val, row) => row?.reportCategory?.name || '---' },
         { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
             const { time, date } = formatDateTimeLines(val);
             return (
@@ -136,12 +91,19 @@ export default function ContentErrorReports() {
                 </div>
             );
         } },
-        { key: 'status', label: 'Trạng thái', width: '130px', render: (val) => (
-            <span className={`ins-status-chip ${val === 1 ? 'rejected' : 'approved'}`}>
-                <span className='chip-dot'></span>{val === 1 ? 'Chua xu ly' : 'Da xu ly'}
-            </span>
-        )},
-        { key: 'actions', label: 'Thao tác', width: '100px', render: (_, row) => (
+        {
+            key: 'status',
+            label: 'Trạng thái',
+            width: '120px',
+            render: (val) => {
+                let cls = 'pending';
+                if (val === 1) cls = 'approved';
+                else if (val === 3) cls = 'rejected';
+                return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
+            },
+        },
+
+        { key: 'actions', label: 'Thao tác', width: '140px', render: (_, row) => (
             <div className='ins-action-cell'>
                 <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
                     const route = getEntityRoute(row);
@@ -150,11 +112,19 @@ export default function ContentErrorReports() {
                 }}>
                     <i className='fa-solid fa-eye'></i>
                 </button>
-                <button className='ins-action-btn edit' title='Xử lý' onClick={() => {
+                <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
                     setSelectedReport(row);
                     setModalMode('process');
+                    setActionType('approve');
                 }}>
-                    <i className='fa-solid fa-wrench'></i>
+                    <i className='fa-solid fa-check'></i>
+                </button>
+                <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
+                    setSelectedReport(row);
+                    setModalMode('process');
+                    setActionType('disapprove');
+                }}>
+                    <i className='fa-solid fa-xmark'></i>
                 </button>
             </div>
         )},
@@ -163,6 +133,7 @@ export default function ContentErrorReports() {
     const handleCloseModal = () => {
         setSelectedReport(null);
         setModalMode('view');
+        setActionType('approve');
     };
 
     const handleSubmitFeedback = async ({ title, content }) => {
@@ -174,14 +145,14 @@ export default function ContentErrorReports() {
         }
 
         try {
-            const result = await postData('api/Resolves', {
-                reportId: selectedReport.id,
-                title,
-                content,
-            }, token);
+            const endpoint = actionType === 'disapprove'
+                ? `Reports/${selectedReport.id}/disapprove`
+                : `Reports/${selectedReport.id}/approve`;
+
+            const result = await patchData(endpoint, { title, content }, token);
 
             if (result !== true) {
-                return { error: 'He thong khong xac nhan resolve thanh cong.' };
+                return { error: 'He thong khong xac nhan xu ly bao cao thanh cong.' };
             }
         } catch (error) {
             const apiErrors = error?.payload?.errors;
@@ -190,7 +161,7 @@ export default function ContentErrorReports() {
                 const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
                 return { error: firstMessage || 'Du lieu khong hop le.' };
             }
-            return { error: error?.message || 'Gui resolve that bai.' };
+            return { error: error?.message || 'Xu ly bao cao that bai.' };
         }
 
         handleCloseModal();
@@ -198,15 +169,7 @@ export default function ContentErrorReports() {
         return { ok: true };
     };
 
-    if (error) {
-        return (
-            <div className='ins-page'>
-                <div className='ins-page-header'>
-                    <div><h1>Báo cáo lỗi nội dung</h1><p>{error}</p></div>
-                </div>
-            </div>
-        );
-    }
+
 
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
@@ -217,7 +180,7 @@ export default function ContentErrorReports() {
             <div className='ins-page-header'>
                 <div><h1>Báo cáo lỗi nội dung</h1><p>Danh sách lỗi nội dung được báo cáo từ người dùng.</p></div>
             </div>
-
+            {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
             <InstructorDataTable
                 title={`Báo cáo lỗi (${serverPagination.totalCount})`}
                 columns={columns}
@@ -226,13 +189,15 @@ export default function ContentErrorReports() {
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
             />
-
             <ReportFeedbackModal
                 isOpen={!!selectedReport}
                 mode={modalMode}
                 report={selectedReport}
-                reportCategoryName={selectedReport ? getReportCategoryName(selectedReport.reportCategoryId) : ''}
-                resolve={selectedReport ? resolveByReportId[selectedReport.id] : null}
+                resolve={selectedReport?.resolves?.[0] || null}
+                actionType={actionType}
+                initialTitle={actionType === 'disapprove'
+                    ? '[Kết quả] Phản hồi về báo cáo nội dung ....'
+                    : '[Đã cập nhật] Xác nhận sửa đổi nội dung theo báo cáo của bạn!'}
                 onOpenEntity={() => {
                     if (!selectedReport) return;
                     const route = getEntityRoute(selectedReport);

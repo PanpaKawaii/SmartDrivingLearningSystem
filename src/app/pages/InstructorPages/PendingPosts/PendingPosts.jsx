@@ -97,7 +97,7 @@ export default function PendingPosts() {
         };
     };
     const columns = [
-        { key: 'id', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1  },
+        { key: '', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1  },
         { key: 'title', label: 'Tiêu đề bài viết' },
         { key: 'user', label: 'Tác giả', width: '120px', render: (val) => val?.name || val?.email || '---' },
         { key: 'forumTopicId', label: 'Chủ đề', width: '100px', render: (val) => {
