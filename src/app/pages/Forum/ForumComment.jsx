@@ -100,6 +100,7 @@ export default function ForumComment({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            setLoading(false);
         } finally {
             // setLoading(false);
         };
