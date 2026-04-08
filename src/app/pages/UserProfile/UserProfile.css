@@ -208,12 +208,6 @@
                     h2 { font-size: 1.6rem; font-weight: 600; color: white; margin: 0; }
                 }
 
-                p.subtitle {
-                    color: var(--text-muted);
-                    font-size: 0.95rem;
-                    margin: 0;
-                }
-
                 .edit-mode-btn {
                     background-color: rgba(59, 130, 246, .1);
                     color: #60a5fa;
@@ -239,6 +233,10 @@
                     flex-direction: column;
                     gap: 0.5rem; 
 
+                    .full-width-input {
+                        width: 100%;
+                    }
+
                     .form-row {
                         display: flex;
                         gap: 1.5rem;
@@ -258,29 +256,14 @@
                             margin-bottom: 0.6rem;
                         }
 
-                        /* Shared Input Styling */
-                        .moving-label-input-container, .style-label-select-container {
+                        .moving-label-input-container,
+                        .style-label-select-container {
                             width: 100%;
-                            
-                            .input, .select {
-                                background-color: var(--input-bg);
-                                border: var(--card-border);
-                                color: white;
-                                padding: 10px 14px;
-                                border-radius: 8px;
-                                transition: .3s;
-                                box-sizing: border-box;
-                                width: 100%;
-
-                                &:focus {
-                                    border-color: var(--input-focus-border);
-                                    box-shadow: var(--input-focus-shadow);
-                                    outline: none;
-                                }
-                            }
-                            label { color: var(--text-muted); }
                         }
 
+                        /* Shared input/select/textarea styling */
+                        .moving-label-input-container .input,
+                        .style-label-select-container .select,
                         textarea {
                             background-color: var(--input-bg);
                             border: var(--card-border);
@@ -291,12 +274,19 @@
                             box-sizing: border-box;
                             width: 100%;
                             font-family: inherit;
+                        }
 
-                            &:focus {
-                                border-color: var(--input-focus-border);
-                                box-shadow: var(--input-focus-shadow);
-                                outline: none;
-                            }
+                        .moving-label-input-container .input:focus,
+                        .style-label-select-container .select:focus,
+                        textarea:focus {
+                            border-color: var(--input-focus-border);
+                            box-shadow: var(--input-focus-shadow);
+                            outline: none;
+                        }
+
+                        .moving-label-input-container label,
+                        .style-label-select-container label {
+                            color: var(--text-muted);
                         }
                     }
 
