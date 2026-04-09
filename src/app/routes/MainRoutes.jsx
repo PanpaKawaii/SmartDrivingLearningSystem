@@ -38,7 +38,7 @@ import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
 import Require from './Require.jsx'
 import AdminLayout from '../layouts/AdminLayout/AdminLayout.jsx'
 import AdminDashboard from '../pages/AdminPages/AdminDashboard/AdminDashboard.jsx'
-import FeaturePlaceholder from '../components/Shared/FeaturePlaceholder.jsx'
+import AdminFeaturePlaceholder from '../pages/AdminPages/AdminFeaturePlaceholder/AdminFeaturePlaceholder.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -100,50 +100,51 @@ export default function MainRoutes() {
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
 
-                <Route path='admin' element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
+                <Route path='admin'element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<AdminDashboard />} />
-                    <Route path='user-management' element={<FeaturePlaceholder/>}/>
-                    <Route path='user-management/create' element={<FeaturePlaceholder />} />
-                    <Route path='user-management/:userId' element={<FeaturePlaceholder />} />
-                    <Route path='system-config' element={<FeaturePlaceholder />} />
-                    <Route path='scoring-rules' element={<FeaturePlaceholder />} />
-                    <Route path='scoring-rules/:examId/setup' element={<FeaturePlaceholder />} />
-                    <Route path='categories' element={<FeaturePlaceholder />} />
-                    <Route path='categories/:type/create' element={<FeaturePlaceholder />} />
-                    <Route path='categories/:type/:id/edit' element={<FeaturePlaceholder />} />
-                    <Route path='change-requests' element={<FeaturePlaceholder />} />
-                    <Route path='change-requests/create' element={<FeaturePlaceholder />} />
-                    <Route path='pending-posts' element={<FeaturePlaceholder />} />
-                    <Route path='community-reports' element={<FeaturePlaceholder  />} />
-                    <Route path='community-reports/:reportId' element={<FeaturePlaceholder />} />
-                    <Route path='generate-reports' element={<FeaturePlaceholder />} />
-                    <Route path='notifications' element={<FeaturePlaceholder />}/>
-                    <Route path='profile' element={<FeaturePlaceholder />}/>
+                    <Route path='user-management' element={<AdminFeaturePlaceholder/>}/>
+                    <Route path='user-management/create' element={<AdminFeaturePlaceholder />} />
+                    <Route path='user-management/:userId' element={<AdminFeaturePlaceholder />} />
+                    <Route path='system-config' element={<AdminFeaturePlaceholder />} />
+                    <Route path='scoring-rules' element={<AdminFeaturePlaceholder />} />
+                    <Route path='scoring-rules/:examId/setup' element={<AdminFeaturePlaceholder />} />
+                    <Route path='categories' element={<AdminFeaturePlaceholder />} />
+                    <Route path='categories/:type/create' element={<AdminFeaturePlaceholder />} />
+                    <Route path='categories/:type/:id/edit' element={<AdminFeaturePlaceholder />} />
+                    <Route path='change-requests' element={<AdminFeaturePlaceholder />} />
+                    <Route path='change-requests/create' element={<AdminFeaturePlaceholder />} />
+                    <Route path='pending-posts' element={<AdminFeaturePlaceholder />} />
+                    <Route path='community-reports' element={<AdminFeaturePlaceholder  />} />
+                    <Route path='community-reports/:reportId' element={<AdminFeaturePlaceholder />} />
+                    <Route path='generate-reports' element={<AdminFeaturePlaceholder />} />
+                        
+                    <Route path='notifications' element={<AdminFeaturePlaceholder />}/>
+                    <Route path='profile' element={<AdminFeaturePlaceholder />}/>
                 </Route>
 
                 {/* Instructor CMS Routes */}
                 <Route path='/instructor' element={<Require allowedRoles={['Instructor']}><InstructorLayout /></Require>} >
                     <Route index element={<Navigate to='dashboard' replace />} />
-                    <Route path='dashboard' element={<FeaturePlaceholder />} />
-                    <Route path='question-bank' element={<FeaturePlaceholder />} />
-                    <Route path='question-bank/:questionId' element={<FeaturePlaceholder />} />
-                    <Route path='lesson-management' element={<FeaturePlaceholder />} />
-                    <Route path='chapter-management' element={<FeaturePlaceholder />} />
-                    <Route path='license-management' element={<FeaturePlaceholder />} />
-                    <Route path='vehicle-management' element={<FeaturePlaceholder />} />
-                    <Route path='traffic-sign-bank' element={<FeaturePlaceholder />} />
-                    <Route path='simulation-bank' element={<FeaturePlaceholder />} />
-                    <Route path='exam-management' element={<FeaturePlaceholder />} />
-                    <Route path='pending-posts' element={<FeaturePlaceholder />} />
-                    <Route path='my-posts' element={<FeaturePlaceholder />} />
-                    <Route path='my-posts-list' element={<FeaturePlaceholder />} />
-                    <Route path='community-reports' element={<FeaturePlaceholder />} />
-                    <Route path='content-error-reports' element={<FeaturePlaceholder />} />
-                    <Route path='change-requests' element={<FeaturePlaceholder />} />
-                    <Route path='report-processing' element={<FeaturePlaceholder />} />
-                    <Route path='report-entity/:entityType/:entityId' element={<FeaturePlaceholder />} />
-                    <Route path='simulation-exam-management' element={<FeaturePlaceholder />} />
+                    <Route path='dashboard' element={<InsDashboard />} />
+                    <Route path='question-bank' element={<InsQuestionBank />} />
+                    <Route path='question-bank/:questionId' element={<InsQuestionDetail />} />
+                    <Route path='lesson-management' element={<InsLessonMgmt />} />
+                    <Route path='chapter-management' element={<InsChapterMgmt />} />
+                    <Route path='license-management' element={<InsLicenseMgmt />} />
+                    <Route path='vehicle-management' element={<InsVehicleMgmt />} />
+                    <Route path='traffic-sign-bank' element={<InsTrafficSignBank />} />
+                    <Route path='simulation-bank' element={<InsSimulationBank />} />
+                    <Route path='exam-management' element={<InsExamMgmt />} />
+                    <Route path='pending-posts' element={<InsPendingPosts />} />
+                    <Route path='my-posts' element={<InsMyPosts />} />
+                    <Route path='my-posts-list' element={<InsMyPosts />} />
+                    <Route path='community-reports' element={<InsCommunityReports />} />
+                    <Route path='content-error-reports' element={<InsContentErrorReports />} />
+                    <Route path='change-requests' element={<InsChangeRequests />} />
+                    <Route path='report-processing' element={<InsReportProcessing />} />
+                    <Route path='report-entity/:entityType/:entityId' element={<InsReportEntityDetail />} />
+                    <Route path='simulation-exam-management' element={<InsSimulationExamMgmt />} />
                 </Route>
             </Routes>
             <BoxChat />
