@@ -1,0 +1,294 @@
+.admin-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.admin-dashboard .dashboard-greeting {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-dashboard .dashboard-greeting h1 {
+    font-family: var(--ins-font-headline);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+}
+
+.admin-dashboard .dashboard-greeting p {
+    font-size: 0.9rem;
+    color: var(--ins-on-surface-variant);
+}
+
+.admin-dashboard .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.admin-dashboard .dashboard-columns {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 20px;
+}
+
+.admin-dashboard .dashboard-section {
+    background-color: var(--ins-surface);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-dashboard .dashboard-section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-dashboard .dashboard-section-title {
+    font-family: var(--ins-font-headline);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ins-on-surface);
+}
+
+.admin-dashboard .dashboard-section-meta {
+    font-size: 0.75rem;
+    color: var(--ins-on-surface-variant);
+}
+
+.admin-dashboard .trend-bars {
+    min-height: 210px;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    align-items: end;
+}
+
+.admin-dashboard .trend-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.admin-dashboard .trend-value {
+    font-size: 0.7rem;
+    color: var(--ins-on-surface-variant);
+    font-weight: 500;
+}
+
+.admin-dashboard .trend-bar-wrap {
+    height: 140px;
+    width: 100%;
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(95, 117, 165, 0.08) 0%, rgba(95, 117, 165, 0.18) 100%);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.admin-dashboard .trend-bar {
+    width: 100%;
+    background: linear-gradient(180deg, var(--ins-primary) 0%, var(--ins-primary-container) 100%);
+    border-radius: 8px 8px 0 0;
+    transition: height 0.2s ease;
+}
+
+.admin-dashboard .trend-label {
+    font-size: 0.75rem;
+    color: var(--ins-on-surface);
+    font-weight: 600;
+}
+
+.admin-dashboard .signal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-dashboard .signal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    background-color: var(--ins-surface-low);
+    border: 1px solid rgba(95, 117, 165, 0.12);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-dashboard .signal-item:hover {
+    background-color: var(--ins-surface-high);
+    border-color: rgba(95, 117, 165, 0.22);
+}
+
+.admin-dashboard .signal-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.admin-dashboard .signal-priority {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+
+.admin-dashboard .signal-priority.high {
+    background-color: var(--ins-error);
+}
+
+.admin-dashboard .signal-priority.medium {
+    background-color: #f4c95d;
+}
+
+.admin-dashboard .signal-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-dashboard .signal-title {
+    font-size: 0.85rem;
+    color: var(--ins-on-surface);
+    font-weight: 600;
+}
+
+.admin-dashboard .signal-note {
+    font-size: 0.75rem;
+    color: var(--ins-on-surface-variant);
+}
+
+.admin-dashboard .signal-value {
+    min-width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background-color: rgba(95, 117, 165, 0.2);
+    color: var(--ins-on-surface);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ins-font-headline);
+    font-weight: 700;
+}
+
+.admin-dashboard .dashboard-table-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.admin-dashboard .dashboard-logs-card {
+    padding: 0;
+    background: transparent;
+}
+
+.admin-dashboard .dashboard-logs-card > .dashboard-section-header {
+    background-color: var(--ins-surface);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 8px;
+}
+
+.admin-dashboard .logs-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-dashboard .logs-filter-group label {
+    font-size: 0.75rem;
+    color: var(--ins-on-surface-variant);
+    font-weight: 600;
+}
+
+.admin-dashboard .logs-filter-group select {
+    border: 1px solid rgba(95, 117, 165, 0.2);
+    background-color: var(--ins-surface);
+    color: var(--ins-on-surface);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-family: var(--ins-font-body);
+}
+
+.admin-dashboard .log-level {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 4px 8px;
+    letter-spacing: 0.03em;
+}
+
+.admin-dashboard .log-level.info {
+    background-color: rgba(56, 189, 248, 0.15);
+    color: #7dd3fc;
+}
+
+.admin-dashboard .log-level.warn {
+    background-color: rgba(250, 204, 21, 0.15);
+    color: #facc15;
+}
+
+.admin-dashboard .log-level.error {
+    background-color: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+}
+
+.admin-dashboard .log-level.debug {
+    background-color: rgba(129, 140, 248, 0.15);
+    color: #a5b4fc;
+}
+
+.admin-dashboard .log-source {
+    color: var(--ins-on-surface);
+    font-weight: 600;
+    font-size: 0.78rem;
+}
+
+.admin-dashboard .log-message {
+    color: var(--ins-on-surface-variant);
+    font-size: 0.8rem;
+}
+
+.admin-dashboard .ins-data-table-wrapper {
+    min-width: 0;
+}
+
+@media (max-width: 1200px) {
+    .admin-dashboard .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-dashboard .dashboard-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-dashboard .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-dashboard .dashboard-greeting h1 {
+        font-size: 1.35rem;
+    }
+
+    .admin-dashboard .trend-bars {
+        gap: 6px;
+    }
+}

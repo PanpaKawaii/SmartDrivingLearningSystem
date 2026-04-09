@@ -1,0 +1,24 @@
+.admin-placeholder-card {
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px;
+    border-radius: 18px;
+    background: var(--ins-surface);
+    border: 1px solid rgba(95, 117, 165, 0.12);
+}
+
+.admin-placeholder-card h1 {
+    font-family: var(--ins-font-headline);
+    font-size: 1.6rem;
+    margin: 0;
+    color: var(--ins-on-surface);
+}
+
+.admin-placeholder-card p {
+    margin: 0;
+    color: var(--ins-on-surface-variant);
+    line-height: 1.6;
+}

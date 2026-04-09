@@ -35,10 +35,10 @@ import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.
 import CarScene from '../pages/ThreeScene/CarScene.jsx'
 import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
 
-import AdminSideBar from '../pages/AdminPages/AdminSideBar/AdminSideBar.jsx'
-import QuestionManagement from '../pages/AdminPages/QuestionManagement/QuestionManagement.jsx'
-import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagement.jsx'
-import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
+import Require from './Require.jsx'
+import AdminLayout from '../layouts/AdminLayout/AdminLayout.jsx'
+import AdminDashboard from '../pages/AdminPages/AdminDashboard/AdminDashboard.jsx'
+import AdminFeaturePlaceholder from '../pages/AdminPages/AdminFeaturePlaceholder/AdminFeaturePlaceholder.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -100,15 +100,31 @@ export default function MainRoutes() {
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
 
-                <Route path='admin' element={<AdminSideBar />} >
-                    <Route index element={<Navigate to='user-management' replace />} />
-                    <Route path='user-management' element={<UserManagement />} />
-                    <Route path='question-management' element={<QuestionManagement />} />
-                    <Route path='lesson-management' element={<LessonManagement />} />
+                <Route path='admin'element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
+                    <Route index element={<Navigate to='dashboard' replace />} />
+                    <Route path='dashboard' element={<AdminDashboard />} />
+                    <Route path='user-management' element={<AdminFeaturePlaceholder/>}/>
+                    <Route path='user-management/create' element={<AdminFeaturePlaceholder />} />
+                    <Route path='user-management/:userId' element={<AdminFeaturePlaceholder />} />
+                    <Route path='system-config' element={<AdminFeaturePlaceholder />} />
+                    <Route path='scoring-rules' element={<AdminFeaturePlaceholder />} />
+                    <Route path='scoring-rules/:examId/setup' element={<AdminFeaturePlaceholder />} />
+                    <Route path='categories' element={<AdminFeaturePlaceholder />} />
+                    <Route path='categories/:type/create' element={<AdminFeaturePlaceholder />} />
+                    <Route path='categories/:type/:id/edit' element={<AdminFeaturePlaceholder />} />
+                    <Route path='change-requests' element={<AdminFeaturePlaceholder />} />
+                    <Route path='change-requests/create' element={<AdminFeaturePlaceholder />} />
+                    <Route path='pending-posts' element={<AdminFeaturePlaceholder />} />
+                    <Route path='community-reports' element={<AdminFeaturePlaceholder  />} />
+                    <Route path='community-reports/:reportId' element={<AdminFeaturePlaceholder />} />
+                    <Route path='generate-reports' element={<AdminFeaturePlaceholder />} />
+                        
+                    <Route path='notifications' element={<AdminFeaturePlaceholder />}/>
+                    <Route path='profile' element={<AdminFeaturePlaceholder />}/>
                 </Route>
 
                 {/* Instructor CMS Routes */}
-                <Route path='/instructor' element={<InstructorLayout />} >
+                <Route path='/instructor' element={<Require allowedRoles={['Instructor']}><InstructorLayout /></Require>} >
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<InsDashboard />} />
                     <Route path='question-bank' element={<InsQuestionBank />} />
