@@ -59,7 +59,7 @@ export default function LoginFace({
             login({ ...result?.user, token: result?.accessToken, refreshToken: result?.refreshToken });
 
             // onClose(false);
-            if (result.user.roleName == 'User') navigate('/');
+            if (result.user.roleName == 'User') navigate('/profile');
             else if (result.user.roleName == 'Instructor') navigate('/instructor');
             else if (result.user.roleName == 'Admin') navigate('/admin');
         } catch (error) {

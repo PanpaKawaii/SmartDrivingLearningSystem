@@ -71,7 +71,7 @@ export default function Forum() {
 
     const filteredFORUMPOSTs = FORUMPOSTs.filter(fp => {
         let matchStatus = false;
-        if (selectedStatus == '') matchStatus = !([-1, 0].includes(fp.status));
+        if (selectedStatus == '') matchStatus = fp.status == '1';
         else if (selectedStatus == '1') matchStatus = fp.userId == user?.id && fp.status == '1';
         else if (selectedStatus == '-2') matchStatus = fp.postReacts?.some(r => r.userId == user?.id) && fp.status == '1';
         else matchStatus = selectedStatus == fp.status;
