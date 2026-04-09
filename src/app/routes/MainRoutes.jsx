@@ -39,6 +39,16 @@ import Require from './Require.jsx'
 import AdminLayout from '../layouts/AdminLayout/AdminLayout.jsx'
 import AdminDashboard from '../pages/AdminPages/AdminDashboard/AdminDashboard.jsx'
 import AdminFeaturePlaceholder from '../pages/AdminPages/AdminFeaturePlaceholder/AdminFeaturePlaceholder.jsx'
+import AdminPendingPosts from '../pages/AdminPages/PendingPosts/PendingPosts.jsx'
+import AdminCommunityReports from '../pages/AdminPages/CommunityReports/CommunityReports.jsx'
+import AdminChangeRequests from '../pages/AdminPages/ChangeRequests/ChangeRequests.jsx'
+import AdminUserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
+import AdminSystemConfig from '../pages/AdminPages/SystemConfig/SystemConfig.jsx'
+import AdminScoringRules from '../pages/AdminPages/ScoringRules/ScoringRules.jsx'
+import AdminCategoriesHub from '../pages/AdminPages/Categories/CategoriesHub.jsx'
+import AdminGenerateReports from '../pages/AdminPages/GenerateReports/GenerateReports.jsx'
+import AdminNotifications from '../pages/AdminPages/Notifications/Notifications.jsx'
+import AdminProfile from '../pages/AdminPages/Profile/Profile.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -103,24 +113,24 @@ export default function MainRoutes() {
                 <Route path='admin'element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<AdminDashboard />} />
-                    <Route path='user-management' element={<AdminFeaturePlaceholder/>}/>
-                    <Route path='user-management/create' element={<AdminFeaturePlaceholder />} />
-                    <Route path='user-management/:userId' element={<AdminFeaturePlaceholder />} />
-                    <Route path='system-config' element={<AdminFeaturePlaceholder />} />
-                    <Route path='scoring-rules' element={<AdminFeaturePlaceholder />} />
-                    <Route path='scoring-rules/:examId/setup' element={<AdminFeaturePlaceholder />} />
-                    <Route path='categories' element={<AdminFeaturePlaceholder />} />
-                    <Route path='categories/:type/create' element={<AdminFeaturePlaceholder />} />
-                    <Route path='categories/:type/:id/edit' element={<AdminFeaturePlaceholder />} />
-                    <Route path='change-requests' element={<AdminFeaturePlaceholder />} />
-                    <Route path='change-requests/create' element={<AdminFeaturePlaceholder />} />
-                    <Route path='pending-posts' element={<AdminFeaturePlaceholder />} />
-                    <Route path='community-reports' element={<AdminFeaturePlaceholder  />} />
-                    <Route path='community-reports/:reportId' element={<AdminFeaturePlaceholder />} />
-                    <Route path='generate-reports' element={<AdminFeaturePlaceholder />} />
+                    <Route path='user-management' element={<AdminUserManagement/>}/>
+                    <Route path='user-management/create' element={<AdminUserManagement openCreateInitially />} />
+                    <Route path='user-management/:userId' element={<AdminUserManagement />} />
+                    <Route path='system-config' element={<AdminSystemConfig />} />
+                    <Route path='scoring-rules' element={<AdminScoringRules />} />
+                    <Route path='scoring-rules/:examId/setup' element={<AdminScoringRules openSetupInitially />} />
+                    <Route path='categories' element={<AdminCategoriesHub />} />
+                    <Route path='categories/:type/create' element={<AdminCategoriesHub openCreateInitially />} />
+                    <Route path='categories/:type/:id/edit' element={<AdminCategoriesHub openEditInitially />} />
+                    <Route path='change-requests' element={<AdminChangeRequests />} />
+                    <Route path='change-requests/create' element={<AdminChangeRequests openCreateInitially />} />
+                    <Route path='pending-posts' element={<AdminPendingPosts />} />
+                    <Route path='community-reports' element={<AdminCommunityReports />} />
+                    <Route path='report-entity/:entityType/:entityId' element={<InsReportEntityDetail />} />
+                    <Route path='generate-reports' element={<AdminGenerateReports />} />
                         
-                    <Route path='notifications' element={<AdminFeaturePlaceholder />}/>
-                    <Route path='profile' element={<AdminFeaturePlaceholder />}/>
+                    <Route path='notifications' element={<AdminNotifications />}/>
+                    <Route path='profile' element={<AdminProfile />}/>
                 </Route>
 
                 {/* Instructor CMS Routes */}
