@@ -54,7 +54,7 @@ export default function AdminPendingPosts() {
         try {
             setLoading(true);
             const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/approve`, { status: 1 }, token);
+            await patchData(`ForumPosts/${id}/approve`, {}, token);
             setRefresh((r) => r + 1);
         } catch {
             setError('Lỗi duyệt bài');
@@ -67,7 +67,7 @@ export default function AdminPendingPosts() {
         try {
             setLoading(true);
             const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/disapprove`, { status: 3 }, token);
+            await patchData(`ForumPosts/${id}/disapprove`, {}, token);
             setRefresh((r) => r + 1);
         } catch {
             setError('Lỗi từ chối bài');

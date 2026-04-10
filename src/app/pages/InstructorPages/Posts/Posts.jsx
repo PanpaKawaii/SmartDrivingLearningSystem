@@ -9,9 +9,8 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 const PostItems = [...Post];
 const STATUS_LABELS = {
-    '-1': 'Chờ duyệt',
-    '1': 'Đã duyệt',
-    '3': 'Đã từ chối',
+    '1': 'Public',
+    '4': 'Đã ẩn',
 };
 
 
@@ -117,9 +116,8 @@ export default function Posts() {
             label: 'Trạng thái',
             width: '120px',
             render: (val) => {
-                let cls = 'pending';
-                if (val === 1) cls = 'approved';
-                else if (val === 3) cls = 'rejected';
+                let cls = 'active';
+                if (val === 4) cls = 'hidden';
                 return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
             },
         },

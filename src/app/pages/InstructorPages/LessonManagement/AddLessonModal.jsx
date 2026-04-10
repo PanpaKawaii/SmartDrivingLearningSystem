@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
+import RichTextEditor from "../../../components/RichTextEditor/RichTextEditor";
 
 const chapterOptions = [
     { id: 1, name: 'Luật giao thông' },
@@ -74,30 +75,6 @@ export default function AddLessonModal({ isOpen, onClose, onSave }) {
                         ))}
                     </select>
                 </div>
-
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Loại bài học</label>
-                    <select className='ins-form-select' name='type' value={lesson.type} onChange={handleChange}>
-                        {typeOptions.map((t) => (
-                            <option key={t} value={t}>{t}</option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Thời lượng</label>
-                    <input
-                        className='ins-form-input'
-                        type='text'
-                        name='duration'
-                        value={lesson.duration}
-                        onChange={handleChange}
-                        placeholder='VD: 45 phút'
-                    />
-                </div>
-
                 <div className='ins-form-group'>
                     <label className='ins-form-label'>Trạng thái</label>
                     <select className='ins-form-select' name='status' value={lesson.status} onChange={handleChange}>
@@ -122,14 +99,15 @@ export default function AddLessonModal({ isOpen, onClose, onSave }) {
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Nội dung bài học</label>
-                <textarea
+                <RichTextEditor
+                    key={`${lesson.id || "new"}`}
                     className='ins-form-textarea'
                     name='content'
                     value={lesson.content}
                     onChange={handleChange}
                     placeholder='Bắt đầu soạn thảo nội dung bài học tại đây...'
                     style={{ minHeight: '180px' }}
-                ></textarea>
+                ></RichTextEditor>
             </div>
         </Modal>
     );
