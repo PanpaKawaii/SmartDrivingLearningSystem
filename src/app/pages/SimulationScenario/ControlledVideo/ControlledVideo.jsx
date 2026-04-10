@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import ButtonList from '../../../components/ButtonList/ButtonList';
+import PopupContainer from '../../../components/PopupContainer/PopupContainer';
+import ReportModal from '../../../components/ReportModal/ReportModal';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 import './ControlledVideo.css';
 
@@ -7,10 +11,14 @@ export default function ControlledVideo({
     allowRestart = false,
     allowContinue = false,
 }) {
+    const { user } = useAuth();
+
     const videoRef = useRef(null);
     const lastTimeRef = useRef(0);
 
-    const [videoTimeInSeconds, setVideoTimeInSeconds] = useState(null);
+    const [openReport, setOpenReport] = useState(null);
+
+    const [stopMoment, setStopMoment] = useState(null);
     const [progressPercent, setProgressPercent] = useState(0);
     console.log('Rerender');
 
@@ -34,8 +42,8 @@ export default function ControlledVideo({
                     // const exactSeconds = Math.floor(lastTimeRef.current);
                     const exactSeconds = lastTimeRef.current;
                     video.pause();
-                    setVideoTimeInSeconds(p => !p ? exactSeconds : p);
-                    // setVideoTimeInSeconds(exactSeconds);
+                    setStopMoment(p => !p ? exactSeconds : p);
+                    // setStopMoment(exactSeconds);
                     console.log('⏸ Video dừng tại:', exactSeconds, 'giây');
                 } else {
                     if (allowContinue) {
@@ -51,7 +59,7 @@ export default function ControlledVideo({
         return () => {
             video.removeEventListener('timeupdate', handleTimeUpdate);
             document.removeEventListener('keydown', handleKeyDown);
-            setVideoTimeInSeconds(null);
+            setStopMoment(null);
             setProgressPercent(0);
         };
     }, [selectedScenario]);
@@ -63,7 +71,7 @@ export default function ControlledVideo({
         video.load();
         video.play();
         lastTimeRef.current = 0;
-        setVideoTimeInSeconds(null);
+        setStopMoment(null);
     };
 
     const FirstWhite = 100 * selectedScenario?.startPoint / videoRef.current?.duration;
@@ -74,11 +82,11 @@ export default function ControlledVideo({
     // console.log('MiddlePoint', MiddlePoint);
 
     const range = selectedScenario?.endPoint - selectedScenario?.startPoint;
-    const smallRange = Number(videoTimeInSeconds) - selectedScenario?.startPoint;
+    const smallRange = Number(stopMoment) - selectedScenario?.startPoint;
     const percent = smallRange / range;
-    console.log('range', range);
-    console.log('smallRange', smallRange);
-    console.log('percent', percent);
+    // console.log('range', range);
+    // console.log('smallRange', smallRange);
+    // console.log('percent', percent);
     const maxScore = 10;
     const minScore = 2;
     const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ?
@@ -99,8 +107,20 @@ export default function ControlledVideo({
                     />
                     <div className='content'>
                         <div className='bars'>
+                            {stopMoment &&
+                                <div className='bar second-bar'>
+                                    {/* Video duration - red - blue */}
+                                    <div
+                                        className='fill'
+                                        style={{
+                                            width: `${progressPercent}%`,
+                                            backgroundColor: progressPercent > 80 ? '#ff7070' : '#70a7ff',
+                                        }}
+                                    />
+                                </div>
+                            }
                             <div className='bar'>
-                                {/* Video duration - blue */}
+                                {/* Video duration - red - blue */}
                                 <div
                                     className='fill'
                                     style={{
@@ -115,21 +135,21 @@ export default function ControlledVideo({
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: `${100 * videoTimeInSeconds / selectedScenario?.totalTime || 0}%`,
+                                        width: `${100 * stopMoment / selectedScenario?.totalTime || 0}%`,
                                         height: 8,
                                         backgroundColor: '#7aef44',
                                     }}
                                 />
                                 {/* Triangle mark enter event - green */}
-                                {videoTimeInSeconds &&
+                                {stopMoment &&
                                     <div className='mark'
                                         style={{
-                                            left: `${100 * videoTimeInSeconds / selectedScenario?.totalTime || 0}%`,
+                                            left: `${100 * stopMoment / selectedScenario?.totalTime || 0}%`,
                                         }}
                                     ></div>
                                 }
                             </div>
-                            {videoTimeInSeconds !== null &&
+                            {stopMoment !== null &&
                                 <div className='bar point-bar'>
                                     <div
                                         className='fill white-point'
@@ -149,16 +169,34 @@ export default function ControlledVideo({
                                 </div>
                             }
                         </div>
-                        <div className='flex'>
-                            {allowRestart &&
-                                <button onClick={handleRestart} disabled={!allowRestart}>Bắt đầu lại</button>
+                        <div className='actions'>
+                            <div className='actions-left'>
+                                {allowRestart &&
+                                    <button className='btn' onClick={handleRestart} disabled={!allowRestart}>Bắt đầu lại</button>
+                                }
+                                {stopMoment !== null && (
+                                    <>
+                                        <p>Thời gian: {stopMoment?.toFixed(3)} giây</p>
+                                        <p>Điểm: {point ? point?.toFixed(3) : 0}</p>
+                                    </>
+                                )}
+                            </div>
+                            {user &&
+                                <ButtonList
+                                    list={[
+                                        {
+                                            name: 'report',
+                                            onToggle: () => setOpenReport({
+                                                simulationId: selectedScenario?.id,
+                                                forumPostId: null,
+                                                forumCommentId: null,
+                                                questionId: null,
+                                            }),
+                                            disabled: false,
+                                        }
+                                    ]}
+                                />
                             }
-                            {videoTimeInSeconds !== null && (
-                                <>
-                                    <p>Thời gian: {videoTimeInSeconds?.toFixed(3)} giây</p>
-                                    <p>Điểm: {point ? point?.toFixed(3) : 0}</p>
-                                </>
-                            )}
                         </div>
                         <div className='detail'>
                             <h2>{selectedScenario.name}</h2>
@@ -173,6 +211,12 @@ export default function ControlledVideo({
                 >
                     Hãy chọn một kịch bản
                 </div>
+            }
+
+            {openReport &&
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo mô phỏng`} modalStyle={{}} innerStyle={{ width: 700, scrollbarWidth: 'none' }}>
+                    <ReportModal data={openReport} onClose={() => setOpenReport(null)} />
+                </PopupContainer>
             }
         </div>
     )

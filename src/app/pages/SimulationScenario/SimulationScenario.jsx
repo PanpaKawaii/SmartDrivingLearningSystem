@@ -17,7 +17,6 @@ export default function SimulationScenario() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
 
     useEffect(() => {
         (async () => {
