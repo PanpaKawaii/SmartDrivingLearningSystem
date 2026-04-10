@@ -138,7 +138,7 @@ export default function Forum() {
             {selectedPost && (
                 <PopupContainer onClose={() => setSelectedPostId('')} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
                     <ForumCard post={selectedPost} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
-                    <ForumComment post={selectedPost} setRefreshParent={setRefresh} />
+                    <ForumComment post={selectedPost} setRefreshParent={setRefresh} allowButtonListAction={true} />
                 </PopupContainer>
             )}
         </div>

@@ -4,7 +4,7 @@
 
     .forum-content {
         min-height: 400px;
-        margin: 0 0 20px;
+        margin: 0 0 40px;
 
         .questions {
             display: flex;
@@ -62,14 +62,6 @@
                 flex: 1;
             }
         }
-
-        .questions.reported-comment {
-            .name-comment {
-                border-color: #f97316;
-                background: rgba(251, 146, 60, 0.12);
-                box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.28);
-            }
-        }
     }
 
     .content {
@@ -115,11 +107,18 @@
                 }
             }
 
+            &.reported-comment {
+                border-color: #f97316;
+                background: #fb923c1f;
+                box-shadow: 0 0 0 1px #fb923c47;
+            }
+
             .name-btn-list {
+                height: 24px;
                 margin: 0 0 4px;
                 display: flex;
-                align-items: center;
                 justify-content: space-between;
+                align-items: start;
 
                 .name {
                     /* white-space: nowrap; */
@@ -188,9 +187,9 @@
                 background-color: transparent;
                 color: var(--text-secondary);
 
-                &.btn-takedown {
+                /* &.btn-takedown {
                     color: var(--red-light);
-                }
+                } */
             }
         }
 

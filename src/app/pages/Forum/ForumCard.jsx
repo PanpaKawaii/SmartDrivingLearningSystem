@@ -126,21 +126,22 @@ export default function ForumCard({
                         <div className='topic'>{post.forumTopic?.name}</div>
                     </div>
                 </div>
-                {/* ==FIX== */}
-                <ButtonList
-                    list={[
-                        {
-                            name: 'report',
-                            onToggle: () => setOpenReport({
-                                simulationId: null,
-                                forumPostId: post.id,
-                                forumCommentId: null,
-                                questionId: null,
-                            }),
-                            disabled: false,
-                        }
-                    ]}
-                />
+                {user &&
+                    <ButtonList
+                        list={[
+                            {
+                                name: 'report',
+                                onToggle: () => setOpenReport({
+                                    simulationId: null,
+                                    forumPostId: post.id,
+                                    forumCommentId: null,
+                                    questionId: null,
+                                }),
+                                disabled: false,
+                            }
+                        ]}
+                    />
+                }
             </div>
             <div className='content'>
                 <h2>{post.title}</h2>

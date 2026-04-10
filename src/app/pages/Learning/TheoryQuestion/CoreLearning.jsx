@@ -241,26 +241,27 @@ export default function CoreLearning({
                                                 <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
                                             ))}
                                         </div>
-                                        {/* ==FIX== */}
-                                        <ButtonList
-                                            list={[
-                                                {
-                                                    name: 'report',
-                                                    onToggle: () => setOpenReport({
-                                                        simulationId: null,
-                                                        forumPostId: null,
-                                                        forumCommentId: null,
-                                                        questionId: selectedQuestion?.id,
-                                                    }),
-                                                    disabled: false,
-                                                },
-                                                {
-                                                    name: MySavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
-                                                    onToggle: () => ToggleMarkQuestion(selectedQuestionId, mySAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
-                                                    disabled: loading,
-                                                }
-                                            ]}
-                                        />
+                                        {user &&
+                                            <ButtonList
+                                                list={[
+                                                    {
+                                                        name: 'report',
+                                                        onToggle: () => setOpenReport({
+                                                            simulationId: null,
+                                                            forumPostId: null,
+                                                            forumCommentId: null,
+                                                            questionId: selectedQuestion?.id,
+                                                        }),
+                                                        disabled: false,
+                                                    },
+                                                    {
+                                                        name: MySavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
+                                                        onToggle: () => ToggleMarkQuestion(selectedQuestionId, mySAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
+                                                        disabled: loading,
+                                                    }
+                                                ]}
+                                            />
+                                        }
                                     </div>
                                 </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
