@@ -12,6 +12,7 @@ export default function ListExam() {
     const { user, refreshNewToken } = useAuth();
 
     const [EXAMs, setEXAMs] = useState([]);
+    const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -29,8 +30,6 @@ export default function ListExam() {
                     status: 1,
                 });
                 const drivingLicenseQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
                     status: 1,
                 });
                 const questionChapterQuery = new URLSearchParams({
@@ -39,21 +38,24 @@ export default function ListExam() {
                     status: 1,
                 });
                 const ExamResponse = await fetchData(`Exams?${examQuery.toString()}`, token);
-                const DrivingLicenseResponse = await fetchData(`DrivingLicenses?${drivingLicenseQuery.toString()}`, token);
+                const SituationExamResponse = await fetchData(`SituationExams?${examQuery.toString()}`, token);
+                const DrivingLicenseResponse = await fetchData(`DrivingLicenses/all?${drivingLicenseQuery.toString()}`, token);
                 const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
                 console.log('ExamResponse', ExamResponse);
+                console.log('SituationExamResponse', SituationExamResponse);
                 console.log('DrivingLicenseResponse', DrivingLicenseResponse);
                 console.log('QuestionChapterResponse', QuestionChapterResponse);
                 const ExamItems = ExamResponse?.items;
-                const DrivingLicenseItems = DrivingLicenseResponse?.items;
+                const SituationExamItems = SituationExamResponse?.items;
                 const QuestionChapterItems = QuestionChapterResponse?.items;
 
-                const DrivingLicenses = DrivingLicenseItems.map(dl => ({
+                const DrivingLicenses = DrivingLicenseResponse.map(dl => ({
                     ...dl,
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
                 setEXAMs(ExamItems);
+                setSITUATIONEXAMs(SituationExamItems);
                 setDRIVINGLICENSEs(DrivingLicenses);
             } catch (error) {
                 console.error('Error', error);
@@ -70,6 +72,17 @@ export default function ListExam() {
     return (
         <div className='list-exam-container container'>
             {EXAMs.map((exam, index) => (
+                <Link key={exam.id} to={`${exam.id}`}>
+                    <div className='exam'>
+                        <div>{exam.title}</div>
+                        <div>{exam.description}</div>
+                        <div>{exam.duration}s</div>
+                        <div>{exam.passScore}</div>
+                        <div>{exam.isRandom ? 'Random' : ''}</div>
+                    </div>
+                </Link>
+            ))}
+            {SITUATIONEXAMs.map((exam, index) => (
                 <Link key={exam.id} to={`${exam.id}`}>
                     <div className='exam'>
                         <div>{exam.title}</div>

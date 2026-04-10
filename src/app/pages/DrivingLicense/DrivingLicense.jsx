@@ -24,8 +24,6 @@ export default function DrivingLicense() {
             const token = user?.token || '';
             try {
                 const drivingLicenseQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
                     status: 1,
                 });
                 const questionChapterQuery = new URLSearchParams({
@@ -33,15 +31,13 @@ export default function DrivingLicense() {
                     pageSize: '500',
                     status: 1,
                 });
-                const DrivingLicenseResponse = await fetchData(`DrivingLicenses?${drivingLicenseQuery.toString()}`, token);
+                const DrivingLicenseResponse = await fetchData(`DrivingLicenses/all?${drivingLicenseQuery.toString()}`, token);
                 const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
                 console.log('DrivingLicenseResponse', DrivingLicenseResponse);
                 console.log('QuestionChapterResponse', QuestionChapterResponse);
-                const DrivingLicenseItems = DrivingLicenseResponse?.items;
                 const QuestionChapterItems = QuestionChapterResponse?.items;
-                // const DrivingLicenseItems = [...drivingLicenses];
-                // const QuestionChapterItems = [...questionChapters];
-                const DrivingLicenses = DrivingLicenseItems.map(dl => ({
+
+                const DrivingLicenses = DrivingLicenseResponse.map(dl => ({
                     ...dl,
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
