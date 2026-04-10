@@ -41,12 +41,21 @@ export default function UserHeader({
 
     useEffect(() => {
         const UserSession = localStorage.getItem('user');
-        if (!UserSession) navigate('/');
-        else if (user?.roleName == 'Instructor') navigate('/instructor');
-        else if (user?.roleName == 'Admin') navigate('/admin');
+        if (!UserSession) {
+            console.log('/');
+            navigate('/');
+        } else if (user?.roleName == 'Guest') {
+            console.log('Guest');
+        } else if (user?.roleName == 'Student') {
+            console.log('Student');
+        } else if (user?.roleName == 'Instructor') {
+            console.log('Instructor');
+            navigate('/instructor');
+        } else if (user?.roleName == 'Admin') {
+            console.log('Admin');
+            navigate('/admin');
+        }
     }, [user?.id]);
-
-    // console.log('showProfileList', showProfileList);
 
     return (
         <nav className='user-header-container'>

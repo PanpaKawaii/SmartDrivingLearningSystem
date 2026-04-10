@@ -19,9 +19,21 @@ export default function AdminSideBar() {
 
     useEffect(() => {
         const UserSession = localStorage.getItem('user');
-        if (!UserSession) navigate('/');
-        else if (user?.roleName == 'User') navigate('/');
-        else if (user?.roleName == 'Instructor') navigate('/instructor');
+        if (!UserSession) {
+            console.log('/');
+            navigate('/');
+        } else if (user?.roleName == 'Guest') {
+            console.log('Guest');
+            navigate('/');
+        } else if (user?.roleName == 'Student') {
+            console.log('Student');
+            navigate('/');
+        } else if (user?.roleName == 'Instructor') {
+            console.log('Instructor');
+            navigate('/instructor');
+        } else if (user?.roleName == 'Admin') {
+            console.log('Admin');
+        }
     }, [user?.id]);
 
     console.log('toJSON', new Date().toJSON());
