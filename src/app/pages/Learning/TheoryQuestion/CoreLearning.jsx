@@ -247,7 +247,6 @@ export default function CoreLearning({
                                                 {
                                                     name: 'report',
                                                     onToggle: () => setOpenReport({
-                                                        header: 'Báo cáo câu hỏi',
                                                         simulationId: null,
                                                         forumPostId: null,
                                                         forumCommentId: null,
@@ -296,8 +295,8 @@ export default function CoreLearning({
             </div>
 
             {openReport &&
-                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo câu hỏi`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
-                    <ReportModal data={openReport} />
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo câu hỏi`} modalStyle={{}} innerStyle={{ width: 700, scrollbarWidth: 'none' }}>
+                    <ReportModal data={openReport} onClose={() => setOpenReport(null)} />
                 </PopupContainer>
             }
         </div>

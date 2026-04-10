@@ -131,7 +131,6 @@ export default function ForumCard({
                         {
                             name: 'report',
                             onToggle: () => setOpenReport({
-                                header: 'Báo cáo bài viết',
                                 simulationId: null,
                                 forumPostId: post.id,
                                 forumCommentId: null,
@@ -241,8 +240,8 @@ export default function ForumCard({
             </div>
 
             {openReport &&
-                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bài viết`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
-                    <ReportModal data={openReport} />
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bài viết`} modalStyle={{}} innerStyle={{ width: 700, scrollbarWidth: 'none' }}>
+                    <ReportModal data={openReport} onClose={() => setOpenReport(null)} />
                 </PopupContainer>
             }
         </div>

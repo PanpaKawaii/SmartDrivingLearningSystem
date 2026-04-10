@@ -9,7 +9,7 @@ import SelectedChapter from './SelectedChapter';
 import './ChapterLesson.css';
 
 export default function ChapterLesson() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const Params = useParams();
     const location = useLocation();
@@ -77,11 +77,12 @@ export default function ChapterLesson() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token]);
+    }, [refresh, user?.token, user?.id]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
