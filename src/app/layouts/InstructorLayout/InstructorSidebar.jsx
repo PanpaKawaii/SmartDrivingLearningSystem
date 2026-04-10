@@ -8,8 +8,7 @@ const menuSections = [
         label: 'Nội dung',
         items: [
             { name: 'Trang chủ', icon: 'fa-house', path: '/instructor/dashboard' },
-            { name: 'Tạo bài viết', icon: 'fa-pen-to-square', path: '/instructor/my-posts' },
-            { name: 'Bài viết của tôi', icon: 'fa-file-lines', path: '/instructor/my-posts-list' },
+            { name: 'Danh sách bài viết', icon: 'fa-file-lines', path: '/instructor/posts-list' },
         ],
     },
     {

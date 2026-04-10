@@ -3,8 +3,7 @@ import './InstructorHeader.css';
 
 const pageTitles = {
     '/instructor/dashboard': 'Trang chủ',
-    '/instructor/my-posts': 'Tạo bài viết',
-    '/instructor/my-posts-list': 'Bài viết của tôi',
+    '/instructor/posts-list': 'Danh sách bài viết',
     '/instructor/pending-posts': 'Bài viết chờ duyệt',
     '/instructor/community-reports': 'Báo cáo cộng đồng',
     '/instructor/content-error-reports': 'Báo cáo lỗi nội dung',

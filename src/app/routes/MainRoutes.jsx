@@ -64,7 +64,7 @@ import InsTrafficSignBank from '../pages/InstructorPages/TrafficSignBank/Traffic
 import InsSimulationBank from '../pages/InstructorPages/SimulationBank/SimulationBank.jsx'
 import InsExamMgmt from '../pages/InstructorPages/ExamManagement/ExamManagement.jsx'
 import InsPendingPosts from '../pages/InstructorPages/PendingPosts/PendingPosts.jsx'
-import InsMyPosts from '../pages/InstructorPages/MyPosts/MyPosts.jsx'
+import InsPosts from '../pages/InstructorPages/Posts/Posts.jsx'
 import InsCommunityReports from '../pages/InstructorPages/CommunityReports/CommunityReports.jsx'
 import InsContentErrorReports from '../pages/InstructorPages/ContentErrorReports/ContentErrorReports.jsx'
 import InsChangeRequests from '../pages/InstructorPages/ChangeRequests/ChangeRequests.jsx'
@@ -147,8 +147,7 @@ export default function MainRoutes() {
                     <Route path='simulation-bank' element={<InsSimulationBank />} />
                     <Route path='exam-management' element={<InsExamMgmt />} />
                     <Route path='pending-posts' element={<InsPendingPosts />} />
-                    <Route path='my-posts' element={<InsMyPosts />} />
-                    <Route path='my-posts-list' element={<InsMyPosts />} />
+                    <Route path='posts-list' element={<InsPosts />} />
                     <Route path='community-reports' element={<InsCommunityReports />} />
                     <Route path='content-error-reports' element={<InsContentErrorReports />} />
                     <Route path='change-requests' element={<InsChangeRequests />} />

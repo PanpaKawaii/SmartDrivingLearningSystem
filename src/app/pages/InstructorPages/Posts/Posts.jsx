@@ -1,4 +1,5 @@
-import DataTable from '../../../components/Shared/DataTable';
+import DataTable from '../../../components/Shared/DataTable.jsx';
+import { Post } from '../../../../mocks/DataSample.js';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
 import '../InstructorPages.css';
@@ -6,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
+const PostItems = [...Post];
 const STATUS_LABELS = {
     '-1': 'Chờ duyệt',
     '1': 'Đã duyệt',
@@ -13,7 +15,7 @@ const STATUS_LABELS = {
 };
 
 
-export default function PendingPosts() {
+export default function Posts() {
     const { user } = useAuth();
     const [items, setItems] = useState([]);
     const [topics, setTopics] = useState([]);
@@ -59,30 +61,22 @@ export default function PendingPosts() {
         })();
     }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
 
-    const handleApprove = async (id) => {
-        try {
-            setLoading(true);
-            const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/approve`, { status: 1 }, token);
-            setRefresh(r => r + 1);
-        } catch (err) {
-            setError('Lỗi duyệt bài');
-        } finally {
-            setLoading(false);
-        }
+    const handlePageChange = (page) => {
+        setServerPagination(prev => ({ ...prev, page }));
     };
-    const handleReject = async (id) => {
+    const handleDelete = async (id) => {
         try {
             setLoading(true);
             const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/disapprove`, { status: 3 }, token);
+            await patchData(`ForumPosts/${id}/`, { status: 3 }, token);
             setRefresh(r => r + 1);
         } catch (err) {
             setError('Lỗi từ chối bài');
         } finally {
             setLoading(false);
         }
-    };
+    };    
+    const selectedPost = items.find(item => item.id === selectedPostId);
 
     const formatDateTimeLines = (value) => {
         if (!value) return { time: '', date: '' };
@@ -95,18 +89,19 @@ export default function PendingPosts() {
             time: timePart.slice(0, 5),
             date: day && month && year ? `${day}/${month}/${year}` : datePart,
         };
-    };
+    };    
+
     const columns = [
-        { key: 'id', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1  },
+        { key: 'id', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Tiêu đề' },
         { key: 'user', label: 'Tác giả', width: '120px', render: (val) => val?.name || val?.email || '---' },
         { key: 'forumTopicId', label: 'Chủ đề', width: '100px', render: (val) => {
             const topic = topics.find(t => t.id === val);
             return topic?.name || '---';
         } },
-        { key: 'forumTopicId', label: 'Thể loại', width: '120px', render: (val) => {
+        { key: 'forumTopicId', label: 'Thể loại', width: '100px', render: (val) => {
             const topic = topics.find(t => t.id === val);
-            return topic?.description || '---';
+            return topic?.name || '---';
         } },
         { key: 'createAt', label: 'Ngày gửi', width: '130px', render: (val) => {
             const { time, date } = formatDateTimeLines(val);
@@ -116,8 +111,8 @@ export default function PendingPosts() {
                     <div>{date}</div>
                 </div>
             );
-        } },    
-        {
+        } },
+         {
             key: 'status',
             label: 'Trạng thái',
             width: '120px',
@@ -128,58 +123,49 @@ export default function PendingPosts() {
                 return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
             },
         },
-        {
-            key: 'actions',
-            label: 'Thao tác',
-            width: '120px',
-            render: (_, row) => (
-                <div className='ins-action-cell'>
-                    <button
-                        className='ins-action-btn view'
-                        title='Xem'
-                        onClick={() => setSelectedPostId(row.id)}
-                        disabled={loading}
-                    >
-                        <i className='fa-solid fa-eye' ></i>
-                    </button>
-                    <button className='ins-action-btn edit' title='Duyệt' onClick={() => handleApprove(row.id)} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
-                    <button className='ins-action-btn delete' title='Từ chối' onClick={() => handleReject(row.id)} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
-                </div>
-            ),
-        },
+        { key: 'actions', label: 'Thao tác', width: '100px', render: (_, row) => (
+            <div className='ins-action-cell'>
+                <button
+                    className='ins-action-btn view'
+                    title='Xem'
+                    onClick={() => setSelectedPostId(row.id)}
+                    disabled={loading}
+                >
+                    <i className='fa-solid fa-eye' ></i>
+                </button>
+                <button className='ins-action-btn edit' title='Sửa'><i className='fa-solid fa-pen'></i></button>
+                <button className='ins-action-btn delete' title='Xóa' onClick={() => handleDelete(row.id)}><i className='fa-solid fa-trash'></i></button>
+            </div>
+        )},
     ];
-
-    const handlePageChange = (page) => {
-        setServerPagination(prev => ({ ...prev, page }));
-    };
-
-    // Find the selected post object
-    const selectedPost = items.find(item => item.id === selectedPostId);
 
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
                 <div>
-                    <h1>Bài viết chờ duyệt</h1>
-                    <p>Danh sách bài viết đang chờ phê duyệt từ giảng viên.</p>
+                    <h1>Danh sách bài viêt</h1>
+                    <p>Quản lý các bài viết do bạn tạo.</p>
                 </div>
+                
+                <button className='ins-btn ins-btn-primary'>
+                    <i className='fa-solid fa-plus'></i> Tạo bài viết
+                </button>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
-            <DataTable
-                title={`Bài viết chờ duyệt (${serverPagination.totalCount})`}
-                columns={columns}
+            <DataTable 
+                title={`Danh sách bài viết (${serverPagination.totalCount})`} 
+                columns={columns} 
                 data={items}
                 loading={loading}
                 serverPagination={serverPagination}
-                onPageChange={handlePageChange}
+                onPageChange={handlePageChange} 
             />
-
             {/* View Popup */}
             {selectedPost && (
                 <PopupContainer onClose={() => setSelectedPostId(null)} titleName={`Bài viết của ${selectedPost?.user?.name || ''}`} modalStyle={{}} innerStyle={{ width: 700 }}>
                     <ForumCard post={selectedPost} parentLoading={loading} />
                 </PopupContainer>
-            )}
+            )}            
         </div>
     );
 }

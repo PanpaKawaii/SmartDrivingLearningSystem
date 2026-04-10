@@ -4291,7 +4291,7 @@ export const pendingPosts = [
     },
 ];
 
-export const myPosts = [
+export const Post = [
     {
         id: 1,
         title: 'Meo vuot bai thi sa hinh lan dau',
