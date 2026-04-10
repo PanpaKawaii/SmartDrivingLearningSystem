@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { fetchData, postData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea/AutoResizeTextarea';
+import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
+import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './ForumCreatePost.css';
@@ -82,6 +84,8 @@ export default function ForumCreatePost({
         CreatePost(Content);
     };
 
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-create-post-container'>
             <div className='user-information'>
