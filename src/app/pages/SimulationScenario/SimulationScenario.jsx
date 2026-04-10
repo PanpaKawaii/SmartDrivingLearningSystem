@@ -10,14 +10,13 @@ import ListScenario from './ListScenario';
 import './SimulationScenario.css';
 
 export default function SimulationScenario() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [SIMULATIONSCENARIOs, setSIMULATIONSCENARIOs] = useState([]);
     const [selectedScenarioId, setSelectedScenarioId] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -52,6 +51,7 @@ export default function SimulationScenario() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }

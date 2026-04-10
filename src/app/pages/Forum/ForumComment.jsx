@@ -14,8 +14,9 @@ export default function ForumComment({
     post = {},
     setRefreshParent = () => { },
     highlightCommentId = null,
+    allowButtonListAction = false,
 }) {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const refReply = useRef(null);
     const refComment = useRef(null);
@@ -56,6 +57,7 @@ export default function ForumComment({
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };
@@ -89,6 +91,7 @@ export default function ForumComment({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
             const el = document.getElementById(CommentData?.id);
@@ -109,6 +112,7 @@ export default function ForumComment({
             console.error('Error', error);
             setError(error);
             setLoading(false);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             // setLoading(false);
         };
@@ -130,6 +134,7 @@ export default function ForumComment({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };
@@ -163,7 +168,7 @@ export default function ForumComment({
                     const isReportedComment = Boolean(highlightCommentId) && String(comment.id) === String(highlightCommentId);
                     console.log('myVote', myVote);
                     return (
-                        <div key={i} id={`${comment.id}`} className={`questions ${isReportedComment ? 'reported-comment' : ''}`}>
+                        <div key={i} id={`${comment.id}`} className={`questions`}>
                             {num <= 5 && num > 0 &&
                                 <div className='head-block'>
                                     <div className={`vertical-line ${i + 1 == ChildrenComment.length ? 'no-line' : 'line-full'}`}></div>
@@ -177,11 +182,10 @@ export default function ForumComment({
                                         <div className={`vertical-line ${(COMMENTs.filter(c => c.replyId == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
                                     </div>
                                     <div className='comment-block'>
-                                        <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''}`}>
+                                        <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''} ${isReportedComment ? 'reported-comment' : ''}`}>
                                             <div className='name-btn-list'>
                                                 <div className='name'>{comment.user?.name}</div>
-                                                {/* ==FIX== */}
-                                                {comment.userId != user?.id &&
+                                                {allowButtonListAction &&
                                                     <ButtonList
                                                         list={[
                                                             {
@@ -193,8 +197,13 @@ export default function ForumComment({
                                                                     questionId: null,
                                                                 }),
                                                                 disabled: false,
+                                                            },
+                                                            (user?.id && comment.userId == user?.id) && {
+                                                                name: 'TAKEDOWN',
+                                                                onToggle: () => TakeDownComment(comment.id),
+                                                                disabled: loading,
                                                             }
-                                                        ]}
+                                                        ].filter(Boolean)}
                                                     />
                                                 }
                                             </div>
@@ -207,9 +216,10 @@ export default function ForumComment({
                                                     <i className={`fa-${myVote ? 'solid' : 'regular'} fa-circle-up`} />
                                                 </button>
                                             </div>
-                                            <div className='commentdate'>{comment.createAt?.split('T')?.[0]}</div>
+                                            {/* <div className='commentdate'>{comment.createAt?.split('T')?.[0]}</div> */}
+                                            <div className='commentdate'>{comment.createAt?.replace('T', ' ')?.split('.')?.[0]}</div>
                                             <button className='btn' onClick={() => handleSetReplyParent(comment.id)}>{comment.id == inputComment ? 'Hủy' : 'Trả lời'}</button>
-                                            {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>}
+                                            {/* {user?.id && comment.userId == user?.id && <button className='btn btn-takedown' onClick={() => TakeDownComment(comment.id)}>Gỡ</button>} */}
                                         </div>
                                     </div>
                                 </div>
@@ -245,8 +255,8 @@ export default function ForumComment({
         )
     };
 
-    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    // if (error) return <div><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>
             <div className='forum-content'>

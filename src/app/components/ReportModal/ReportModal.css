@@ -61,14 +61,16 @@
     }
 
     .upload-image {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
 
         .file-input {
             display: flex;
             gap: 20px;
-            margin: 0 0 12px;
 
             input {
-                    background-color: #374e6e80;
+                background-color: #374e6e80;
             }
 
             .btn {

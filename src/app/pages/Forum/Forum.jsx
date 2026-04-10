@@ -11,7 +11,7 @@ import ForumCreatePost from './ForumCreatePost';
 import './Forum.css';
 
 export default function Forum() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [FORUMPOSTs, setFORUMPOSTs] = useState([]);
     const [FORUMTOPICs, setFORUMTOPICs] = useState([]);
@@ -36,33 +36,31 @@ export default function Forum() {
                     pageSize: '500',
                 });
                 const forumTopicQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
                     status: 1,
                 });
                 const postReactQuery = new URLSearchParams({
                     status: 1,
                 });
                 const ForumPostResponse = await fetchData(`ForumPosts?${forumPostQuery.toString()}`, token);
-                const ForumTopicResponse = await fetchData(`ForumTopics?${forumTopicQuery.toString()}`, token);
+                const ForumTopicResponse = await fetchData(`ForumTopics/all?${forumTopicQuery.toString()}`, token);
                 const PostReactResponse = await fetchData(`PostReacts/all?${postReactQuery.toString()}`, token);
                 console.log('ForumPostResponse', ForumPostResponse);
                 console.log('ForumTopicResponse', ForumTopicResponse);
                 console.log('PostReactResponse', PostReactResponse);
                 const ForumPostItems = ForumPostResponse?.items;
-                const ForumTopicItems = ForumTopicResponse?.items;
 
                 const ForumPosts = ForumPostItems.map(fp => ({
                     ...fp,
-                    forumTopic: ForumTopicItems.find(ft => ft.id == fp.forumTopicId) || null,
+                    forumTopic: ForumTopicResponse.find(ft => ft.id == fp.forumTopicId) || null,
                     postReacts: PostReactResponse.filter(pr => pr.forumPostId == fp.id),
                 }));
 
                 setFORUMPOSTs(ForumPosts);
-                setFORUMTOPICs(ForumTopicItems);
+                setFORUMTOPICs(ForumTopicResponse);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };
@@ -137,7 +135,7 @@ export default function Forum() {
             {selectedPost && (
                 <PopupContainer onClose={() => setSelectedPostId('')} titleName={`Bài viết của ${selectedPost?.user?.name}`} modalStyle={{}} innerStyle={{ width: 700 }}>
                     <ForumCard post={selectedPost} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
-                    <ForumComment post={selectedPost} setRefreshParent={setRefresh} />
+                    <ForumComment post={selectedPost} setRefreshParent={setRefresh} allowButtonListAction={true} />
                 </PopupContainer>
             )}
         </div>

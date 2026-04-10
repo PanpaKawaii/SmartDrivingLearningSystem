@@ -18,7 +18,7 @@ export default function CoreLearning({
     disableAfterAnswer = false,
     endQuizButton = false,
 }) {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const Params = useParams();
     const navigate = useNavigate();
@@ -47,10 +47,16 @@ export default function CoreLearning({
                 const tagQuery = new URLSearchParams({
                     status: 1,
                 });
+                const savedQuestionQuery = new URLSearchParams({
+                    userId: userId,
+                    status: 1,
+                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
+                const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
+                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
@@ -64,19 +70,11 @@ export default function CoreLearning({
 
                 setQUESTIONs(QuestionsAnswers);
                 setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
-
-                if (user?.token) {
-                    const savedQuestionQuery = new URLSearchParams({
-                        userId: userId,
-                        status: 1,
-                    });
-                    const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
-                    console.log('SavedQuestionResponse', SavedQuestionResponse);
-                    setMySAVEDQUESTIONs(SavedQuestionResponse);
-                }
+                setMySAVEDQUESTIONs(SavedQuestionResponse);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };
@@ -120,6 +118,7 @@ export default function CoreLearning({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };
@@ -205,13 +204,14 @@ export default function CoreLearning({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };
     };
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    // if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='core-learning-container'>
             <div className='container'>
@@ -241,26 +241,27 @@ export default function CoreLearning({
                                                 <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
                                             ))}
                                         </div>
-                                        {/* ==FIX== */}
-                                        <ButtonList
-                                            list={[
-                                                {
-                                                    name: 'report',
-                                                    onToggle: () => setOpenReport({
-                                                        simulationId: null,
-                                                        forumPostId: null,
-                                                        forumCommentId: null,
-                                                        questionId: selectedQuestion?.id,
-                                                    }),
-                                                    disabled: false,
-                                                },
-                                                {
-                                                    name: MySavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
-                                                    onToggle: () => ToggleMarkQuestion(selectedQuestionId, mySAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
-                                                    disabled: loading,
-                                                }
-                                            ]}
-                                        />
+                                        {user &&
+                                            <ButtonList
+                                                list={[
+                                                    {
+                                                        name: 'report',
+                                                        onToggle: () => setOpenReport({
+                                                            simulationId: null,
+                                                            forumPostId: null,
+                                                            forumCommentId: null,
+                                                            questionId: selectedQuestion?.id,
+                                                        }),
+                                                        disabled: false,
+                                                    },
+                                                    {
+                                                        name: MySavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
+                                                        onToggle: () => ToggleMarkQuestion(selectedQuestionId, mySAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
+                                                        disabled: loading,
+                                                    }
+                                                ]}
+                                            />
+                                        }
                                     </div>
                                 </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>

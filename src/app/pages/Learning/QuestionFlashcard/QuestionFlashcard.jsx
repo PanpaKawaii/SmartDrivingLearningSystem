@@ -9,7 +9,7 @@ import StarsBackground from '../../../components/StarsBackground/StarsBackground
 import './QuestionFlashcard.css';
 
 export default function QuestionFlashcard() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [QUESTIONs, setQUESTIONs] = useState([]);
     const [mySAVEDQUESTIONs, setMySAVEDQUESTIONs] = useState([]);
@@ -33,10 +33,16 @@ export default function QuestionFlashcard() {
                 const tagQuery = new URLSearchParams({
                     status: 1,
                 });
+                const savedQuestionQuery = new URLSearchParams({
+                    userId: userId,
+                    status: 1,
+                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
+                const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
+                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
@@ -50,19 +56,11 @@ export default function QuestionFlashcard() {
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
-
-                if (user?.token) {
-                    const savedQuestionQuery = new URLSearchParams({
-                        userId: userId,
-                        status: 1,
-                    });
-                    const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
-                    console.log('SavedQuestionResponse', SavedQuestionResponse);
-                    setMySAVEDQUESTIONs(SavedQuestionResponse);
-                }
+                setMySAVEDQUESTIONs(SavedQuestionResponse);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };
@@ -72,7 +70,7 @@ export default function QuestionFlashcard() {
     const MySavedQuestions = mySAVEDQUESTIONs.map(sq => sq.questionId);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    // if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='question-flashcard-container'>
             <StarsBackground />

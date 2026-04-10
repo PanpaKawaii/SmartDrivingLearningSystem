@@ -14,7 +14,7 @@ export default function ForumCard({
     setRefresh = () => { },
     parentLoading = false,
 }) {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -44,6 +44,7 @@ export default function ForumCard({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };
@@ -125,21 +126,22 @@ export default function ForumCard({
                         <div className='topic'>{post.forumTopic?.name}</div>
                     </div>
                 </div>
-                {/* ==FIX== */}
-                <ButtonList
-                    list={[
-                        {
-                            name: 'report',
-                            onToggle: () => setOpenReport({
-                                simulationId: null,
-                                forumPostId: post.id,
-                                forumCommentId: null,
-                                questionId: null,
-                            }),
-                            disabled: false,
-                        }
-                    ]}
-                />
+                {user &&
+                    <ButtonList
+                        list={[
+                            {
+                                name: 'report',
+                                onToggle: () => setOpenReport({
+                                    simulationId: null,
+                                    forumPostId: post.id,
+                                    forumCommentId: null,
+                                    questionId: null,
+                                }),
+                                disabled: false,
+                            }
+                        ]}
+                    />
+                }
             </div>
             <div className='content'>
                 <h2>{post.title}</h2>

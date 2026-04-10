@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { fetchData, postData } from '../../../mocks/CallingAPI';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import AutoResizeTextarea from '../AutoResizeTextarea/AutoResizeTextarea';
-import DefaultAvatar from '../../assets/DefaultAvatar.png';
+import CloudsBackground from '../CloudsBackground/CloudsBackground';
+import TrafficLight from '../TrafficLight/TrafficLight';
 
 import './ReportModal.css';
 
@@ -121,6 +122,8 @@ export default function ReportModal({
         CreateReport(Content);
     };
 
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='report-modal-container'>
             <div className='report-information'>
@@ -138,11 +141,11 @@ export default function ReportModal({
                     <input type='file' ref={fileInputRef} accept='png' onChange={handleUpload} />
                     <button className='btn' onClick={() => handleRemove()}>Gỡ</button>
                 </div>
-                <div className='image'>
-                    {/* {imageUrl && */}
-                    <img src={imageUrl || DefaultAvatar} alt='Uploaded' />
-                    {/* } */}
-                </div>
+                {imageUrl &&
+                    <div className='image'>
+                        <img src={imageUrl} alt='Uploaded' />
+                    </div>
+                }
             </div>
             <div className='report-information'>
                 <input type='text' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly />
