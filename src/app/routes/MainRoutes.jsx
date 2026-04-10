@@ -26,7 +26,7 @@ import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/Traffic
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
 import ExamDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamDetail.jsx'
-import QuestionExam from '../pages/Learning/QuestionExam/QuestionExam.jsx'
+import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
 
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 

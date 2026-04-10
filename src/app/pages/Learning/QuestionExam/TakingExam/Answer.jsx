@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Timer from '../../../components/Timer/Timer';
+import Timer from '../../../../components/Timer/Timer';
 
 import './Answer.css';
 
@@ -141,7 +141,7 @@ export default function Answer({
                             <div className='answers'>
                                 {question.answers?.map((answer, aIndex) => (
                                     <div key={answer.id} className={`answer-item`}>
-                                        <button className={`btn ${isAnswerSelected(question.id, answer.id) ? 'selected' : ''}`} onClick={() => handleSelectAnswer(question.id, answer.id)}>{aIndex + 1}</button>
+                                        <button className={`btn ${isAnswerSelected(question.id, answer.id) ? 'btn-selected' : ''}`} onClick={() => handleSelectAnswer(question.id, answer.id)}>{aIndex + 1}</button>
                                     </div>
                                 ))}
                             </div>

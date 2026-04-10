@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { answers, questions } from '../../../../mocks/DataSample.js';
+import { answers, questions } from '../../../../../mocks/DataSample.js';
 import Answer from './Answer.jsx';
 import Question from './Question.jsx';
 
 import './QuestionExam.css';
+import StarsBackground from '../../../../components/StarsBackground/StarsBackground.jsx';
 
 export default function QuestionExam() {
     const [QUESTIONs, setQUESTIONs] = useState(questions || []);
@@ -71,6 +72,7 @@ export default function QuestionExam() {
 
     return (
         <div className='question-exam-container container'>
+            <StarsBackground />
             <Question
                 QuestionsAnswers={QuestionsAnswers}
                 selectedQuestion={selectedQuestion}
