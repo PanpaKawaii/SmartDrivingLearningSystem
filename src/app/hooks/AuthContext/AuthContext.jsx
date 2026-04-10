@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { postData } from '../../../mocks/CallingAPI';
 
 const AuthContext = React.createContext(null);
 
@@ -58,10 +59,32 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const refreshNewToken = async (userProp) => {
+        try {
+            const refreshTokenQuery = new URLSearchParams({
+                refreshToken: userProp?.refreshToken,
+            });
+            const result = await postData(`auth/refresh?${refreshTokenQuery}`, {}, '');
+            console.log('result', result);
+
+            if (result?.user?.status == 0) {
+                console.error('Tài khoản này đã bị vô hiệu hóa');
+                return;
+            }
+
+            login({ ...userProp, token: result?.accessToken });
+            console.log('Refreshed');
+        } catch (error) {
+            console.error('Error refreshing token:', error);
+            logout();
+        }
+    };
+
     const authContextValue = {
         user,
         login,
         logout,
+        refreshNewToken,
         isLoading
     };
 

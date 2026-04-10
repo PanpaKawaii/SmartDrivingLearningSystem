@@ -53,13 +53,14 @@
         }
 
         .btn {
+            flex: 1;
             height: 38px;
             color: #fff;
             background: linear-gradient(to right, #3b82f6, #06b6d4);
         }
     }
 
-    .comment-area {
+    .content-area {
         flex: 1;
         display: flex;
         gap: 8px;

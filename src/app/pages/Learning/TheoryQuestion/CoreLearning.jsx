@@ -1,5 +1,3 @@
-// import { answers, questions } from '../../../mocks/DataSample';
-// import { QUIZ_DATA } from '../../../mocks/QUIZ_DATA';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteData, fetchData, postData, putData } from '../../../../mocks/CallingAPI';
@@ -249,7 +247,6 @@ export default function CoreLearning({
                                                 {
                                                     name: 'report',
                                                     onToggle: () => setOpenReport({
-                                                        header: 'Báo cáo câu hỏi',
                                                         simulationId: null,
                                                         forumPostId: null,
                                                         forumCommentId: null,
@@ -295,23 +292,11 @@ export default function CoreLearning({
                         </div>
                     </div>
                 )}
-
-                {/* <div>
-                    {[...Array(600)].map((_, i) => (
-                        <div key={i} style={{ color: '#000' }}>
-                            {QUIZ_DATA[i + 1]?.answers?.map((a, j) => (
-                                <div key={j}>
-                                    <div>{a.correct === true ? 1 : 0}</div>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </div> */}
             </div>
 
             {openReport &&
-                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo câu hỏi`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
-                    <ReportModal data={openReport} />
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo câu hỏi`} modalStyle={{}} innerStyle={{ width: 700, scrollbarWidth: 'none' }}>
+                    <ReportModal data={openReport} onClose={() => setOpenReport(null)} />
                 </PopupContainer>
             }
         </div>

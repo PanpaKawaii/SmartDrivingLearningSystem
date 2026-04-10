@@ -147,11 +147,12 @@ const normalizeMediaUploadResponse = (payload) => {
     return [];
 };
 
-export const uploadMedia = async ({ files = [], entityId = '', imageTarget = '', token = '' }) => {
+export const uploadMedia = async (files, entityId, imageTarget, token) => {
     try {
-        if (!Array.isArray(files) || files.length === 0) {
-            throw new Error('Files is required');
-        }
+        // if (!Array.isArray(files) || files.length === 0) {
+        //     console.log('files', files);
+        //     throw new Error('Files is required');
+        // }
 
         if (!entityId) {
             throw new Error('EntityId is required');
@@ -168,7 +169,7 @@ export const uploadMedia = async ({ files = [], entityId = '', imageTarget = '',
         formData.append('EntityId', entityId);
         formData.append('ImageTarget', imageTarget);
 
-        const response = await fetch(`${apiUrl}api/media/upload`, {
+        const response = await fetch(`${apiUrl}media/upload`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,

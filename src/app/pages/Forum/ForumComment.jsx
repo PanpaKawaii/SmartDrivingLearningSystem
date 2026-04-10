@@ -187,7 +187,6 @@ export default function ForumComment({
                                                             {
                                                                 name: 'report',
                                                                 onToggle: () => setOpenReport({
-                                                                    header: 'Báo cáo bình luận',
                                                                     simulationId: null,
                                                                     forumPostId: null,
                                                                     forumCommentId: comment.id,
@@ -267,8 +266,8 @@ export default function ForumComment({
             </div>
 
             {openReport &&
-                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bình luận`} modalStyle={{}} innerStyle={{ width: 600, scrollbarWidth: 'none' }}>
-                    <ReportModal data={openReport} />
+                <PopupContainer onClose={() => setOpenReport(null)} titleName={`Báo cáo bình luận`} modalStyle={{}} innerStyle={{ width: 700, scrollbarWidth: 'none' }}>
+                    <ReportModal data={openReport} onClose={() => setOpenReport(null)} />
                 </PopupContainer>
             }
         </div>

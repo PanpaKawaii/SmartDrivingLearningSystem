@@ -10,9 +10,9 @@ export default function ForumCreatePost({
     onClose = () => { },
     setRefreshParent = () => { },
 }) {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
-    const refComment = useRef(null);
+    const refContent = useRef(null);
 
     const [name, setName] = useState('');
     const [title, setTitle] = useState('');
@@ -39,6 +39,7 @@ export default function ForumCreatePost({
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }
@@ -65,13 +66,14 @@ export default function ForumCreatePost({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };
     };
 
-    const handleSubmitComment = (refReplyContent) => {
-        const Content = refReplyContent;
+    const handleSubmitPost = (refContent) => {
+        const Content = refContent;
         console.log({
             Content,
             topic,
@@ -99,9 +101,9 @@ export default function ForumCreatePost({
                 </select>
                 <button className='btn' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
             </div>
-            <form className='comment-area'>
-                <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
-                <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value)} disabled={loading}>
+            <form className='content-area'>
+                <AutoResizeTextarea refer={refContent} placeholder={user ? 'Nội dung bài viết' : 'Vui lòng đăng nhập để tạo bài viết...'} disable={!user} />
+                <button type='button' className='btn' onClick={() => handleSubmitPost(refContent.current.value)} disabled={loading}>
                     ĐĂNG
                 </button>
             </form>
