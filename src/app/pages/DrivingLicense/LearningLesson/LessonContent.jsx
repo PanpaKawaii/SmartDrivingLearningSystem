@@ -10,7 +10,7 @@ export default function LessonContent({
   questionLessonId = '',
   setRefreshParent = () => { },
 }) {
-  const { user } = useAuth();
+  const { user, refreshNewToken } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -36,6 +36,7 @@ export default function LessonContent({
     } catch (error) {
       console.error('Error', error);
       setError(error);
+      if (error.status == 401) refreshNewToken(user);
     } finally {
       setLoading(false);
     };

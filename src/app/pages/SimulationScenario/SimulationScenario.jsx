@@ -10,7 +10,7 @@ import ListScenario from './ListScenario';
 import './SimulationScenario.css';
 
 export default function SimulationScenario() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [SIMULATIONSCENARIOs, setSIMULATIONSCENARIOs] = useState([]);
     const [selectedScenarioId, setSelectedScenarioId] = useState(null);
@@ -52,6 +52,7 @@ export default function SimulationScenario() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }

@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI.js';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground.jsx';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import UserCreateExam from './UserCreateExam.jsx';
 
 import './ListExam.css';
 
 export default function ListExam() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [EXAMs, setEXAMs] = useState([]);
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
@@ -56,12 +58,15 @@ export default function ListExam() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }
         })();
     }, [refresh, user?.token]);
 
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='list-exam-container container'>
             {EXAMs.map((exam, index) => (

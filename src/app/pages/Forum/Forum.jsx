@@ -11,7 +11,7 @@ import ForumCreatePost from './ForumCreatePost';
 import './Forum.css';
 
 export default function Forum() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [FORUMPOSTs, setFORUMPOSTs] = useState([]);
     const [FORUMTOPICs, setFORUMTOPICs] = useState([]);
@@ -63,6 +63,7 @@ export default function Forum() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };

@@ -12,16 +12,16 @@ import ProgressOverview from './ProgressOverview';
 import './LearningLesson.css';
 
 export default function LearningLesson() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const Params = useParams();
 
     const questionChapterId = Params?.chapterId;
-    // console.log('questionChapterId', questionChapterId);
+    console.log('questionChapterId', questionChapterId);
     const drivingLicenseId = Params?.licenseId;
-    // console.log('drivingLicenseId', drivingLicenseId);
+    console.log('drivingLicenseId', drivingLicenseId);
     const questionLessonId = Params?.lessonId;
-    // console.log('questionLessonId', questionLessonId);
+    console.log('questionLessonId', questionLessonId);
 
     const [ThisQuestionLesson, setThisQuestionLesson] = useState(null);
     const [LESSONPROGRESSes, setLESSONPROGRESSes] = useState([]);
@@ -65,6 +65,7 @@ export default function LearningLesson() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };

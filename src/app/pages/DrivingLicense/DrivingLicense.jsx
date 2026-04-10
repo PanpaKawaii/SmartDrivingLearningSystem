@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import './DrivingLicense.css';
 
 export default function DrivingLicense() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
     const [refresh, setRefresh] = useState(0);
@@ -50,6 +50,7 @@ export default function DrivingLicense() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }

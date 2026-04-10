@@ -14,7 +14,7 @@ export default function ForumCard({
     setRefresh = () => { },
     parentLoading = false,
 }) {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -44,6 +44,7 @@ export default function ForumCard({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };

@@ -10,7 +10,7 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import './TrafficSignDetail.css';
 
 export default function TrafficSignDetail() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const Params = useParams();
 
@@ -35,6 +35,7 @@ export default function TrafficSignDetail() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }

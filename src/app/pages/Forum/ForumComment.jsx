@@ -15,7 +15,7 @@ export default function ForumComment({
     setRefreshParent = () => { },
     highlightCommentId = null,
 }) {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
 
     const refReply = useRef(null);
     const refComment = useRef(null);
@@ -56,6 +56,7 @@ export default function ForumComment({
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
+                if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };
@@ -89,6 +90,7 @@ export default function ForumComment({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
             const el = document.getElementById(CommentData?.id);
@@ -109,6 +111,7 @@ export default function ForumComment({
             console.error('Error', error);
             setError(error);
             setLoading(false);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             // setLoading(false);
         };
@@ -130,6 +133,7 @@ export default function ForumComment({
         } catch (error) {
             console.error('Error', error);
             setError(error);
+            if (error.status == 401) refreshNewToken(user);
         } finally {
             setLoading(false);
         };
@@ -245,8 +249,8 @@ export default function ForumComment({
         )
     };
 
-    // if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    // if (error) return <div><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (loading) return <div><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='forum-comment-container'>
             <div className='forum-content'>
