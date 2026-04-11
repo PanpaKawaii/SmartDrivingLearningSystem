@@ -72,7 +72,13 @@ export default function ListExam() {
     return (
         <div className='list-exam-container container'>
             {EXAMs.map((exam, index) => (
-                <Link key={exam.id} to={`${exam.id}`}>
+                <Link
+                    key={exam.id}
+                    to={`${exam.id}`}
+                    className='link question-exam-link'
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    state='exam'
+                >
                     <div className='exam'>
                         <div>{exam.title}</div>
                         <div>{exam.description}</div>
@@ -83,7 +89,13 @@ export default function ListExam() {
                 </Link>
             ))}
             {SITUATIONEXAMs.map((exam, index) => (
-                <Link key={exam.id} to={`${exam.id}`}>
+                <Link
+                    key={exam.id}
+                    to={`${exam.id}`}
+                    className='link situation-exam-link'
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    state='situation'
+                >
                     <div className='exam'>
                         <div>{exam.title}</div>
                         <div>{exam.description}</div>
@@ -94,7 +106,7 @@ export default function ListExam() {
                 </Link>
             ))}
 
-            <UserCreateExam DRIVINGLICENSEs={DRIVINGLICENSEs}/>
+            <UserCreateExam DRIVINGLICENSEs={DRIVINGLICENSEs} />
         </div>
     )
 }

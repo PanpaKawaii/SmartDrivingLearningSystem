@@ -3,7 +3,21 @@
     flex-direction: column;
     gap: 20px;
 
-    .exam {
-        border: 1px solid #ccc;
+    .link {
+        padding: 8px;
+        opacity: 0;
+        animation: slideInUp .6s ease forwards;
+
+        &.question-exam-link {
+            background-color: #ff8080;
+        }
+
+        &.situation-exam-link {
+            background-color: #ff8000;
+        }
+
+        .exam {
+            border: 1px solid #ccc;
+        }
     }
 }
