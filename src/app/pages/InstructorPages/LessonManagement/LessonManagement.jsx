@@ -1,6 +1,6 @@
 import { useEffect ,useState } from 'react';
 import DataTable from '../../../components/Shared/DataTable';
-import AddLessonModal from './AddLessonModal';
+import LessonModal from './LessonModal';
 import '../InstructorPages.css';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -23,7 +23,7 @@ export default function LessonManagement() {
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     
     // State for view popup
-    const [selectedItemId, setSelectedItemId] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
     console.log('Fetched lessons:', lessons);
     useEffect(() => {
         (async () => {
@@ -36,7 +36,7 @@ export default function LessonManagement() {
             });            
             try {
                 const token = user?.token || '';
-                // Lấy chapters (chỉ lấy 1 lần)
+                
                 
                 if (chapters.length === 0) {
                     const chapterRes = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
@@ -79,8 +79,7 @@ export default function LessonManagement() {
             setLoading(true);
             const token = user?.token || '';
             // Toggle: 1 (Public) <-> 0 (Hidden)
-            const newStatus = currentStatus === 1 ? 0 : 1;
-            await patchData(`QuestionLessons/${id}`, {}, token);
+            await patchData(`QuestionLessons/${id}`, { }, token);
             setRefresh(r => r + 1);
         } catch (err) {
             setError('Lỗi cập nhật trạng thái');
@@ -89,21 +88,10 @@ export default function LessonManagement() {
         }
     };    
     const handleSave = (newLesson) => {
-        const chapterMap = { '1': 'Luật giao thông', '2': 'Kỹ thuật lái xe', '3': 'Biển báo', '4': 'Tình huống', '5': 'Cấu tạo và sửa chữa', '6': 'Đạo đức người lái xe' };
-        setLessons((prev) => [
-            ...prev,
-            {
-                id: prev.length + 1,
-                title: newLesson.name,
-                chapter: chapterMap[newLesson.chapter] || newLesson.chapter,
-                type: newLesson.type,
-                duration: newLesson.duration || '--',
-                status: Number(newLesson.status) === 1 ? 'active' : 'draft',
-            },
-        ]);
+
     };
     const columns = [
-        { key: 'id', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
+        { key: 'index', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'name', label: 'Tên bài học', width: '100px' },
         { key: 'questionChapterId', label: 'Chương', width: '100px', render: (val) => {
             const chapter = chapters.find(t => t.id === val);
@@ -122,15 +110,17 @@ export default function LessonManagement() {
         },},
         { key: 'actions', label: 'Thao tác', width: '120px', render: (_, row) => (
             <div className='ins-action-cell'>
-                <button className='ins-action-btn view' title='Xem'><i className='fa-solid fa-eye'></i></button>
-                <button className='ins-action-btn edit' title='Sửa'><i className='fa-solid fa-pen'></i></button>
+                <button className='ins-action-btn edit' title='Sửa' onClick={() => {
+                    setSelectedItem(row);
+                    setShowModal(true);
+                }}><i className='fa-solid fa-pen'></i></button>
                 <button 
                     className={`ins-action-btn ${row.status === 1 ? 'active' : 'hidden'}`}
                     title={row.status === 1 ? 'Ẩn bài học' : 'Hiển thị bài học'}
-                    onClick={() => handleToggleStatus(row.id)}
+                    onClick={() => handleToggleStatus(row.id,row.status)}
                     disabled={loading}
                 >
-                    <i className={`fa-solid ${row.status === 1 ? 'fa-eye' : 'fa-eye-slash'}`}></i>
+                    <i className={`fa-solid fa-toggle-${row.status === 1 ? 'on' : 'off'}`} style={{fontSize:'1rem'}}></i>
                 </button>
             </div>
         )},
@@ -142,7 +132,10 @@ export default function LessonManagement() {
                     <h1>Quản lý Bài học</h1>
                     <p>Quản lý danh sách bài học trong hệ thống đào tạo.</p>
                 </div>
-                <button className='ins-btn ins-btn-primary' onClick={() => setShowModal(true)}>
+                <button className='ins-btn ins-btn-primary' onClick={() => {
+                    setSelectedItem(null);
+                    setShowModal(true);
+                }}>
                     <i className='fa-solid fa-plus'></i> Thêm bài học
                 </button>
             </div>
@@ -155,7 +148,18 @@ export default function LessonManagement() {
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange} 
             />
-            <AddLessonModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={handleSave} />
+            <LessonModal 
+                isOpen={showModal} 
+                lesson={selectedItem}
+                action={selectedItem ? 'edit' : 'add'}
+                chapter={selectedItem?.questionChapterId}
+                chapters={chapters}
+                onClose={() => {
+                    setShowModal(false);
+                    setSelectedItem(null);
+                }}
+                onSave={handleSave}
+            />
         </div>
     );
 }
