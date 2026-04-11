@@ -8,7 +8,6 @@ export default function ReportFeedbackModal({
     resolve,
     actionType,
     initialTitle,
-    onOpenEntity,
     onClose,
     onSubmit,
 }) {
@@ -94,15 +93,6 @@ export default function ReportFeedbackModal({
                 <label className='ins-form-label'>Nội dung báo cáo</label>
                 <div className='ins-form-static'>{report?.content}</div>
             </div>
-
-            {onOpenEntity && (
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Đối tượng liên quan</label>
-                    <button className='ins-btn ins-btn-secondary' type='button' onClick={onOpenEntity}>
-                        Xem chi tiết đối tượng
-                    </button>
-                </div>
-            )}
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Người báo cáo</label>
