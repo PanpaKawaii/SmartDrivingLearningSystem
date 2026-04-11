@@ -49,13 +49,25 @@ export default function TrafficLight({
                 ref={containerRef}>
                 <div className='traffic-light'
                     ref={objectRef}>
+                    {/* <div className='face' style={{
+                        width: 8,
+                        height: 600,
+                        backgroundColor: 'red',
+                        transform: 'rotateX(90deg)',
+                    }}></div>
+                    <div className='face' style={{
+                        width: 8,
+                        height: 600,
+                        backgroundColor: 'red',
+                        transform: 'rotateX(90deg) rotateY(90deg)',
+                    }}></div> */}
                     {[...Array(6)].map((_, i) => (
                         <div
                             key={i}
-                            className={`face f${i + 1} ${i < 2 ? 'updown-face' : ((i + 1 == 4 || i + 1 == 6) ? 'status-face' : 'side-face')}`}
+                            className={`face f${i + 1} ${i < 2 ? 'updown-face' : (i + 1 == 4 ? 'special refresh-face' : (i + 1 == 6 ? (status ? 'special status-face' : 'special refresh-face') : 'side-face'))}`}
                             onClick={() => setRefresh(p => p + 1)}
                         >
-                            {(i + 1 == 4 || i + 1 == 6) && status}
+                            {i + 1 == 4 ? 'Refresh' : (i + 1 == 6 ? (status ? status : 'Refresh') : '')}
                         </div>
                     ))}
                     {[...Array(2)].map((_, i) => (

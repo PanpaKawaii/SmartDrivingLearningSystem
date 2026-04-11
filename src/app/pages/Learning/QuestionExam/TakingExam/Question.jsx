@@ -7,7 +7,7 @@ export default function Question({
     selectedQuestion = {},
     myAnswers = [],
 }) {
-    const answeredQuestions = myAnswers?.filter(q => q.answers)?.length || 0;
+    // const answeredQuestions = myAnswers?.filter(q => q.answers)?.length || 0;
     // console.log('answeredQuestions', answeredQuestions);
 
     return (
@@ -23,7 +23,7 @@ export default function Question({
                 </div>
             </div>
             <ProgressBar current={myAnswers?.filter(q => q.answers)?.length || 0} total={QuestionsAnswers?.length || 1} showValue={true} height={'20px'} />
-            <div className='my-answers'>
+            {/* <div className='my-answers'>
                 {myAnswers.map((question, qIndex) => (
                     <div key={question.id} className='question-item'>
                         <div>QID: {question.questionId}</div>
@@ -36,7 +36,7 @@ export default function Question({
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     )
 }

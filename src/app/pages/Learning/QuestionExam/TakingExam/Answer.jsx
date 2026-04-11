@@ -130,6 +130,7 @@ export default function Answer({
 
         const token = user?.token || '';
         try {
+            // ==FIX==
             const result = await postData('ExamSessions', ExamSessionData, token);
             console.log('result', result);
 
@@ -188,11 +189,16 @@ export default function Answer({
                         </div>
                     ))}
                 </div>
-                {isFinish ?
-                    <button className='btn btn-end' onClick={() => checkAnswersResult(QuestionsAnswers, myAnswers)} disabled={loading}>KẾT THÚC (FUNCTION)</button>
-                    :
-                    <button className='btn btn-end' onClick={() => { setLoading(true); setIsFinish(true); }} disabled={loading}>KẾT THÚC (TIME)</button>
-                }
+                <button
+                    className='btn btn-end'
+                    onClick={() => {
+                        if (isFinish) checkAnswersResult(QuestionsAnswers, myAnswers);
+                        else { setLoading(true); setIsFinish(true); }
+                    }}
+                    disabled={loading}
+                >
+                    KẾT THÚC
+                </button>
                 {/* <div>
                     <hr />
                     <div>Correct: {result.correctCount}</div>
