@@ -8,10 +8,10 @@ export default function LessonModal({
     isOpen,
     onClose,
     onSave,
-    chapter,
+    listLicenses,
     lesson: lessonProp,
     action,
-    chapters = []
+    listChapters
 }) {
     // Giá trị mặc định cho lesson mới
     const defaultLesson = {
@@ -25,20 +25,44 @@ export default function LessonModal({
     };
 
     const [lesson, setLesson] = useState(lessonProp ? { ...lessonProp } : defaultLesson);
-    console.log('LessonModal props:', { isOpen, lessonProp, action, chapter });
+    const [chapters, setChapters] = useState([]);
+    const [drivingLicenseId, setDrivingLicenseId] = useState('');
+
     useEffect(() => {
         if (isOpen) {
             if (lessonProp && action === 'edit') {
-                setLesson({ ...lessonProp });
+                const licenseId = lessonProp.questionChapter?.drivingLicenseId || '';
+                setDrivingLicenseId(licenseId);
+                const filteredChapters = listChapters.filter(ch => ch.drivingLicenseId === licenseId);
+                setChapters(filteredChapters);
+                const currentChapter = filteredChapters.find(ch => ch.id === lessonProp.questionChapterId);
+                setLesson({
+                    ...lessonProp,
+                    chapter: currentChapter ? currentChapter.id : (filteredChapters[0]?.id || '')
+                });
             } else if (action === 'add') {
                 setLesson(defaultLesson);
+                setDrivingLicenseId('');
+                setChapters([]);
             }
         }
-    }, [isOpen, lessonProp, action]);
+    }, [isOpen, lessonProp, action, listChapters]);
 
+    const handleLicenseChange = (e) => {
+        const licenseId = e.target.value;
+        setDrivingLicenseId(licenseId);
+        const filteredChapters = listChapters.filter(ch => ch.drivingLicenseId === licenseId);
+        setChapters(filteredChapters);
+        setLesson(prev => ({ ...prev, chapter: '' }));
+    };
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setLesson((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleRichTextChange = (html) => {
+        setLesson((prev) => ({ ...prev, content: html }));
     };
 
     const handleSubmit = () => {
@@ -49,7 +73,7 @@ export default function LessonModal({
         setLesson(defaultLesson);
         onClose();
     };
-
+    console.log('LessondrivingLicenseId props:', drivingLicenseId);
     return (
         <Modal
             isOpen={isOpen}
@@ -78,7 +102,16 @@ export default function LessonModal({
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '16px' }}>
+                <div className='ins-form-group'>
+                    <label className='ins-form-label'>Bằng <span style={{ color: 'var(--ins-error)' }}>*</span></label>
+                    <select className='ins-form-select' name='drivingLicenseId' value={drivingLicenseId} onChange={handleLicenseChange}>
+                        <option value='' disabled>Chọn bằng...</option>
+                        {listLicenses.map((ch) => (
+                            <option key={ch.id} value={ch.id}>{ch.name}</option>
+                        ))}
+                    </select>
+                </div>
                 <div className='ins-form-group'>
                     <label className='ins-form-label'>Chương <span style={{ color: 'var(--ins-error)' }}>*</span></label>
                     <select className='ins-form-select' name='chapter' value={lesson.chapter} onChange={handleChange}>
@@ -115,9 +148,8 @@ export default function LessonModal({
                 <RichTextEditor
                     key={`${lesson.id || "new"}`}
                     className='ins-form-textarea'
-                    name='content'
-                    value={lesson.content}
-                    onChange={handleChange}
+                    initialHtml={lesson.content}
+                    onHtmlChange={handleRichTextChange}
                     placeholder='Bắt đầu soạn thảo nội dung bài học tại đây...'
                     style={{ minHeight: '180px' }}
                 ></RichTextEditor>

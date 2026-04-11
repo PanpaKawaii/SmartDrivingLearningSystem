@@ -1,9 +1,9 @@
 /* src/app/components/RichTextEditor/RichTextEditor.css */
 .rte-wrapper {
-    border: 1px solid #ccc;
+    border: 1px solid rgba(95, 117, 165, 0.15);
     border-radius: 8px;
     overflow: hidden;
-    background: #fff;
+    background: var(--ins-surface-low);
     font-family: inherit;
 }
 
@@ -14,8 +14,8 @@
     align-items: center;
     gap: 4px;
     padding: 6px 10px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ddd;
+    background: var(--ins-surface);
+    border-bottom: 1px solid rgba(95, 117, 165, 0.1);
 }
 
 .rte-toolbar button {
@@ -28,28 +28,29 @@
     border: 1px solid transparent;
     border-radius: 4px;
     cursor: pointer;
-    color: #444;
+    color: var(--ins-on-surface-variant);
     font-size: 14px;
     transition: background 0.15s;
 }
 
-.rte-toolbar button:hover { background: #e2e2e2; }
-.rte-toolbar button.active  { background: #d0e8ff; border-color: #90c0f0; color: #1a6fbf; }
+.rte-toolbar button:hover { background: var(--ins-surface-high); color: var(--ins-on-surface); }
+.rte-toolbar button.active  { background: rgba(189, 199, 219, 0.15); border-color: var(--ins-primary); color: var(--ins-primary); }
 
 .rte-toolbar select {
     height: 32px;
     padding: 0 6px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(95, 117, 165, 0.15);
     border-radius: 4px;
-    background: #fff;
+    background: var(--ins-surface-low);
     cursor: pointer;
     font-size: 13px;
+    color: var(--ins-on-surface);
 }
 
 .rte-divider {
     width: 1px;
     height: 24px;
-    background: #ccc;
+    background: rgba(95, 117, 165, 0.15);
     margin: 0 4px;
 }
 
@@ -63,8 +64,8 @@
     min-height: 160px;
     padding: 12px 16px;
     outline: none;
-    caret-color: #333;
-    color: #222;
+    caret-color: var(--ins-on-surface);
+    color: var(--ins-on-surface);
     font-size: 15px;
     line-height: 1.6;
 }
@@ -73,7 +74,7 @@
     position: absolute;
     top: 18px;
     left: 16px;
-    color: #aaa;
+    color: var(--ins-on-surface-variant);
     pointer-events: none;
     user-select: none;
     font-size: 15px;
@@ -85,9 +86,9 @@
 .rte-h3 { font-size: 1.2em; font-weight: 600; margin: 0.4em 0; }
 .rte-paragraph { margin: 0.3em 0; }
 .rte-quote {
-    border-left: 4px solid #90c0f0;
+    border-left: 4px solid var(--ins-primary);
     padding-left: 12px;
-    color: #666;
+    color: var(--ins-on-surface-variant);
     font-style: italic;
     margin: 0.5em 0;
 }
@@ -98,4 +99,4 @@
 .rte-italic { font-style: italic; }
 .rte-underline { text-decoration: underline; }
 .rte-strikethrough { text-decoration: line-through; }
-.rte-link { color: #1a6fbf; text-decoration: underline; cursor: pointer; }
+.rte-link { color: var(--ins-primary); text-decoration: underline; cursor: pointer; }

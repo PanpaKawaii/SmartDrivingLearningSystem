@@ -17,19 +17,19 @@ export default function LessonManagement() {
     const [showModal, setShowModal] = useState(false);
     const [lessons, setLessons] = useState([]);
     const [chapters, setChapters] = useState([]);
+    const [drivingLicenses, setDrivingLicenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
-    
+
     // State for view popup
     const [selectedItem, setSelectedItem] = useState(null);
-    console.log('Fetched lessons:', lessons);
     useEffect(() => {
         (async () => {
             setLoading(true);
             setError(null);
-            const questionChapterQuery = new URLSearchParams({
+            const subQuery = new URLSearchParams({
                 page: '1',
                 pageSize: '500',
                 status: 1,
@@ -37,9 +37,11 @@ export default function LessonManagement() {
             try {
                 const token = user?.token || '';
                 
-                
+                const drivingLicenseRes = await fetchData(`DrivingLicenses/all?${subQuery.toString()}`, token);
+                setDrivingLicenses(normalizeItems(drivingLicenseRes));
+                console.log('Fetched driving licenses:', drivingLicenseRes);
                 if (chapters.length === 0) {
-                    const chapterRes = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
+                    const chapterRes = await fetchData(`QuestionChapters?${subQuery.toString()}`, token);
                     setChapters(normalizeItems(chapterRes));
                 }
                 // Lấy posts phân trang
@@ -49,7 +51,6 @@ export default function LessonManagement() {
                 });
                 const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
                 setLessons(normalizeItems(res));
-                console.log('Fetched lessons:', res);
                 setServerPagination(prev => ({
                     ...prev,
                     page: res?.page || prev.page,
@@ -62,10 +63,11 @@ export default function LessonManagement() {
                 setError('Lỗi tải dữ liệu');
             } finally {
                 setLoading(false);
+                
             }
         })();
     }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
-
+    
     const normalizeItems = (payload) => {
         if (Array.isArray(payload)) return payload;
         if (Array.isArray(payload?.items)) return payload.items;
@@ -93,6 +95,10 @@ export default function LessonManagement() {
     const columns = [
         { key: 'index', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'name', label: 'Tên bài học', width: '100px' },
+        { key: 'questionChapterId', label: 'Bằng', render: (val) => {
+            const drivingLicense = drivingLicenses.find(t => t.id === chapters.find(t => t.id === val)?.drivingLicenseId);
+            return drivingLicense?.name || '---';
+        } },
         { key: 'questionChapterId', label: 'Chương', width: '100px', render: (val) => {
             const chapter = chapters.find(t => t.id === val);
             return chapter?.name || '---';
@@ -152,8 +158,8 @@ export default function LessonManagement() {
                 isOpen={showModal} 
                 lesson={selectedItem}
                 action={selectedItem ? 'edit' : 'add'}
-                chapter={selectedItem?.questionChapterId}
-                chapters={chapters}
+                listLicenses={drivingLicenses}
+                listChapters={chapters}
                 onClose={() => {
                     setShowModal(false);
                     setSelectedItem(null);
