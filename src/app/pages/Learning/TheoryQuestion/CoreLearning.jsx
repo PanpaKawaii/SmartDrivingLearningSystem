@@ -64,7 +64,7 @@ export default function CoreLearning({
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
-                setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
+                setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
 
                 const savedQuestionQuery = new URLSearchParams({
                     userId: userId,

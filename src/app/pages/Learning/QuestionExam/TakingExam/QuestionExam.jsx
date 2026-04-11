@@ -58,7 +58,7 @@ export default function QuestionExam() {
 
                 setThisExam(ThisExamResponse);
                 setQUESTIONs(QuestionsAnswers);
-                setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
+                setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
                 localStorage.setItem('Exam', new Date().toLocaleDateString());
             } catch (error) {
                 console.error('Error', error);
@@ -117,15 +117,9 @@ export default function QuestionExam() {
             return prev.map((item, i) => i === index ? newItem : item);
         });
     };
-    // console.log('myAnswers', myAnswers);
 
-    // const QuestionsAnswers = QUESTIONs.map((q, i) => {
-    //     const relatedAnswers = ANSWERs.filter(a => a.questionId === q.id);
-    //     return { ...q, answers: relatedAnswers, index: i + 1 };
-    // })
-    console.log('QUESTIONs', QUESTIONs);
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
-    // console.log('selectedQuestion', selectedQuestion);
+    console.log('selectedQuestion', selectedQuestion);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>

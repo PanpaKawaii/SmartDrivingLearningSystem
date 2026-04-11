@@ -29,12 +29,12 @@ export default function Answer({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [examDuration, setExamDuration] = useState(duration);
-    const [result, setResult] = useState({
-        correctCount: 0,
-        totalCount: 0,
-        skippedCount: 0,
-        details: [],
-    })
+    // const [result, setResult] = useState({
+    //     correctCount: 0,
+    //     totalCount: 0,
+    //     skippedCount: 0,
+    //     details: [],
+    // })
 
     const isAnswerSelected = (questionId, answerId) => {
         const item = myAnswers.find(i => i.questionId === questionId);
@@ -69,7 +69,7 @@ export default function Answer({
         let correctCount = 0;
         let skippedCount = 0;
 
-        const details = [];
+        // const details = [];
 
         questionsAnswers.forEach(question => {
             const userAnswer = myAnswers.find(a => a.questionId === question.id);
@@ -94,20 +94,20 @@ export default function Answer({
             }
 
             // Ghi chi tiết
-            correctAnswers.forEach(correct => {
-                const selected = question.answers.find(a => selectedAnswerIds?.includes(a.id));
+            // correctAnswers.forEach(correct => {
+            //     const selected = question.answers.find(a => selectedAnswerIds?.includes(a.id));
 
-                details.push({
-                    questionId: question.id,
-                    questionContent: question.content,
+            //     details.push({
+            //         questionId: question.id,
+            //         questionContent: question.content,
 
-                    answerId: correct.id,
-                    answerContent: correct.content,
+            //         answerId: correct.id,
+            //         answerContent: correct.content,
 
-                    selectedAnswerId: selected?.id || null,
-                    selectedAnswerContent: selected?.content || null
-                });
-            });
+            //         selectedAnswerId: selected?.id || null,
+            //         selectedAnswerContent: selected?.content || null
+            //     });
+            // });
         });
 
         // setResult({
@@ -137,10 +137,8 @@ export default function Answer({
 
         const token = user?.token || '';
         try {
-            // ==FIX==
             const result = await postData('ExamSessions', ExamSessionData, token);
             console.log('result', result);
-            // ==FIX==
             navigate(`./../exam-result/${result?.id}`);
 
             await sleep(1000);
@@ -206,7 +204,7 @@ export default function Answer({
                     }}
                     disabled={loading}
                 >
-                    KẾT THÚC {isFinish && 'A'}
+                    KẾT THÚC
                 </button>
                 {/* <i className='fa-solid fa-xmark' style={{ color: 'red', fontSize: '20rem', textAlign: 'center', width: '100%' }} /> */}
                 {/* <div>
