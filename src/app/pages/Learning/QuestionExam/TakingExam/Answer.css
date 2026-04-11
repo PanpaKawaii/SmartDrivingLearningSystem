@@ -39,7 +39,8 @@
                 border: 1px solid #68FCFF;
                 box-sizing: border-box;
                 border-radius: 8px;
-                cursor: pointer;
+                user-select: none;
+                cursor: not-allowed;
 
                 &.none {
                     color: #fff;

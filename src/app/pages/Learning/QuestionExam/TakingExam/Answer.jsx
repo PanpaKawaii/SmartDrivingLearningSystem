@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { postData } from '../../../../../mocks/CallingAPI';
 import Timer from '../../../../components/Timer/Timer';
+import { useAuth } from '../../../../hooks/AuthContext/AuthContext';
 
 import './Answer.css';
 
@@ -13,8 +16,11 @@ export default function Answer({
     duration = 5,
     passScore = 0,
 }) {
+    const { user, refreshNewToken } = useAuth();
+
+    const navigate = useNavigate();
+
     const [isFinish, setIsFinish] = useState(false);
-    const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(false);
     const [startTime, setStartTime] = useState(new Date());
     const [result, setResult] = useState({
@@ -23,6 +29,7 @@ export default function Answer({
         skippedCount: 0,
         details: [],
     })
+
     const isAnswerSelected = (questionId, answerId) => {
         const item = myAnswers.find(i => i.questionId === questionId);
         return item
@@ -48,22 +55,18 @@ export default function Answer({
         return 'answered';
     };
 
-    const checkAnswersResult = (questionsAnswers, myAnswers) => {
+    const checkAnswersResult = async (questionsAnswers, myAnswers) => {
+        setLoading(true);
+        setIsFinish(true);
+
         let correctCount = 0;
         let skippedCount = 0;
 
         const details = [];
 
         questionsAnswers.forEach(question => {
-            const userAnswer = myAnswers.find(
-                a => a.questionId === question.id
-            );
-            // console.log('userAnswer', userAnswer);
-
-            const correctAnswers = question.answers.filter(
-                a => a.isCorrect
-            );
-            // console.log('correctAnswers', correctAnswers);
+            const userAnswer = myAnswers.find(a => a.questionId === question.id);
+            const correctAnswers = question.answers.filter(a => a.isCorrect);
 
             // Không chọn đáp án nào hoặc chọn chưa đủ
             if (!userAnswer || userAnswer.answers?.length !== correctAnswers?.length) {
@@ -72,28 +75,20 @@ export default function Answer({
             }
 
             const selectedAnswerIds = userAnswer?.answers?.map(a => a.answerId);
-
             const correctAnswerIds = correctAnswers.map(a => a.id);
 
             // So sánh đúng / sai (phải khớp hoàn toàn)
             const isCorrect =
                 selectedAnswerIds?.length === correctAnswerIds?.length &&
                 selectedAnswerIds?.every(id => correctAnswerIds?.includes(id));
-            // console.log('isCorrect', isCorrect);
 
             if (isCorrect) {
                 correctCount++;
             }
 
-            // console.log('correctAnswers', correctAnswers);
-            // console.log('question.answers', question.answers);
             // Ghi chi tiết
             correctAnswers.forEach(correct => {
-                const selected = question.answers.find(a =>
-                    selectedAnswerIds?.includes(a.id)
-                );
-                // console.log('correct', correct);
-                // console.log('selected', selected);
+                const selected = question.answers.find(a => selectedAnswerIds?.includes(a.id));
 
                 details.push({
                     questionId: question.id,
@@ -108,12 +103,12 @@ export default function Answer({
             });
         });
 
-        setResult({
-            correctCount: correctCount,
-            totalCount: questionsAnswers?.length || 0,
-            skippedCount: skippedCount,
-            details: details,
-        });
+        // setResult({
+        //     correctCount: correctCount,
+        //     totalCount: questionsAnswers?.length || 0,
+        //     skippedCount: skippedCount,
+        //     details: details,
+        // });
 
         const resultFlat = myAnswers.flatMap(item =>
             item.answers.map(ans => ({
@@ -132,11 +127,21 @@ export default function Answer({
             examDetails: resultFlat,
         };
         console.log('ExamSessionData:', ExamSessionData);
-    };
 
-    // console.log('result', result);
-    console.log('myAnswers', myAnswers);
-    // console.log('startTime', startTime);
+        const token = user?.token || '';
+        try {
+            const result = await postData('ExamSessions', ExamSessionData, token);
+            console.log('result', result);
+
+            navigate('./..');
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+            if (error.status == 401) refreshNewToken(user);
+        } finally {
+            setLoading(false);
+        };
+    };
 
     return (
         <div className='answer-container'>
@@ -160,20 +165,35 @@ export default function Answer({
 
                 <div className='questions'>
                     {QuestionsAnswers.map((question, qIndex) => (
-                        <div key={question.id} className={`question-item ${selectedQuestionId === question.id ? 'selected' : ''} ${getQuestionAnswerStatus(question.id)}`} onClick={() => setSelectedQuestionId(question.id)}>
+                        <div
+                            key={question.id}
+                            className={`question-item ${selectedQuestionId === question.id ? 'selected' : ''} ${getQuestionAnswerStatus(question.id)}`}
+                            onClick={() => setSelectedQuestionId(p => isFinish ? p : question.id)}
+                            style={{ cursor: isFinish ? 'not-allowed' : 'pointer' }}
+                        >
                             <div className='index'>{qIndex + 1}</div>
                             <div className='answers'>
                                 {question.answers?.map((answer, aIndex) => (
                                     <div key={answer.id} className={`answer-item`}>
-                                        <button className={`btn ${isAnswerSelected(question.id, answer.id) ? 'btn-selected' : ''}`} onClick={() => handleSelectAnswer(question.id, answer.id)}>{aIndex + 1}</button>
+                                        <button
+                                            className={`btn ${isAnswerSelected(question.id, answer.id) ? 'btn-selected' : ''}`}
+                                            onClick={() => handleSelectAnswer(question.id, answer.id)}
+                                            disabled={isFinish}
+                                        >
+                                            {aIndex + 1}
+                                        </button>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     ))}
                 </div>
-                <button className='btn btn-end' onClick={() => setIsFinish(true)} disabled={isFinish}>KẾT THÚC</button>
-                <div>
+                {isFinish ?
+                    <button className='btn btn-end' onClick={() => checkAnswersResult(QuestionsAnswers, myAnswers)} disabled={loading}>KẾT THÚC (FUNCTION)</button>
+                    :
+                    <button className='btn btn-end' onClick={() => { setLoading(true); setIsFinish(true); }} disabled={loading}>KẾT THÚC (TIME)</button>
+                }
+                {/* <div>
                     <hr />
                     <div>Correct: {result.correctCount}</div>
                     <div>Total: {result.totalCount}</div>
@@ -183,9 +203,9 @@ export default function Answer({
                     <div>
                         {result?.details?.map((d, index) => (
                             <div key={index}>
-                                {/* <div>{d.questionContent}</div>
+                                <div>{d.questionContent}</div>
                                 <div>{d.answerContent}</div>
-                                <div>{d.selectedAnswerContent}</div> */}
+                                <div>{d.selectedAnswerContent}</div>
                                 <div>{index + 1}</div>
                                 <div>Question: {d.questionId}</div>
                                 <div style={{ backgroundColor: d.answerId == d.selectedAnswerId ? '#28a745' : '#ffffff80' }}>Correct: {d.answerId}</div>
@@ -194,7 +214,7 @@ export default function Answer({
                             </div>
                         ))}
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

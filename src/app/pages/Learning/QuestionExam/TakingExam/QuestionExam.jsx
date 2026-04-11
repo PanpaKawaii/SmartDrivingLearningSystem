@@ -79,9 +79,7 @@ export default function QuestionExam() {
             }
 
             const current = prev[index];
-            const isSelected = current.answers.some(
-                a => a.answerId === answerId
-            );
+            const isSelected = current.answers.some(a => a.answerId === answerId);
 
             let newAnswers = [];
             if (isSelected) {
@@ -107,9 +105,7 @@ export default function QuestionExam() {
                 answers: newAnswers
             };
 
-            return prev.map((item, i) =>
-                i === index ? newItem : item
-            );
+            return prev.map((item, i) => i === index ? newItem : item);
         });
     };
     // console.log('myAnswers', myAnswers);
