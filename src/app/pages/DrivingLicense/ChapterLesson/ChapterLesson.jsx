@@ -79,8 +79,8 @@ export default function ChapterLesson() {
                 console.error('Error', error);
                 setError(error);
                 if (error.status == 401) {
-                    const text = await refreshNewToken(user);
-                    if (text == 'Logout') { 
+                    const refreshResult = await refreshNewToken(user);
+                    if (refreshResult?.message == 'Logout') { 
                         logout();
                         navigate('./', { state: { openLogin: 'true' } }); 
                     }

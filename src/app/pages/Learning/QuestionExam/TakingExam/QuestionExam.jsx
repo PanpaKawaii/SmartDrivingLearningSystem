@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../../mocks/CallingAPI.js';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground.jsx';
 import StarsBackground from '../../../../components/StarsBackground/StarsBackground.jsx';
@@ -14,6 +14,7 @@ export default function QuestionExam() {
     const { user, refreshNewToken } = useAuth();
 
     const Params = useParams();
+    const navigate = useNavigate();
 
     const examId = Params?.examId;
     console.log('examId', examId);
@@ -23,11 +24,18 @@ export default function QuestionExam() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isFinish, setIsFinish] = useState(false);
+    const [startTime, setStartTime] = useState(new Date());
+    const [endTime, setEndTime] = useState(null);
 
     const [selectedQuestionId, setSelectedQuestionId] = useState(null);
     const [myAnswers, setMyAnswers] = useState([]);
 
     useEffect(() => {
+        if (user?.roleName != 'Student' && localStorage.getItem('Exam') == new Date().toLocaleDateString()) {
+            navigate('./..');
+            return;
+        }
         (async () => {
             setError(null);
             setLoading(true);
@@ -51,6 +59,7 @@ export default function QuestionExam() {
                 setThisExam(ThisExamResponse);
                 setQUESTIONs(QuestionsAnswers);
                 setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
+                localStorage.setItem('Exam', new Date().toLocaleDateString());
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -135,8 +144,13 @@ export default function QuestionExam() {
                 setSelectedQuestionId={setSelectedQuestionId}
                 selectedQuestionId={selectedQuestionId}
                 handleSelectAnswer={handleSelectAnswer}
+                startTime={startTime}
+                endTime={endTime}
+                setEndTime={setEndTime}
                 duration={ThisExam?.duration}
                 passScore={ThisExam?.passScore}
+                isFinish={isFinish}
+                setIsFinish={setIsFinish}
             />
         </div>
     )

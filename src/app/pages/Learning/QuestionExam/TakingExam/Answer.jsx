@@ -13,16 +13,22 @@ export default function Answer({
     setSelectedQuestionId = () => { },
     selectedQuestionId = '',
     handleSelectAnswer = () => { },
+    startTime = new Date(),
+    endTime = null,
+    setEndTime = () => { },
     duration = 5,
     passScore = 0,
+    isFinish = false,
+    setIsFinish = () => { },
 }) {
     const { user, refreshNewToken } = useAuth();
 
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     const navigate = useNavigate();
 
-    const [isFinish, setIsFinish] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [startTime, setStartTime] = useState(new Date());
+    const [error, setError] = useState(null);
+    const [examDuration, setExamDuration] = useState(duration);
     const [result, setResult] = useState({
         correctCount: 0,
         totalCount: 0,
@@ -56,6 +62,7 @@ export default function Answer({
     };
 
     const checkAnswersResult = async (questionsAnswers, myAnswers) => {
+        setEndTime(p => p ? p : new Date());
         setLoading(true);
         setIsFinish(true);
 
@@ -122,7 +129,7 @@ export default function Answer({
         const ExamSessionData = {
             examId: examId,
             score: score,
-            totalDuration: Math.max(0, Math.min(duration, (new Date() - startTime) / 1000)),
+            totalDuration: Math.max(0, Math.min(examDuration, ((endTime ? endTime : new Date()) - startTime) / 1000)),
             isPass: score >= passScore,
             examDetails: resultFlat,
         };
@@ -133,8 +140,10 @@ export default function Answer({
             // ==FIX==
             const result = await postData('ExamSessions', ExamSessionData, token);
             console.log('result', result);
+            // ==FIX==
+            navigate(`./../exam-result/${result?.id}`);
 
-            navigate('./..');
+            await sleep(1000);
         } catch (error) {
             console.error('Error', error);
             setError(error);
@@ -197,8 +206,9 @@ export default function Answer({
                     }}
                     disabled={loading}
                 >
-                    KẾT THÚC
+                    KẾT THÚC {isFinish && 'A'}
                 </button>
+                {/* <i className='fa-solid fa-xmark' style={{ color: 'red', fontSize: '20rem', textAlign: 'center', width: '100%' }} /> */}
                 {/* <div>
                     <hr />
                     <div>Correct: {result.correctCount}</div>
