@@ -28,7 +28,7 @@ export default function ListTrafficSign() {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
-            const userId = user?.id || '';
+            const userId = user?.id || 'no-user';
             try {
                 const trafficSignQuery = new URLSearchParams({
                     page: '1',

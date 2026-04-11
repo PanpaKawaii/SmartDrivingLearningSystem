@@ -57,6 +57,10 @@ export default function UserHeader({
         }
     }, [user?.id]);
 
+    useEffect(() => {
+        if (location.state?.openLogin == 'true') setLoginOpen(true);
+    }, [location.state]);
+
     return (
         <nav className='user-header-container'>
             <div className='nav-wrapper'>

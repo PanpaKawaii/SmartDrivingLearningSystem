@@ -34,7 +34,7 @@ export default function LearningLesson() {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
-            const userId = user?.id || '';
+            const userId = user?.id || 'no-user';
             try {
                 const questionQuery = new URLSearchParams({
                     page: '1',
