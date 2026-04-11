@@ -28,6 +28,7 @@ import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
 import ExamDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamDetail.jsx'
 import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSessionDetail.jsx'
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
+import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
 
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
@@ -91,6 +92,7 @@ export default function MainRoutes() {
                     <Route path='learning/list-exam/:examId' element={<ExamDetail />} />
                     <Route path='learning/list-exam/:examId/exam-result/:sessionId' element={<ExamSessionDetail />} />
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
+                    <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
                 </Route>  

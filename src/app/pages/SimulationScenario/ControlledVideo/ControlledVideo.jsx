@@ -7,9 +7,12 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import './ControlledVideo.css';
 
 export default function ControlledVideo({
+    myResults = [],
     selectedScenario = null,
     allowRestart = false,
     allowContinue = false,
+    baseScore = 5,
+    additionalFunction = () => { },
 }) {
     const { user } = useAuth();
 
@@ -42,7 +45,22 @@ export default function ControlledVideo({
                     // const exactSeconds = Math.floor(lastTimeRef.current);
                     const exactSeconds = lastTimeRef.current;
                     video.pause();
-                    setStopMoment(p => !p ? exactSeconds : p);
+
+                    const range = selectedScenario?.endPoint - selectedScenario?.startPoint;
+                    const smallRange = Number(exactSeconds) - selectedScenario?.startPoint;
+                    const percent = smallRange / range;
+                    const maxScore = baseScore;
+                    const minScore = 1;
+                    const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ?
+                        maxScore - Math.floor((maxScore - minScore + 1) * percent)
+                        : 0;
+
+                    additionalFunction({
+                        simulationExamId: selectedScenario?.simulationExamId,
+                        durationSecond: exactSeconds,
+                        score: point,
+                    });
+                    setStopMoment(p => p ? p : exactSeconds);
                     // setStopMoment(exactSeconds);
                     console.log('⏸ Video dừng tại:', exactSeconds, 'giây');
                 } else {
@@ -87,8 +105,8 @@ export default function ControlledVideo({
     // console.log('range', range);
     // console.log('smallRange', smallRange);
     // console.log('percent', percent);
-    const maxScore = 10;
-    const minScore = 2;
+    const maxScore = baseScore;
+    const minScore = 1;
     const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ?
         maxScore - Math.floor((maxScore - minScore + 1) * percent)
         : 0;
@@ -176,8 +194,8 @@ export default function ControlledVideo({
                                 }
                                 {stopMoment !== null && (
                                     <>
-                                        <p>Thời gian: {stopMoment?.toFixed(3)} giây</p>
-                                        <p>Điểm: {point ? point?.toFixed(3) : 0}</p>
+                                        <p>Thời gian: {stopMoment?.toFixed(3) || 0} giây</p>
+                                        <p>Điểm: {point?.toFixed(0) || 0}</p>
                                     </>
                                 )}
                             </div>
@@ -203,6 +221,18 @@ export default function ControlledVideo({
                             <p>{selectedScenario.description}</p>
                         </div>
                     </div>
+                    {myResults?.length > 0 &&
+                        <div>
+                            {myResults.map((result, index) => (
+                                <div key={index}>
+                                    <div>{result.simulationExamId}</div>
+                                    <div>{result.durationSecond}</div>
+                                    <div>{result.score}</div>
+                                    <hr />
+                                </div>
+                            ))}
+                        </div>
+                    }
                 </>
                 :
                 <div

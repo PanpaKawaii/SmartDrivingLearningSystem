@@ -47,7 +47,7 @@ export default function SimulationScenario() {
                 // const SimulationScenarioItems = SimulationScenarioResponse?.items;
                 // setSIMULATIONSCENARIOs(SimulationScenarioItems);
 
-                // setSelectedScenarioId(SimulationScenario?.[0]?.id);
+                setSelectedScenarioId(SimulationScenario?.[0]?.id);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -66,17 +66,24 @@ export default function SimulationScenario() {
     return (
         <div className='simulation-scenario-container'>
             <CloudsBackground />
+            <h1>THỰC HÀNH MÔ PHỎNG</h1>
             <div className='container'>
                 <ControlledVideo
+                    myResults={[]}
                     selectedScenario={selectedScenario}
                     allowRestart={true}
                     allowContinue={true}
+                    baseScore={5}
+                    additionalFunction={() => { console.log(selectedScenario?.name); }}
                 />
                 <ListScenario
                     list={SIMULATIONSCENARIOs}
+                    done={[]}
                     groupBy={'simulationChapterId'}
+                    label={'Chương'}
                     onClickButton={setSelectedScenarioId}
                     selected={selectedScenarioId}
+                    finishButton={<></>}
                 />
             </div>
         </div>
