@@ -4,12 +4,19 @@ import Timer from '../../../../components/Timer/Timer';
 import './Answer.css';
 
 export default function Answer({
+    examId = '',
     QuestionsAnswers = [],
     myAnswers = [],
     setSelectedQuestionId = () => { },
     selectedQuestionId = '',
     handleSelectAnswer = () => { },
+    duration = 5,
+    passScore = 0,
 }) {
+    const [isFinish, setIsFinish] = useState(false);
+    const [refresh, setRefresh] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [startTime, setStartTime] = useState(new Date());
     const [result, setResult] = useState({
         correctCount: 0,
         totalCount: 0,
@@ -27,11 +34,14 @@ export default function Answer({
         const question = QuestionsAnswers.find(q => q.id === questionId);
         const item = myAnswers.find(a => a.questionId === questionId);
 
-        if (!item || item.answers.length === 0) {
+        if (!item) {
+            // Chưa trả lời
+            return '';
+        } else if (item.answers?.length !== (Number(question.correctAnswer))) {
+            // Trả lời chưa đủ
             return 'none';
-        }
-
-        if (item.answers.length == (Number(question.correctAnswer) || 1)) {
+        } else if (item?.answers?.length == (Number(question.correctAnswer))) {
+            // Trả lời đủ
             return 'full';
         }
 
@@ -48,44 +58,42 @@ export default function Answer({
             const userAnswer = myAnswers.find(
                 a => a.questionId === question.id
             );
+            // console.log('userAnswer', userAnswer);
 
             const correctAnswers = question.answers.filter(
                 a => a.isCorrect
             );
+            // console.log('correctAnswers', correctAnswers);
 
-            // ❌ Không chọn đáp án nào hoặc chọn chưa đủ
-            if (
-                !userAnswer ||
-                userAnswer.answers.length !== correctAnswers.length
-            ) {
+            // Không chọn đáp án nào hoặc chọn chưa đủ
+            if (!userAnswer || userAnswer.answers?.length !== correctAnswers?.length) {
                 skippedCount++;
                 return;
             }
 
-            const selectedAnswerIds = userAnswer.answers.map(
-                a => a.answerId
-            );
+            const selectedAnswerIds = userAnswer?.answers?.map(a => a.answerId);
 
-            const correctAnswerIds = correctAnswers.map(
-                a => a.id
-            );
+            const correctAnswerIds = correctAnswers.map(a => a.id);
 
-            // ✅ So sánh đúng / sai (phải khớp hoàn toàn)
+            // So sánh đúng / sai (phải khớp hoàn toàn)
             const isCorrect =
-                selectedAnswerIds.length === correctAnswerIds.length &&
-                selectedAnswerIds.every(id =>
-                    correctAnswerIds.includes(id)
-                );
+                selectedAnswerIds?.length === correctAnswerIds?.length &&
+                selectedAnswerIds?.every(id => correctAnswerIds?.includes(id));
+            // console.log('isCorrect', isCorrect);
 
             if (isCorrect) {
                 correctCount++;
             }
 
-            // 🔍 Ghi chi tiết
+            // console.log('correctAnswers', correctAnswers);
+            // console.log('question.answers', question.answers);
+            // Ghi chi tiết
             correctAnswers.forEach(correct => {
                 const selected = question.answers.find(a =>
-                    selectedAnswerIds.includes(a.id)
+                    selectedAnswerIds?.includes(a.id)
                 );
+                // console.log('correct', correct);
+                // console.log('selected', selected);
 
                 details.push({
                     questionId: question.id,
@@ -102,35 +110,51 @@ export default function Answer({
 
         setResult({
             correctCount: correctCount,
-            totalCount: questionsAnswers.length,
+            totalCount: questionsAnswers?.length || 0,
             skippedCount: skippedCount,
             details: details,
         });
 
-        // return {
-        //     correctCount,
-        //     totalCount: questionsAnswers.length,
-        //     skippedCount,
-        //     details
-        // };
+        const resultFlat = myAnswers.flatMap(item =>
+            item.answers.map(ans => ({
+                answerId: ans.answerId,
+            }))
+        );
+        console.log('resultFlat', resultFlat);
+        const score = Number(((100 * correctCount / (QuestionsAnswers?.length || 1)) || 0)?.toFixed(0) || 0);
+        console.log('score', score);
+
+        const ExamSessionData = {
+            examId: examId,
+            score: score,
+            totalDuration: Math.max(0, Math.min(duration, (new Date() - startTime) / 1000)),
+            isPass: score >= passScore,
+            examDetails: resultFlat,
+        };
+        console.log('ExamSessionData:', ExamSessionData);
     };
+
+    // console.log('result', result);
+    console.log('myAnswers', myAnswers);
+    // console.log('startTime', startTime);
 
     return (
         <div className='answer-container'>
             <div className='content'>
                 <div className='time'>
-                    <div className='title'>THỜI GIAN THI CÒN LẠI:</div>
+                    <h2>THỜI GIAN THI CÒN LẠI:</h2>
                     <Timer
-                        initialTime={108}
+                        initialTime={duration}
                         // showStartButton={true}
                         // showPauseButton={true}
                         // showRestartButton={true}
+                        continueRunning={!isFinish}
                         onFinish={() => checkAnswersResult(QuestionsAnswers, myAnswers)}
                         timelines={[
                             { time: 10, action: () => console.log('Còn 10 giây!'), },
                             { time: 5, action: () => console.log('Sắp hết giờ!'), },
                         ]}
-                        color={'#007bff'}
+                        color={['#3b82f6', '#ef4444']}
                     />
                 </div>
 
@@ -148,7 +172,7 @@ export default function Answer({
                         </div>
                     ))}
                 </div>
-                <button className='btn btn-end' onClick={() => checkAnswersResult(QuestionsAnswers, myAnswers)}>KẾT THÚC</button>
+                <button className='btn btn-end' onClick={() => setIsFinish(true)} disabled={isFinish}>KẾT THÚC</button>
                 <div>
                     <hr />
                     <div>Correct: {result.correctCount}</div>
@@ -162,8 +186,9 @@ export default function Answer({
                                 {/* <div>{d.questionContent}</div>
                                 <div>{d.answerContent}</div>
                                 <div>{d.selectedAnswerContent}</div> */}
+                                <div>{index + 1}</div>
                                 <div>Question: {d.questionId}</div>
-                                <div style={{ backgroundColor: d.answerId === d.selectedAnswerId ? '#28a745' : '#fff' }}>Correct: {d.answerId}</div>
+                                <div style={{ backgroundColor: d.answerId == d.selectedAnswerId ? '#28a745' : '#ffffff80' }}>Correct: {d.answerId}</div>
                                 <div>Selected: {d.selectedAnswerId}</div>
                                 <hr />
                             </div>

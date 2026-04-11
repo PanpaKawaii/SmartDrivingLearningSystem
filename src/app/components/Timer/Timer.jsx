@@ -10,9 +10,10 @@ export default function Timer({
     showPauseButton = false,
     showRestartButton = false,
 
-    onFinish = () => {},
+    continueRunning = true,
+    onFinish = () => { },
     timelines = [],
-    color = '#000'
+    color = ['#000', '#ccc']
 }) {
     const [time, setTime] = useState(
         direction === 'down' ? initialTime : 0
@@ -35,7 +36,7 @@ export default function Timer({
 
     // Restart timer (reset & pause)
     const restart = () => {
-        setIsRunning(false);
+        setIsRunning(autoStart);
         triggeredTimelines.current.clear();
         setTime(direction === 'down' ? initialTime : 0);
     };
@@ -47,14 +48,14 @@ export default function Timer({
         intervalRef.current = setInterval(() => {
             setTime(prev => {
                 const next =
-                    direction === 'down' ? Math.max(0, prev - 1) : prev + 1;
+                    continueRunning ? (direction === 'down' ? Math.max(0, prev - 1) : prev + 1) : 0;
 
                 return next;
             });
-        }, 100);
+        }, 1000);
 
         return () => clearInterval(intervalRef.current);
-    }, [isRunning, direction]);
+    }, [isRunning, direction, continueRunning]);
 
     // Handle finish
     useEffect(() => {
@@ -79,7 +80,7 @@ export default function Timer({
 
     return (
         <div className='timer-container'>
-            <div className='display' style={{ color: color }}>
+            <div className='display' style={{ color: time >= 300 ? color?.[0] : color?.[1] }}>
                 {(() => {
                     const hour = Math.floor(time / 3600);
                     const minute = Math.floor((time % 3600) / 60);

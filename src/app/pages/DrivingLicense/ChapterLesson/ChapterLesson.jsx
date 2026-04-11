@@ -89,7 +89,7 @@ export default function ChapterLesson() {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, user?.id]);
+    }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>

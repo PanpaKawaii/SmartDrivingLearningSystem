@@ -1,20 +1,70 @@
-import { useState } from 'react';
-import { answers, questions } from '../../../../../mocks/DataSample.js';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchData } from '../../../../../mocks/CallingAPI.js';
+import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground.jsx';
+import StarsBackground from '../../../../components/StarsBackground/StarsBackground.jsx';
+import TrafficLight from '../../../../components/TrafficLight/TrafficLight.jsx';
+import { useAuth } from '../../../../hooks/AuthContext/AuthContext.jsx';
 import Answer from './Answer.jsx';
 import Question from './Question.jsx';
 
 import './QuestionExam.css';
-import StarsBackground from '../../../../components/StarsBackground/StarsBackground.jsx';
 
 export default function QuestionExam() {
-    const [QUESTIONs, setQUESTIONs] = useState(questions || []);
-    const [ANSWERs, setANSWERs] = useState(answers || []);
-    const [selectedQuestionId, setSelectedQuestionId] = useState(questions?.[0]?.id);
+    const { user, refreshNewToken } = useAuth();
 
+    const Params = useParams();
+
+    const examId = Params?.examId;
+    console.log('examId', examId);
+
+    const [ThisExam, setThisExam] = useState(null);
+    const [QUESTIONs, setQUESTIONs] = useState([]);
+    const [refresh, setRefresh] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [selectedQuestionId, setSelectedQuestionId] = useState(null);
     const [myAnswers, setMyAnswers] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            setError(null);
+            setLoading(true);
+            const token = user?.token || '';
+            try {
+                const ThisExamResponse = await fetchData(`Exams/${examId}`, token);
+                console.log('ThisExamResponse', ThisExamResponse);
+
+                const QuestionItems = ThisExamResponse.examQuestions?.map(eq => eq.question);
+                console.log('QuestionItems', QuestionItems);
+
+                const QuestionsAnswers = QuestionItems.map((q, i) => {
+                    return {
+                        ...q,
+                        index: i + 1,
+                        correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
+                    };
+                });
+                console.log('QuestionsAnswers', QuestionsAnswers);
+
+                setThisExam(ThisExamResponse);
+                setQUESTIONs(QuestionsAnswers);
+                setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
+            } catch (error) {
+                console.error('Error', error);
+                setError(error);
+                if (error.status == 401) refreshNewToken(user);
+            } finally {
+                setLoading(false);
+            };
+        })();
+    }, [refresh, user?.token]);
+
     const handleSelectAnswer = (questionId, answerId) => {
         setMyAnswers(prev => {
-            const question = questions.find(q => q.id === questionId);
+            const question = QUESTIONs.find(q => q.id === questionId);
+            console.log('question', question);
             const index = prev.findIndex(item => item.questionId === questionId);
 
             if (index === -1) {
@@ -40,8 +90,10 @@ export default function QuestionExam() {
                 );
             } else {
                 if (question?.type === 'multiple') {
+                    console.log('multiple');
                     newAnswers = [...current.answers, { answerId }];
                 } else {
+                    console.log('single');
                     newAnswers = [{ answerId }];
                 }
             }
@@ -60,30 +112,35 @@ export default function QuestionExam() {
             );
         });
     };
-    console.log('myAnswers', myAnswers);
+    // console.log('myAnswers', myAnswers);
 
-    const QuestionsAnswers = QUESTIONs.map((q, i) => {
-        const relatedAnswers = ANSWERs.filter(a => a.questionId === q.id);
-        return { ...q, answers: relatedAnswers, index: i + 1 };
-    })
-    console.log('QuestionsAnswers', QuestionsAnswers);
-    const selectedQuestion = QuestionsAnswers.find(q => q.id === selectedQuestionId);
-    console.log('selectedQuestion', selectedQuestion);
+    // const QuestionsAnswers = QUESTIONs.map((q, i) => {
+    //     const relatedAnswers = ANSWERs.filter(a => a.questionId === q.id);
+    //     return { ...q, answers: relatedAnswers, index: i + 1 };
+    // })
+    console.log('QUESTIONs', QUESTIONs);
+    const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
+    // console.log('selectedQuestion', selectedQuestion);
 
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='question-exam-container container'>
             <StarsBackground />
             <Question
-                QuestionsAnswers={QuestionsAnswers}
+                QuestionsAnswers={QUESTIONs}
                 selectedQuestion={selectedQuestion}
                 myAnswers={myAnswers}
             />
             <Answer
-                QuestionsAnswers={QuestionsAnswers}
+                examId={examId}
+                QuestionsAnswers={QUESTIONs}
                 myAnswers={myAnswers}
                 setSelectedQuestionId={setSelectedQuestionId}
                 selectedQuestionId={selectedQuestionId}
                 handleSelectAnswer={handleSelectAnswer}
+                duration={ThisExam?.duration}
+                passScore={ThisExam?.passScore}
             />
         </div>
     )

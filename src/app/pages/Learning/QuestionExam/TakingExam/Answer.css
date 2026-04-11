@@ -6,7 +6,6 @@
     border: 2px solid #68FCFF;
     border-radius: 12px;
     box-sizing: border-box;
-    transition: .15s;
 
     .content {
         padding: 12px 20px;
@@ -16,14 +15,12 @@
 
         .time {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             gap: 8px;
 
-            .title {
-                box-sizing: border-box;
-                font-size: 24px;
-                text-align: center;
+            h2 {
+                font-size: 1.5rem;
             }
         }
 
@@ -37,13 +34,19 @@
                 justify-content: space-between;
                 align-items: center;
                 gap: 12px;
-                height: 36px;
                 padding: 4px;
                 color: var(--text-secondary);
                 border: 1px solid #68FCFF;
                 box-sizing: border-box;
                 border-radius: 8px;
                 cursor: pointer;
+
+                &.none {
+                    color: #fff;
+                    border-color: #f97316;
+                    background: #fb923c1f;
+                    box-shadow: 0 0 0 1px #fb923c47;
+                }
 
                 &.full {
                     color: #fff;
@@ -67,7 +70,7 @@
 
                 .answers {
                     display: flex;
-                    justify-content: start;
+                    justify-content: end;
                     align-items: center;
                     gap: 4px;
                     max-width: 108px;

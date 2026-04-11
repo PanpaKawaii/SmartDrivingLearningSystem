@@ -3887,9 +3887,12 @@ export const questions = [
 
     { id: 26, content: 'Khi gặp tai nạn giao thông, bạn nên làm gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 },
     { id: 27, content: 'Biển báo hình chữ nhật thường dùng để làm gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 },
-    { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 },
-    { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 },
-    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 }
+    // { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 },
+    // { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 },
+    // { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'single', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 1, status: 1 }
+    { id: 28, content: 'Khi lái xe đường dài, cần chú ý điều gì?', type: 'multiple', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 2, status: 1 },
+    { id: 29, content: 'Đèn chiếu xa dùng khi nào?', type: 'multiple', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 2, status: 1 },
+    { id: 30, content: 'Người lái xe phải tuân thủ điều gì quan trọng nhất?', type: 'multiple', questionLessonId: 2, questionCategoryId: 1, correctAnswer: 2, status: 1 }
 ];
 
 export const answers = [
@@ -4033,16 +4036,19 @@ export const answers = [
 
     // Question 28 (3 answers)
     { id: 85, questionId: 28, content: 'Nghỉ ngơi hợp lý', isCorrect: true, status: 1 },
+    { id: 850, questionId: 28, content: 'Nghỉ ngơi hợp lý', isCorrect: true, status: 1 },
     { id: 86, questionId: 28, content: 'Lái liên tục', isCorrect: false, status: 1 },
     { id: 87, questionId: 28, content: 'Không cần nghỉ', isCorrect: false, status: 1 },
 
     // Question 29 (1 answers)
     { id: 88, questionId: 29, content: 'Đường vắng, không có xe đối diện', isCorrect: true, status: 1 },
+    { id: 880, questionId: 29, content: 'Đường vắng, không có xe đối diện', isCorrect: true, status: 1 },
     { id: 89, questionId: 29, content: 'Trong thành phố đông xe', isCorrect: false, status: 1 },
     { id: 90, questionId: 29, content: 'Khi dừng xe', isCorrect: false, status: 1 },
 
     // Question 30 (1 answers)
     { id: 91, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
+    { id: 910, questionId: 30, content: 'Luật giao thông', isCorrect: true, status: 1 },
     { id: 92, questionId: 30, content: 'Theo cảm tính', isCorrect: false, status: 1 },
     { id: 93, questionId: 30, content: 'Theo người khác', isCorrect: false, status: 1 },
     { id: 94, questionId: 30, content: 'Theo bà hàng xóm', isCorrect: false, status: 1 },

@@ -8,13 +8,13 @@ export default function Question({
     myAnswers = [],
 }) {
     const answeredQuestions = myAnswers?.filter(q => q.answers)?.length || 0;
-    console.log('answeredQuestions', answeredQuestions);
+    // console.log('answeredQuestions', answeredQuestions);
 
     return (
         <div className='question-container'>
             <div className='questions'>
                 <div className='question-item'>
-                    <div className='index'><b>Câu hỏi {selectedQuestion.index}: </b>{selectedQuestion?.content}</div>
+                    <h2><b>Câu hỏi {selectedQuestion.index}: </b>{selectedQuestion?.content}</h2>
                     <div className='answers'>
                         {selectedQuestion?.answers?.map((answer, aIndex) => (
                             <div key={answer.id} className='answer-item'>{aIndex + 1}. {answer.content}</div>
