@@ -29,17 +29,18 @@ export default function TrafficSignFlashcard() {
                     pageSize: '1000',
                     status: 1,
                 });
-                    const savedTrafficSignQuery = new URLSearchParams({
-                        userId: userId,
-                        status: 1,
-                    });
                 const TrafficSignResponse = await fetchData(`TrafficSigns?${trafficSignQuery.toString()}`, token);
-                const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
                 console.log('TrafficSignResponse', TrafficSignResponse);
-                console.log('SavedTrafficSignResponse', SavedTrafficSignResponse);
                 const TrafficSignItems = TrafficSignResponse?.items;
-                
+
                 setTRAFFICSIGNs(TrafficSignItems);
+
+                const savedTrafficSignQuery = new URLSearchParams({
+                    userId: userId,
+                    status: 1,
+                });
+                const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
+                console.log('SavedTrafficSignResponse', SavedTrafficSignResponse);
                 setMySAVEDTRAFFICSIGNs(SavedTrafficSignResponse);
             } catch (error) {
                 console.error('Error', error);
@@ -67,7 +68,7 @@ export default function TrafficSignFlashcard() {
     console.log('QuestionsAnswers', QuestionsAnswers);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (error && error.status != 401) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='traffic-sign-flashcard-container'>
             <StarsBackground />

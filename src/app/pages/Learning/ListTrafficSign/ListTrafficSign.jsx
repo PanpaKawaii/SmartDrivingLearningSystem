@@ -38,20 +38,21 @@ export default function ListTrafficSign() {
                 const signCategoryQuery = new URLSearchParams({
                     status: 1,
                 });
-                const savedTrafficSignQuery = new URLSearchParams({
-                    userId: userId,
-                    status: 1,
-                });
                 const TrafficSignResponse = await fetchData(`TrafficSigns?${trafficSignQuery.toString()}`, token);
                 const SignCategoryResponse = await fetchData(`SignCategories/all?${signCategoryQuery.toString()}`, token);
-                const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
                 console.log('TrafficSignResponse', TrafficSignResponse);
                 console.log('SignCategoryResponse', SignCategoryResponse);
-                console.log('SavedTrafficSignResponse', SavedTrafficSignResponse);
                 const TrafficSignItems = TrafficSignResponse?.items;
 
                 setTRAFFICSIGNs(TrafficSignItems);
                 setSIGNCATEGORIes(SignCategoryResponse);
+
+                const savedTrafficSignQuery = new URLSearchParams({
+                    userId: userId,
+                    status: 1,
+                });
+                const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
+                console.log('SavedTrafficSignResponse', SavedTrafficSignResponse);
                 setMySAVEDTRAFFICSIGNs(SavedTrafficSignResponse);
             } catch (error) {
                 console.error('Error', error);
@@ -98,7 +99,7 @@ export default function ListTrafficSign() {
     console.log('filteredTRAFFICSIGNs', filteredTRAFFICSIGNs);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (error && error.status != 401) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='list-traffic-sign-container container'>
             <StarsBackground />
