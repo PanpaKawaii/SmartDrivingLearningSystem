@@ -21,13 +21,13 @@
                     box-shadow: 0 0 6px #38BDF899;
                     transition: all 0.1s ease;
 
-                    &.done {
-                        background-color: #38BDF840;
-                    }
-
                     &.btn-selected {
                         background-color: #38BDF899;
                         box-shadow: 0 0 12px #0EA5E9;
+
+                        &:disabled {
+                            opacity: 1;
+                        }
                     }
 
                     &:hover {

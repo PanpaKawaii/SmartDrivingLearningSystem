@@ -32,7 +32,12 @@ export default function ListScenario({
                             {group.items?.map((item, index) => {
                                 const i = list?.findIndex(s => s.id == item.id);
                                 return (
-                                    <button key={index} className={`item ${item.id == selected ? 'btn-selected' : ''} ${done.includes(item.simulationExamId) ? 'done' : ''}`} onClick={() => onClickButton(item.id)}>
+                                    <button
+                                        key={index}
+                                        className={`item ${item.id == selected ? 'btn-selected' : ''}`}
+                                        onClick={() => onClickButton(item.id)}
+                                        disabled={done.includes(item.simulationExamId)}
+                                    >
                                         <div>
                                             {i + 1}
                                         </div>

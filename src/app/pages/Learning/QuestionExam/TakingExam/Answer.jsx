@@ -48,17 +48,14 @@ export default function Answer({
         const item = myAnswers.find(a => a.questionId === questionId);
 
         if (!item) {
-            // Chưa trả lời
-            return '';
-        } else if (item.answers?.length !== (Number(question.correctAnswer))) {
-            // Trả lời chưa đủ
-            return 'none';
+            return '';// Chưa trả lời
+        } else if (item?.answers?.length != (Number(question.correctAnswer))) {
+            return 'none';// Trả lời chưa đủ
         } else if (item?.answers?.length == (Number(question.correctAnswer))) {
-            // Trả lời đủ
-            return 'full';
+            return 'full';// Trả lời đủ
         }
 
-        return 'answered';
+        return '';
     };
 
     const checkAnswersResult = async (questionsAnswers, myAnswers) => {
@@ -118,7 +115,7 @@ export default function Answer({
         // });
 
         const resultFlat = myAnswers.flatMap(item =>
-            item.answers.map(ans => ({
+            item.answers?.map(ans => ({
                 answerId: ans.answerId,
             }))
         );

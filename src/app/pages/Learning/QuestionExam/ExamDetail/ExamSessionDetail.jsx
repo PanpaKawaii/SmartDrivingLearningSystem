@@ -1,10 +1,12 @@
+import StarsBackground from '../../../../components/StarsBackground/StarsBackground';
 
 import './ExamSessionDetail.css';
 
 export default function ExamSessionDetail() {
     return (
         <div className='exam-session-detail-container'>
-            ExamSessionDetail
+            <StarsBackground />
+            ExamSessionDetail Question/Simulation
         </div>
     )
 }

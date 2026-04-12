@@ -54,10 +54,6 @@
                     background: #3b82f640;
                 }
 
-                &.answered {
-                    background: #3b82f640;
-                }
-
                 &.selected {
                     padding: 3px;
                     border-width: 2px;

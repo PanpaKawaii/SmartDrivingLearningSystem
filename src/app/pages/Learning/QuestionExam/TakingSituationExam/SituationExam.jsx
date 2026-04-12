@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchData } from '../../../../../mocks/CallingAPI';
+import { fetchData, postData } from '../../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../../hooks/AuthContext/AuthContext';
@@ -12,6 +12,7 @@ import './SituationExam.css';
 export default function SituationExam() {
     const { user, refreshNewToken } = useAuth();
 
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     const Params = useParams();
     const navigate = useNavigate();
 
@@ -26,6 +27,13 @@ export default function SituationExam() {
 
     const [selectedScenarioId, setSelectedScenarioId] = useState(null);
     const [myResults, setMyResults] = useState([]);
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const [done, setDone] = useState([]);
+
+    useEffect(() => {
+        const selectedScenario = SIMULATIONSCENARIOs.find(ss => ss.id == selectedScenarioId);
+        setDone(p => selectedScenario ? [...p, selectedScenario?.simulationExamId] : p);
+    }, [selectedScenarioId])
 
     useEffect(() => {
         if (user?.roleName != 'Student' && localStorage.getItem('SituationExam') == new Date().toLocaleDateString()) {
@@ -51,7 +59,7 @@ export default function SituationExam() {
                 setThisSituationExam(ThisSituationExamResponse);
                 setSIMULATIONSCENARIOs(SimulationItems);
                 setSelectedScenarioId(p => p ? p : SimulationItems?.[0]?.id);
-                localStorage.setItem('Exam', new Date().toLocaleDateString());
+                localStorage.setItem('SituationExam', new Date().toLocaleDateString());
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -66,10 +74,11 @@ export default function SituationExam() {
 
     const handleUpdateDurationScore = (simulationExamId, durationSecond, score) => {
         console.log(simulationExamId, durationSecond, score);
-        // ==FIX==
+        const index = SIMULATIONSCENARIOs?.findIndex(ss => ss.simulationExamId == simulationExamId);
         setMyResults(p => p.find(r => r.simulationExamId == simulationExamId) ?
             p :
             [...p, {
+                index: index ? index + 1 : (index == 0 ? 1 : '#'),
                 simulationExamId: simulationExamId,
                 durationSecond: durationSecond,
                 score: score,
@@ -82,9 +91,39 @@ export default function SituationExam() {
         // }]);
     };
 
-    const handleSubmitExam = () => {
-        console.log('Submit!');
+    const handleSubmitExam = async () => {
+        // ==FIX==
+        const fillUpMyResults = ThisSituationExam?.simulationExams?.map(se => {
+            const result = myResults.find(mr => mr.simulationExamId == se.id);
+            return {
+                simulationExamId: result ? result.simulationExamId : se.id,
+                durationSecond: result ? result.durationSecond : 0,
+                score: result ? result.score : 0,
+            }
+        });
+        console.log('fillUpMyResults', fillUpMyResults);
+        const SimulationSessionsData = {
+            situationExamId: examId,
+            simulationSessionDetails: fillUpMyResults,
+        };
+        console.log('SimulationSessionsData:', SimulationSessionsData);
         console.log('==================================================');
+
+        setLoadingSubmit(true);
+        const token = user?.token || '';
+        try {
+            const result = await postData('SimulationSessions', SimulationSessionsData, token);
+            console.log('result', result);
+            navigate(`./../situation-exam-result/${result?.id}`);
+
+            await sleep(1000);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+            if (error.status == 401) refreshNewToken(user);
+        } finally {
+            setLoadingSubmit(false);
+        };
     };
 
     const selectedScenario = SIMULATIONSCENARIOs.find(ss => ss.id == selectedScenarioId);
@@ -100,14 +139,14 @@ export default function SituationExam() {
                 <ControlledVideo
                     myResults={myResults}
                     selectedScenario={selectedScenario}
-                    allowRestart={true}
+                    allowRestart={false}
                     allowContinue={true}
                     baseScore={ThisSituationExam?.simulationExams?.find(se => se.simulation?.id == selectedScenario?.id)?.baseScore}
                     additionalFunction={(propE) => { handleUpdateDurationScore(propE?.simulationExamId, propE?.durationSecond, propE?.score); }}
                 />
                 <ListScenario
                     list={SIMULATIONSCENARIOs}
-                    done={myResults.map(r => r.simulationExamId)}
+                    done={done}
                     groupBy={'simulationChapterId'}
                     label={'Danh sách kịch bản mô phỏng'}
                     onClickButton={setSelectedScenarioId}
@@ -116,7 +155,7 @@ export default function SituationExam() {
                         <button
                             className='btn btn-end'
                             onClick={() => handleSubmitExam()}
-                            disabled={loading}
+                            disabled={loadingSubmit}
                         >
                             KẾT THÚC
                         </button>

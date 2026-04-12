@@ -64,7 +64,14 @@ export default function ControlledVideo({
                     // setStopMoment(exactSeconds);
                     console.log('⏸ Video dừng tại:', exactSeconds, 'giây');
                 } else {
-                    if (allowContinue) {
+                    if (video.ended) {
+                        if (allowRestart) {
+                            video.currentTime = 0;
+                            video.play();
+                            lastTimeRef.current = 0;
+                            setStopMoment(null);
+                        }
+                    } else if (allowContinue) {
                         video.play();
                     }
                 }
@@ -125,7 +132,7 @@ export default function ControlledVideo({
                     />
                     <div className='content'>
                         <div className='bars'>
-                            {stopMoment &&
+                            {(stopMoment || stopMoment == 0) &&
                                 <div className='bar second-bar'>
                                     {/* Video duration - red - blue */}
                                     <div
@@ -159,7 +166,7 @@ export default function ControlledVideo({
                                     }}
                                 />
                                 {/* Triangle mark enter event - green */}
-                                {stopMoment &&
+                                {(stopMoment || stopMoment == 0) &&
                                     <div className='mark'
                                         style={{
                                             left: `${100 * stopMoment / selectedScenario?.totalTime || 0}%`,
@@ -222,15 +229,27 @@ export default function ControlledVideo({
                         </div>
                     </div>
                     {myResults?.length > 0 &&
-                        <div>
-                            {myResults.map((result, index) => (
-                                <div key={index}>
-                                    <div>{result.simulationExamId}</div>
-                                    <div>{result.durationSecond}</div>
-                                    <div>{result.score}</div>
-                                    <hr />
-                                </div>
-                            ))}
+                        <div className='my-results'>
+                            <h3>CHI TIẾT BÀI LÀM</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Kịch bản</th>
+                                        <th>Thời gian</th>
+                                        <th>Điểm</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {myResults.sort((a, b) => a.index - b.index)?.map((result, index) => (
+                                        <tr key={index}>
+                                            <td>{result.index}</td>
+                                            {/* <div>{result.simulationExamId}</div> */}
+                                            <td>{result.durationSecond}</td>
+                                            <td>{result.score}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     }
                 </>

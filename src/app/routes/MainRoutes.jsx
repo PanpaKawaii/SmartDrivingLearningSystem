@@ -91,6 +91,7 @@ export default function MainRoutes() {
                     <Route path='learning/list-exam' element={<ListExam />} />
                     <Route path='learning/list-exam/:examId' element={<ExamDetail />} />
                     <Route path='learning/list-exam/:examId/exam-result/:sessionId' element={<ExamSessionDetail />} />
+                    <Route path='learning/list-exam/:examId/situation-exam-result/:sessionId' element={<ExamSessionDetail />} />
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
                     <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
 
