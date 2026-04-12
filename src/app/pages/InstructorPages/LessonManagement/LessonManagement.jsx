@@ -50,6 +50,7 @@ export default function LessonManagement() {
                     pageSize: serverPagination.pageSize,
                 });
                 const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
+                console.log('Finished loading lessons', res);
                 setLessons(normalizeItems(res));
                 setServerPagination(prev => ({
                     ...prev,

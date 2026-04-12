@@ -58,7 +58,7 @@ export default function LessonModal({
             }
         }
     }, [isOpen, lessonProp, action, listChapters]);
-
+    console.log('Current lesson in modal:', lesson.id);
     const handleLicenseChange = (e) => {
         const licenseId = e.target.value;
         setDrivingLicenseId(licenseId);
@@ -162,10 +162,14 @@ export default function LessonModal({
                     </div>
                 )}
                 <TinyMCEEditor
-                    initialValue={lesson.content}
+                    value={lesson.content}
                     onChange={content => setLesson(prev => ({ ...prev, content }))}
+                    placeholder= 'Nhập nội dung bài học tại đây...'
+                    action={action}
+                    entityId={lesson.id}
+                    imageTarget= 'LessonImage'
                 />
-                <RichTextEditor
+                {/* <RichTextEditor
                     key={`${action}-${lesson.id || "new"}`}
                     className='ins-form-textarea'
                     initialHtml={editorInitialHtml}
@@ -186,7 +190,7 @@ export default function LessonModal({
                             return uploadMedia(files, entityId, imageTarget, token);
                         },
                     } : {}}
-                />
+                /> */}
             </div>
         </Modal>
     );
