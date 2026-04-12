@@ -1,8 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
-import RichTextEditor from "../../../components/RichTextEditor/RichTextEditor";
-
+import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
+import { uploadMedia, deleteMedia } from '../../../../mocks/CallingAPI';
+import TinyMCEEditor from '../../../components/RichTextEditor/TinyMCE/TinyMCEEditor';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 export default function LessonModal({
     isOpen,
@@ -13,6 +16,7 @@ export default function LessonModal({
     action,
     listChapters
 }) {
+    const { user } = useAuth?.() || {};
     // Giá trị mặc định cho lesson mới
     const defaultLesson = {
         name: '',
@@ -27,7 +31,14 @@ export default function LessonModal({
     const [lesson, setLesson] = useState(lessonProp ? { ...lessonProp } : defaultLesson);
     const [chapters, setChapters] = useState([]);
     const [drivingLicenseId, setDrivingLicenseId] = useState('');
+    const [editorInitialHtml, setEditorInitialHtml] = useState(lessonProp?.content || "");
+    const token = user?.token || "";
+    const hasPersistedLessonId = Boolean(lesson?.id && String(lesson.id).trim());
 
+    // Đồng bộ initialHtml khi lessonProp thay đổi
+    useEffect(() => {
+        setEditorInitialHtml(lessonProp?.content || "");
+    }, [lessonProp]);
     useEffect(() => {
         if (isOpen) {
             if (lessonProp && action === 'edit') {
@@ -62,7 +73,7 @@ export default function LessonModal({
     };
 
     const handleRichTextChange = (html) => {
-        setLesson((prev) => ({ ...prev, content: html }));
+        setLesson((prev) => ({ ...prev, content: typeof html === "string" ? html : "" }));
     };
 
     const handleSubmit = () => {
@@ -73,7 +84,7 @@ export default function LessonModal({
         setLesson(defaultLesson);
         onClose();
     };
-    console.log('LessondrivingLicenseId props:', drivingLicenseId);
+    
     return (
         <Modal
             isOpen={isOpen}
@@ -145,15 +156,39 @@ export default function LessonModal({
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Nội dung bài học</label>
+                {!hasPersistedLessonId && (
+                    <div style={{ color: '#888', fontSize: 13, marginBottom: 4 }}>
+                        Lưu bài học trước để bật chức năng upload, kéo-thả, dán ảnh.
+                    </div>
+                )}
+                <TinyMCEEditor
+                    initialValue={lesson.content}
+                    onChange={content => setLesson(prev => ({ ...prev, content }))}
+                />
                 <RichTextEditor
-                    key={`${lesson.id || "new"}`}
+                    key={`${action}-${lesson.id || "new"}`}
                     className='ins-form-textarea'
-                    initialHtml={lesson.content}
+                    initialHtml={editorInitialHtml}
                     onHtmlChange={handleRichTextChange}
                     placeholder='Bắt đầu soạn thảo nội dung bài học tại đây...'
                     style={{ minHeight: '180px' }}
-                ></RichTextEditor>
+                    enableImage={hasPersistedLessonId}
+                    imageFeatures={{
+                        upload: hasPersistedLessonId,
+                        url: true,
+                        dragDrop: hasPersistedLessonId,
+                        paste: hasPersistedLessonId,
+                    }}
+                    imageUploadConfig={hasPersistedLessonId ? {
+                        entityId:  (lesson.id),
+                        imageTarget: "LessonImage",
+                        uploadHandler: async ({ files, entityId, imageTarget }) => {
+                            return uploadMedia(files, entityId, imageTarget, token);
+                        },
+                    } : {}}
+                />
             </div>
         </Modal>
     );
 }
+

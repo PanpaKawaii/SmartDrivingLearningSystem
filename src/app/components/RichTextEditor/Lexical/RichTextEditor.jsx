@@ -119,35 +119,58 @@ function normalizeRichTextHtml(inputHtml) {
 
 function InitialHtmlPlugin({ initialHtml }) {
   const [editor] = useLexicalComposerContext();
-  const lastAppliedHtmlRef = useRef(null);
+  const hasLoadedRef = useRef(false);
+  const lastExternalHtmlRef = useRef(initialHtml);
 
   useEffect(() => {
-    const safeHtml = normalizeRichTextHtml(initialHtml);
-    if (lastAppliedHtmlRef.current === safeHtml) return;
-    lastAppliedHtmlRef.current = safeHtml;
+    if (!hasLoadedRef.current || lastExternalHtmlRef.current !== initialHtml) {
+      hasLoadedRef.current = true;
+      lastExternalHtmlRef.current = initialHtml;
 
-    if (typeof window === "undefined") return;
+      if (typeof window === "undefined") return;
 
-    editor.update(() => {
-      const root = $getRoot();
-      root.clear();
+      let safeHtml = normalizeRichTextHtml(initialHtml);
 
-      if (!safeHtml.trim()) {
-        root.append($createParagraphNode());
-        return;
-      }
+      editor.update(() => {
+        const root = $getRoot();
+        root.clear();
 
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(safeHtml, "text/html");
-      const nodes = $generateNodesFromDOM(editor, dom);
+        if (!safeHtml.trim()) {
+          root.append($createParagraphNode());
+          return;
+        }
 
-      if (nodes.length > 0) {
-        root.append(...nodes);
-      } else {
-        root.append($createParagraphNode());
-      }
-    });
-  }, [editor, initialHtml]);
+        try {
+          if (!safeHtml.includes("<")) {
+            safeHtml = `<p>${safeHtml.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`;
+          }
+
+          const parser = new DOMParser();
+          const dom = parser.parseFromString(safeHtml, "text/html");
+          const nodes = $generateNodesFromDOM(editor, dom);
+
+          if (nodes.length > 0) {
+            // Filter to only valid root-level nodes (ElementNode)
+            const validNodes = nodes.filter(node => {
+              // Check if node is an ElementNode by checking if it has __type
+              return node && node.__type && node.__type !== "text" && node.__type !== "root";
+            });
+
+            if (validNodes.length > 0) {
+              root.append(...validNodes);
+            } else {
+              root.append($createParagraphNode());
+            }
+          } else {
+            root.append($createParagraphNode());
+          }
+        } catch (err) {
+          console.error("[InitialHtmlPlugin] Error loading HTML:", err);
+          root.append($createParagraphNode());
+        }
+      });
+    }
+  }, [editor]);
 
   return null;
 }

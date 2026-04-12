@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { postData, putData, uploadMedia } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
-import RichTextEditor from "../../../components/RichTextEditor/RichTextEditor";
+import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
 
 import "../EditModal.css";
 
