@@ -242,8 +242,6 @@ export default function RegisterFace({
                 <div className='link' onClick={() => setRotate(0)}>Đăng nhập ngay!</div>
             </div>
 
-            <button onClick={() => setSuccessSendOTP(true)}>OTP</button>
-
             {successSendOTP &&
                 <div className='form-otp'>
                     <div className='otp-container' onPaste={handlePaste}>

@@ -5,6 +5,7 @@ import InstructorLayout from '../layouts/InstructorLayout/InstructorLayout.jsx'
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
 
 import Home from '../pages/Home/Home.jsx'
+import ForgetPassword from '../pages/LoginRegister/ForgetPassword/ForgetPassword.jsx'
 import UserProfile from '../pages/UserProfile/UserProfile.jsx'
 
 import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
@@ -69,6 +70,7 @@ export default function MainRoutes() {
             <Routes>
                  <Route path='/' element={<UserLayout />} >
                     <Route index element={<Home />} />
+                    <Route path='forget-password' element={<ForgetPassword />} />
                     <Route path='profile' element={<UserProfile />} />
 
                     <Route path='driving-license' element={<DrivingLicense />} />

@@ -59,6 +59,7 @@ export default function UserHeader({
 
     useEffect(() => {
         if (location.state?.openLogin == 'true') setLoginOpen(true);
+        else if (location.state?.openLogin == 'false') setLoginOpen(false);
     }, [location.state]);
 
     return (
