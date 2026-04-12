@@ -34,7 +34,10 @@ export default function BoxChat() {
 
     const addMessage = async (newMessage) => {
         console.log('newMessage: ', newMessage);
-        const SendMessage = { message: newMessage };
+        const SendMessage = {
+            prompt: newMessage,
+            userIdentifier: user?.id,
+        };
         setLoading(true);
         const token = user?.token;
         try {
