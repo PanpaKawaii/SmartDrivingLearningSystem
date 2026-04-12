@@ -39,7 +39,7 @@ export default function LessonManagement() {
                 
                 const drivingLicenseRes = await fetchData(`DrivingLicenses/all?${subQuery.toString()}`, token);
                 setDrivingLicenses(normalizeItems(drivingLicenseRes));
-                console.log('Fetched driving licenses:', drivingLicenseRes);
+                
                 if (chapters.length === 0) {
                     const chapterRes = await fetchData(`QuestionChapters?${subQuery.toString()}`, token);
                     setChapters(normalizeItems(chapterRes));
@@ -50,7 +50,7 @@ export default function LessonManagement() {
                     pageSize: serverPagination.pageSize,
                 });
                 const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
-                console.log('Finished loading lessons', res);
+                //console.log('Finished loading lessons', res);
                 setLessons(normalizeItems(res));
                 setServerPagination(prev => ({
                     ...prev,
@@ -91,7 +91,9 @@ export default function LessonManagement() {
         }
     };    
     const handleSave = (newLesson) => {
-
+        setRefresh(r => r + 1);
+        setShowModal(false);
+        setSelectedItem(null);
     };
     const columns = [
         { key: 'index', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
@@ -132,6 +134,7 @@ export default function LessonManagement() {
             </div>
         )},
     ];
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaa:', selectedItem);
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>

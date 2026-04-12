@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
 import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
-import { uploadMedia, deleteMedia } from '../../../../mocks/CallingAPI';
+import { uploadMedia, deleteMedia, fetchData, putData, deleteData } from '../../../../mocks/CallingAPI';
 import TinyMCEEditor from '../../../components/RichTextEditor/TinyMCE/TinyMCEEditor';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
@@ -33,7 +33,7 @@ export default function LessonModal({
     const [drivingLicenseId, setDrivingLicenseId] = useState('');
     const [editorInitialHtml, setEditorInitialHtml] = useState(lessonProp?.content || "");
     const token = user?.token || "";
-    const hasPersistedLessonId = Boolean(lesson?.id && String(lesson.id).trim());
+    //const hasPersistedLessonId = Boolean(lesson?.id && String(lesson.id).trim());
 
     // Đồng bộ initialHtml khi lessonProp thay đổi
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function LessonModal({
             }
         }
     }, [isOpen, lessonProp, action, listChapters]);
-    console.log('Current lesson in modal:', lesson.id);
+    console.log('Current lesson in modal:', lesson);
     const handleLicenseChange = (e) => {
         const licenseId = e.target.value;
         setDrivingLicenseId(licenseId);
@@ -76,10 +76,49 @@ export default function LessonModal({
         setLesson((prev) => ({ ...prev, content: typeof html === "string" ? html : "" }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!lesson.name.trim()) return;
         if (!lesson.chapter) return;
         if (!lesson.description.trim()) return;
+
+        // Nếu là edit, thực hiện kiểm tra ảnh
+        if (action === 'edit' && lesson.id) {
+            try {
+                // 1. Lấy danh sách ảnh của lesson
+                const lessonImages = await fetchData(`LessonImages/${lesson.id}`, token);
+                // 2. Duyệt từng ảnh, nếu url không còn trong content thì xóa
+                for (const img of lessonImages) {
+                    if (img.url && !lesson.content.includes(img.url)) {
+                        try {
+                            await deleteMedia(img.url, 'LessonImage', token);
+                        } catch (e) { console.error('deleteMedia error', e); }
+                        try {
+                            await deleteData(`LessonImages/${img.id}`, token);
+                        } catch (e) { console.error('delete LessonImages error', e); }
+                    }
+                }
+            } catch (e) {
+                console.error('Error cleaning up lesson images:', e);
+            }
+        }
+
+        // 3. Lưu bài học (PUT)
+        if (action === 'edit' && lesson.id) {
+            const payload = {
+                questionChapterId: lesson.chapter,
+                index: lesson.index,
+                name: lesson.name,
+                description: lesson.description,
+                content: lesson.content,
+                status: lesson.status
+            };
+            try {
+                await putData(`QuestionLessons/${lesson.id}`, payload, token);
+            } catch (e) {
+                console.error('Error saving lesson:', e);
+            }
+        }
+        
         if (onSave) onSave(lesson);
         setLesson(defaultLesson);
         onClose();
@@ -113,12 +152,12 @@ export default function LessonModal({
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr 1fr', gap: '16px' }}>
                 <div className='ins-form-group'>
                     <label className='ins-form-label'>Bằng <span style={{ color: 'var(--ins-error)' }}>*</span></label>
                     <select className='ins-form-select' name='drivingLicenseId' value={drivingLicenseId} onChange={handleLicenseChange}>
                         <option value='' disabled>Chọn bằng...</option>
-                        {listLicenses.map((ch) => (
+                        {listLicenses.map((ch) => ( 
                             <option key={ch.id} value={ch.id}>{ch.name}</option>
                         ))}
                     </select>
@@ -132,12 +171,36 @@ export default function LessonModal({
                         ))}
                     </select>
                 </div>
-                <div className='ins-form-group'>
+                <div className='ins-form-group' >
                     <label className='ins-form-label'>Trạng thái</label>
                     <select className='ins-form-select' name='status' value={lesson.status} onChange={handleChange}>
                         <option value={0}>Nháp</option>
                         <option value={1}>Hoạt động</option>
                     </select>
+                </div>
+                <div className='ins-form-group'>
+                    <label className='ins-form-label'>Vị trí <span style={{ color: 'var(--ins-error)' }}>*</span></label>
+                    <input
+                        className='ins-form-input'
+                        name='index'
+                        value={lesson.index}
+                        onChange={e => {
+                            // Chỉ cho phép số nguyên >0
+                            const val = e.target.value;
+                            if (val === '' || /^[1-9]\d*$/.test(val)) {
+                                setLesson(prev => ({ 
+                                    ...prev, 
+                                    index: val === '' ? '' : parseInt(val, 10) 
+                                }));
+                            }
+                        }}
+                        type='number'
+                        min={0}
+                        placeholder='--'
+                        required
+                        step='1'
+                        style={{ width: '100%', minWidth: 0 }}
+                    />
                 </div>
             </div>
 
@@ -156,11 +219,11 @@ export default function LessonModal({
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Nội dung bài học</label>
-                {!hasPersistedLessonId && (
+                {/* {!hasPersistedLessonId && (
                     <div style={{ color: '#888', fontSize: 13, marginBottom: 4 }}>
                         Lưu bài học trước để bật chức năng upload, kéo-thả, dán ảnh.
                     </div>
-                )}
+                )} */}
                 <TinyMCEEditor
                     value={lesson.content}
                     onChange={content => setLesson(prev => ({ ...prev, content }))}
@@ -168,6 +231,7 @@ export default function LessonModal({
                     action={action}
                     entityId={lesson.id}
                     imageTarget= 'LessonImage'
+
                 />
                 {/* <RichTextEditor
                     key={`${action}-${lesson.id || "new"}`}
