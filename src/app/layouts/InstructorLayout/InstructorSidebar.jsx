@@ -23,6 +23,7 @@ const menuSections = [
     {
         label: 'Quản lý Khóa học',
         items: [
+            { name: 'Quản lý bằng lái', icon: 'fa-book', path: '/instructor/license-management' },
             { name: 'Quản lý Chương', icon: 'fa-book', path: '/instructor/chapter-management' },
             { name: 'Quản lý Bài học', icon: 'fa-graduation-cap', path: '/instructor/lesson-management' },
             { name: 'Ngân hàng Câu hỏi', icon: 'fa-question-circle', path: '/instructor/question-bank' },

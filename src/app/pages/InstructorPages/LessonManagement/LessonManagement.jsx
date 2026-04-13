@@ -1,4 +1,5 @@
-import { useEffect ,useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import LessonModal from './LessonModal';
 import '../InstructorPages.css';
@@ -10,77 +11,133 @@ const STATUS_LABELS = {
     '1': 'Public',
     '0': 'Đã ẩn',
 };
-
-
+const normalizeItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.items)) return payload.items;
+    return [];
+};
 export default function LessonManagement() {
     const { user } = useAuth();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const token = user?.token || '';
+    const chapterIdParam = searchParams.get('chapterId') || '';
+    const chapterNameParam = searchParams.get('chapterName') || '';
     const [showModal, setShowModal] = useState(false);
     const [lessons, setLessons] = useState([]);
-    const [chapters, setChapters] = useState([]);
+    const [allChapters, setAllChapters] = useState([]);
     const [drivingLicenses, setDrivingLicenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
-    // State for view popup
+    // Filter state
+    const [filterLicense, setFilterLicense] = useState('');
+    const [filterChapter, setFilterChapter] = useState(chapterIdParam);
+
     const [selectedItem, setSelectedItem] = useState(null);
+
+    // Chỉ cho chọn chương khi đã chọn bằng lái
+    const availableChapters = filterLicense
+        ? allChapters.filter(c => c.drivingLicenseId === filterLicense)
+        : [];
+
+    useEffect(() => {
+        if (chapterIdParam && allChapters.length > 0) {
+            const preChapter = allChapters.find(c => c.id === chapterIdParam);
+            if (preChapter) {
+                setFilterLicense(preChapter.drivingLicenseId || '');
+                setFilterChapter(chapterIdParam);
+            }
+        }
+        
+    }, [chapterIdParam, allChapters]);
+
+    // Load licenses + chapters một lần khi mở trang
+    useEffect(() => {
+        (async () => {
+            try {
+                const subQuery = new URLSearchParams({ page: '1', pageSize: '500', status: 1 });
+                const [dlRes, chRes] = await Promise.all([
+                    fetchData(`DrivingLicenses/all?${subQuery.toString()}`, token),
+                    fetchData(`QuestionChapters?${subQuery.toString()}`, token),
+                ]);
+                setDrivingLicenses(normalizeItems(dlRes));
+                setAllChapters(normalizeItems(chRes));
+            } catch { 
+                setError('Lỗi tải dữ liệu bằng lái và chương.'); 
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [token]);
+
+    // Load lessons khi filter thay đổi hoặc refresh
     useEffect(() => {
         (async () => {
             setLoading(true);
             setError(null);
-            const subQuery = new URLSearchParams({
-                page: '1',
-                pageSize: '500',
-                status: 1,
-            });            
             try {
-                const token = user?.token || '';
-                
-                const drivingLicenseRes = await fetchData(`DrivingLicenses/all?${subQuery.toString()}`, token);
-                setDrivingLicenses(normalizeItems(drivingLicenseRes));
-                
-                if (chapters.length === 0) {
-                    const chapterRes = await fetchData(`QuestionChapters?${subQuery.toString()}`, token);
-                    setChapters(normalizeItems(chapterRes));
-                }
-                // Lấy posts phân trang
                 const query = new URLSearchParams({
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-                const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
-                //console.log('Finished loading lessons', res);
-                setLessons(normalizeItems(res));
-                setServerPagination(prev => ({
-                    ...prev,
-                    page: res?.page || prev.page,
-                    pageSize: res?.pageSize || prev.pageSize,
-                    totalCount: res?.totalCount || prev.totalCount,
-                    totalPages: res?.totalPages || 1,
-                    
-                }));
-            } catch (err) {
+                let items = [];
+                if (filterChapter) {
+                    query.set('questionChapterId', filterChapter);
+                    const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
+                    items = normalizeItems(res);
+                    setServerPagination(prev => ({
+                        ...prev,
+                        page: res?.page || prev.page,
+                        pageSize: res?.pageSize || prev.pageSize,
+                        totalCount: res?.totalCount ?? prev.totalCount,
+                        totalPages: res?.totalPages || 1,
+                    }));
+                } else if (filterLicense) {
+                    const chapterIds = allChapters.filter(c => c.drivingLicenseId === filterLicense).map(c => c.id);
+                    console.log('Filtering lessons by chapters:', chapterIds);
+                    if (chapterIds.length > 0) {
+                        const res = await fetchData(`QuestionLessons?page=1&pageSize=5000`, token);
+                        items = normalizeItems(res).filter(lesson => chapterIds.includes(lesson.questionChapterId));
+                        setServerPagination(prev => ({
+                            ...prev,
+                            page: 1,
+                            pageSize: prev.pageSize,
+                            totalCount: items.length,
+                            totalPages: Math.ceil(items.length / prev.pageSize) || 1,
+                        }));
+                        // Cắt trang phía FE
+                        const startIdx = (serverPagination.page - 1) * serverPagination.pageSize;
+                        items = items.slice(startIdx, startIdx + serverPagination.pageSize);
+                    }
+                } else {
+                    const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
+                    items = normalizeItems(res);
+                    setServerPagination(prev => ({
+                        ...prev,
+                        page: res?.page || prev.page,
+                        pageSize: res?.pageSize || prev.pageSize,
+                        totalCount: res?.totalCount ?? prev.totalCount,
+                        totalPages: res?.totalPages || 1,
+                    }));
+                }
+                setLessons(items);
+            } catch {
                 setError('Lỗi tải dữ liệu');
             } finally {
                 setLoading(false);
-                
             }
         })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
-    
-    const normalizeItems = (payload) => {
-        if (Array.isArray(payload)) return payload;
-        if (Array.isArray(payload?.items)) return payload.items;
-        return [];
-    };
+    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense, allChapters]);
+
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
     };
-    const handleToggleStatus = async (id, currentStatus) => {
+
+    const handleToggleStatus = async (id) => {
         try {
             setLoading(true);
-            const token = user?.token || '';
             // Toggle: 1 (Public) <-> 0 (Hidden)
             await patchData(`QuestionLessons/${id}`, { }, token);
             setRefresh(r => r + 1);
@@ -89,28 +146,63 @@ export default function LessonManagement() {
         } finally {
             setLoading(false);
         }
+    };
+    
+    const handleFilterLicense = (e) => {
+        const val = e.target.value;
+        setFilterLicense(val);
+        setFilterChapter('');
+        setSearchParams({});
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleFilterChapter = (e) => {
+        const val = e.target.value;
+        setFilterChapter(val);
+        if (val) {
+            const ch = allChapters.find(c => c.id === val);
+            setSearchParams({ chapterId: val, chapterName: ch?.name || '' });
+        } else {
+            setSearchParams({});
+        }
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleClearBadge = () => {
+        setFilterLicense('');
+        setFilterChapter('');
+        setSearchParams({});
+        setServerPagination(prev => ({ ...prev, page: 1 }));
     };    
-    const handleSave = (newLesson) => {
+    const handleSave = () => {
         setRefresh(r => r + 1);
         setShowModal(false);
         setSelectedItem(null);
     };
+
+    // Label cho context badge
+    const activeBadgeText = (() => {
+        if (filterChapter) {
+            const ch = allChapters.find(c => c.id === filterChapter);
+            return chapterNameParam || ch?.name || '';
+        }
+        return '';
+    })();
+
     const columns = [
         { key: 'index', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'name', label: 'Tên bài học', width: '100px' },
         { key: 'questionChapterId', label: 'Bằng', render: (val) => {
-            const drivingLicense = drivingLicenses.find(t => t.id === chapters.find(t => t.id === val)?.drivingLicenseId);
+            const drivingLicense = drivingLicenses.find(t => t.id === allChapters.find(t => t.id === val)?.drivingLicenseId);
             return drivingLicense?.name || '---';
         } },
         { key: 'questionChapterId', label: 'Chương', width: '100px', render: (val) => {
-            const chapter = chapters.find(t => t.id === val);
+            const chapter = allChapters.find(t => t.id === val);
             return chapter?.name || '---';
         } },
-        // { key: 'content', label: 'Nội dung',
-        // render: (val) => {
-        //     return <div dangerouslySetInnerHTML={{ __html: val }} />;
-        // } },
-        { key: 'content', label: 'Nội dung'},
+        { key: 'content', label: 'Nội dung', render: (val) => {
+           return <div dangerouslySetInnerHTML={{ __html: val }}/>;
+        }},
         { key: 'status', label: 'Trạng thái', width: '100px', render: (val) => {
                 let cls = 'active';
                 if (val === 0) cls = 'hidden';
@@ -118,7 +210,7 @@ export default function LessonManagement() {
                 return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
         },},
         { key: 'actions', label: 'Thao tác', width: '120px', render: (_, row) => (
-            <div className='ins-action-cell'>
+         <div className='ins-action-cell'>
                 <button className='ins-action-btn edit' title='Sửa' onClick={() => {
                     setSelectedItem(row);
                     setShowModal(true);
@@ -134,7 +226,7 @@ export default function LessonManagement() {
             </div>
         )},
     ];
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaa:', selectedItem);
+
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
@@ -154,16 +246,38 @@ export default function LessonManagement() {
                 columns={columns} 
                 data={lessons}
                 loading={loading}
-                error={error}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange} 
+                filters={[
+                    {
+                        id: 'license-filter',
+                        value: filterLicense,
+                        onChange: handleFilterLicense,
+                        options: drivingLicenses,
+                        placeholder: '— Tất cả hạng bằng —',
+                    },
+                    {
+                        id: 'chapter-filter',
+                        value: filterChapter,
+                        onChange: handleFilterChapter,
+                        options: availableChapters,
+                        placeholder: filterLicense ? '— Tất cả chương —' : '— Chọn bằng trước —',
+                        disabled: !filterLicense,
+                    },
+                ]}
+                contextBadge={
+                    activeBadgeText
+                        ? { text: activeBadgeText, onClear: handleClearBadge }
+                        : null
+                }
             />
             <LessonModal 
                 isOpen={showModal} 
                 lesson={selectedItem}
                 action={selectedItem ? 'edit' : 'add'}
                 listLicenses={drivingLicenses}
-                listChapters={chapters}
+                listChapters={allChapters}
+                defaultChapterId={filterChapter}
                 onClose={() => {
                     setShowModal(false);
                     setSelectedItem(null);

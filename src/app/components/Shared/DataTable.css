@@ -5,7 +5,8 @@
 }
 
 .ins-data-table-header {
-    padding: 20px 24px;
+    padding: 10px 24px;
+    padding-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -176,4 +177,28 @@ color: #fbbf24;
     height: 6px;
     border-radius: 50%;
     background-color: currentColor;
+}
+
+.ins-data-table-search-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ins-data-table-filter-bar-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ins-data-table-badge-row {
+    padding: 0px 24px 0;
+    padding-bottom: 10px;
+}
+
+.ins-data-table-state-cell {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--ins-on-surface-variant);
+    font-size: 0.875rem;
 }

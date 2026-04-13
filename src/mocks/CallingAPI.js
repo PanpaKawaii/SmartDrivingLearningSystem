@@ -204,7 +204,7 @@ export const deleteMedia = async (fileUrl, imageTarget, token) => {
             imageTarget,
         });
 
-        const response = await fetch(`${apiUrl}api/media?${query.toString()}`, {
+        const response = await fetch(`${apiUrl}media?${query.toString()}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,

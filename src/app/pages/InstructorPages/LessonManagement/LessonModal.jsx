@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
 import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
-import { uploadMedia, deleteMedia, fetchData, putData, deleteData } from '../../../../mocks/CallingAPI';
+import { putData, deleteData } from '../../../../mocks/CallingAPI';
 import TinyMCEEditor from '../../../components/RichTextEditor/TinyMCE/TinyMCEEditor';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
@@ -14,7 +14,8 @@ export default function LessonModal({
     listLicenses,
     lesson: lessonProp,
     action,
-    listChapters
+    listChapters,
+    defaultChapterId,  // pre-fill từ Quick Navigate
 }) {
     const { user } = useAuth?.() || {};
     // Giá trị mặc định cho lesson mới
@@ -52,13 +53,23 @@ export default function LessonModal({
                     chapter: currentChapter ? currentChapter.id : (filteredChapters[0]?.id || '')
                 });
             } else if (action === 'add') {
-                setLesson(defaultLesson);
-                setDrivingLicenseId('');
-                setChapters([]);
+                // Pre-fill chapter nếu đến từ Quick Navigate
+                if (defaultChapterId) {
+                    const preChapter = listChapters.find(ch => ch.id === defaultChapterId);
+                    const preLicenseId = preChapter?.drivingLicenseId || '';
+                    setDrivingLicenseId(preLicenseId);
+                    const filteredChapters = listChapters.filter(ch => ch.drivingLicenseId === preLicenseId);
+                    setChapters(filteredChapters);
+                    setLesson({ ...defaultLesson, chapter: defaultChapterId });
+                } else {
+                    setLesson(defaultLesson);
+                    setDrivingLicenseId('');
+                    setChapters([]);
+                }
             }
         }
     }, [isOpen, lessonProp, action, listChapters]);
-    console.log('Current lesson in modal:', lesson);
+
     const handleLicenseChange = (e) => {
         const licenseId = e.target.value;
         setDrivingLicenseId(licenseId);
@@ -80,29 +91,8 @@ export default function LessonModal({
         if (!lesson.name.trim()) return;
         if (!lesson.chapter) return;
         if (!lesson.description.trim()) return;
+        // Không cần dọn dẹp ảnh, BE đã xử lý tự động
 
-        // Nếu là edit, thực hiện kiểm tra ảnh
-        if (action === 'edit' && lesson.id) {
-            try {
-                // 1. Lấy danh sách ảnh của lesson
-                const lessonImages = await fetchData(`LessonImages/${lesson.id}`, token);
-                // 2. Duyệt từng ảnh, nếu url không còn trong content thì xóa
-                for (const img of lessonImages) {
-                    if (img.url && !lesson.content.includes(img.url)) {
-                        try {
-                            await deleteMedia(img.url, 'LessonImage', token);
-                        } catch (e) { console.error('deleteMedia error', e); }
-                        try {
-                            await deleteData(`LessonImages/${img.id}`, token);
-                        } catch (e) { console.error('delete LessonImages error', e); }
-                    }
-                }
-            } catch (e) {
-                console.error('Error cleaning up lesson images:', e);
-            }
-        }
-
-        // 3. Lưu bài học (PUT)
         if (action === 'edit' && lesson.id) {
             const payload = {
                 questionChapterId: lesson.chapter,
@@ -116,6 +106,7 @@ export default function LessonModal({
                 await putData(`QuestionLessons/${lesson.id}`, payload, token);
             } catch (e) {
                 console.error('Error saving lesson:', e);
+                setError('Lỗi lưu bài học. Vui lòng thử lại.');
             }
         }
         
