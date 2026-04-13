@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import LessonModal from './LessonModal';
@@ -26,9 +26,12 @@ export default function LessonManagement() {
     const [lessons, setLessons] = useState([]);
     const [allChapters, setAllChapters] = useState([]);
     const [drivingLicenses, setDrivingLicenses] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [metaLoading, setMetaLoading] = useState(true); // load licenses + chapters
+    const [tableLoading, setTableLoading] = useState(true); // load lessons
+    const loading = metaLoading || tableLoading;
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
+    const allChaptersRef = useRef([]);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
     // Filter state
@@ -42,15 +45,17 @@ export default function LessonManagement() {
         ? allChapters.filter(c => c.drivingLicenseId === filterLicense)
         : [];
 
+    // Chỉ pre-fill một lần khi chapters được load lần đầu
+    const didPreFill = useRef(false);
     useEffect(() => {
-        if (chapterIdParam && allChapters.length > 0) {
+        if (chapterIdParam && allChapters.length > 0 && !didPreFill.current) {
+            didPreFill.current = true;
             const preChapter = allChapters.find(c => c.id === chapterIdParam);
             if (preChapter) {
                 setFilterLicense(preChapter.drivingLicenseId || '');
                 setFilterChapter(chapterIdParam);
             }
         }
-        
     }, [chapterIdParam, allChapters]);
 
     // Load licenses + chapters một lần khi mở trang
@@ -62,12 +67,15 @@ export default function LessonManagement() {
                     fetchData(`DrivingLicenses/all?${subQuery.toString()}`, token),
                     fetchData(`QuestionChapters?${subQuery.toString()}`, token),
                 ]);
+                const chapters = normalizeItems(chRes);
                 setDrivingLicenses(normalizeItems(dlRes));
-                setAllChapters(normalizeItems(chRes));
+                // Cập nhật cả state lẫn ref cùng lúc
+                allChaptersRef.current = chapters;
+                setAllChapters(chapters);
             } catch { 
                 setError('Lỗi tải dữ liệu bằng lái và chương.'); 
             } finally {
-                setLoading(false);
+                setMetaLoading(false);
             }
         })();
     }, [token]);
@@ -75,7 +83,7 @@ export default function LessonManagement() {
     // Load lessons khi filter thay đổi hoặc refresh
     useEffect(() => {
         (async () => {
-            setLoading(true);
+            setTableLoading(true);
             setError(null);
             try {
                 const query = new URLSearchParams({
@@ -95,8 +103,9 @@ export default function LessonManagement() {
                         totalPages: res?.totalPages || 1,
                     }));
                 } else if (filterLicense) {
-                    const chapterIds = allChapters.filter(c => c.drivingLicenseId === filterLicense).map(c => c.id);
-                    console.log('Filtering lessons by chapters:', chapterIds);
+                    const chapterIds = allChaptersRef.current
+                        .filter(c => c.drivingLicenseId === filterLicense)
+                        .map(c => c.id);
                     if (chapterIds.length > 0) {
                         const res = await fetchData(`QuestionLessons?page=1&pageSize=5000`, token);
                         items = normalizeItems(res).filter(lesson => chapterIds.includes(lesson.questionChapterId));
@@ -107,7 +116,6 @@ export default function LessonManagement() {
                             totalCount: items.length,
                             totalPages: Math.ceil(items.length / prev.pageSize) || 1,
                         }));
-                        // Cắt trang phía FE
                         const startIdx = (serverPagination.page - 1) * serverPagination.pageSize;
                         items = items.slice(startIdx, startIdx + serverPagination.pageSize);
                     }
@@ -126,10 +134,11 @@ export default function LessonManagement() {
             } catch {
                 setError('Lỗi tải dữ liệu');
             } finally {
-                setLoading(false);
+                setTableLoading(false);
             }
         })();
-    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense, allChapters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense]);
 
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
@@ -137,14 +146,14 @@ export default function LessonManagement() {
 
     const handleToggleStatus = async (id) => {
         try {
-            setLoading(true);
+            setTableLoading(true);
             // Toggle: 1 (Public) <-> 0 (Hidden)
             await patchData(`QuestionLessons/${id}`, { }, token);
             setRefresh(r => r + 1);
         } catch (err) {
             setError('Lỗi cập nhật trạng thái');
         } finally {
-            setLoading(false);
+            setTableLoading(false);
         }
     };
     
