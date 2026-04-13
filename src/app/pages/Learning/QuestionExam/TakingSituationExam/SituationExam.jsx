@@ -92,7 +92,6 @@ export default function SituationExam() {
     };
 
     const handleSubmitExam = async () => {
-        // ==FIX==
         const fillUpMyResults = ThisSituationExam?.simulationExams?.map(se => {
             const result = myResults.find(mr => mr.simulationExamId == se.id);
             return {
@@ -102,12 +101,12 @@ export default function SituationExam() {
             }
         });
         console.log('fillUpMyResults', fillUpMyResults);
+
         const SimulationSessionsData = {
             situationExamId: examId,
             simulationSessionDetails: fillUpMyResults,
         };
         console.log('SimulationSessionsData:', SimulationSessionsData);
-        console.log('==================================================');
 
         setLoadingSubmit(true);
         const token = user?.token || '';

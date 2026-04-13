@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import LOGO from '../../assets/Logo.png';
+import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './UserHeader.css';
 
@@ -34,8 +34,9 @@ export default function UserHeader({
         { name: 'LEARNING', icon: 'book-open', iconType: 'solid', path: '/learning' },
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
-        { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
-        { name: 'INSTRUCTOR', icon: 'chalkboard-user', iconType: 'solid', path: '/instructor' },
+        // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
+        // { name: 'INSTRUCTOR', icon: 'chalkboard-user', iconType: 'solid', path: '/instructor' },
+        { name: 'PAYMENT', icon: 'dollar', iconType: 'solid', path: '/payment-status/?message=Thanh%20toán%20thành%20công' },
         { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 

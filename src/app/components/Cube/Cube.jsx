@@ -37,8 +37,12 @@ export default function Cube({
                 <div
                     className='object'
                 >
-                    {faces.map((face, index) => {
-                        const styleObj = {};
+                    {/* {faces.map((face, index) => { */}
+                    {[...Array(32)].map((_, index) => {
+                        const face = { ...faces?.[index] };
+                        const styleObj = face.id ? {} : { opacity: 0, transform: 'translate(0px) rotateZ(0deg) scale(0)' };
+
+                        // const styleObj = {};
 
                         face.steps?.forEach(step => {
                             if ((step.type.startsWith('translate')
@@ -51,7 +55,8 @@ export default function Cube({
                             }
                         });
 
-                        return face.visible == 1 ? (
+                        // return face.visible == 1 ? (
+                        return face ? (
                             <React.Fragment key={index}>
                                 <svg
                                     className='face-svg'
@@ -79,12 +84,12 @@ export default function Cube({
                                         </defs>
                                     } */}
                                     <path
-                                        d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : `M 0 0 L ${face.width} 0 L ${face.width} ${face.height} L 0 ${face.height} Z`}
+                                        d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : `M 0 0 L ${face.width || 0} 0 L ${face.width || 0} ${face.height || 0} L 0 ${face.height || 0} Z`}
                                         fill={face.color || '#FFFFFF'}
                                         stroke={face.borderColor || '#FFFFFF'}
                                         strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}
                                         vectorEffect='non-scaling-stroke'
-                                        filter={`url(#glow-${face.id})`}
+                                        filter={`url(#glow-${face.id || 'face-id'})`}
 
                                     // strokeLinecap={face.id == selectedFaceId ? 'round' : ''}
                                     // strokeDasharray={face.id == selectedFaceId ? '8 6' : ''}
@@ -99,12 +104,12 @@ export default function Cube({
                                     // })}
                                     />
                                     <text
-                                        x={face.width / 2}
-                                        y={face.height / 2 + 1}
+                                        x={(face.width || 0) / 2}
+                                        y={(face.height || 0) / 2 + 1}
                                         textAnchor='middle'
                                         dominantBaseline='middle'
-                                        fill={face.nameColor}
-                                        fontSize={face.nameSize}
+                                        fill={face.nameColor || '#FFFFFFFF'}
+                                        fontSize={face.nameSize || 12}
                                     >
                                         {face.nameVisible === 1 ? face.name : ''}
                                     </text>
