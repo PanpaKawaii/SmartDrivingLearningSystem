@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
+import GREENLIGHT_LOGO from '../../assets/GREENLIGHT_LOGO.png';
 import LOGO from '../../assets/Logo.png';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
@@ -68,7 +69,7 @@ export default function UserHeader({
             <div className='nav-wrapper'>
                 <Link to='/'>
                     <div className='logo'>
-                        <img src={LOGO} />
+                        <img src={GREENLIGHT_LOGO} />
                     </div>
                     <span className='logo-text'>GREENLIGHT</span>
                 </Link>

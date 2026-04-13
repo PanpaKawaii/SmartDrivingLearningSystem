@@ -15,8 +15,8 @@
         padding: 1rem 1.5rem;
         box-sizing: border-box;
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
         gap: 40px;
 
         a {
@@ -25,10 +25,11 @@
             gap: 0.8rem;
 
             .logo {
-                width: 60px;
+                width: 52px;
                 height: 48px;
                 border-radius: 8px;
                 overflow: hidden;
+                background-color: #0EA5E940;
 
                 img {
                     width: 100%;
