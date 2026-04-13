@@ -1,21 +1,41 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { postData } from '../../../../../mocks/CallingAPI';
 import Timer from '../../../../components/Timer/Timer';
+import { useAuth } from '../../../../hooks/AuthContext/AuthContext';
 
 import './Answer.css';
 
 export default function Answer({
+    examId = '',
     QuestionsAnswers = [],
     myAnswers = [],
     setSelectedQuestionId = () => { },
     selectedQuestionId = '',
     handleSelectAnswer = () => { },
+    startTime = new Date(),
+    endTime = null,
+    setEndTime = () => { },
+    duration = 5,
+    passScore = 0,
+    isFinish = false,
+    setIsFinish = () => { },
 }) {
-    const [result, setResult] = useState({
-        correctCount: 0,
-        totalCount: 0,
-        skippedCount: 0,
-        details: [],
-    })
+    const { user, refreshNewToken } = useAuth();
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [examDuration, setExamDuration] = useState(duration);
+    // const [result, setResult] = useState({
+    //     correctCount: 0,
+    //     totalCount: 0,
+    //     skippedCount: 0,
+    //     details: [],
+    // })
+
     const isAnswerSelected = (questionId, answerId) => {
         const item = myAnswers.find(i => i.questionId === questionId);
         return item
@@ -27,129 +47,164 @@ export default function Answer({
         const question = QuestionsAnswers.find(q => q.id === questionId);
         const item = myAnswers.find(a => a.questionId === questionId);
 
-        if (!item || item.answers.length === 0) {
-            return 'none';
+        if (!item) {
+            return '';// Chưa trả lời
+        } else if (item?.answers?.length != (Number(question.correctAnswer))) {
+            return 'none';// Trả lời chưa đủ
+        } else if (item?.answers?.length == (Number(question.correctAnswer))) {
+            return 'full';// Trả lời đủ
         }
 
-        if (item.answers.length == (Number(question.correctAnswer) || 1)) {
-            return 'full';
-        }
-
-        return 'answered';
+        return '';
     };
 
-    const checkAnswersResult = (questionsAnswers, myAnswers) => {
+    const checkAnswersResult = async (questionsAnswers, myAnswers) => {
+        setEndTime(p => p ? p : new Date());
+        setLoading(true);
+        setIsFinish(true);
+
         let correctCount = 0;
         let skippedCount = 0;
 
-        const details = [];
+        // const details = [];
 
         questionsAnswers.forEach(question => {
-            const userAnswer = myAnswers.find(
-                a => a.questionId === question.id
-            );
+            const userAnswer = myAnswers.find(a => a.questionId === question.id);
+            const correctAnswers = question.answers.filter(a => a.isCorrect);
 
-            const correctAnswers = question.answers.filter(
-                a => a.isCorrect
-            );
-
-            // ❌ Không chọn đáp án nào hoặc chọn chưa đủ
-            if (
-                !userAnswer ||
-                userAnswer.answers.length !== correctAnswers.length
-            ) {
+            // Không chọn đáp án nào hoặc chọn chưa đủ
+            if (!userAnswer || userAnswer.answers?.length !== correctAnswers?.length) {
                 skippedCount++;
                 return;
             }
 
-            const selectedAnswerIds = userAnswer.answers.map(
-                a => a.answerId
-            );
+            const selectedAnswerIds = userAnswer?.answers?.map(a => a.answerId);
+            const correctAnswerIds = correctAnswers.map(a => a.id);
 
-            const correctAnswerIds = correctAnswers.map(
-                a => a.id
-            );
-
-            // ✅ So sánh đúng / sai (phải khớp hoàn toàn)
+            // So sánh đúng / sai (phải khớp hoàn toàn)
             const isCorrect =
-                selectedAnswerIds.length === correctAnswerIds.length &&
-                selectedAnswerIds.every(id =>
-                    correctAnswerIds.includes(id)
-                );
+                selectedAnswerIds?.length === correctAnswerIds?.length &&
+                selectedAnswerIds?.every(id => correctAnswerIds?.includes(id));
 
             if (isCorrect) {
                 correctCount++;
             }
 
-            // 🔍 Ghi chi tiết
-            correctAnswers.forEach(correct => {
-                const selected = question.answers.find(a =>
-                    selectedAnswerIds.includes(a.id)
-                );
+            // Ghi chi tiết
+            // correctAnswers.forEach(correct => {
+            //     const selected = question.answers.find(a => selectedAnswerIds?.includes(a.id));
 
-                details.push({
-                    questionId: question.id,
-                    questionContent: question.content,
+            //     details.push({
+            //         questionId: question.id,
+            //         questionContent: question.content,
 
-                    answerId: correct.id,
-                    answerContent: correct.content,
+            //         answerId: correct.id,
+            //         answerContent: correct.content,
 
-                    selectedAnswerId: selected?.id || null,
-                    selectedAnswerContent: selected?.content || null
-                });
-            });
+            //         selectedAnswerId: selected?.id || null,
+            //         selectedAnswerContent: selected?.content || null
+            //     });
+            // });
         });
 
-        setResult({
-            correctCount: correctCount,
-            totalCount: questionsAnswers.length,
-            skippedCount: skippedCount,
-            details: details,
-        });
+        // setResult({
+        //     correctCount: correctCount,
+        //     totalCount: questionsAnswers?.length || 0,
+        //     skippedCount: skippedCount,
+        //     details: details,
+        // });
 
-        // return {
-        //     correctCount,
-        //     totalCount: questionsAnswers.length,
-        //     skippedCount,
-        //     details
-        // };
+        const resultFlat = myAnswers.flatMap(item =>
+            item.answers?.map(ans => ({
+                answerId: ans.answerId,
+            }))
+        );
+        console.log('resultFlat', resultFlat);
+        const score = Number(((100 * correctCount / (QuestionsAnswers?.length || 1)) || 0)?.toFixed(0) || 0);
+        console.log('score', score);
+
+        const ExamSessionData = {
+            examId: examId,
+            score: score,
+            totalDuration: Math.max(0, Math.min(examDuration, ((endTime ? endTime : new Date()) - startTime) / 1000)),
+            isPass: score >= passScore,
+            examDetails: resultFlat,
+        };
+        console.log('ExamSessionData:', ExamSessionData);
+
+        const token = user?.token || '';
+        try {
+            const result = await postData('ExamSessions', ExamSessionData, token);
+            console.log('result', result);
+            navigate(`./../exam-result/${result?.id}`);
+
+            await sleep(1000);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+            if (error.status == 401) refreshNewToken(user);
+        } finally {
+            setLoading(false);
+        };
     };
 
     return (
         <div className='answer-container'>
             <div className='content'>
                 <div className='time'>
-                    <div className='title'>THỜI GIAN THI CÒN LẠI:</div>
+                    <h2>THỜI GIAN THI CÒN LẠI:</h2>
                     <Timer
-                        initialTime={108}
+                        initialTime={duration}
                         // showStartButton={true}
                         // showPauseButton={true}
                         // showRestartButton={true}
+                        continueRunning={!isFinish}
                         onFinish={() => checkAnswersResult(QuestionsAnswers, myAnswers)}
                         timelines={[
                             { time: 10, action: () => console.log('Còn 10 giây!'), },
                             { time: 5, action: () => console.log('Sắp hết giờ!'), },
                         ]}
-                        color={'#007bff'}
+                        color={['#3b82f6', '#ef4444']}
                     />
                 </div>
 
                 <div className='questions'>
                     {QuestionsAnswers.map((question, qIndex) => (
-                        <div key={question.id} className={`question-item ${selectedQuestionId === question.id ? 'selected' : ''} ${getQuestionAnswerStatus(question.id)}`} onClick={() => setSelectedQuestionId(question.id)}>
+                        <div
+                            key={question.id}
+                            className={`question-item ${selectedQuestionId === question.id ? 'selected' : ''} ${getQuestionAnswerStatus(question.id)}`}
+                            onClick={() => setSelectedQuestionId(p => isFinish ? p : question.id)}
+                            style={{ cursor: isFinish ? 'not-allowed' : 'pointer' }}
+                        >
                             <div className='index'>{qIndex + 1}</div>
                             <div className='answers'>
                                 {question.answers?.map((answer, aIndex) => (
                                     <div key={answer.id} className={`answer-item`}>
-                                        <button className={`btn ${isAnswerSelected(question.id, answer.id) ? 'btn-selected' : ''}`} onClick={() => handleSelectAnswer(question.id, answer.id)}>{aIndex + 1}</button>
+                                        <button
+                                            className={`btn ${isAnswerSelected(question.id, answer.id) ? 'btn-selected' : ''}`}
+                                            onClick={() => handleSelectAnswer(question.id, answer.id)}
+                                            disabled={isFinish}
+                                        >
+                                            {aIndex + 1}
+                                        </button>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     ))}
                 </div>
-                <button className='btn btn-end' onClick={() => checkAnswersResult(QuestionsAnswers, myAnswers)}>KẾT THÚC</button>
-                <div>
+                <button
+                    className='btn btn-end'
+                    onClick={() => {
+                        if (isFinish) checkAnswersResult(QuestionsAnswers, myAnswers);
+                        else { setLoading(true); setIsFinish(true); }
+                    }}
+                    disabled={loading}
+                >
+                    KẾT THÚC
+                </button>
+                {/* <i className='fa-solid fa-xmark' style={{ color: 'red', fontSize: '20rem', textAlign: 'center', width: '100%' }} /> */}
+                {/* <div>
                     <hr />
                     <div>Correct: {result.correctCount}</div>
                     <div>Total: {result.totalCount}</div>
@@ -159,17 +214,18 @@ export default function Answer({
                     <div>
                         {result?.details?.map((d, index) => (
                             <div key={index}>
-                                {/* <div>{d.questionContent}</div>
+                                <div>{d.questionContent}</div>
                                 <div>{d.answerContent}</div>
-                                <div>{d.selectedAnswerContent}</div> */}
+                                <div>{d.selectedAnswerContent}</div>
+                                <div>{index + 1}</div>
                                 <div>Question: {d.questionId}</div>
-                                <div style={{ backgroundColor: d.answerId === d.selectedAnswerId ? '#28a745' : '#fff' }}>Correct: {d.answerId}</div>
+                                <div style={{ backgroundColor: d.answerId == d.selectedAnswerId ? '#28a745' : '#ffffff80' }}>Correct: {d.answerId}</div>
                                 <div>Selected: {d.selectedAnswerId}</div>
                                 <hr />
                             </div>
                         ))}
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

@@ -66,14 +66,24 @@
                     height: calc(var(--LightWidth) + var(--SpaceHorizontal) * 2);
                 }
 
-                &.status-face {
+                &.special {
                     width: calc(var(--LightWidth) * 3 + var(--SpaceVertical) * 4);
                     height: calc(var(--LightWidth) + var(--SpaceHorizontal) * 2);
 
                     color: #a1afc540;
-                    font-size: 8rem;
                     font-weight: 800;
+
+                    &.status-face {
+                        font-size: 8rem;
+                    }
+
+                    &.refresh-face {
+                        font-size: 6rem;
+                    }
                 }
+
+                --Angle1: 18deg;
+                --Angle2: -19deg;
 
                 &.side-face {
                     width: calc(var(--LightWidth) + var(--SpaceHorizontal) * 2);
@@ -81,27 +91,27 @@
                 }
 
                 &.f1 {
-                    transform: translateZ(calc(var(--LightWidth) * 1.5 + var(--SpaceVertical) * 2));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) translateZ(calc(var(--LightWidth) * 1.5 + var(--SpaceVertical) * 2));
                 }
 
                 &.f2 {
-                    transform: rotateY(180deg) translateZ(calc(var(--LightWidth) * 1.5 + var(--SpaceVertical) * 2));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateY(180deg) translateZ(calc(var(--LightWidth) * 1.5 + var(--SpaceVertical) * 2));
                 }
 
                 &.f3 {
-                    transform: rotateZ(0deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(0deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
                 }
 
                 &.f4 {
-                    transform: rotateZ(90deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(90deg);
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(90deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(-90deg);
                 }
 
                 &.f5 {
-                    transform: rotateZ(180deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(180deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
                 }
 
                 &.f6 {
-                    transform: rotateZ(270deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(90deg);
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(270deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(90deg);
                 }
             }
 
@@ -128,28 +138,31 @@
                     height: var(--LightHeight);
                 }
 
+                --Angle1: 18deg;
+                --Angle2: -19deg;
+
                 &.l1 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
                 }
 
                 &.l2 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight)));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight)));
                 }
 
                 &.l3 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.l4 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(180deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(180deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.l5 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(90deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(90deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.l6 {
-                    transform: rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(-90deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
+                    transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(calc(var(--i) * 180deg)) translateZ(calc(var(--j) * (var(--LightWidth) + var(--SpaceVertical)))) rotateY(-90deg) translateY(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal) + var(--LightHeight) / 2)) translateZ(calc(var(--LightWidth) / 2));
                 }
 
                 &.active {

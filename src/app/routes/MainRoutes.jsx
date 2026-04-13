@@ -5,6 +5,7 @@ import InstructorLayout from '../layouts/InstructorLayout/InstructorLayout.jsx'
 import UserLayout from '../layouts/UserLayout/UserLayout.jsx'
 
 import Home from '../pages/Home/Home.jsx'
+import ForgetPassword from '../pages/LoginRegister/ForgetPassword/ForgetPassword.jsx'
 import UserProfile from '../pages/UserProfile/UserProfile.jsx'
 
 import DrivingLicense from '../pages/DrivingLicense/DrivingLicense.jsx'
@@ -26,7 +27,9 @@ import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/Traffic
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
 import ExamDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamDetail.jsx'
+import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSessionDetail.jsx'
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
+import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
 
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
 
@@ -77,6 +80,7 @@ export default function MainRoutes() {
             <Routes>
                  <Route path='/' element={<UserLayout />} >
                     <Route index element={<Home />} />
+                    <Route path='forget-password' element={<ForgetPassword />} />
                     <Route path='profile' element={<UserProfile />} />
 
                     <Route path='driving-license' element={<DrivingLicense />} />
@@ -98,7 +102,10 @@ export default function MainRoutes() {
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
                     <Route path='learning/list-exam/:examId' element={<ExamDetail />} />
+                    <Route path='learning/list-exam/:examId/exam-result/:sessionId' element={<ExamSessionDetail />} />
+                    <Route path='learning/list-exam/:examId/situation-exam-result/:sessionId' element={<ExamSessionDetail />} />
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
+                    <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
                 </Route>  

@@ -21,14 +21,18 @@
                     box-shadow: 0 0 6px #38BDF899;
                     transition: all 0.1s ease;
 
-                    &:hover {
-                        background-color: #38BDF8;
-                        border: 2px solid #68FCFF;
-                    }
-
                     &.btn-selected {
                         background-color: #38BDF899;
                         box-shadow: 0 0 12px #0EA5E9;
+
+                        &:disabled {
+                            opacity: 1;
+                        }
+                    }
+
+                    &:hover {
+                        background-color: #38BDF8;
+                        border: 2px solid #68FCFF;
                     }
 
                     &.off {
@@ -37,5 +41,11 @@
                 }
             }
         }
+    }
+
+    .btn-end {
+        width: 100%;
+        color: #fff;
+        background: linear-gradient(90deg, #2563eb, #0891b2);
     }
 }

@@ -7,9 +7,12 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import './ControlledVideo.css';
 
 export default function ControlledVideo({
+    myResults = [],
     selectedScenario = null,
     allowRestart = false,
     allowContinue = false,
+    baseScore = 5,
+    additionalFunction = () => { },
 }) {
     const { user } = useAuth();
 
@@ -42,11 +45,33 @@ export default function ControlledVideo({
                     // const exactSeconds = Math.floor(lastTimeRef.current);
                     const exactSeconds = lastTimeRef.current;
                     video.pause();
-                    setStopMoment(p => !p ? exactSeconds : p);
+
+                    const range = selectedScenario?.endPoint - selectedScenario?.startPoint;
+                    const smallRange = Number(exactSeconds) - selectedScenario?.startPoint;
+                    const percent = smallRange / range;
+                    const maxScore = baseScore;
+                    const minScore = 1;
+                    const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ?
+                        maxScore - Math.floor((maxScore - minScore + 1) * percent)
+                        : 0;
+
+                    additionalFunction({
+                        simulationExamId: selectedScenario?.simulationExamId,
+                        durationSecond: exactSeconds,
+                        score: point,
+                    });
+                    setStopMoment(p => p ? p : exactSeconds);
                     // setStopMoment(exactSeconds);
                     console.log('⏸ Video dừng tại:', exactSeconds, 'giây');
                 } else {
-                    if (allowContinue) {
+                    if (video.ended) {
+                        if (allowRestart) {
+                            video.currentTime = 0;
+                            video.play();
+                            lastTimeRef.current = 0;
+                            setStopMoment(null);
+                        }
+                    } else if (allowContinue) {
                         video.play();
                     }
                 }
@@ -87,8 +112,8 @@ export default function ControlledVideo({
     // console.log('range', range);
     // console.log('smallRange', smallRange);
     // console.log('percent', percent);
-    const maxScore = 10;
-    const minScore = 2;
+    const maxScore = baseScore;
+    const minScore = 1;
     const point = (smallRange >= 0 && percent >= 0 && percent <= 1) ?
         maxScore - Math.floor((maxScore - minScore + 1) * percent)
         : 0;
@@ -107,7 +132,7 @@ export default function ControlledVideo({
                     />
                     <div className='content'>
                         <div className='bars'>
-                            {stopMoment &&
+                            {(stopMoment || stopMoment == 0) &&
                                 <div className='bar second-bar'>
                                     {/* Video duration - red - blue */}
                                     <div
@@ -141,7 +166,7 @@ export default function ControlledVideo({
                                     }}
                                 />
                                 {/* Triangle mark enter event - green */}
-                                {stopMoment &&
+                                {(stopMoment || stopMoment == 0) &&
                                     <div className='mark'
                                         style={{
                                             left: `${100 * stopMoment / selectedScenario?.totalTime || 0}%`,
@@ -176,8 +201,8 @@ export default function ControlledVideo({
                                 }
                                 {stopMoment !== null && (
                                     <>
-                                        <p>Thời gian: {stopMoment?.toFixed(3)} giây</p>
-                                        <p>Điểm: {point ? point?.toFixed(3) : 0}</p>
+                                        <p>Thời gian: {stopMoment?.toFixed(3) || 0} giây</p>
+                                        <p>Điểm: {point?.toFixed(0) || 0}</p>
                                     </>
                                 )}
                             </div>
@@ -203,6 +228,30 @@ export default function ControlledVideo({
                             <p>{selectedScenario.description}</p>
                         </div>
                     </div>
+                    {myResults?.length > 0 &&
+                        <div className='my-results'>
+                            <h3>CHI TIẾT BÀI LÀM</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Kịch bản</th>
+                                        <th>Thời gian</th>
+                                        <th>Điểm</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {myResults.sort((a, b) => a.index - b.index)?.map((result, index) => (
+                                        <tr key={index}>
+                                            <td>{result.index}</td>
+                                            {/* <div>{result.simulationExamId}</div> */}
+                                            <td>{result.durationSecond}</td>
+                                            <td>{result.score}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                 </>
                 :
                 <div

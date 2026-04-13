@@ -3,9 +3,12 @@ import './ListScenario.css';
 
 export default function ListScenario({
     list = [],
+    done = [],
     groupBy = '',
+    label = '',
     onClickButton = () => { },
     selected = '',
+    finishButton = <></>,
 }) {
     const groupedList = Object.values(
         list.reduce((acc, item) => {
@@ -24,12 +27,17 @@ export default function ListScenario({
             <div className='group-list'>
                 {groupedList.map((group, gIndex) => (
                     <div key={gIndex} className='group-item'>
-                        <h3>Chương {gIndex + 1}: {group?.[groupBy]?.name}</h3>
+                        <h3>{label}{groupedList?.length > 1 && ` ${gIndex + 1}: ${group?.[groupBy]?.name}`}</h3>
                         <div className='list'>
                             {group.items?.map((item, index) => {
                                 const i = list?.findIndex(s => s.id == item.id);
                                 return (
-                                    <button key={index} className={`item ${item.id == selected ? 'btn-selected' : ''}`} onClick={() => onClickButton(item.id)}>
+                                    <button
+                                        key={index}
+                                        className={`item ${item.id == selected ? 'btn-selected' : ''}`}
+                                        onClick={() => onClickButton(item.id)}
+                                        disabled={done.includes(item.simulationExamId)}
+                                    >
                                         <div>
                                             {i + 1}
                                         </div>
@@ -40,6 +48,7 @@ export default function ListScenario({
                     </div>
                 ))}
             </div>
+            {finishButton}
         </div>
     )
 }

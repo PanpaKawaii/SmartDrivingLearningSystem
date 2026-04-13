@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
@@ -9,10 +9,11 @@ import SelectedChapter from './SelectedChapter';
 import './ChapterLesson.css';
 
 export default function ChapterLesson() {
-    const { user, refreshNewToken } = useAuth();
+    const { user, logout, refreshNewToken } = useAuth();
 
     const Params = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const drivingLicenseId = Params?.licenseId;
     console.log('drivingLicenseId', drivingLicenseId);
@@ -32,7 +33,7 @@ export default function ChapterLesson() {
             setError(null);
             setLoading(true);
             const token = user?.token || '';
-            const userId = user?.id || '';
+            const userId = user?.id || 'no-user';
             try {
                 const questionChapterQuery = new URLSearchParams({
                     page: '1',
@@ -77,12 +78,18 @@ export default function ChapterLesson() {
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
-                if (error.status == 401) refreshNewToken(user);
+                if (error.status == 401) {
+                    const refreshResult = await refreshNewToken(user);
+                    if (refreshResult?.message == 'Logout') { 
+                        logout();
+                        navigate('./', { state: { openLogin: 'true' } }); 
+                    }
+                }
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, user?.id]);
+    }, [refresh, user?.token]);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>

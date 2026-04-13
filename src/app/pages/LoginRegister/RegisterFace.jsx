@@ -41,9 +41,8 @@ export default function RegisterFace({
 
         try {
             setLoading(true);
-            // ==FIX==
-            // const result = await postData('auth/check-otp', OTP, '');
-            // console.log('result', result);
+            const result = await postData('auth/register-confirm', CheckOtpData, '');
+            console.log('result', result);
             await sleep(1000);
 
             setOtpSuccess('Đăng ký thành công!');
@@ -76,16 +75,15 @@ export default function RegisterFace({
             name: Name,
             phone: Phone,
             gender: Gender,
-            dateOfBirth: '',
-            // avatar: 'https://i.pinimg.com/736x/af/59/b3/af59b36b88bdbea5172a618872f3bbc5.jpg',
+            avatar: 'https://i.pinimg.com/736x/af/59/b3/af59b36b88bdbea5172a618872f3bbc5.jpg',
+            roleId: '67b62c82-e459-4b1a-b912-e1758a5c87c4',
         };
         console.log('RegisterData:', RegisterData);
 
         try {
             setLoading(true);
-            // ==FIX==
-            // const result = await postData('auth/register', RegisterData, '');
-            // console.log('result', result);
+            const result = await postData('auth/register-request', RegisterData, '');
+            console.log('result', result);
             await sleep(1000);
 
             setRegisterSuccess('Đã gửi OTP đến gmail của bạn!');
@@ -243,8 +241,6 @@ export default function RegisterFace({
                 <div className=''>Đã có tài khoản?</div>
                 <div className='link' onClick={() => setRotate(0)}>Đăng nhập ngay!</div>
             </div>
-
-            <button onClick={() => setSuccessSendOTP(true)}>OTP</button>
 
             {successSendOTP &&
                 <div className='form-otp'>

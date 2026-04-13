@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 
@@ -103,7 +103,7 @@ export default function LoginFace({
                             Lưu đăng nhập
                         </label>
                     </div>
-                    <a href='#' className='forget-link'>Quên mật khẩu?</a>
+                    <Link to='forget-password' state={{ openLogin: 'false' }} className='forget-link'>Quên mật khẩu?</Link>
                 </div>
 
                 {loginError && <div className='message error-message'>{loginError.value}</div>}

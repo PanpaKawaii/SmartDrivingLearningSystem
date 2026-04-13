@@ -74,9 +74,10 @@ export const AuthProvider = ({ children }) => {
 
             login({ ...userProp, token: result?.accessToken });
             console.log('Refreshed');
+            return { message: 'Refreshed', token: result?.accessToken };
         } catch (error) {
             console.error('Error refreshing token:', error);
-            logout();
+            return { message: 'Logout' };
         }
     };
 

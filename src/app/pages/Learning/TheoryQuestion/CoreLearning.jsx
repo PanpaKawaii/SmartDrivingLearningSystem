@@ -42,34 +42,36 @@ export default function CoreLearning({
             setError(null);
             setLoading(true);
             const token = user?.token || '';
-            const userId = user?.id || '';
+            const userId = user?.id || 'no-user';
             try {
                 const tagQuery = new URLSearchParams({
                     status: 1,
                 });
-                const savedQuestionQuery = new URLSearchParams({
-                    userId: userId,
-                    status: 1,
-                });
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
                 const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
-                const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
                 console.log('QuestionResponse', QuestionResponse);
                 console.log('TagResponse', TagResponse);
-                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 const QuestionItems = QuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
                     return {
                         ...q,
                         index: i + 1,
+                        correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
                         tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setQUESTIONs(QuestionsAnswers);
-                setSelectedQuestionId(p => !p ? QuestionsAnswers?.[0]?.id : p);
+                setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
+
+                const savedQuestionQuery = new URLSearchParams({
+                    userId: userId,
+                    status: 1,
+                });
+                const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
+                console.log('SavedQuestionResponse', SavedQuestionResponse);
                 setMySAVEDQUESTIONs(SavedQuestionResponse);
             } catch (error) {
                 console.error('Error', error);
@@ -211,7 +213,7 @@ export default function CoreLearning({
     };
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    if (error && error.status != 401) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='core-learning-container'>
             <div className='container'>
