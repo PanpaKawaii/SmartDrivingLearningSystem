@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { vehicles } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -29,7 +29,7 @@ export default function VehicleManagement() {
                 <div><h1>Quản lý Phương tiện</h1><p>Quản lý danh sách phương tiện đào tạo ({vehicleItems.length} xe).</p></div>
                 <button className='ins-btn ins-btn-primary'><i className='fa-solid fa-plus'></i> Thêm phương tiện</button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${vehicleItems.length} phương tiện`} columns={columns} data={vehicleItems} />
+            <DataTable title={`Hiển thị ${vehicleItems.length} phương tiện`} columns={columns} data={vehicleItems} />
         </div>
     );
 }

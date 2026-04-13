@@ -8,8 +8,7 @@ const menuSections = [
         label: 'Nội dung',
         items: [
             { name: 'Trang chủ', icon: 'fa-house', path: '/instructor/dashboard' },
-            { name: 'Tạo bài viết', icon: 'fa-pen-to-square', path: '/instructor/my-posts' },
-            { name: 'Bài viết của tôi', icon: 'fa-file-lines', path: '/instructor/my-posts-list' },
+            { name: 'Danh sách bài viết', icon: 'fa-file-lines', path: '/instructor/posts-list' },
         ],
     },
     {
@@ -24,6 +23,7 @@ const menuSections = [
     {
         label: 'Quản lý Khóa học',
         items: [
+            { name: 'Quản lý bằng lái', icon: 'fa-book', path: '/instructor/license-management' },
             { name: 'Quản lý Chương', icon: 'fa-book', path: '/instructor/chapter-management' },
             { name: 'Quản lý Bài học', icon: 'fa-graduation-cap', path: '/instructor/lesson-management' },
             { name: 'Ngân hàng Câu hỏi', icon: 'fa-question-circle', path: '/instructor/question-bank' },

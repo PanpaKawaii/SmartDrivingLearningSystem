@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import InstructorModal from '../../../components/InstructorComponent/InstructorModal';
+import Modal from '../../../components/Shared/Modal';
 import {
     simulationScenarios,
     simulationChapters,
@@ -66,7 +66,7 @@ export default function CreateSituationExamModal({ isOpen, onClose }) {
         selectedScenarios.length > 0;
 
     return (
-        <InstructorModal
+        <Modal
             isOpen={isOpen}
             onClose={handleClose}
             title='Tạo đề thi mô phỏng mới'
@@ -251,6 +251,6 @@ export default function CreateSituationExamModal({ isOpen, onClose }) {
                     </div>
                 </div>
             </div>
-        </InstructorModal>
+        </Modal>
     );
 }

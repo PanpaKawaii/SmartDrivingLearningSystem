@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { fetchData, postData } from '../../../mocks/CallingAPI';
+import { fetchData, postData, uploadMedia, deleteMedia} from '../../../mocks/CallingAPI';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import AutoResizeTextarea from '../AutoResizeTextarea/AutoResizeTextarea';
 import CloudsBackground from '../CloudsBackground/CloudsBackground';
@@ -30,29 +30,29 @@ export default function ReportModal({
     const handleUpload = async (e) => {
         const file = e.target.files[0];
         console.log('file', file);
-
-        if (!file) return;
-        const ImageData = {
-            EntityId: user?.id,
-            ImageTarget: 'ReportImage',
-            Files: [...[], file],
-        };
-        console.log('ImageData', ImageData);
-        // const formData = new FormData();
-        // formData.append('EntityId', user?.id);
-        // formData.append('ImageTarget', crypto.randomUUID());
-        // formData.append('Files', file);
-        // console.log('formData', formData);
+        
+        // if (!file) return;
+        // const ImageData = {
+        //     EntityId: user?.id,
+        //     ImageTarget: 'ReportImage',
+        //     Files: [...[], file],
+        // };
+        // console.log('ImageData', ImageData);
+        // // const formData = new FormData();
+        // // formData.append('EntityId', user?.id);
+        // // formData.append('ImageTarget', crypto.randomUUID());
+        // // formData.append('Files', file);
+        // // console.log('formData', formData);
 
         setError(null);
         setLoading(true);
         const token = user?.token || '';
         try {
-            // const result = await uploadMedia([...file], user?.id, crypto.randomUUID(), token);
-            const result = await postData('media/upload', ImageData, token);
-            console.log('result', result);
-
-            setImageUrl(result.url);
+            const result = await uploadMedia([file], user?.id,'ReportImage', token);
+            //const result = await postData('media/upload', ImageData, token);
+            //console.log('result', result);
+            console.log('result', result[0]?.url);
+            setImageUrl(result[0]?.url);
         } catch (error) {
             console.error('Error', error);
             setError(error);
@@ -92,7 +92,7 @@ export default function ReportModal({
             reportCategoryId: category,
             title: title,
             content: Content,
-            image: '',
+            image: imageUrl || '',
         };
         console.log('ReportData:', ReportData);
 

@@ -1,0 +1,169 @@
+import DataTable from '../../../components/Shared/DataTable.jsx';
+import { Post } from '../../../../mocks/DataSample.js';
+import PopupContainer from '../../../components/PopupContainer/PopupContainer';
+import ForumCard from '../../Forum/ForumCard';
+import '../InstructorPages.css';
+import { useEffect, useState } from 'react';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+
+const PostItems = [...Post];
+const STATUS_LABELS = {
+    '1': 'Public',
+    '4': 'Đã ẩn',
+};
+
+
+export default function Posts() {
+    const { user } = useAuth();
+    const [items, setItems] = useState([]);
+    const [topics, setTopics] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [refresh, setRefresh] = useState(0);
+    const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
+
+    // State for view popup
+    const [selectedPostId, setSelectedPostId] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const token = user?.token || '';
+                // Lấy topics (chỉ lấy 1 lần)
+                if (topics.length === 0) {
+                    const topicRes = await fetchData('ForumTopics/all', token);
+                    setTopics(Array.isArray(topicRes) ? topicRes : topicRes?.items || []);
+                }
+                // Lấy posts phân trang
+                const query = new URLSearchParams({
+                    page: serverPagination.page,
+                    pageSize: serverPagination.pageSize,
+                });
+                const res = await fetchData(`ForumPosts?${query.toString()}`, token);
+                setItems(res?.items || []);
+                setServerPagination(prev => ({
+                    ...prev,
+                    page: res?.page || prev.page,
+                    pageSize: res?.pageSize || prev.pageSize,
+                    totalCount: res?.totalCount || prev.totalCount,
+                    totalPages: res?.totalPages || 1,
+                    
+                }));
+            } catch (err) {
+                setError('Lỗi tải dữ liệu');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
+
+    const handlePageChange = (page) => {
+        setServerPagination(prev => ({ ...prev, page }));
+    };
+    const handleDelete = async (id) => {
+        try {
+            setLoading(true);
+            const token = user?.token || '';
+            await patchData(`ForumPosts/${id}/`, { status: 3 }, token);
+            setRefresh(r => r + 1);
+        } catch (err) {
+            setError('Lỗi từ chối bài');
+        } finally {
+            setLoading(false);
+        }
+    };    
+    const selectedPost = items.find(item => item.id === selectedPostId);
+
+    const formatDateTimeLines = (value) => {
+        if (!value) return { time: '', date: '' };
+
+        const normalizedValue = String(value).replace('T', ' ').trim();
+        const [datePart = '', timePart = ''] = normalizedValue.split(' ');
+        const [year = '', month = '', day = ''] = datePart.split('-');
+
+        return {
+            time: timePart.slice(0, 5),
+            date: day && month && year ? `${day}/${month}/${year}` : datePart,
+        };
+    };    
+
+    const columns = [
+        { key: 'id', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
+        { key: 'title', label: 'Tiêu đề' },
+        { key: 'user', label: 'Tác giả', width: '120px', render: (val) => val?.name || val?.email || '---' },
+        { key: 'forumTopicId', label: 'Chủ đề', width: '100px', render: (val) => {
+            const topic = topics.find(t => t.id === val);
+            return topic?.name || '---';
+        } },
+        { key: 'forumTopicId', label: 'Thể loại', width: '100px', render: (val) => {
+            const topic = topics.find(t => t.id === val);
+            return topic?.name || '---';
+        } },
+        { key: 'createAt', label: 'Ngày gửi', width: '130px', render: (val) => {
+            const { time, date } = formatDateTimeLines(val);
+            return (
+                <div style={{ lineHeight: '1.2' }}>
+                    <div>{time}</div>
+                    <div>{date}</div>
+                </div>
+            );
+        } },
+         {
+            key: 'status',
+            label: 'Trạng thái',
+            width: '120px',
+            render: (val) => {
+                let cls = 'active';
+                if (val === 4) cls = 'hidden';
+                return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
+            },
+        },
+        { key: 'actions', label: 'Thao tác', width: '100px', render: (_, row) => (
+            <div className='ins-action-cell'>
+                <button
+                    className='ins-action-btn view'
+                    title='Xem'
+                    onClick={() => setSelectedPostId(row.id)}
+                    disabled={loading}
+                >
+                    <i className='fa-solid fa-eye' ></i>
+                </button>
+                <button className='ins-action-btn edit' title='Sửa'><i className='fa-solid fa-pen'></i></button>
+                <button className='ins-action-btn delete' title='Xóa' onClick={() => handleDelete(row.id)}><i className='fa-solid fa-trash'></i></button>
+            </div>
+        )},
+    ];
+
+    return (
+        <div className='ins-page'>
+            <div className='ins-page-header'>
+                <div>
+                    <h1>Danh sách bài viêt</h1>
+                    <p>Quản lý các bài viết do bạn tạo.</p>
+                </div>
+                
+                <button className='ins-btn ins-btn-primary'>
+                    <i className='fa-solid fa-plus'></i> Tạo bài viết
+                </button>
+            </div>
+            {error && <div className='ins-error-banner'>{error}</div>}
+            <DataTable 
+                title={`Danh sách bài viết (${serverPagination.totalCount})`} 
+                columns={columns} 
+                data={items}
+                loading={loading}
+                serverPagination={serverPagination}
+                onPageChange={handlePageChange} 
+            />
+            {/* View Popup */}
+            {selectedPost && (
+                <PopupContainer onClose={() => setSelectedPostId(null)} titleName={`Bài viết của ${selectedPost?.user?.name || ''}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCard post={selectedPost} parentLoading={loading} />
+                </PopupContainer>
+            )}            
+        </div>
+    );
+}

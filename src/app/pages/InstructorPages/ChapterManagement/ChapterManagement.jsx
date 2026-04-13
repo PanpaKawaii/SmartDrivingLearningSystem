@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { questionChapters } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -34,7 +34,7 @@ export default function ChapterManagement() {
                     <i className='fa-solid fa-plus'></i> Thêm chương
                 </button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${chapterItems.length} chương`} columns={columns} data={chapterItems} />
+            <DataTable title={`Hiển thị ${chapterItems.length} chương`} columns={columns} data={chapterItems} />
         </div>
     );
 }

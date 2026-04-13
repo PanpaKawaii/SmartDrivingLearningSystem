@@ -149,10 +149,10 @@ const normalizeMediaUploadResponse = (payload) => {
 
 export const uploadMedia = async (files, entityId, imageTarget, token) => {
     try {
-        // if (!Array.isArray(files) || files.length === 0) {
-        //     console.log('files', files);
-        //     throw new Error('Files is required');
-        // }
+        if (!Array.isArray(files) || files.length === 0) {
+            console.log('files', files);
+            throw new Error('Files is required');
+        }
 
         if (!entityId) {
             throw new Error('EntityId is required');
@@ -189,7 +189,7 @@ export const uploadMedia = async (files, entityId, imageTarget, token) => {
     }
 };
 
-export const deleteMedia = async ({ fileUrl = '', imageTarget = '', token = '' }) => {
+export const deleteMedia = async (fileUrl, imageTarget, token) => {
     try {
         if (!fileUrl) {
             throw new Error('fileUrl is required');
@@ -204,7 +204,7 @@ export const deleteMedia = async ({ fileUrl = '', imageTarget = '', token = '' }
             imageTarget,
         });
 
-        const response = await fetch(`${apiUrl}api/media?${query.toString()}`, {
+        const response = await fetch(`${apiUrl}media?${query.toString()}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { simulationScenarios, simulationChapters, simulationDifficultyLevels } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -39,7 +39,7 @@ export default function SimulationBank() {
                 <div><h1>Ngân hàng Mô phỏng</h1><p>Quản lý danh sách tình huống mô phỏng lái xe. ({data.length} tình huống)</p></div>
                 <button className='ins-btn ins-btn-primary'><i className='fa-solid fa-plus'></i> Thêm mô phỏng</button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${data.length} tình huống`} columns={columns} data={data} />
+            <DataTable title={`Hiển thị ${data.length} tình huống`} columns={columns} data={data} />
         </div>
     );
 }

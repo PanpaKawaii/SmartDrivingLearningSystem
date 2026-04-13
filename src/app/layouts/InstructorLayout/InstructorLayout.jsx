@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import InstructorSidebar from './InstructorSidebar';
 import InstructorHeader from './InstructorHeader';
+import '../../styles/shared-design-tokens.css';
 import './InstructorLayout.css';
 
 export default function InstructorLayout() {

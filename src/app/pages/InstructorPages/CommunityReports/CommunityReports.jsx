@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
@@ -246,7 +246,7 @@ export default function CommunityReports() {
                 <div><h1>Báo cáo cộng đồng</h1><p>Danh sách báo cáo vi phạm từ cộng đồng.</p></div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
-            <InstructorDataTable
+            <DataTable
                 title={`Báo cáo cộng đồng (${serverPagination.totalCount})`}
                 columns={columns}
                 data={reportItems}
