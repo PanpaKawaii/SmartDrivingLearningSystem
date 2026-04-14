@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
 import '../InstructorPages.css';
@@ -97,8 +97,8 @@ export default function PendingPosts() {
         };
     };
     const columns = [
-        { key: '', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1  },
-        { key: 'title', label: 'Tiêu đề bài viết' },
+        { key: 'id', label: 'STT', width: '60px',render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1  },
+        { key: 'title', label: 'Tiêu đề' },
         { key: 'user', label: 'Tác giả', width: '120px', render: (val) => val?.name || val?.email || '---' },
         { key: 'forumTopicId', label: 'Chủ đề', width: '100px', render: (val) => {
             const topic = topics.find(t => t.id === val);
@@ -165,7 +165,7 @@ export default function PendingPosts() {
                 </div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
-            <InstructorDataTable
+            <DataTable
                 title={`Bài viết chờ duyệt (${serverPagination.totalCount})`}
                 columns={columns}
                 data={items}

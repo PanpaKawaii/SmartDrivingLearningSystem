@@ -1,0 +1,41 @@
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--ins-bg);
+    color: var(--ins-on-surface);
+    font-family: var(--ins-font-body);
+}
+
+.admin-layout .admin-main-area {
+    flex: 1;
+    margin-left: 280px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.admin-layout .admin-content {
+    flex: 1;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Override scrollbar for admin pages */
+.admin-layout ::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+.admin-layout ::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.admin-layout ::-webkit-scrollbar-thumb {
+    background-color: var(--ins-outline-variant);
+    border-radius: 4px;
+}
+
+.admin-layout ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ins-outline);
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import CreateSituationExamModal from './CreateSituationExamModal';
 import SituationExamDetailModal from './SituationExamDetailModal';
 import { situationExams, simulationExams } from '../../../../mocks/DataSample.js';
@@ -102,7 +102,7 @@ export default function SimulationExamManagement() {
                 </div>
             </div>
 
-            <InstructorDataTable
+            <DataTable
                 title={`Hiển thị ${situationExamItems.length} bộ đề thi mô phỏng`}
                 columns={columns}
                 data={situationExamItems}

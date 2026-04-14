@@ -19,6 +19,9 @@ import SimulationScenario from '../pages/SimulationScenario/SimulationScenario.j
 import Forum from '../pages/Forum/Forum.jsx'
 
 import Learning from '../pages/Learning/Learning.jsx'
+
+
+
 import TheoryQuestion from '../pages/Learning/TheoryQuestion/TheoryQuestion.jsx'
 import QuestionFlashcard from '../pages/Learning/QuestionFlashcard/QuestionFlashcard.jsx'
 import ListTrafficSign from '../pages/Learning/ListTrafficSign/ListTrafficSign.jsx'
@@ -26,10 +29,7 @@ import TrafficSignDetail from '../pages/Learning/ListTrafficSign/TrafficSignDeta
 import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/TrafficSignFlashcard.jsx'
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
-import ExamDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamDetail.jsx'
-import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSessionDetail.jsx'
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
-import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
 
 import PaymentStatus from '../pages/Payment/PaymentStatus.jsx'
 
@@ -38,10 +38,14 @@ import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.
 import CarScene from '../pages/ThreeScene/CarScene.jsx'
 import ThreeScene from '../pages/ThreeScene/ThreeScene.jsx'
 
-import AdminSideBar from '../pages/AdminPages/AdminSideBar/AdminSideBar.jsx'
-import QuestionManagement from '../pages/AdminPages/QuestionManagement/QuestionManagement.jsx'
-import LessonManagement from '../pages/AdminPages/LessonManagement/LessonManagement.jsx'
-import UserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
+import Require from './Require.jsx'
+import AdminLayout from '../layouts/AdminLayout/AdminLayout.jsx'
+import AdminDashboard from '../pages/AdminPages/AdminDashboard/AdminDashboard.jsx'
+import AdminFeaturePlaceholder from '../pages/AdminPages/AdminFeaturePlaceholder/AdminFeaturePlaceholder.jsx'
+import AdminPendingPosts from '../pages/AdminPages/PendingPosts/PendingPosts.jsx'
+import AdminCommunityReports from '../pages/AdminPages/CommunityReports/CommunityReports.jsx'
+import AdminUserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
+import AdminProfile from '../pages/AdminPages/Profile/Profile.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -57,7 +61,7 @@ import InsTrafficSignBank from '../pages/InstructorPages/TrafficSignBank/Traffic
 import InsSimulationBank from '../pages/InstructorPages/SimulationBank/SimulationBank.jsx'
 import InsExamMgmt from '../pages/InstructorPages/ExamManagement/ExamManagement.jsx'
 import InsPendingPosts from '../pages/InstructorPages/PendingPosts/PendingPosts.jsx'
-import InsMyPosts from '../pages/InstructorPages/MyPosts/MyPosts.jsx'
+import InsPosts from '../pages/InstructorPages/Posts/Posts.jsx'
 import InsCommunityReports from '../pages/InstructorPages/CommunityReports/CommunityReports.jsx'
 import InsContentErrorReports from '../pages/InstructorPages/ContentErrorReports/ContentErrorReports.jsx'
 import InsChangeRequests from '../pages/InstructorPages/ChangeRequests/ChangeRequests.jsx'
@@ -86,6 +90,9 @@ export default function MainRoutes() {
                     <Route path='forum' element={<Forum />} />
 
                     <Route path='learning' element={<Learning />} />
+
+
+
                     <Route path='learning/theory-question' element={<TheoryQuestion />} />
                     <Route path='learning/question-flashcard' element={<QuestionFlashcard />} />
                     <Route path='learning/list-traffic-sign' element={<ListTrafficSign />} />
@@ -93,11 +100,7 @@ export default function MainRoutes() {
                     <Route path='learning/traffic-sign-flashcard' element={<TrafficSignFlashcard />} />
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
-                    <Route path='learning/list-exam/:examId' element={<ExamDetail />} />
-                    <Route path='learning/list-exam/:examId/exam-result/:sessionId' element={<ExamSessionDetail />} />
-                    <Route path='learning/list-exam/:examId/situation-exam-result/:sessionId' element={<ExamSessionDetail />} />
-                    <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
-                    <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
+                    <Route path='learning/list-exam/:examId' element={<QuestionExam />} />
 
                     <Route path='/payment-status/?' element={<PaymentStatus />} />
 
@@ -107,15 +110,20 @@ export default function MainRoutes() {
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
 
-                <Route path='admin' element={<AdminSideBar />} >
-                    <Route index element={<Navigate to='user-management' replace />} />
-                    <Route path='user-management' element={<UserManagement />} />
-                    <Route path='question-management' element={<QuestionManagement />} />
-                    <Route path='lesson-management' element={<LessonManagement />} />
+                <Route path='admin'element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
+                    <Route index element={<Navigate to='dashboard' replace />} />
+                    <Route path='dashboard' element={<AdminDashboard />} />
+                    <Route path='user-management' element={<AdminUserManagement/>}/>
+                    <Route path='user-management/create' element={<AdminUserManagement openCreateInitially />} />
+                    <Route path='user-management/:userId' element={<AdminUserManagement />} />
+                    <Route path='pending-posts' element={<AdminPendingPosts />} />
+                    <Route path='community-reports' element={<AdminCommunityReports />} />
+                    <Route path='report-entity/:entityType/:entityId' element={<InsReportEntityDetail />} />
+                    <Route path='profile' element={<AdminProfile />}/>
                 </Route>
 
                 {/* Instructor CMS Routes */}
-                <Route path='/instructor' element={<InstructorLayout />} >
+                <Route path='/instructor' element={<Require allowedRoles={['Instructor']}><InstructorLayout /></Require>} >
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<InsDashboard />} />
                     <Route path='question-bank' element={<InsQuestionBank />} />
@@ -128,8 +136,7 @@ export default function MainRoutes() {
                     <Route path='simulation-bank' element={<InsSimulationBank />} />
                     <Route path='exam-management' element={<InsExamMgmt />} />
                     <Route path='pending-posts' element={<InsPendingPosts />} />
-                    <Route path='my-posts' element={<InsMyPosts />} />
-                    <Route path='my-posts-list' element={<InsMyPosts />} />
+                    <Route path='posts-list' element={<InsPosts />} />
                     <Route path='community-reports' element={<InsCommunityReports />} />
                     <Route path='content-error-reports' element={<InsContentErrorReports />} />
                     <Route path='change-requests' element={<InsChangeRequests />} />

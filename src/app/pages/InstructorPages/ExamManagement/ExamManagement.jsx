@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { exams } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -32,7 +32,7 @@ export default function ExamManagement() {
                 <div><h1>Quản lý Bài thi thử</h1><p>Quản lý danh sách bài thi sát hạch thử nghiệm.</p></div>
                 <button className='ins-btn ins-btn-primary'><i className='fa-solid fa-plus'></i> Tạo bài thi</button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${examItems.length} bài thi`} columns={columns} data={examItems} />
+            <DataTable title={`Hiển thị ${examItems.length} bài thi`} columns={columns} data={examItems} />
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import InstructorDataTable from '../../../components/InstructorComponent/InstructorDataTable';
+import DataTable from '../../../components/Shared/DataTable';
 import { signCategories, trafficSigns } from '../../../../mocks/DataSample.js';
 import '../InstructorPages.css';
 
@@ -34,7 +34,7 @@ export default function TrafficSignBank() {
                 <div><h1>Ngân hàng Biển báo</h1><p>Quản lý danh sách biển báo giao thông ({data.length} biển báo).</p></div>
                 <button className='ins-btn ins-btn-primary'><i className='fa-solid fa-plus'></i> Thêm biển báo</button>
             </div>
-            <InstructorDataTable title={`Hiển thị ${data.length} biển báo`} columns={columns} data={data} />
+            <DataTable title={`Hiển thị ${data.length} biển báo`} columns={columns} data={data} />
         </div>
     );
 }
