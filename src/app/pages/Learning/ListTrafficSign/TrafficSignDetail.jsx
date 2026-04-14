@@ -48,9 +48,9 @@ export default function TrafficSignDetail() {
         <div className='traffic-sign-detail-container'>
             <StarsBackground />
             <div className='container'>
-                {/* ==FIX== */}
-                <img src={ThisTrafficSign.image || DefaultAvatar} alt={ThisTrafficSign.name} />
-                {/* <img src={DefaultAvatar} alt={ThisTrafficSign.name} /> */}
+                <div className='image'>
+                    <img src={ThisTrafficSign.image || DefaultAvatar} alt={ThisTrafficSign.name} />
+                </div>
                 <h2>{ThisTrafficSign?.name}</h2>
                 <p>{ThisTrafficSign?.description}</p>
                 <div>- Mã biển báo: {ThisTrafficSign?.code}</div>

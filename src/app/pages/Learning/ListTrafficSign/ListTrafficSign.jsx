@@ -131,9 +131,7 @@ export default function ListTrafficSign() {
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
                         <Link to={`./${sign.id}`} className='image-link'>
-                            {/* ==FIX== */}
                             <img src={sign.image || DefaultAvatar} alt={sign.name} />
-                            {/* <img src={DefaultAvatar} alt={sign.name} /> */}
                         </Link>
                         <div className='sign-information'>
                             <div className='sign-heading'>
