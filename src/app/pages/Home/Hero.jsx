@@ -19,16 +19,16 @@ export default function Hero() {
                 <div className='content'>
                     <div className='badge'>
                         <i className='fa-solid fa-zap' />
-                        <span>AI-Powered Training System</span>
+                        <span>Hệ thống đào tạo lái xe hỗ trợ AI</span>
                     </div>
                     <div className='title'>
                         <h1>
-                            <span>Master The Road</span>
-                            <span className='gradient'>Drive With Confidence</span>
+                            <span>Làm chủ con đường</span>
+                            <span className='gradient'>Lái xe tự tin</span>
                         </h1>
                     </div>
                     <p className='description'>
-                        Experience the future of driver education with AI-powered simulations and personalized learning paths
+                        Trải nghiệm tương lai của việc học lái xe với các mô phỏng ứng dụng AI và lộ trình học tập được cá nhân hóa
                     </p>
                     <div className='actions'>
                         <Link to='/driving-license'>

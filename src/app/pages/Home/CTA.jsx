@@ -8,14 +8,14 @@ export default function CTA() {
             <section className='container'>
                 <div className='text'>
                     <h2 className='title'>
-                        <div>Ready to Master</div>
-                        <div>the Road?</div>
+                        <div>Sẵn sàng chinh phục</div>
+                        <div>con đường?</div>
                     </h2>
                     <p className='subtitle'>
-                        Join 10,000+ successful learners and start your journey today
+                        Tham gia cùng hơn 10.000 học viên thành công và bắt đầu hành trình của bạn ngay hôm nay!
                     </p>
                     <p className='note'>
-                        Free access to all learning materials. No credit card required.
+                        Truy cập miễn phí vào tất cả tài liệu học tập. Không cần thẻ tín dụng.
                     </p>
                 </div>
                 <div className='actions'>
