@@ -35,6 +35,11 @@
             justify-content: center;
             align-items: center;
 
+            &.icon-loading {
+                background: linear-gradient(135deg, #2563eb, #0891b2);
+                box-shadow: 0 8px 20px #2563eb80;
+            }
+
             &.icon-success {
                 background: linear-gradient(135deg, var(--green), #0891b2);
                 box-shadow: 0 8px 20px #39871280;

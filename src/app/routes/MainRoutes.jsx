@@ -19,9 +19,6 @@ import SimulationScenario from '../pages/SimulationScenario/SimulationScenario.j
 import Forum from '../pages/Forum/Forum.jsx'
 
 import Learning from '../pages/Learning/Learning.jsx'
-
-
-
 import TheoryQuestion from '../pages/Learning/TheoryQuestion/TheoryQuestion.jsx'
 import QuestionFlashcard from '../pages/Learning/QuestionFlashcard/QuestionFlashcard.jsx'
 import ListTrafficSign from '../pages/Learning/ListTrafficSign/ListTrafficSign.jsx'
@@ -29,7 +26,10 @@ import TrafficSignDetail from '../pages/Learning/ListTrafficSign/TrafficSignDeta
 import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/TrafficSignFlashcard.jsx'
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
+import ExamDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamDetail.jsx'
+import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSessionDetail.jsx'
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
+import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
 
 import PaymentStatus from '../pages/Payment/PaymentStatus.jsx'
 
@@ -90,9 +90,6 @@ export default function MainRoutes() {
                     <Route path='forum' element={<Forum />} />
 
                     <Route path='learning' element={<Learning />} />
-
-
-
                     <Route path='learning/theory-question' element={<TheoryQuestion />} />
                     <Route path='learning/question-flashcard' element={<QuestionFlashcard />} />
                     <Route path='learning/list-traffic-sign' element={<ListTrafficSign />} />
@@ -100,7 +97,11 @@ export default function MainRoutes() {
                     <Route path='learning/traffic-sign-flashcard' element={<TrafficSignFlashcard />} />
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
-                    <Route path='learning/list-exam/:examId' element={<QuestionExam />} />
+                    <Route path='learning/list-exam/:examId' element={<ExamDetail />} />
+                    <Route path='learning/list-exam/:examId/exam-result/:sessionId' element={<ExamSessionDetail />} />
+                    <Route path='learning/list-exam/:examId/situation-exam-result/:sessionId' element={<ExamSessionDetail />} />
+                    <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
+                    <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
 
                     <Route path='/payment-status/?' element={<PaymentStatus />} />
 

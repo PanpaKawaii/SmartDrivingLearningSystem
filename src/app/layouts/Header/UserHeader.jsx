@@ -37,8 +37,8 @@ export default function UserHeader({
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
         // { name: 'INSTRUCTOR', icon: 'chalkboard-user', iconType: 'solid', path: '/instructor' },
-        { name: 'PAYMENT', icon: 'dollar', iconType: 'solid', path: '/payment-status/?message=Thanh%20toán%20thành%20công' },
-        { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
+        // { name: 'PAYMENT', icon: 'dollar', iconType: 'solid', path: '/payment-status/?message=Thanh%20toán%20thành%20công' },
+        // { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 
     useEffect(() => {

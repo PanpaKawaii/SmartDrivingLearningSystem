@@ -36,14 +36,14 @@ export default function PaymentStatus() {
                         <>
                             <div className='icon icon-fail'>
                                 <span>×</span>
-                                <div className='div-1'></div>
-                                <div className='div-2'></div>
+                                {/* <div className='div-1'></div>
+                                <div className='div-2'></div> */}
                             </div>
                             <div className='title title-fail'>{message}</div>
                         </>
                     )
                     :
-                    <div className='icon'><i className='fa-solid fa-spinner' /></div>
+                    <div className='icon icon-loading'><i className='fa-solid fa-spinner' /></div>
                 }
                 <div className='buttons'>
                     <Link to='/'><button className='btn-in-payment-status'>VỀ TRANG CHỦ</button></Link>
