@@ -22,15 +22,15 @@ export default function CTA() {
                     <Link to='/driving-license'>
                         <button className='primary-btn'>
                             <i className='fa-solid fa-zap' />
-                            <span>Start Learning Now</span>
+                            <span>Bắt đầu ngay</span>
                         </button>
                     </Link>
-                    <Link to='/dashboard'>
+                    {/* <Link to='/profile'>
                         <button className='secondary-btn'>
                             <i className='fa-solid fa-arrow-trend-up' />
-                            <span>View Progress Demo</span>
+                            <span>Xem bản demo tiến độ</span>
                         </button>
-                    </Link>
+                    </Link> */}
                 </div>
             </section>
         </div>

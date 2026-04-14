@@ -134,9 +134,9 @@
                 }
 
                 .feature-desc {
-                    font-size: 1.05rem;
+                    font-size: .875rem;
                     color: #94a3b8;
-                    line-height: 1.7;
+                    line-height: 1.5;
                     margin: 0;
                 }
             }

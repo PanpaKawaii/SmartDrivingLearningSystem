@@ -6,10 +6,10 @@ import './Hero.css';
 
 export default function Hero() {
     const stats = [
-        { icon: 'users', value: '10K+', label: 'Active Learners' },
-        { icon: 'award', value: '95%', label: 'Pass Rate' },
-        { icon: 'question-circle', value: '600+', label: 'Questions' },
-        { icon: 'shield', value: '100%', label: 'Safe Learning' }
+        { icon: 'question-circle', type: 'solid', value: '600+', label: 'Câu hỏi lý thuyết' },
+        { icon: 'play', type: 'solid', value: '120+', label: 'Kịch bản mô phỏng' },
+        { icon: 'triangle-exclamation', type: 'solid', value: '300+', label: 'Biển báo giao thông' },
+        { icon: 'comment-dots', type: 'solid', value: '24/7', label: 'AI Support' }
     ];
     return (
         <div className='hero-container'>
@@ -34,20 +34,20 @@ export default function Hero() {
                         <Link to='/driving-license'>
                             <button className='primary-btn'>
                                 <i className='fa-solid fa-book-open' />
-                                <span>Start Learning</span>
+                                <span>Bắt đầu ngay</span>
                             </button>
                         </Link>
                         <Link to='/simulation'>
                             <button className='secondary-btn'>
-                                <i className='fa-solid fa-gamepad' />
-                                <span>Try Simulator</span>
+                                <i className='fa-solid fa-play' />
+                                <span>Trải nghiệm mô phỏng</span>
                             </button>
                         </Link>
                     </div>
                     <div className='stats'>
                         {stats.map((stat, index) => (
                             <div key={index} className='stat-card'>
-                                <i className={`fa-solid fa-${stat.icon}`} />
+                                <i className={`fa-${stat.type} fa-${stat.icon}`} />
                                 <div className='value'>{stat.value}</div>
                                 <div className='label'>{stat.label}</div>
                             </div>

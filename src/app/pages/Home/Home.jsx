@@ -28,14 +28,18 @@ export default function Home() {
         };
     }, []);
 
-    return isLoading ? <div><CloudsBackground /><TrafficLight text={'success'} setRefresh={() => { }} /></div> : (
-        <div className='home-container'>
-            <StarsBackground />
-            <Hero />
-            <Platform />
-            <Journey />
-            <Testimonials />
-            <CTA />
-        </div>
-    )
+    return isLoading ?
+        <div>
+            <CloudsBackground />
+            <TrafficLight text={'success'} faceText={''} setRefresh={() => { }} />
+        </div> : (
+            <div className='home-container'>
+                <StarsBackground />
+                <Hero />
+                <Platform />
+                <Journey />
+                <Testimonials />
+                <CTA />
+            </div>
+        )
 }

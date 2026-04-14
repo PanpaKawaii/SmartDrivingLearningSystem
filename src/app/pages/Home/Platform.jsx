@@ -4,38 +4,38 @@ export default function Platform() {
     const features = [
         {
             icon: 'book-open',
-            title: 'Theory Learning',
-            description: 'Comprehensive lessons on traffic laws, signs, and driving techniques',
+            title: 'Học lý thuyết',
+            description: 'Bài học toàn diện về luật giao thông, biển báo và kỹ thuật lái xe.',
             color: '#2563eb #06b6d4'
         },
         {
             icon: 'file-lines',
-            title: 'Practice Exams',
-            description: 'Realistic mock tests with instant feedback and detailed analytics',
+            title: 'Bài kiểm tra',
+            description: 'Các bài kiểm tra thử thực tế với phản hồi tức thì và phân tích chi tiết.',
             color: '#0b8a29 #6ad182'
         },
         {
             icon: 'triangle-exclamation',
-            title: 'Traffic Signs Library',
-            description: 'Complete database of traffic signs with interactive learning',
+            title: 'Thư viện biển báo giao thông',
+            description: 'Kho dữ liệu đầy đủ về biển báo giao thông với tính năng học tập tương tác.',
             color: '#f59e0b #fada89'
         },
         {
-            icon: 'gamepad',
-            title: 'Driving Simulator',
-            description: 'Immersive 3D simulation for practical driving scenarios',
+            icon: 'play',
+            title: 'Mô phỏng lái xe',
+            description: 'Mô phỏng 3D sống động cho các tình huống lái xe thực tế.',
             color: '#8b5cf6 #ec4899'
         },
         {
             icon: 'comment-dots',
-            title: 'AI Assistant',
-            description: 'Get instant help and personalized learning recommendations',
+            title: 'Trợ lý AI',
+            description: 'Nhận hỗ trợ tức thì và các đề xuất học tập cá nhân hóa.',
             color: '#06b6d4 #2563eb'
         },
         {
             icon: 'arrow-trend-up',
-            title: 'Progress Tracking',
-            description: 'Detailed analytics and insights into your learning journey',
+            title: 'Theo dõi tiến độ',
+            description: 'Phân tích chi tiết và những hiểu biết sâu sắc về hành trình học tập của bạn.',
             color: '#ec4899 #f5b3d5'
         }
     ];

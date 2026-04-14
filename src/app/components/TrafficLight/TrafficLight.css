@@ -4,7 +4,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: var(--gray-1); */
 
     .scene-traffic-light {
         width: 300px;
@@ -49,8 +48,6 @@
             .face {
                 position: absolute;
                 box-sizing: border-box;
-                /* background: var(--gray-3); */
-                background: linear-gradient(120deg, #111827d8 20%, #5f6a7cd8 80%);
                 border: 1px solid var(--gray-2);
                 transition: all 1s ease, font-size 0s;
 
@@ -91,26 +88,33 @@
                 }
 
                 &.f1 {
+                    /* background: linear-gradient(0deg, #242d42d8 0%, #5f6a7cd8 80%); */
+                    background: linear-gradient(45deg, #111827d8 20%, #5f6a7cd8 80%);
                     transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) translateZ(calc(var(--LightWidth) * 1.5 + var(--SpaceVertical) * 2));
                 }
 
                 &.f2 {
+                    background: linear-gradient(135deg, #111827d8 20%, #5f6a7cd8 80%);
                     transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateY(180deg) translateZ(calc(var(--LightWidth) * 1.5 + var(--SpaceVertical) * 2));
                 }
 
                 &.f3 {
+                    background: linear-gradient(120deg, #111827d8 40%, #5f6a7cd8 80%);
                     transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(0deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
                 }
 
                 &.f4 {
+                    background: linear-gradient(-30deg, #111827d8 40%, #5f6a7cd8 80%);
                     transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(90deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(-90deg);
                 }
 
                 &.f5 {
+                    background: linear-gradient(60deg, #111827d8 40%, #5f6a7cd8 80%);
                     transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(180deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal)));
                 }
 
                 &.f6 {
+                    background: linear-gradient(210deg, #111827d8 40%, #5f6a7cd8 80%);
                     transform: rotateY(var(--Angle1)) rotateX(var(--Angle2)) rotateZ(270deg) rotateX(-90deg) translateZ(calc(var(--LightWidth) / 2 + var(--SpaceHorizontal))) rotateZ(90deg);
                 }
             }
