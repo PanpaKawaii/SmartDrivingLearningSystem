@@ -5,14 +5,14 @@
     box-sizing: border-box;
     transition: .15s;
 
-    &.my-post {
-        border-color: var(--green-dark);
-    }
-
     &:hover {
         border-color: #3b82f666;
         background: #3b82f620;
         box-shadow: 0 20px 50px #3b82f633;
+    }
+
+    &.my-post {
+        border-color: var(--green-dark);
     }
 
     .user-information {
