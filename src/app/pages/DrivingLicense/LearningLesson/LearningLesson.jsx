@@ -36,25 +36,30 @@ export default function LearningLesson() {
             const token = user?.token || '';
             const userId = user?.id || 'no-user';
             try {
+                let LessonProgressResponse = [];
                 const questionQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
-                    status: 1,
-                });
-                const lessonProgressQuery = new URLSearchParams({
+                    questionLessonId: questionLessonId,
                     status: 1,
                 });
                 const ThisQuestionLessonResponse = await fetchData(`QuestionLessons/${questionLessonId}`, token);
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
-                const LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}?${lessonProgressQuery}`, token);
                 console.log('ThisQuestionLessonResponse', ThisQuestionLessonResponse);
                 console.log('QuestionResponse', QuestionResponse);
-                console.log('LessonProgressResponse', LessonProgressResponse);
                 const QuestionItems = QuestionResponse?.items;
+
+                if (user) {
+                    const lessonProgressQuery = new URLSearchParams({
+                        status: 1,
+                    });
+                    LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}?${lessonProgressQuery}`, token);
+                    console.log('LessonProgressResponse', LessonProgressResponse);
+                }
 
                 const QuestionLesson = {
                     ...ThisQuestionLessonResponse,
-                    questions: QuestionItems.filter(q => q.questionLessonId == questionLessonId),
+                    questions: QuestionItems,
                 };
                 console.log('QuestionLesson', QuestionLesson);
                 setThisQuestionLesson(QuestionLesson);
@@ -84,7 +89,7 @@ export default function LearningLesson() {
                     state={questionChapterId}
                 >
                     <i className='fa-solid fa-arrow-left' />
-                    <span>Back to Lessons</span>
+                    <span>Quay lại</span>
                 </Link>
 
                 <div className='lesson-header'>

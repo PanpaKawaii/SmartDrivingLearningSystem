@@ -60,7 +60,7 @@
             p {
                 font-size: 24px;
                 color: #cbd5f5;
-                max-width: 720px;
+                max-width: 1400px;
             }
         }
     }
@@ -163,6 +163,7 @@
 
                             .icon-box {
                                 width: 64px;
+                                min-width: 64px;
                                 height: 64px;
                                 border-radius: 12px;
                                 background: linear-gradient(90deg, #2563eb, #0891b2);

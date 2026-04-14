@@ -22,7 +22,7 @@ export default function SelectedChapter({
                                 </div>
                                 <div className='chapter-info'>
                                     <h2>{chapter.name}</h2>
-                                    <p>{completed} of {lesson} completed</p>
+                                    <p>{completed} trong {lesson} đã hoàn thành</p>
                                 </div>
                             </div>
 
@@ -33,7 +33,7 @@ export default function SelectedChapter({
                                 />
                             ) : (
                                 <div className='lesson-grid'>
-                                    {chapter.questionLessons?.map((lesson, index_lesson) => (
+                                    {chapter.questionLessons?.sort((a, b) => a.index - b.index)?.map((lesson, index_lesson) => (
                                         <Link
                                             key={index_lesson}
                                             to={`./chapter/${selectedChapterId}/lesson/${lesson.id}`}
@@ -65,11 +65,11 @@ export default function SelectedChapter({
                                                                     <div className='detail'>
                                                                         <div className='item'>
                                                                             <i className='fa-solid fa-book-open' />
-                                                                            <span>Lessons</span>
+                                                                            <span>Bài học</span>
                                                                         </div>
                                                                         <div className='item'>
                                                                             <i className='fa-regular fa-file-lines' />
-                                                                            <span>Exam</span>
+                                                                            <span>Bài kiểm tra</span>
                                                                         </div>
                                                                         {lesson.lessonProgresses?.[0]?.score !== undefined &&
                                                                             lesson.lessonProgresses?.[0]?.score !== null && (

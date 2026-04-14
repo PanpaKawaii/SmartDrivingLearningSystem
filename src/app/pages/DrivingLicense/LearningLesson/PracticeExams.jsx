@@ -16,8 +16,8 @@ export default function PracticeExams({
                         <i className='fa-solid fa-trophy' />
                     </div>
                     <div>
-                        <h2>Practice Exams</h2>
-                        <p>Test your learned knowledge</p>
+                        <h2>Bài kiểm tra</h2>
+                        <p>Kiểm tra kiến ​​thức bạn đã học</p>
                     </div>
                 </div>
             </div>
@@ -34,21 +34,21 @@ export default function PracticeExams({
                         <div className='stat'>
                             <i className='fa-regular fa-question-circle blue' />
                             <div>
-                                <p className='label'>Questions</p>
+                                <p className='label'>Câu hỏi</p>
                                 <p className='value'>{lesson?.questions?.length}</p>
                             </div>
                         </div>
                         <div className='stat'>
                             <i className='fa-regular fa-clock purple' />
                             <div>
-                                <p className='label'>Average duration</p>
+                                <p className='label'>Thời gian trung bình</p>
                                 <p className='value'>~{(lesson?.questions?.length * 10 / 60 || 0)?.toFixed(0)} mins</p>
                             </div>
                         </div>
                         <div className='stat'>
                             <i className='fa-solid fa-bullseye green' />
                             <div>
-                                <p className='label'>Pass Score</p>
+                                <p className='label'>Điểm đậu</p>
                                 <p className='value'>{50}%</p>
                             </div>
                         </div>
@@ -56,12 +56,12 @@ export default function PracticeExams({
                     {isLocked ? (
                         <div className='locked-box'>
                             <i className='fa-solid fa-book-open' />
-                            <span>Complete theory sections to unlock</span>
+                            <span>Hoàn thành các phần lý thuyết để mở khóa</span>
                         </div>
                     ) : (
                         <Link to={`./quiz/${progress?.[0]?.id}`}>
                             <button className='start-button'>
-                                Start Exam
+                                Bắt đầu bài kiểm tra
                             </button>
                         </Link>
                     )}

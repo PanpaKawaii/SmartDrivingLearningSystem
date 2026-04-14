@@ -235,7 +235,7 @@ export default function ForumComment({
                                                     <img src={user?.image || DefaultAvatar} alt={user?.email} />
                                                 </div>
                                                 <form className='comment-area'>
-                                                    <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user} />
+                                                    <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user || user?.roleId == '67b62c82-e459-4b1a-b912-e1758a5c87c4'} />
                                                     <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, inputComment)}>
                                                         ĐĂNG
                                                     </button>
@@ -268,7 +268,7 @@ export default function ForumComment({
                     <img src={user?.image || DefaultAvatar} alt={user?.email} />
                 </div>
                 <div className='comment-area'>
-                    <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user} />
+                    <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user || user?.roleId == '67b62c82-e459-4b1a-b912-e1758a5c87c4'} />
                     <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
                         ĐĂNG
                     </button>
