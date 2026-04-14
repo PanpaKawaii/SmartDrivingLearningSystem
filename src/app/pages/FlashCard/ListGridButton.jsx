@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import './ListGridButton.css';
 
 export default function ListGridButton({
@@ -8,6 +10,8 @@ export default function ListGridButton({
     myAnswers = [],
     column = 1,
 }) {
+    const [toggle, setToggle] = useState(0);
+
     const getQuestionStatus = (question, myAnswers) => {
         if (myAnswers.length == 0) return 'btn-not-answer';
 
@@ -38,15 +42,23 @@ export default function ListGridButton({
 
     return (
         <div className='list-grid-button-container' style={{ '--column': column }}>
-            {list.map((question, bIndex) => (
-                <button
-                    key={bIndex}
-                    className={`grid-btn ${selectedQuestionId == question.id ? 'btn-selected' : ''} ${getQuestionStatus(question, myAnswers)} ${mark.includes(question.id) ? 'marked' : ''}`}
-                    onClick={() => setSelectedQuestionId(question.id)}
-                >
-                    {bIndex + 1}
-                </button>
-            ))}
+            <div className='toggle-btns'>
+                <button className={`btn ${toggle == 0 ? '' : 'off'}`} onClick={() => setToggle(0)}>ALL</button>
+                <button className={`btn ${toggle == 1 ? '' : 'off'}`} onClick={() => setToggle(1)}>SAVED</button>
+            </div>
+            <div className='list-grid'>
+                {list.map((question, bIndex) => {
+                    return (toggle == 0 || toggle == 1 && mark.includes(question.id)) && (
+                        <button
+                            key={bIndex}
+                            className={`grid-btn ${selectedQuestionId == question.id ? 'btn-selected' : ''} ${getQuestionStatus(question, myAnswers)} ${mark.includes(question.id) ? 'marked' : ''}`}
+                            onClick={() => setSelectedQuestionId(question.id)}
+                        >
+                            {bIndex + 1}
+                        </button>
+                    )
+                })}
+            </div>
         </div>
     )
 }

@@ -1,101 +1,117 @@
 .list-grid-button-container {
-    padding: 12px;
-    width: fit-content;
-    height: fit-content;
-    display: grid;
-    grid-template-columns: repeat(var(--column), minmax(0, 1fr));
-    gap: 4px;
-    max-height: 80vh;
-    overflow-y: scroll;
 
-    .grid-btn {
-        position: relative;
-        color: #80FCFF;
-        background-color: transparent;
-        border: 2px solid #68FCFF;
-        box-shadow: 0 0 6px #38BDF899;
-        transition: all 0.1s ease;
-        overflow: hidden;
+    .toggle-btns {
+        padding: 0 12px;
+        display: flex;
+        gap: 8px;
 
-        &.btn-correct {
+        .btn {
+            flex: 1;
+            min-width: 100px;
             color: #fff;
-            background-color: #10b98180;
-            border: 2px solid #10b981;
-
-            &:hover {
-                background-color: #10b981bf;
-                box-shadow: 0 0 12px #0EA5E9;
-                border: 2px solid #68FCFF;
-            }
+            background: linear-gradient(90deg, #2563eb, #0891b2);
         }
+    }
 
-        &.btn-incorrect {
-            color: #fff;
-            background-color: #b9371080;
-            border: 2px solid #b93710;
+    .list-grid {
+        padding: 12px;
+        width: fit-content;
+        height: fit-content;
+        display: grid;
+        grid-template-columns: repeat(var(--column), minmax(0, 1fr));
+        gap: 4px;
+        max-height: 80vh;
+        overflow-y: scroll;
 
-            &:hover {
-                background-color: #b93710bf;
-                box-shadow: 0 0 12px #0EA5E9;
-                border: 2px solid #68FCFF;
-            }
-        }
+        .grid-btn {
+            position: relative;
+            color: #80FCFF;
+            background-color: transparent;
+            border: 2px solid #68FCFF;
+            box-shadow: 0 0 6px #38BDF899;
+            transition: all 0.1s ease;
+            overflow: hidden;
 
-        &.btn-correct-missing {
-            color: #fff;
-            background-color: #10b98133;
-            border: 2px solid #10b981;
-
-            &:hover {
+            &.btn-correct {
+                color: #fff;
                 background-color: #10b98180;
-                box-shadow: 0 0 12px #0EA5E9;
-                border: 2px solid #68FCFF;
+                border: 2px solid #10b981;
+
+                &:hover {
+                    background-color: #10b981bf;
+                    box-shadow: 0 0 12px #0EA5E9;
+                    border: 2px solid #68FCFF;
+                }
             }
-        }
 
-        &.btn-incorrect-missing {
-            color: #fff;
-            background-color: #b9371033;
-            border: 2px solid #b93710;
-
-            &:hover {
+            &.btn-incorrect {
+                color: #fff;
                 background-color: #b9371080;
+                border: 2px solid #b93710;
+
+                &:hover {
+                    background-color: #b93710bf;
+                    box-shadow: 0 0 12px #0EA5E9;
+                    border: 2px solid #68FCFF;
+                }
+            }
+
+            &.btn-correct-missing {
+                color: #fff;
+                background-color: #10b98133;
+                border: 2px solid #10b981;
+
+                &:hover {
+                    background-color: #10b98180;
+                    box-shadow: 0 0 12px #0EA5E9;
+                    border: 2px solid #68FCFF;
+                }
+            }
+
+            &.btn-incorrect-missing {
+                color: #fff;
+                background-color: #b9371033;
+                border: 2px solid #b93710;
+
+                &:hover {
+                    background-color: #b9371080;
+                    box-shadow: 0 0 12px #0EA5E9;
+                    border: 2px solid #68FCFF;
+                }
+            }
+
+            &.btn-not-answer {
+                &:hover {
+                    background-color: #38BDF8;
+                    box-shadow: 0 0 12px #0EA5E9;
+                    border: 2px solid #68FCFF;
+                }
+            }
+
+            &.btn-selected {
+                background-color: #38BDF899;
                 box-shadow: 0 0 12px #0EA5E9;
-                border: 2px solid #68FCFF;
+
+                &:hover {
+                    background-color: #38BDF8;
+                    border: 2px solid #68FCFF;
+                }
             }
-        }
 
-        &.btn-not-answer {
-            &:hover {
-                background-color: #38BDF8;
-                box-shadow: 0 0 12px #0EA5E9;
-                border: 2px solid #68FCFF;
+            &.off {
+                opacity: 0.4;
             }
-        }
 
-        &.btn-selected {
-            background-color: #38BDF899;
-            box-shadow: 0 0 12px #0EA5E9;
-
-            &:hover {
-                background-color: #38BDF8;
-                border: 2px solid #68FCFF;
+            &.marked::before {
+                content: '';
+                position: absolute;
+                top: -20px;
+                right: -20px;
+                transform: rotateZ(45deg);
+                width: 32px;
+                height: 32px;
+                background-color: #FF9600;
             }
-        }
-
-        &.off {
-            opacity: 0.4;
-        }
-
-        &.marked::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            transform: rotateZ(45deg);
-            width: 32px;
-            height: 32px;
-            background-color: #FF9600;
         }
     }
 }

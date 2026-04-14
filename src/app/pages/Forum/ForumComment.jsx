@@ -199,7 +199,7 @@ export default function ForumComment({
                                                                 disabled: false,
                                                             },
                                                             (user?.id && comment.userId == user?.id) && {
-                                                                name: 'TAKEDOWN',
+                                                                name: 'takedown',
                                                                 onToggle: () => TakeDownComment(comment.id),
                                                                 disabled: loading,
                                                             }
