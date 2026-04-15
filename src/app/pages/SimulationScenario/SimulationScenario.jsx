@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { simulationCategories, simulationChapters, simulationDifficultyLevels, simulationScenarios } from '../../../mocks/DataSample';
 import { fetchData } from '../../../mocks/CallingAPI';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
@@ -24,28 +23,15 @@ export default function SimulationScenario() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                const SimulationScenarioResponse = [...simulationScenarios];
-                const SimulationChapterResponse = [...simulationChapters];
-                const SimulationCategoryResponse = [...simulationCategories];
-                const SimulationDifficultyLevelResponse = [...simulationDifficultyLevels];
-                const SimulationScenario = SimulationScenarioResponse.map(ss => ({
-                    ...ss,
-                    chapter: SimulationChapterResponse.find(chapter => ss.simulationChapterId == chapter.id),
-                    category: SimulationCategoryResponse.find(category => ss.simulationCategoryId == category.id),
-                    difficultyLevel: SimulationDifficultyLevelResponse.find(difficultyLevel => ss.simulationDifficultyLevelId == difficultyLevel.id),
-                }));
-                console.log('SimulationScenario', SimulationScenario);
-                setSIMULATIONSCENARIOs(SimulationScenario);
-
-                // const simulationScenarioQuery = new URLSearchParams({
-                //     page: '1',
-                //     pageSize: '500',
-                //     status: 1,
-                // });
-                // const SimulationScenarioResponse = await fetchData(`SimulationScenarios?${simulationScenarioQuery.toString()}`, token);
-                // console.log('SimulationScenarioResponse', SimulationScenarioResponse);
-                // const SimulationScenarioItems = SimulationScenarioResponse?.items;
-                // setSIMULATIONSCENARIOs(SimulationScenarioItems);
+                const simulationScenarioQuery = new URLSearchParams({
+                    page: '1',
+                    pageSize: '500',
+                    status: 1,
+                });
+                const SimulationScenarioResponse = await fetchData(`SimulationScenarios?${simulationScenarioQuery.toString()}`, token);
+                console.log('SimulationScenarioResponse', SimulationScenarioResponse);
+                const SimulationScenarioItems = SimulationScenarioResponse?.items;
+                setSIMULATIONSCENARIOs(SimulationScenarioItems);
 
                 setSelectedScenarioId(SimulationScenario?.[0]?.id);
             } catch (error) {
