@@ -31,6 +31,9 @@ export default function ForumComment({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [contentComment, setContentComment] = useState('');
+    const [contentReply, setContentReply] = useState('');
+
     const [openReport, setOpenReport] = useState(null);
 
     useEffect(() => {
@@ -87,6 +90,8 @@ export default function ForumComment({
 
             setRefresh(p => p + 1);
             setRefreshParent(p => p + 1);
+            setContentComment('');
+            setContentReply('');
             await sleep(500);
         } catch (error) {
             console.error('Error', error);
@@ -235,7 +240,13 @@ export default function ForumComment({
                                                     <img src={user?.image || DefaultAvatar} alt={user?.email} />
                                                 </div>
                                                 <form className='comment-area'>
-                                                    <AutoResizeTextarea refer={refReply} placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'} disable={!user || user?.roleId == '67b62c82-e459-4b1a-b912-e1758a5c87c4'} />
+                                                    <AutoResizeTextarea
+                                                        refer={refReply}
+                                                        placeholder={user ? 'Viết phản hồi' : 'Vui lòng đăng nhập để phản hồi...'}
+                                                        disable={!user || user?.roleId == '67b62c82-e459-4b1a-b912-e1758a5c87c4'}
+                                                        propContent={contentReply}
+                                                        setContent={setContentReply}
+                                                    />
                                                     <button type='button' className='btn' onClick={() => handleSubmitComment(refReply.current.value, inputComment)}>
                                                         ĐĂNG
                                                     </button>
@@ -268,7 +279,13 @@ export default function ForumComment({
                     <img src={user?.image || DefaultAvatar} alt={user?.email} />
                 </div>
                 <div className='comment-area'>
-                    <AutoResizeTextarea refer={refComment} placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'} disable={!user || user?.roleId == '67b62c82-e459-4b1a-b912-e1758a5c87c4'} />
+                    <AutoResizeTextarea
+                        refer={refComment}
+                        placeholder={user ? 'Viết bình luận' : 'Vui lòng đăng nhập để bình luận...'}
+                        disable={!user || user?.roleId == '67b62c82-e459-4b1a-b912-e1758a5c87c4'}
+                        propContent={contentComment}
+                        setContent={setContentComment}
+                    />
                     <button type='button' className='btn' onClick={() => handleSubmitComment(refComment.current.value, null)}>
                         ĐĂNG
                     </button>

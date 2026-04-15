@@ -65,7 +65,6 @@ export default function DrivingLicense() {
                 <h1>Chọn lộ trình <span className='gradient'>bằng lái của bạn</span></h1>
                 <p>
                     Hãy chọn một chương trình cấp bằng để bắt đầu hành trình của bạn. Mỗi chương trình đều bao gồm các bài học lý thuyết toàn diện và các bài kiểm tra thực hành.
-
                 </p>
             </div>
 

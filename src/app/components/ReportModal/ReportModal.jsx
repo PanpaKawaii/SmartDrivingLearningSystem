@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { fetchData, postData, uploadMedia, deleteMedia} from '../../../mocks/CallingAPI';
+import { fetchData, postData, uploadMedia, deleteMedia } from '../../../mocks/CallingAPI';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import AutoResizeTextarea from '../AutoResizeTextarea/AutoResizeTextarea';
 import CloudsBackground from '../CloudsBackground/CloudsBackground';
@@ -17,6 +17,7 @@ export default function ReportModal({
 
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
+    const [content, setContent] = useState('');
     const [REPORTCATEGORIes, setREPORTCATEGORIes] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -30,7 +31,7 @@ export default function ReportModal({
     const handleUpload = async (e) => {
         const file = e.target.files[0];
         console.log('file', file);
-        
+
         // if (!file) return;
         // const ImageData = {
         //     EntityId: user?.id,
@@ -48,7 +49,7 @@ export default function ReportModal({
         setLoading(true);
         const token = user?.token || '';
         try {
-            const result = await uploadMedia([file], user?.id,'ReportImage', token);
+            const result = await uploadMedia([file], user?.id, 'ReportImage', token);
             //const result = await postData('media/upload', ImageData, token);
             //console.log('result', result);
             console.log('result', result[0]?.url);
@@ -127,6 +128,9 @@ export default function ReportModal({
     return (
         <div className='report-modal-container'>
             <div className='report-information'>
+                <input type='text' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly />
+            </div>
+            <div className='report-information'>
                 <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Tiêu đề' />
                 <select value={category} onChange={(e) => setCategory(e.target.value)}>
                     <option value='' disabled>Chọn loại báo cáo</option>
@@ -147,12 +151,15 @@ export default function ReportModal({
                     </div>
                 }
             </div>
-            <div className='report-information'>
-                <input type='text' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly />
-            </div>
             <form className='content-area'>
-                <AutoResizeTextarea refer={refContent} placeholder={user ? 'Nội dung báo cáo' : 'Vui lòng đăng nhập để báo cáo...'} disable={!user} />
-                <button type='button' className='btn' onClick={() => handleSubmitReport(refContent.current.value, null)} disabled={loading}>
+                <AutoResizeTextarea
+                    refer={refContent}
+                    placeholder={user ? 'Nội dung báo cáo' : 'Vui lòng đăng nhập để báo cáo...'}
+                    disable={!user}
+                    propContent={content}
+                    setContent={setContent}
+                />
+                <button type='button' className='btn' onClick={() => handleSubmitReport(refContent.current.value, null)} disabled={loading || !title || !content || !category}>
                     GỬI BÁO CÁO
                 </button>
             </form>
