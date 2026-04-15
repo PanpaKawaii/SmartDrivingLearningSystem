@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import DefaultAvatar from '../../assets/DefaultAvatar.png';
 
 import './FlipCard.css';
 
@@ -34,8 +33,7 @@ export default function FlipCard({
                                 <div className='content'>
                                     <div className='question-content'>{question?.content}</div>
                                     <div className='image'>
-                                        {/* {question.image && <img src={question.image || DefaultAvatar} alt='Ảnh minh họa câu hỏi' />} */}
-                                        {question.image && <img src={DefaultAvatar} alt='Ảnh minh họa câu hỏi' />}
+                                        {question.image && <img src={question.image} alt='Ảnh minh họa câu hỏi' />}
                                     </div>
                                     <div className='answer-content'>
                                         {question.showAnswer && question?.answers?.map((answer, aIndex) => (

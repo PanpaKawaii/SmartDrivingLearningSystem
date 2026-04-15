@@ -5,6 +5,10 @@
     box-sizing: border-box;
     transition: .15s;
 
+    &.my-post {
+        border-color: var(--green-dark);
+    }
+
     &:hover {
         border-color: #3b82f666;
         background: #3b82f620;

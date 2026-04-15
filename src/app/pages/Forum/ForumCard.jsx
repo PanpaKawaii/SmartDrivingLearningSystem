@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { deleteData, postData, putData } from '../../../mocks/CallingAPI';
+import { deleteData, patchData, postData, putData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import ButtonList from '../../components/ButtonList/ButtonList';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
@@ -20,6 +20,26 @@ export default function ForumCard({
     const [error, setError] = useState(null);
     const [open, setOpen] = useState(false);
     const [openReport, setOpenReport] = useState(null);
+
+    const TogglePostStatus = async (postId, action) => {
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            if (action == 'hidden') {
+                await patchData(`ForumPosts/${postId}/toggle-status`, {}, token);
+            } else if (action == 'delete') {
+                await patchData(`ForumPosts/${postId}`, {}, token);
+            }
+
+            setRefresh(p => p + 1);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+            if (error.status == 401) refreshNewToken(user);
+        } finally {
+            setLoading(false);
+        };
+    };
 
     const ReactThePost = async (newReactId, oldReactId, note) => {
         const ReactData = {
@@ -115,7 +135,7 @@ export default function ForumCard({
     // console.log('myReactionIcon', myReactionIcon);
 
     return (
-        <div className='forum-card-container'>
+        <div className={`forum-card-container ${post.userId == user?.id ? 'my-post' : ''}`}>
             <div className='user-information'>
                 <div className='image-name'>
                     <div className='image'>
@@ -129,7 +149,10 @@ export default function ForumCard({
                 {user &&
                     <ButtonList
                         list={[
-                            {
+                            (
+                                post.status == 1
+                                && post.userId != user?.id
+                            ) && {
                                 name: 'report',
                                 onToggle: () => setOpenReport({
                                     simulationId: null,
@@ -138,8 +161,23 @@ export default function ForumCard({
                                     questionId: null,
                                 }),
                                 disabled: false,
+                            },
+                            (
+                                (post.status == 1 || post.status == 4)
+                                && post.userId == user?.id
+                            ) && {
+                                name: post.status == 4 ? 'unhidden' : 'hidden',
+                                onToggle: () => TogglePostStatus(post.id, 'hidden'),
+                                disabled: loading,
+                            },
+                            (
+                                post.userId == user?.id
+                            ) && {
+                                name: 'delete',
+                                onToggle: () => TogglePostStatus(post.id, 'delete'),
+                                disabled: loading,
                             }
-                        ]}
+                        ].filter(Boolean)}
                     />
                 }
             </div>
