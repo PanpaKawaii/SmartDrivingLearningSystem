@@ -4,20 +4,20 @@ export default function Journey() {
     const steps = [
         {
             step: '01',
-            title: 'Learn the Theory',
-            description: 'Master traffic laws, road signs, and driving principles through interactive lessons designed by experts.',
+            title: 'Tìm hiểu lý thuyết',
+            description: 'Nắm vững luật giao thông, biển báo đường bộ và nguyên tắc lái xe thông qua các bài học tương tác được thiết kế bởi các chuyên gia.',
             icon: 'book-open',
         },
         {
             step: '02',
-            title: 'Practice & Test',
-            description: 'Sharpen your knowledge with realistic exams and receive AI-powered feedback on weak areas.',
+            title: 'Luyện tập & Kiểm tra',
+            description: 'Nâng cao kiến thức của bạn với các bài kiểm tra thực tế và nhận phản hồi từ AI về những lĩnh vực còn yếu.',
             icon: 'file-lines',
         },
         {
             step: '03',
-            title: 'Simulate & Master',
-            description: 'Experience real-world driving scenarios in our advanced 3D simulator before hitting the road.',
+            title: 'Mô phỏng & Làm chủ kỹ năng',
+            description: 'Trải nghiệm các tình huống lái xe thực tế trong trình mô phỏng 3D tiên tiến của chúng tôi trước khi ra đường.',
             icon: 'gamepad',
         }
     ];
@@ -31,14 +31,14 @@ export default function Journey() {
                 <div className='wrapper'>
                     <div className='header'>
                         <div className='badge'>
-                            <span>Simple 3-Step Process</span>
+                            <span>QUY TRÌNH 3 BƯỚC ĐƠN GIẢN</span>
                         </div>
                         <h2 className='title'>
-                            Your Journey to<br />
-                            <span className='gradient'>Driving Excellence</span>
+                            Hành trình của bạn đến<br />
+                            <span className='gradient'>sự xuất sắc trong lái xe</span>
                         </h2>
                         <p className='subtitle'>
-                            Master driving faster with our proven learning methodology
+                            Nâng cao kỹ năng lái xe nhanh hơn với phương pháp học tập đã được chứng minh của chúng tôi
                         </p>
                     </div>
                     <div className='steps'>

@@ -14,17 +14,17 @@ export default function Footer() {
                         <span className='logo-text'>GREENLIGHT</span>
                     </div>
                     <p>
-                        Advanced driving training system powered by AI technology.
-                        Experience the future of driver education.
+                        Hệ thống đào tạo lái xe tiên tiến được hỗ trợ bởi công nghệ trí tuệ nhân tạo.
+                        Trải nghiệm tương lai của giáo dục lái xe.
                     </p>
                 </div>
 
                 <div className='footer-column'>
-                    <h3>Quick Links</h3>
-                    <Link to='/learn'>Theory Learning</Link>
-                    <Link to='/practice'>Practice Exams</Link>
-                    <Link to='/signs'>Traffic Signs</Link>
-                    <Link to='/simulator'>Simulator</Link>
+                    <h3>Các liên kết</h3>
+                    <Link to='/learn'>Học lý thuyết</Link>
+                    <Link to='/practice'>Thi thực hành</Link>
+                    <Link to='/signs'>Biển báo giao thông</Link>
+                    <Link to='/simulator'>Trình mô phỏng</Link>
                 </div>
 
                 <div className='footer-column'>
@@ -36,7 +36,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className='footer-bottom'>
-                © 2026 <span>Smart Driving Learning System</span>. All rights reserved.
+                © 2026 <span>Hệ thống Học Lái Xe Thông Minh</span>. Bảo lưu mọi quyền.
             </div>
         </footer>
     )

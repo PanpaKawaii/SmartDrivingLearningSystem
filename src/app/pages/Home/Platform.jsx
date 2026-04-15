@@ -47,14 +47,14 @@ export default function Platform() {
                 <div className='wrapper'>
                     <div className='header'>
                         <div className='badge'>
-                            <span>Complete Training Platform</span>
+                            <span>NỀN TẢNG ĐÀO TẠO HOÀN CHỈNH</span>
                         </div>
                         <h2 className='title'>
-                            <div>Everything You Need</div>
-                            <div className='gradient'>To Become a Pro Driver</div>
+                            <div>Tất cả những gì bạn cần</div>
+                            <div className='gradient'>để trở thành một tay lái chuyên nghiệp</div>
                         </h2>
                         <p className='subtitle'>
-                            Six powerful modules working together to transform you from beginner to confident driver
+                            Sáu mô-đun mạnh mẽ phối hợp cùng nhau, giúp bạn từ người mới bắt đầu trở thành một tay lái tự tin
                         </p>
                     </div>
                     <div className='features'>
