@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import LessonModal from './LessonModal';
 import '../InstructorPages.css';
@@ -17,7 +17,8 @@ const normalizeItems = (payload) => {
     return [];
 };
 export default function LessonManagement() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const token = user?.token || '';
     const chapterIdParam = searchParams.get('chapterId') || '';
@@ -72,8 +73,12 @@ export default function LessonManagement() {
                 // Cập nhật cả state lẫn ref cùng lúc
                 allChaptersRef.current = chapters;
                 setAllChapters(chapters);
-            } catch { 
-                setError('Lỗi tải dữ liệu bằng lái và chương.'); 
+            } catch (error) {
+                if (error.status == 401) {
+                    refreshNewToken(user);
+                } else {
+                    setError('Lỗi tải dữ liệu bằng lái và chương.');
+                }
             } finally {
                 setMetaLoading(false);
             }
@@ -131,8 +136,12 @@ export default function LessonManagement() {
                     }));
                 }
                 setLessons(items);
-            } catch {
-                setError('Lỗi tải dữ liệu');
+            } catch (error) {
+                if (error.status == 401) {
+                    refreshNewToken(user);
+                } else {
+                    setError('Lỗi tải dữ liệu');
+                }
             } finally {
                 setTableLoading(false);
             }
@@ -146,6 +155,7 @@ export default function LessonManagement() {
 
     const handleToggleStatus = async (id) => {
         try {
+            
             setTableLoading(true);
             // Toggle: 1 (Public) <-> 0 (Hidden)
             await patchData(`QuestionLessons/${id}`, { }, token);
@@ -243,12 +253,19 @@ export default function LessonManagement() {
                     <h1>Quản lý Bài học</h1>
                     <p>Quản lý danh sách bài học trong hệ thống đào tạo.</p>
                 </div>
-                <button className='ins-btn ins-btn-primary' onClick={() => {
-                    setSelectedItem(null);
-                    setShowModal(true);
-                }}>
-                    <i className='fa-solid fa-plus'></i> Thêm bài học
-                </button>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    {chapterIdParam && (
+                        <button className='ins-btn' style={{ background: 'var(--ins-surface-high)', color: 'var(--ins-on-surface)' }} onClick={() => navigate(-1)}>
+                            <i className='fa-solid fa-arrow-left'></i> Quay lại
+                        </button>
+                    )}
+                    <button className='ins-btn ins-btn-primary' onClick={() => {
+                        setSelectedItem(null);
+                        setShowModal(true);
+                    }}>
+                        <i className='fa-solid fa-plus'></i> Thêm bài học
+                    </button>
+                </div>
             </div>
             <DataTable 
                 title={`Danh sách bài học (${serverPagination.totalCount})`} 

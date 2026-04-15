@@ -18,7 +18,7 @@ export default function ReportFeedbackModal({
 
     useEffect(() => {
         if (!isOpen) return;
-
+        console.log('ReportFeedbackModal opened with report:', report, 'and resolve:', resolve);
         setTitle(resolve?.title || initialTitle || '');
         setContent(resolve?.content || '');
         setError('');
@@ -28,16 +28,17 @@ export default function ReportFeedbackModal({
     if (!report) return null;
 
     const isViewMode = mode === 'view';
-    const isValid = title.trim().length >= 3 && content.trim().length >= 10;
+    const isValid = title.trim().length >= 5 && content.trim().length >= 10;
 
     const handleSubmit = async () => {
+        console.log('Submitting feedback with title:', title, 'and content:', content);
         if (isViewMode) {
             onClose();
             return;
         }
 
-        if (title.trim().length < 3) {
-            setError('Tieu de phan hoi phai co it nhat 3 ky tu');
+        if (title.trim().length < 5) {
+            setError('Tieu de phan hoi phai co it nhat 5 ky tu');
             return;
         }
 
@@ -51,6 +52,7 @@ export default function ReportFeedbackModal({
 
         try {
             const result = await onSubmit({ title: title.trim(), content: content.trim() });
+            console.log('Submit result:', result);
             if (result?.error) {
                 setError(result.error);
             }
@@ -131,6 +133,13 @@ export default function ReportFeedbackModal({
                             placeholder='Nhap tieu de phan hoi...'
                             disabled={submitting}
                         />
+                        <div style={{ 
+                            fontSize: '0.8rem', 
+                            color: title.trim().length >= 5 ? 'var(--ins-on-surface-variant)' : 'var(--ins-error)',
+                            marginTop: '4px'
+                        }}>
+                            {title.trim().length}/5 ký tự (Tối thiểu 5 ký tự) {title.trim().length < 5}
+                        </div>
                     </div>
                     <div className='ins-form-group'>
                         <label className='ins-form-label'>Noi dung phan hoi</label>
@@ -144,11 +153,15 @@ export default function ReportFeedbackModal({
                             placeholder='Nhap phan hoi cho nguoi bao cao...'
                             disabled={submitting}
                         ></textarea>
+                        <div style={{ 
+                            fontSize: '0.8rem', 
+                            color: content.trim().length >= 10 ? 'var(--ins-on-surface-variant)' : 'var(--ins-error)',
+                            marginTop: '4px'
+                        }}>
+                            {content.trim().length}/10 ký tự (Tối thiểu 10 ký tự) {content.trim().length < 10}
+                        </div>
                     </div>
-                    {error && <div style={{ color: 'var(--ins-error)', fontSize: '0.875rem' }}>{error}</div>}
-                    <div style={{ fontSize: '0.8rem', color: 'var(--ins-on-surface-variant)' }}>
-                        {content.trim().length}/10 ký tự (Tối thiểu 10 ký tự)
-                    </div>
+                    {error && <div style={{ color: 'var(--ins-error)', fontSize: '0.875rem', marginTop: '8px' }}>{error}</div>}
                 </>
             )}
         </Modal>

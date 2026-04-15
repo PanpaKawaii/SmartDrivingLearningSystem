@@ -14,7 +14,7 @@ const menuSections = [
     {
         label: 'Duyệt & Báo cáo',
         items: [
-            { name: 'Bài viết chờ duyệt', icon: 'fa-clock', path: '/instructor/pending-posts' },
+            { name: 'Quản lý bài viết', icon: 'fa-clock', path: '/instructor/pending-posts' },
             { name: 'Báo cáo cộng đồng', icon: 'fa-users', path: '/instructor/community-reports' },
             { name: 'Báo cáo lỗi nội dung', icon: 'fa-bug', path: '/instructor/content-error-reports' },
             { name: 'Duyệt yêu cầu thay đổi', icon: 'fa-code-pull-request', path: '/instructor/change-requests' },

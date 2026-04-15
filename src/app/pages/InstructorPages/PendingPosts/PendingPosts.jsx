@@ -9,17 +9,20 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 const STATUS_LABELS = {
     '-1': 'Chờ duyệt',
     '1': 'Đã duyệt',
+    '2': 'Đã xóa',
     '3': 'Đã từ chối',
 };
 
 
 export default function PendingPosts() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const [items, setItems] = useState([]);
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
+    const [filterStatus, setFilterStatus] = useState('');
+    const [selectedActions, setSelectedActions] = useState({});
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
     // State for view popup
@@ -41,6 +44,9 @@ export default function PendingPosts() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
+                if (filterStatus !== '') {
+                    query.set('status', filterStatus);
+                }
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
                 setItems(res?.items || []);
                 setServerPagination(prev => ({
@@ -51,34 +57,88 @@ export default function PendingPosts() {
                     totalPages: res?.totalPages || 1,
                     
                 }));
-            } catch (err) {
-                setError('Lỗi tải dữ liệu');
+            } catch (error) {
+                if (error.status == 401) refreshNewToken(user);
+                else setError('Lỗi tải dữ liệu bài viết. Vui lòng thử lại.');
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, filterStatus]);
+
+    const handleFilterStatus = (e) => {
+        const nextStatus = e.target.value;
+        setFilterStatus(nextStatus);
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
 
     const handleApprove = async (id) => {
         try {
+            setSelectedActions(prev => ({ ...prev, [id]: 'approve' }));
             setLoading(true);
             const token = user?.token || '';
             await patchData(`ForumPosts/${id}/approve`, { status: 1 }, token);
             setRefresh(r => r + 1);
-        } catch (err) {
+        } catch (error) {
+            if (error.status == 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi duyệt bài');
+            }
+            setSelectedActions(prev => {
+                const next = { ...prev };
+                delete next[id];
+                return next;
+            });
             setError('Lỗi duyệt bài');
+
         } finally {
             setLoading(false);
         }
     };
     const handleReject = async (id) => {
         try {
+            setSelectedActions(prev => ({ ...prev, [id]: 'reject' }));
             setLoading(true);
             const token = user?.token || '';
             await patchData(`ForumPosts/${id}/disapprove`, { status: 3 }, token);
             setRefresh(r => r + 1);
-        } catch (err) {
+        } catch (error) {
+            if (error.status == 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi từ chối bài');
+            }
+            setSelectedActions(prev => {
+                const next = { ...prev };
+                delete next[id];
+                return next;
+            });
             setError('Lỗi từ chối bài');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleForceDelete = async (id) => {
+        try {
+            setSelectedActions(prev => ({ ...prev, [id]: 'forceDelete' }));
+            setLoading(true);
+            const token = user?.token || '';
+            await patchData(`ForumPosts/${id}/force-delete`, { status: 2 }, token);
+            setRefresh(r => r + 1);
+        } catch (error) {
+            if (error.status == 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi xóa bài viết');
+            }
+            setSelectedActions(prev => {
+                const next = { ...prev };
+                delete next[id];
+                return next;
+            });
+            setError('Lỗi xóa bài viết');
         } finally {
             setLoading(false);
         }
@@ -124,6 +184,7 @@ export default function PendingPosts() {
             render: (val) => {
                 let cls = 'pending';
                 if (val === 1) cls = 'approved';
+                else if (val === 2) cls = 'rejected';
                 else if (val === 3) cls = 'rejected';
                 return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
             },
@@ -132,20 +193,36 @@ export default function PendingPosts() {
             key: 'actions',
             label: 'Thao tác',
             width: '120px',
-            render: (_, row) => (
-                <div className='ins-action-cell'>
-                    <button
-                        className='ins-action-btn view'
-                        title='Xem'
-                        onClick={() => setSelectedPostId(row.id)}
-                        disabled={loading}
-                    >
-                        <i className='fa-solid fa-eye' ></i>
-                    </button>
-                    <button className='ins-action-btn edit' title='Duyệt' onClick={() => handleApprove(row.id)} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
-                    <button className='ins-action-btn delete' title='Từ chối' onClick={() => handleReject(row.id)} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
-                </div>
-            ),
+            render: (_, row) => {
+                const chosenAction = selectedActions[row.id];
+                const isPending = row.status === -1;
+                const isApproved = row.status === 1;
+                const showApprove = isPending && chosenAction !== 'reject';
+                const showReject = isPending && chosenAction !== 'approve';
+                const showForceDelete = isApproved;
+
+                return (
+                    <div className='ins-action-cell'>
+                        <button
+                            className='ins-action-btn view'
+                            title='Xem'
+                            onClick={() => setSelectedPostId(row.id)}
+                            disabled={loading}
+                        >
+                            <i className='fa-solid fa-eye' ></i>
+                        </button>
+                        {showApprove && (
+                            <button className='ins-action-btn edit' title='Duyệt' onClick={() => handleApprove(row.id)} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
+                        )}
+                        {showReject && (
+                            <button className='ins-action-btn delete' title='Từ chối' onClick={() => handleReject(row.id)} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
+                        )}
+                        {showForceDelete && (
+                            <button className='ins-action-btn delete' title='Xóa bài' onClick={() => handleForceDelete(row.id)} disabled={loading}><i className='fa-solid fa-trash'></i></button>
+                        )}
+                    </div>
+                );
+            },
         },
     ];
 
@@ -160,18 +237,32 @@ export default function PendingPosts() {
         <div className='ins-page'>
             <div className='ins-page-header'>
                 <div>
-                    <h1>Bài viết chờ duyệt</h1>
+                    <h1>Quản lý bài viết</h1>
                     <p>Danh sách bài viết đang chờ phê duyệt từ giảng viên.</p>
                 </div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
             <DataTable
-                title={`Bài viết chờ duyệt (${serverPagination.totalCount})`}
-                columns={columns}
+                title={`Quản lý bài viết (${serverPagination.totalCount})`}
+                columns={columns}   
                 data={items}
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
+                filters={[
+                    {
+                        id: 'status-filter',
+                        value: filterStatus,
+                        onChange: handleFilterStatus,
+                        options: [
+                            { id: '-1', name: 'Chờ duyệt' },
+                            { id: '1', name: 'Đã duyệt' },
+                            { id: '2', name: 'Đã xóa' },
+                            { id: '3', name: 'Đã từ chối' },
+                        ],
+                        placeholder: '— Tất cả trạng thái —',
+                    },
+                ]}
             />
 
             {/* View Popup */}
