@@ -6,7 +6,6 @@ import CloudsBackground from '../../../components/CloudsBackground/CloudsBackgro
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
-import SignTemp from './SignTemp';
 
 import './ListTrafficSign.css';
 
@@ -148,8 +147,6 @@ export default function ListTrafficSign() {
                     </div>
                 ))}
             </div>
-
-            {/* <SignTemp /> */}
         </div>
     )
 }
