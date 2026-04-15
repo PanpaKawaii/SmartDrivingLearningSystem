@@ -33,7 +33,7 @@ export default function QuestionExam() {
 
     useEffect(() => {
         if (user?.roleName != 'Student' && localStorage.getItem('Exam') == new Date().toLocaleDateString()) {
-            navigate('./..');
+            navigate('./../..');
             return;
         }
         (async () => {

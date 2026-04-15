@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchData } from '../../../mocks/CallingAPI';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
+import HeadingComponent from '../../components/HeadingComponent/HeadingComponent';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import ControlledVideo from './ControlledVideo/ControlledVideo';
@@ -52,7 +53,12 @@ export default function SimulationScenario() {
     return (
         <div className='simulation-scenario-container'>
             <CloudsBackground />
-            <h1>THỰC HÀNH MÔ PHỎNG</h1>
+            <HeadingComponent
+                title={'THỰC HÀNH MÔ PHỎNG'}
+                subtitle=''
+                titlePosition={'center'}
+                back={'Quay lại'}
+            />
             <div className='container'>
                 <ControlledVideo
                     myResults={[]}

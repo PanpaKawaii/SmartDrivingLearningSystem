@@ -26,7 +26,6 @@ import TrafficSignDetail from '../pages/Learning/ListTrafficSign/TrafficSignDeta
 import TrafficSignFlashcard from '../pages/Learning/TrafficSignFlashcard/TrafficSignFlashcard.jsx'
 import TrafficSignFlipBook from '../pages/Learning/TrafficSignFlipBook/TrafficSignFlipBook.jsx'
 import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
-import ExamDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamDetail.jsx'
 import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSessionDetail.jsx'
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
 import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
@@ -97,7 +96,6 @@ export default function MainRoutes() {
                     <Route path='learning/traffic-sign-flashcard' element={<TrafficSignFlashcard />} />
                     <Route path='learning/traffic-sign-flip-book' element={<TrafficSignFlipBook />} />
                     <Route path='learning/list-exam' element={<ListExam />} />
-                    <Route path='learning/list-exam/:examId' element={<ExamDetail />} />
                     <Route path='learning/list-exam/:examId/exam-result/:sessionId' element={<ExamSessionDetail />} />
                     <Route path='learning/list-exam/:examId/situation-exam-result/:sessionId' element={<ExamSessionDetail />} />
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData, postData } from '../../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
+import HeadingComponent from '../../../../components/HeadingComponent/HeadingComponent';
 import TrafficLight from '../../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../../hooks/AuthContext/AuthContext';
 import ControlledVideo from '../../../SimulationScenario/ControlledVideo/ControlledVideo';
@@ -37,7 +38,7 @@ export default function SituationExam() {
 
     useEffect(() => {
         if (user?.roleName != 'Student' && localStorage.getItem('SituationExam') == new Date().toLocaleDateString()) {
-            navigate('./..');
+            navigate('./../../');
             return;
         }
         (async () => {
@@ -133,7 +134,12 @@ export default function SituationExam() {
     return (
         <div className='situation-exam-container'>
             <CloudsBackground />
-            <h1>BÀI THI MÔ PHỎNG</h1>
+            <HeadingComponent
+                title={'BÀI THI MÔ PHỎNG'}
+                subtitle=''
+                titlePosition={'center'}
+                back={''}
+            />
             <div className='container'>
                 <ControlledVideo
                     myResults={myResults}

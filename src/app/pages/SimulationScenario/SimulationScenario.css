@@ -1,9 +1,6 @@
 .simulation-scenario-container {
-
-    h1 {
-        padding: 20px 0;
-        text-align: center;
-        font-size: 4rem;
+    .heading-component-container {
+        max-width: 1400px;
     }
 
     .container {
