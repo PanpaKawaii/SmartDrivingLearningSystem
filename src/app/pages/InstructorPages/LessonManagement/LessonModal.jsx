@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
 import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
-import { putData, deleteData } from '../../../../mocks/CallingAPI';
+import { postData, putData, deleteData } from '../../../../mocks/CallingAPI';
 import TinyMCEEditor from '../../../components/RichTextEditor/TinyMCE/TinyMCEEditor';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
@@ -17,7 +17,8 @@ export default function LessonModal({
     listChapters,
     defaultChapterId,  // pre-fill từ Quick Navigate
 }) {
-    const { user } = useAuth?.() || {};
+    const { user, refreshNewToken } = useAuth?.() || {};
+    const [error, setError] = useState('');
     // Giá trị mặc định cho lesson mới
     const defaultLesson = {
         name: '',
@@ -25,7 +26,7 @@ export default function LessonModal({
         type: 'Lý thuyết',
         description: '',
         content: '',
-        index: 0,
+        index: 1,
         status: 0 
     };
 
@@ -88,31 +89,51 @@ export default function LessonModal({
     };
 
     const handleSubmit = async () => {
-        if (!lesson.name.trim()) return;
-        if (!lesson.chapter) return;
-        if (!lesson.description.trim()) return;
-        // Không cần dọn dẹp ảnh, BE đã xử lý tự động
+        setError('');
+        const normalizedIndex = Number(lesson.index);
+        const normalizedPayload = {
+            questionChapterId: lesson.chapter,
+            index: normalizedIndex,
+            name: lesson.name.trim(),
+            description: lesson.description.trim(),
+            content: lesson.content || '',
+        };
 
-        if (action === 'edit' && lesson.id) {
-            const payload = {
-                questionChapterId: lesson.chapter,
-                index: lesson.index,
-                name: lesson.name,
-                description: lesson.description,
-                content: lesson.content,
-                status: lesson.status
-            };
-            try {
-                await putData(`QuestionLessons/${lesson.id}`, payload, token);
-            } catch (e) {
-                console.error('Error saving lesson:', e);
-                setError('Lỗi lưu bài học. Vui lòng thử lại.');
-            }
+        if (!normalizedPayload.name) {
+            setError('Tên bài học là bắt buộc.');
+            return;
         }
-        
-        if (onSave) onSave(lesson);
-        setLesson(defaultLesson);
-        onClose();
+        if (!normalizedPayload.questionChapterId) {
+            setError('Vui lòng chọn chương cho bài học.');
+            return;
+        }
+        if (!normalizedPayload.description) {
+            setError('Mô tả bài học là bắt buộc.');
+            return;
+        }
+        if (!Number.isInteger(normalizedIndex) || normalizedIndex < 1) {
+            setError('Vị trí (index) phải là số nguyên >= 1.');
+            return;
+        }
+
+        try {
+            let savedLesson = null;
+
+            if (action === 'edit' && lesson.id) {
+                await putData(`QuestionLessons/${lesson.id}`, normalizedPayload, token);
+                savedLesson = { ...lesson, ...normalizedPayload };
+            } else if (action === 'add') {
+                savedLesson = await postData('QuestionLessons', normalizedPayload, token);
+            }
+
+            if (onSave) onSave(savedLesson || lesson);
+            setLesson(defaultLesson);
+            onClose();
+        } catch (error) {
+            console.error('Error saving lesson:', error);
+            setError(error?.message || 'Lưu bài học thất bại. Vui lòng kiểm tra dữ liệu nhập.');
+            if (error.status === 401) refreshNewToken(user); 
+        }
     };
     
     return (
@@ -186,7 +207,7 @@ export default function LessonModal({
                             }
                         }}
                         type='number'
-                        min={0}
+                        min={1}
                         placeholder='--'
                         required
                         step='1'
@@ -194,6 +215,12 @@ export default function LessonModal({
                     />
                 </div>
             </div>
+
+            {error && (
+                <div style={{ color: 'var(--ins-error)', marginTop: '-4px', marginBottom: '8px', fontSize: '0.9rem' }}>
+                    {error}
+                </div>
+            )}
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Mô tả <span style={{ color: 'var(--ins-error)' }}>*</span></label>
