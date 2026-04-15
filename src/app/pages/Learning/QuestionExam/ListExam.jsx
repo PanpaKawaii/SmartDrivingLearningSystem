@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI.js';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground.jsx';
+import HeadingComponent from '../../../components/HeadingComponent/HeadingComponent.jsx';
+import StarsBackground from '../../../components/StarsBackground/StarsBackground.jsx';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
-import UserCreateExam from './UserCreateExam.jsx';
+import ExamDetail from './ExamDetail/ExamDetail.jsx';
+import ExamSession from './ExamDetail/ExamSession.jsx';
+// import UserCreateExam from './UserCreateExam.jsx';
 
 import './ListExam.css';
 
@@ -17,6 +20,13 @@ export default function ListExam() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [selectedId, setSelectedId] = useState(null);
+    const [ExamOrSituation, setExamOrSituation] = useState('exam');
+
+    const selectedExam = ExamOrSituation == 'exam' ?
+        EXAMs.find(e => e.id == selectedId)
+        : SITUATIONEXAMs.find(e => e.id == selectedId);
 
     useEffect(() => {
         (async () => {
@@ -67,46 +77,123 @@ export default function ListExam() {
         })();
     }, [refresh, user?.token]);
 
+    console.log('EXAMs', EXAMs);
+    console.log('SITUATIONEXAMs', SITUATIONEXAMs);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
-        <div className='list-exam-container container'>
-            {EXAMs.map((exam, index) => (
-                <Link
-                    key={exam.id}
-                    to={`${exam.id}`}
-                    className='link question-exam-link'
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                    state='exam'
-                >
-                    <div className='exam'>
-                        <div>{exam.title}</div>
-                        <div>{exam.description}</div>
-                        <div>{exam.duration}s</div>
-                        <div>{exam.passScore}</div>
-                        <div>{exam.isRandom ? 'Random' : ''}</div>
-                    </div>
-                </Link>
-            ))}
-            {SITUATIONEXAMs.map((exam, index) => (
-                <Link
-                    key={exam.id}
-                    to={`${exam.id}`}
-                    className='link situation-exam-link'
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                    state='situation'
-                >
-                    <div className='exam'>
-                        <div>{exam.title}</div>
-                        <div>{exam.description}</div>
-                        <div>{exam.duration}s</div>
-                        <div>{exam.passScore}</div>
-                        <div>{exam.isRandom ? 'Random' : ''}</div>
-                    </div>
-                </Link>
-            ))}
+        <div className='list-exam-container'>
+            <StarsBackground />
+            <HeadingComponent
+                title={'Danh sách bài thi'}
+                subtitle='Luyện tập với các dạng bài thi khác nhau, nhận kết quả ngay lập tức.'
+                titlePosition={'left'}
+                back={'Quay lại'}
+            />
+            <button className='btn' onClick={() => setExamOrSituation('exam')}>EXAM</button>
+            <button className='btn' onClick={() => setExamOrSituation('situation')}>SITUATION</button>
+            <div className='container'>
+                <div className='left'>
+                    <div className='table-wrapper'>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bài Thi</th>
+                                    <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
+                                    <th>Thời gian</th>
+                                    <th>Điều kiện đậu</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
+                                    const isSelected = selectedId == exam.id;
+                                    const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
+                                    const passCondition = (ExamOrSituation == 'exam' ? ' điểm' : '%') || '';
 
-            <UserCreateExam DRIVINGLICENSEs={DRIVINGLICENSEs} />
-        </div>
+                                    return (
+                                        <tr
+                                            key={exam.id}
+                                            onClick={() => setSelectedId(isSelected ? null : exam.id)}
+                                            className={`${isSelected ? 'active' : ''}`}
+                                            style={{ animationDelay: `${index * 0.05}s` }}
+                                        >
+                                            <td>
+                                                <div className='row'>
+                                                    <div className='icon-box'>
+                                                        <i className='fa-solid fa-file-lines' />
+                                                    </div>
+                                                    <div>
+                                                        <div className='title'>{exam.title}</div>
+                                                        <div className='desc'>{exam.description}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{numberLength}</td>
+                                            <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
+                                            <td>{exam.passScore}{passCondition}</td>
+                                            <td><i className='fa-solid fa-chevron-right' /></td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div className='right' key={selectedId}>
+                    {selectedExam ? (
+                        <>
+                            <ExamDetail exam={selectedExam} type={ExamOrSituation} />
+                            <ExamSession />
+                        </>
+                    ) : (
+                        <div className='empty'>
+                            <h2>Chọn bài thi</h2>
+                            <p>Nhấn vào một bài thi để xem chi tiết</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* <div className='list'>
+                {EXAMs.map((exam, index) => (
+                    <Link
+                        key={exam.id}
+                        to={`${exam.id}`}
+                        className='link question-exam-link'
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                        state='exam'
+                    >
+                        <div className='exam'>
+                            <div>{exam.title}</div>
+                            <div>{exam.description}</div>
+                            <div>{exam.duration}s</div>
+                            <div>{exam.passScore}</div>
+                            <div>{exam.isRandom ? 'Random' : ''}</div>
+                        </div>
+                    </Link>
+                ))}
+                {SITUATIONEXAMs.map((exam, index) => (
+                    <Link
+                        key={exam.id}
+                        to={`${exam.id}`}
+                        className='link situation-exam-link'
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                        state='situation'
+                    >
+                        <div className='exam'>
+                            <div>{exam.title}</div>
+                            <div>{exam.description}</div>
+                            <div>{exam.duration}s</div>
+                            <div>{exam.passScore}</div>
+                            <div>{exam.isRandom ? 'Random' : ''}</div>
+                        </div>
+                    </Link>
+                ))}
+            </div> */}
+
+            {/* <UserCreateExam DRIVINGLICENSEs={DRIVINGLICENSEs} /> */}
+        </div >
     )
 }

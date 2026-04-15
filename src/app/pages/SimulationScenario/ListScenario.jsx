@@ -14,7 +14,7 @@ export default function ListScenario({
         list.reduce((acc, item) => {
             const chapterId = item?.[groupBy];
             if (!acc[chapterId]) {
-                acc[chapterId] = { [groupBy]: item.chapter, items: [] };
+                acc[chapterId] = { [groupBy]: item?.[groupBy?.slice(0, -2)], items: [] };
             }
             acc[chapterId].items.push(item);
             return acc;
