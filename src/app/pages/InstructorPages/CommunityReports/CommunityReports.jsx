@@ -69,6 +69,7 @@ export default function CommunityReports() {
                 });
 
                 const res = await fetchData(`Reports?${query.toString()}`, token);
+                console.log('Fetched reports data:', res);
                 const communityReports = normalizeItems(res).filter((report) => Boolean(report?.forumPostId || report?.forumCommentId));
 
                 setReportItems(communityReports);
@@ -92,7 +93,85 @@ export default function CommunityReports() {
         '1': 'Đã duyệt',
         '3': 'Đã bỏ qua',
     };
+    const handleCloseModal = () => {
+        console.log('Closing modal and resetting selected report');
+        setSelectedReport(null);
+        setModalMode('view');
+        setActionType('approve');
+    };
 
+    const handleCloseView = () => {
+        console.log('Closing post view');
+        setViewPost(null);
+        setHighlightCommentId(null);
+    };
+
+    const handleOpenReportEntity = async (report) => {
+        console.log('Opening report entity for report:', report);
+        if (!report) return;
+
+        setViewLoading(true);
+        setError(null);
+
+        const token = user?.token || '';
+        try {
+            let postId = report?.forumPostId || null;
+            const commentId = report?.forumCommentId || null;
+
+            if (!postId && commentId) {
+                const comment = await fetchData(`ForumComments/${commentId}`, token);
+                postId = comment?.forumPostId || null;
+            }
+
+            if (!postId) {
+                throw new Error('Khong tim thay bai viet can xem.');
+            }
+
+            const post = await fetchData(`ForumPosts/${postId}`, token);
+            setViewPost(post || null);
+            setHighlightCommentId(commentId || null);
+        } catch (err) {
+            setError('Lỗi tải chi tiết bài viết');
+            setViewPost(null);
+            setHighlightCommentId(null);
+        } finally {
+            setViewLoading(false);
+        }
+    };
+
+    const handleSubmitFeedback = async ({ title, content }) => {
+        console.log('Submitting feedback with title:', title, 'and content:', content);
+        if (!selectedReport) return { error: 'Khong tim thay bao cao can xu ly.' };
+
+        const token = user?.token || '';
+        if (!token) {
+            return { error: 'Bạn cần đăng nhập với tư cách Instructor để gửi phản hồi.' };
+        }
+
+        try {
+            const endpoint = actionType === 'disapprove'
+                ? `Reports/${selectedReport.id}/disapprove`
+                : `Reports/${selectedReport.id}/approve`;
+
+            await patchData(endpoint, { title, content }, token);
+        } catch (error) {
+            const apiErrors = error?.payload?.errors;
+            if (apiErrors && typeof apiErrors === 'object') {
+                const firstKey = Object.keys(apiErrors)[0];
+                const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
+                return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
+            }
+            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
+        }
+
+        setRefresh((current) => current + 1);
+        handleCloseModal();
+        return { ok: true };
+    };
+
+    const handlePageChange = (page) => {
+        setServerPagination(prev => ({ ...prev, page }));
+    };
     const columns = [
         { key: '', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Tiêu đề báo cáo' },
@@ -163,82 +242,6 @@ export default function CommunityReports() {
             ),
         },
     ];
-
-    const handleCloseModal = () => {
-        setSelectedReport(null);
-        setModalMode('view');
-        setActionType('approve');
-    };
-
-    const handleCloseView = () => {
-        setViewPost(null);
-        setHighlightCommentId(null);
-    };
-
-    const handleOpenReportEntity = async (report) => {
-        if (!report) return;
-
-        setViewLoading(true);
-        setError(null);
-
-        const token = user?.token || '';
-        try {
-            let postId = report?.forumPostId || null;
-            const commentId = report?.forumCommentId || null;
-
-            if (!postId && commentId) {
-                const comment = await fetchData(`ForumComments/${commentId}`, token);
-                postId = comment?.forumPostId || null;
-            }
-
-            if (!postId) {
-                throw new Error('Khong tim thay bai viet can xem.');
-            }
-
-            const post = await fetchData(`ForumPosts/${postId}`, token);
-            setViewPost(post || null);
-            setHighlightCommentId(commentId || null);
-        } catch (err) {
-            setError('Lỗi tải chi tiết bài viết');
-            setViewPost(null);
-            setHighlightCommentId(null);
-        } finally {
-            setViewLoading(false);
-        }
-    };
-
-    const handleSubmitFeedback = async ({ title, content }) => {
-        if (!selectedReport) return { error: 'Khong tim thay bao cao can xu ly.' };
-
-        const token = user?.token || '';
-        if (!token) {
-            return { error: 'Bạn cần đăng nhập với tư cách Instructor để gửi phản hồi.' };
-        }
-
-        try {
-            const endpoint = actionType === 'disapprove'
-                ? `Reports/${selectedReport.id}/disapprove`
-                : `Reports/${selectedReport.id}/approve`;
-
-            await patchData(endpoint, { title, content }, token);
-        } catch (error) {
-            const apiErrors = error?.payload?.errors;
-            if (apiErrors && typeof apiErrors === 'object') {
-                const firstKey = Object.keys(apiErrors)[0];
-                const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
-                return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
-            }
-            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
-        }
-
-        setRefresh((current) => current + 1);
-        handleCloseModal();
-        return { ok: true };
-    };
-
-    const handlePageChange = (page) => {
-        setServerPagination(prev => ({ ...prev, page }));
-    };
 
     return (
         <div className='ins-page'>
