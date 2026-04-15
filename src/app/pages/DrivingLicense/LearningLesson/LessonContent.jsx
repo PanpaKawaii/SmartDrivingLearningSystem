@@ -50,13 +50,13 @@ export default function LessonContent({
             <i className='fa-solid fa-book-open' />
           </div>
           <div>
-            <h2>Lesson Content</h2>
-            <p>HTML lesson content</p>
+            <h2>Nội dung bài học</h2>
+            <p>Nội dung lý thuyết</p>
           </div>
         </div>
         {!isLocked && (
           <div className='completed'>
-            <span>Completed</span>
+            <span>Đã hoàn thành</span>
           </div>
         )}
       </div>
@@ -76,10 +76,10 @@ export default function LessonContent({
               <button
                 onClick={markLessonContentComplete}
                 className='complete-button compact'
-                disabled={loading}
+                disabled={ !user || loading}
               >
                 <i className='fa-regular fa-check-circle' />
-                <span>Mark Complete</span>
+                <span>Đánh dấu đã học</span>
               </button>
             </div>
           )}
@@ -87,7 +87,7 @@ export default function LessonContent({
       ) : (
         <div className='empty'>
           <div className='empty-icon' />
-          <p>No lesson content available</p>
+          <p>Không có nội dung bài học nào.</p>
         </div>
       )}
     </div>

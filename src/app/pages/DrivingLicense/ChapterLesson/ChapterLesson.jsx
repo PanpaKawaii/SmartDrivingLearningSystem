@@ -35,6 +35,7 @@ export default function ChapterLesson() {
             const token = user?.token || '';
             const userId = user?.id || 'no-user';
             try {
+                let LessonProgressResponse = [];
                 const questionChapterQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
@@ -46,19 +47,22 @@ export default function ChapterLesson() {
                     pageSize: '500',
                     status: 1,
                 });
-                const lessonProgressQuery = new URLSearchParams({
-                    status: 1,
-                });
                 const ThisDrivingLicenseResponse = await fetchData(`DrivingLicenses/${drivingLicenseId}`, token);
                 const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
                 const QuestionLessonResponse = await fetchData(`QuestionLessons?${questionLessonQuery.toString()}`, token);
-                const LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}?${lessonProgressQuery}`, token);
                 console.log('ThisDrivingLicenseResponse', ThisDrivingLicenseResponse);
                 console.log('QuestionChapterResponse', QuestionChapterResponse);
                 console.log('QuestionLessonResponse', QuestionLessonResponse);
-                console.log('LessonProgressResponse', LessonProgressResponse);
                 const QuestionChapterItems = QuestionChapterResponse?.items;
                 const QuestionLessonItems = QuestionLessonResponse?.items;
+
+                if (user) {
+                    const lessonProgressQuery = new URLSearchParams({
+                        status: 1,
+                    });
+                    LessonProgressResponse = await fetchData(`LessonProgresses/user/${userId}?${lessonProgressQuery}`, token);
+                    console.log('LessonProgressResponse', LessonProgressResponse);
+                }
 
                 const QuestionLessons = QuestionLessonItems.map(ql => ({
                     ...ql,
@@ -80,9 +84,9 @@ export default function ChapterLesson() {
                 setError(error);
                 if (error.status == 401) {
                     const refreshResult = await refreshNewToken(user);
-                    if (refreshResult?.message == 'Logout') { 
+                    if (refreshResult?.message == 'Logout') {
                         logout();
-                        navigate('./', { state: { openLogin: 'true' } }); 
+                        navigate('./', { state: { openLogin: 'true' } });
                     }
                 }
             } finally {
@@ -104,7 +108,7 @@ export default function ChapterLesson() {
                 <div className='content'>
                     <Link to='/driving-license' className='back-btn'>
                         <i className='fa-solid fa-chevron-left' />
-                        <div>Back to Licenses</div>
+                        <span>Quay lại</span>
                     </Link>
                     <h1>{ThisDrivingLicense?.name}</h1>
                     <p>{ThisDrivingLicense?.description}</p>
@@ -112,8 +116,8 @@ export default function ChapterLesson() {
             </div>
             <div className='container'>
                 <div className='section-header'>
-                    <h2>Course Chapters</h2>
-                    <p>Complete lessons and pass exams to progress</p>
+                    <h2>Các chương của khóa học</h2>
+                    <p>Hoàn thành các bài học và vượt qua các kỳ thi để tiến bộ.</p>
                 </div>
 
                 <div className='chapter-tabs'>
@@ -121,7 +125,7 @@ export default function ChapterLesson() {
                         className={`tab ${selectedChapterId == '' ? 'active' : ''}`}
                         onClick={() => setSelectedChapterId('')}
                     >
-                        All Chapters
+                        Tất cả các chương
                     </button>
                     {QUESTIONCHAPTERs.map((chapter, index_chapter) => {
                         const lesson = chapter.questionLessons?.length || 0;
@@ -141,7 +145,7 @@ export default function ChapterLesson() {
 
                 {selectedChapterId == '' && (
                     <div className='chapter-grid'>
-                        {QUESTIONCHAPTERs.map((chapter, index_chapter) => {
+                        {QUESTIONCHAPTERs?.sort((a, b) => a.index - b.index)?.map((chapter, index_chapter) => {
                             const lesson = chapter.questionLessons?.length || 0;
                             const completed = chapter.questionLessons?.filter(ql => ql.lessonProgresses?.some(lp => Number(lp.score) >= 50))?.length || 0;
                             const progress = lesson > 0 ? (completed / lesson) * 100 : 0;

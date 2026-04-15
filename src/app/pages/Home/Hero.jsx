@@ -6,10 +6,10 @@ import './Hero.css';
 
 export default function Hero() {
     const stats = [
-        { icon: 'users', value: '10K+', label: 'Active Learners' },
-        { icon: 'award', value: '95%', label: 'Pass Rate' },
-        { icon: 'question-circle', value: '600+', label: 'Questions' },
-        { icon: 'shield', value: '100%', label: 'Safe Learning' }
+        { icon: 'question-circle', type: 'solid', value: '600+', label: 'Câu hỏi lý thuyết' },
+        { icon: 'play', type: 'solid', value: '120+', label: 'Kịch bản mô phỏng' },
+        { icon: 'triangle-exclamation', type: 'solid', value: '300+', label: 'Biển báo giao thông' },
+        { icon: 'comment-dots', type: 'solid', value: '24/7', label: 'AI Support' }
     ];
     return (
         <div className='hero-container'>
@@ -19,35 +19,35 @@ export default function Hero() {
                 <div className='content'>
                     <div className='badge'>
                         <i className='fa-solid fa-zap' />
-                        <span>AI-Powered Training System</span>
+                        <span>Hệ thống đào tạo lái xe hỗ trợ AI</span>
                     </div>
                     <div className='title'>
                         <h1>
-                            <span>Master The Road</span>
-                            <span className='gradient'>Drive With Confidence</span>
+                            <span>Làm chủ con đường</span>
+                            <span className='gradient'>Lái xe tự tin</span>
                         </h1>
                     </div>
                     <p className='description'>
-                        Experience the future of driver education with AI-powered simulations and personalized learning paths
+                        Trải nghiệm tương lai của việc học lái xe với các mô phỏng ứng dụng AI và lộ trình học tập được cá nhân hóa
                     </p>
                     <div className='actions'>
                         <Link to='/driving-license'>
                             <button className='primary-btn'>
                                 <i className='fa-solid fa-book-open' />
-                                <span>Start Learning</span>
+                                <span>Bắt đầu ngay</span>
                             </button>
                         </Link>
                         <Link to='/simulation'>
                             <button className='secondary-btn'>
-                                <i className='fa-solid fa-gamepad' />
-                                <span>Try Simulator</span>
+                                <i className='fa-solid fa-play' />
+                                <span>Trải nghiệm mô phỏng</span>
                             </button>
                         </Link>
                     </div>
                     <div className='stats'>
                         {stats.map((stat, index) => (
                             <div key={index} className='stat-card'>
-                                <i className={`fa-solid fa-${stat.icon}`} />
+                                <i className={`fa-${stat.type} fa-${stat.icon}`} />
                                 <div className='value'>{stat.value}</div>
                                 <div className='label'>{stat.label}</div>
                             </div>

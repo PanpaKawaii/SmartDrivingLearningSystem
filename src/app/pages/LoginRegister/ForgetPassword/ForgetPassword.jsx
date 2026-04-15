@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { postData } from '../../../../mocks/CallingAPI';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 
 import './ForgetPassword.css';
@@ -139,7 +140,6 @@ export default function ForgetPassword() {
     return (
         <div className='forget-password-container'>
             <StarsBackground />
-            {/* ==FIX== */}
             <div className='container'>
                 {/* <div>{step}</div> */}
                 {step == 1 &&
@@ -159,8 +159,17 @@ export default function ForgetPassword() {
 
                     {step == 0 &&
                         <div className='form-email'>
-                            {/* ==FIX== */}
-                            <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <div className='form-group'>
+                                <MovingLabelInput
+                                    type={'text'}
+                                    value={email || ''}
+                                    onValueChange={(propE) => setEmail(propE)}
+                                    extraClassName={''}
+                                    extraStyle={{}}
+                                    label={'Email'}
+                                    labelStyle={'left moving'}
+                                />
+                            </div>
                             <div className='message'>{error?.message}</div>
                             <button type='button' className='btn' onClick={() => handleNext('')} disabled={loading}>Kiểm tra email</button>
                         </div>
@@ -200,8 +209,17 @@ export default function ForgetPassword() {
 
                     {step == 2 &&
                         <div className='form-password'>
-                            {/* ==FIX== */}
-                            <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <div className='form-group'>
+                                <MovingLabelInput
+                                    type={'password'}
+                                    value={password || ''}
+                                    onValueChange={(propE) => setPassword(propE)}
+                                    extraClassName={''}
+                                    extraStyle={{}}
+                                    label={'Password'}
+                                    labelStyle={'left moving'}
+                                />
+                            </div>
                             <div className='message'>{error?.message}</div>
                             <button type='button' className='btn' onClick={() => handleNext('')} disabled={loading}>Đổi mật khẩu</button>
                         </div>
@@ -209,7 +227,7 @@ export default function ForgetPassword() {
 
                     {step == 3 &&
                         <div className='form-success'>
-                            {/* ==FIX== */}
+                            <div className='icon-success'>✓</div>
                             <div className='success'>Đổi mật khẩu mới thành công</div>
                             <Link to='/' state={{ openLogin: 'true' }}>
                                 <button type='button' className='btn'>Về trang chủ</button>

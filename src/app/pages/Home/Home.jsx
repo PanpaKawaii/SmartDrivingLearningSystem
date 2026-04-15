@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
@@ -10,6 +11,8 @@ import Testimonials from './Testimonials';
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -24,15 +27,18 @@ export default function Home() {
             clearTimeout(timer);
         };
     }, []);
-    
-        return isLoading ? <div><CloudsBackground /><TrafficLight text={'success'} setRefresh={() => { }} /></div> : (
-        <div className='home-container'>
-            <StarsBackground />
-            <Hero />
-            <Platform />
-            <Journey />
-            <Testimonials />
-            <CTA />
-        </div>
-    )
+
+    return isLoading ?
+        <div>
+            <CloudsBackground />
+            <TrafficLight text={'success'} faceText={''} setRefresh={() => { }} />
+        </div> : (
+            <div className='home-container'>
+                <StarsBackground />
+                <Hero />
+                <Platform />
+                <Journey />
+                <CTA />
+            </div>
+        )
 }

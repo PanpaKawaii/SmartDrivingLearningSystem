@@ -26,16 +26,29 @@
             height: 200px;
             margin: 20px auto 40px;
             color: #fff;
-            background: linear-gradient(135deg, #2563eb, #0891b2);
             border-radius: 50%;
-            box-shadow: 0 8px 20px #0891b24d;
-
             font-size: 8rem;
             font-weight: bold;
+            user-select: none;
 
             display: flex;
             justify-content: center;
             align-items: center;
+
+            &.icon-loading {
+                background: linear-gradient(135deg, #2563eb, #0891b2);
+                box-shadow: 0 8px 20px #2563eb80;
+            }
+
+            &.icon-success {
+                background: linear-gradient(135deg, var(--green), #0891b2);
+                box-shadow: 0 8px 20px #39871280;
+            }
+
+            &.icon-fail {
+                background: linear-gradient(135deg, var(--red-dark), var(--red-light));
+                box-shadow: 0 8px 20px #cc000380;
+            }
 
             span {
                 align-content: center;
@@ -70,12 +83,12 @@
             font-size: 1.25rem;
             font-weight: bold;
 
-            &.success {
+            &.title-success {
                 margin: 0 auto 24px;
                 text-shadow: 0 4px 12px #28a745;
             }
 
-            &.fail {
+            &.title-fail {
                 margin: 0 auto 24px;
                 text-shadow: 0 4px 12px #dc3545;
             }

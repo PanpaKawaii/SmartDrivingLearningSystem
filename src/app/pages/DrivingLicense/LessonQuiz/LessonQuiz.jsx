@@ -19,7 +19,7 @@ export default function LessonQuiz() {
         <div className='lesson-quiz-container'>
             <StarsBackground />
             <CoreLearning
-                grid={2}
+                grid={4}
                 questionQuery={questionQuery}
                 disableAfterAnswer={true}
                 endQuizButton={true}

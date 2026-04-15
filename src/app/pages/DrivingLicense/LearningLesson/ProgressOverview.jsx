@@ -8,26 +8,26 @@ export default function ProgressOverview({
     const isPassed = maxScore >= 50;    
     return (
         <div className='progress-overview-container'>
-            <h3>Progress Overview</h3>
+            <h3>Tổng quan tiến độ</h3>
             <div className='progress-list'>
                 <ProgressItem
                     icon={<i className='fa-solid fa-book-open' />}
-                    title='Theory'
+                    title='Lý thuyết'
                     completed={!isLocked}
                     text={
                         !isLocked
-                            ? 'Completed'
-                            : 'Not started'
+                            ? 'Hoàn thành'
+                            : 'Chưa hoàn thành'
                     }
                 />
                 <ProgressItem
                     icon={<i className='fa-solid fa-file-lines' />}
-                    title='Exam'
+                    title='Bài kiểm tra'
                     completed={isPassed}
                     text={
                         isPassed
-                            ? `Score: ${maxScore}%`
-                            : 'Not started'
+                            ? `Điểm: ${maxScore}%`
+                            : 'Chưa hoàn thành'
                     }
                 />
             </div>
@@ -36,10 +36,10 @@ export default function ProgressOverview({
                     <div className='complete-box'>
                         <div className='complete-title'>
                             <i className='fa-regular fa-check-circle' />
-                            <span>Lesson Complete!</span>
+                            <span>Bài học hoàn tất!</span>
                         </div>
                         <p>
-                            Great job! You've completed all requirements for this lesson.
+                            Tuyệt vời! Bạn đã hoàn thành tất cả các yêu cầu của bài học này.
                         </p>
                     </div>
                 </div>

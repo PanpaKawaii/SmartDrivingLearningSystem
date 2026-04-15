@@ -77,11 +77,11 @@ export default function Learning() {
                 <div className='learn-header'>
                     <div className='badge'>
                         <i className='fa-solid fa-book-open' />
-                        <span>Theory Training</span>
+                        <span>Tài liệu đào tạo</span>
                     </div>
-                    <h1>Master Driving Theory</h1>
+                    <h1>Làm chủ kiến thức lái xe</h1>
                     <p>
-                        Comprehensive training modules for traffic laws, signs, techniques, and safety
+                        Các mô-đun đào tạo toàn diện về luật giao thông, biển báo, kỹ thuật và an toàn giao thông
                     </p>
                 </div>
 

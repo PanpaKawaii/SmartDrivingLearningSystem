@@ -11,6 +11,10 @@
         box-shadow: 0 20px 50px #3b82f633;
     }
 
+    &.my-post {
+        border-color: var(--green-dark);
+    }
+
     .user-information {
         padding: 12px 12px 0;
         display: flex;

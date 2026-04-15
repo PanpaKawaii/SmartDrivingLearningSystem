@@ -60,12 +60,11 @@ export default function DrivingLicense() {
             <StarsBackground />
             <div className='licenses-header'>
                 <div className='badge'>
-                    <span>Driver License Programs</span>
+                    <span>Chương trình ôn tập thi lấy giấy phép lái xe</span>
                 </div>
-                <h1>Choose Your <span className='gradient'>License Path</span></h1>
+                <h1>Chọn lộ trình <span className='gradient'>bằng lái của bạn</span></h1>
                 <p>
-                    Select a license program to start your journey. Each program includes
-                    comprehensive theory lessons and practice exams.
+                    Hãy chọn một chương trình cấp bằng để bắt đầu hành trình của bạn. Mỗi chương trình đều bao gồm các bài học lý thuyết toàn diện và các bài kiểm tra thực hành.
                 </p>
             </div>
 
@@ -95,11 +94,11 @@ export default function DrivingLicense() {
                                         </div>
                                         <div className='item'>
                                             <i className='fa-regular fa-check-circle' />
-                                            <span>Theory + Exam</span>
+                                            <span>Lý thuyết + bài kiểm tra</span>
                                         </div>
                                     </div>
                                     <div className='cta'>
-                                        <span>Start Learning</span>
+                                        <span>Bắt đầu học</span>
                                         <i className='fa-solid fa-arrow-right' />
                                     </div>
                                 </div>

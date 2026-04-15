@@ -5,6 +5,7 @@ import './TrafficLight.css';
 export default function TrafficLight({
     text = 'error',
     status = '',
+    faceText = 'Refresh',
     setRefresh = () => { },
 }) {
     console.log('status', status);
@@ -67,7 +68,7 @@ export default function TrafficLight({
                             className={`face f${i + 1} ${i < 2 ? 'updown-face' : (i + 1 == 4 ? 'special refresh-face' : (i + 1 == 6 ? (status ? 'special status-face' : 'special refresh-face') : 'side-face'))}`}
                             onClick={() => setRefresh(p => p + 1)}
                         >
-                            {i + 1 == 4 ? 'Refresh' : (i + 1 == 6 ? (status ? status : 'Refresh') : '')}
+                            {i + 1 == 4 ? faceText : (i + 1 == 6 ? (status ? status : faceText) : '')}
                         </div>
                     ))}
                     {[...Array(2)].map((_, i) => (

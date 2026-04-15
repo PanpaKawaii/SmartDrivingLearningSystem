@@ -19,6 +19,7 @@ export default function ForumCreatePost({
     const [name, setName] = useState('');
     const [title, setTitle] = useState('');
     const [topic, setTopic] = useState('');
+    const [content, setContent] = useState('');
     const [FORUMTOPICs, setFORUMTOPICs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -106,8 +107,14 @@ export default function ForumCreatePost({
                 <button className='btn' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
             </div>
             <form className='content-area'>
-                <AutoResizeTextarea refer={refContent} placeholder={user ? 'Nội dung bài viết' : 'Vui lòng đăng nhập để tạo bài viết...'} disable={!user} />
-                <button type='button' className='btn' onClick={() => handleSubmitPost(refContent.current.value)} disabled={loading}>
+                <AutoResizeTextarea
+                    refer={refContent}
+                    placeholder={user ? 'Nội dung bài viết' : 'Vui lòng đăng nhập để tạo bài viết...'}
+                    disable={!user}
+                    propContent={content}
+                    setContent={setContent}
+                />
+                <button type='button' className='btn' onClick={() => handleSubmitPost(refContent.current.value)} disabled={loading || !title || !content || !topic}>
                     ĐĂNG
                 </button>
             </form>
