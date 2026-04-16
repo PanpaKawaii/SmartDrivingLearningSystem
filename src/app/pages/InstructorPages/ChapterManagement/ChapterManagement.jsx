@@ -26,7 +26,8 @@ export default function ChapterManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
-
+    const [searchTerm, setSearchTerm] = useState('');
+    const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     // Filter state — pre-filled từ query param
     const [filterLicense, setFilterLicense] = useState(licenseIdParam);
 
@@ -58,33 +59,67 @@ export default function ChapterManagement() {
             setLoading(true);
             setError(null);
             try {
-                const query = new URLSearchParams({ page: '1', pageSize: '500' });
-                if (filterLicense) query.set('drivingLicenseId', filterLicense);
+                
+                const query = new URLSearchParams({
+                    page: serverPagination.page,
+                    pageSize: serverPagination.pageSize,
+                });
+                if (searchTerm.trim()) {
+                    query.set('name', searchTerm.trim());
+                }
+                if (filterLicense) {
+                    query.set('drivingLicenseId', filterLicense);   
+                } 
                 const res = await fetchData(`QuestionChapters?${query.toString()}`, token);
                 const items = normalizeItems(res);
+                console.log('totalPages:', res?.totalPages);
+                setServerPagination(prev => ({
+                        ...prev,
+                        page: res?.page || prev.page,
+                        pageSize: res?.pageSize || prev.pageSize,
+                        totalCount: res?.totalCount ?? prev.totalCount,
+                        totalPages: res?.totalPages || 1,
+                }));
                 setChapters(items);
+                
             } catch (err) {
                 setError('Lỗi tải dữ liệu chương.');
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh, token, filterLicense]);
+    }, [refresh, token, filterLicense, searchTerm, serverPagination.page, serverPagination.pageSize]);
 
     const handleClearFilter = () => {
-        setFilterLicense('');
+        if(filterLicense){
+            setFilterLicense('');
+        }
+        if(searchTerm.trim()){
+            setSearchTerm('');
+        }
+        setServerPagination(prev => ({ ...prev, page: 1 }));
         setSearchParams({});
     };
 
     const handleFilterChange = (e) => {
         const val = e.target.value;
         setFilterLicense(val);
+        setServerPagination(prev => ({ ...prev, page: 1 }));
         if (val) {
             const selectedLicense = licenses.find(l => l.id === val);
             setSearchParams({ licenseId: val, licenseName: selectedLicense?.name || '' });
+            
         } else {
             setSearchParams({});
         }
+    };
+    
+    const handleSearch = (search) => {
+            setSearchTerm(search);
+            setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+    const handlePageChange = (page) => {
+            setServerPagination(prev => ({ ...prev, page }));
     };
 
     const handleToggleStatus = async (id) => {
@@ -129,7 +164,11 @@ export default function ChapterManagement() {
             key: 'drivingLicenseId', label: 'Hạng bằng', width: '110px',
             render: (val) => getLicenseName(val),
         },
-        { key: 'description', label: 'Mô tả' },
+        { key: 'description', label: 'Mô tả', render: (val) => {
+            const maxLength = 50;
+            const truncated = val && val.length > maxLength ? val.substring(0, maxLength) + '...' : val;
+            return truncated ? <span title={val}>{truncated}</span> : <span>—</span>;
+        } },
         {
             key: 'status', label: 'Trạng thái', width: '110px',
             render: (val) => (
@@ -174,8 +213,19 @@ export default function ChapterManagement() {
         },
     ];
 
-    // Tên license đang filter (từ param hoặc state)
-    const activeFilterName = licenseNameParam || licenses.find(l => l.id === filterLicense)?.name || '';
+    // Tên thuộc tính đang filter 
+    // const activeFilterName =  licenseNameParam || licenses.find(l => l.id === filterLicense)?.name || '';
+     const activeBadge = (() => {
+        let badge = [];
+        if(searchTerm.trim()){
+            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearFilter() });
+        }
+        if (filterLicense) {
+            const license = licenses.find(l => l.id === filterLicense);
+            badge.push({ text: licenseNameParam || license?.name, onClear: () => handleClearFilter() });
+        }
+        return badge;
+    })();
 
     return (
         <div className='ins-page'>
@@ -200,11 +250,13 @@ export default function ChapterManagement() {
             </div>
 
             <DataTable
-                title={`Danh sách chương (${chapters.length})`}
+                title={`Danh sách chương (${serverPagination.totalCount})`}
                 columns={columns}
                 data={chapters}
                 loading={loading}
-                error={error}
+                serverPagination={serverPagination}
+                onPageChange={handlePageChange}
+                onSearch={handleSearch}
                 filters={[
                     {
                         id: 'license-filter',
@@ -214,12 +266,10 @@ export default function ChapterManagement() {
                         placeholder: '— Tất cả hạng bằng —',
                     },
                 ]}
-                contextBadge={
-                    filterLicense && activeFilterName
-                        ? { text: activeFilterName, onClear: handleClearFilter }
-                        : null
-                }
-            />
+                contextBadge={ activeBadge.length > 0 ? activeBadge : null }
+                    searchValue={searchTerm}
+                    onSearchValueChange={setSearchTerm}
+                />
 
             <ChapterModal
                 isOpen={showModal}
