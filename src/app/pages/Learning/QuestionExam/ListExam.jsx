@@ -16,6 +16,8 @@ export default function ListExam() {
 
     const [EXAMs, setEXAMs] = useState([]);
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
+    const [EXAMSESSIONs, setEXAMSESSIONs] = useState([]);
+    const [SIMULATIONSESSIONs, setSIMULATIONSESSIONs] = useState([]);
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -64,6 +66,30 @@ export default function ListExam() {
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
+
+                if (user) {
+                    const examSessionQuery = new URLSearchParams({
+                        page: '1',
+                        pageSize: '500',
+                        userId: user?.id,
+                        status: 1,
+                    });
+                    const simulationSessionQuery = new URLSearchParams({
+                        page: '1',
+                        pageSize: '500',
+                        userId: user?.id,
+                        status: 1,
+                    });
+                    const ExamSessionResponse = await fetchData(`ExamSessions?${examSessionQuery.toString()}`, token);
+                    const SimulationSessionResponse = await fetchData(`SimulationSessions?${simulationSessionQuery.toString()}`, token);
+                    console.log('ExamSessionResponse', ExamSessionResponse);
+                    console.log('SimulationSessionResponse', SimulationSessionResponse);
+                    const ExamSessionItems = ExamSessionResponse?.items;
+                    const SimulationSessionItems = SimulationSessionResponse?.items;
+                    setEXAMSESSIONs(ExamSessionItems);
+                    setSIMULATIONSESSIONs(SimulationSessionItems);
+                }
+
                 setEXAMs(ExamItems);
                 setSITUATIONEXAMs(SituationExamItems);
                 setDRIVINGLICENSEs(DrivingLicenses);
@@ -95,7 +121,7 @@ export default function ListExam() {
             <button className='btn' onClick={() => setExamOrSituation('situation')}>SITUATION</button>
             <div className='container'>
                 <div className='left'>
-                    <div className='table-wrapper'>
+                    <div className={`table-wrapper ${ExamOrSituation}`}>
                         <table>
                             <thead>
                                 <tr>
@@ -110,7 +136,6 @@ export default function ListExam() {
                                 {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
                                     const isSelected = selectedId == exam.id;
                                     const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
-                                    const passCondition = (ExamOrSituation == 'exam' ? ' điểm' : '%') || '';
 
                                     return (
                                         <tr
@@ -132,7 +157,7 @@ export default function ListExam() {
                                             </td>
                                             <td>{numberLength}</td>
                                             <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
-                                            <td>{exam.passScore}{passCondition}</td>
+                                            <td>{exam.passScore}%</td>
                                             <td><i className='fa-solid fa-chevron-right' /></td>
                                         </tr>
                                     );
@@ -145,7 +170,11 @@ export default function ListExam() {
                     {selectedExam ? (
                         <>
                             <ExamDetail exam={selectedExam} type={ExamOrSituation} />
-                            <ExamSession />
+                            {ExamOrSituation == 'exam' ?
+                                <ExamSession examSessions={EXAMSESSIONs.filter((session) => session.examId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))} />
+                                :
+                                <ExamSession examSessions={SIMULATIONSESSIONs.filter((session) => session.situationExamId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))} />
+                            }
                         </>
                     ) : (
                         <div className='empty'>

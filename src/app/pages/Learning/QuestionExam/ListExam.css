@@ -6,14 +6,18 @@
 
         .left {
             flex: 1;
+            height: 200vh;
         }
 
         .right {
+            position: sticky;
+            top: -300px;
             width: 360px;
             height: fit-content;
             border: 1px solid #374e6e80;
             border-radius: 20px;
             overflow: hidden;
+
             opacity: 0;
             animation: slideInUp .6s ease forwards;
 
@@ -71,6 +75,18 @@
                             .fa-chevron-right {
                                 transform: rotateZ(90deg);
                             }
+
+                            .icon-box {
+                                transform: scale(1.2);
+
+                                i {
+                                    transform: rotateZ(20deg) scale(1.2);
+                                }
+                            }
+                        }
+
+                        td:nth-child(n+2) {
+                            color: #fff;
                         }
                     }
 
@@ -109,7 +125,7 @@
                         .row {
                             display: flex;
                             align-items: start;
-                            gap: 12px;
+                            gap: 20px;
 
                             .icon-box {
                                 width: 48px;
@@ -120,6 +136,7 @@
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
+                                transition: .15s;
 
                                 i {
                                     color: #fff;
@@ -137,6 +154,45 @@
                             .desc {
                                 font-size: .75rem;
                                 text-align: left;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.situation {
+                table {
+                    tr {
+                        &:hover {
+
+                            th,
+                            td {
+                                background-color: #1a264280;
+                            }
+                        }
+
+                        &.active {
+                            border-left: 3px solid #3b82f6;
+
+                            th,
+                            td {
+                                background: #3b82f620;
+                            }
+                        }
+
+                        th,
+                        td {
+                            color: var(--text-secondary);
+                            background-color: #0f172abb;
+                        }
+
+                        td {
+                            border-top: 2px solid #374e6e80;
+
+                            .row {
+                                .icon-box {
+                                    background: linear-gradient(135deg, #e43efa, #9008b2);
+                                }
                             }
                         }
                     }

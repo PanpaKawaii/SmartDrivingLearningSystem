@@ -7,7 +7,7 @@ export default function ExamDetail({
     type = '',
 }) {
     return (
-        <div className='exam-detail-container'>
+        <div className={`exam-detail-container ${type}`}>
             <div className='name'>
                 <h2>{exam.title}</h2>
                 <p>{exam.description}</p>

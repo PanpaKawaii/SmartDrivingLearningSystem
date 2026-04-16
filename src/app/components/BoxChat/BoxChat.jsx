@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { block1, block2, block3, block4, block5, block6 } from '../../../mocks/blocks.js';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
@@ -9,6 +10,8 @@ import './BoxChat.css';
 
 export default function BoxChat() {
     const { user } = useAuth();
+
+    const location = useLocation();
 
     const [Messages, setMessages] = useState([]);
     const [WidthFull, setWidthFull] = useState(false);
@@ -26,6 +29,11 @@ export default function BoxChat() {
             return () => clearTimeout(timer);
         }
     }, [visible]);
+
+    useEffect(() => {
+        if (location.state?.openBoxChat == 'true') setDisplayChat(true);
+        else if (location.state?.openBoxChat == 'false') setDisplayChat(false);
+    }, [location.state]);
 
     useEffect(() => {
         setMessages(['Xin chào! Tôi là trợ lý AI của bạn. Hãy đặt câu hỏi để tôi hỗ trợ nhé!']);

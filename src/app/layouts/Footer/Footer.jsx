@@ -21,22 +21,23 @@ export default function Footer() {
 
                 <div className='footer-column'>
                     <h3>Các liên kết</h3>
-                    <Link to='/learn'>Học lý thuyết</Link>
-                    <Link to='/practice'>Thi thực hành</Link>
-                    <Link to='/signs'>Biển báo giao thông</Link>
-                    <Link to='/simulator'>Trình mô phỏng</Link>
+                    <Link to='/driving-license'>Học lý thuyết</Link>
+                    <Link to='/learning/list-exam'>Thi thực hành</Link>
+                    <Link to='/simulation'>Trình mô phỏng</Link>
+                    <Link to='/learning/list-traffic-sign'>Biển báo giao thông</Link>
                 </div>
 
                 <div className='footer-column'>
                     <h3>Support</h3>
-                    <Link to='/assistant'>AI Assistant</Link>
-                    <Link to='/dashboard'>My Progress</Link>
-                    <a href='#'>Help Center</a>
-                    <a href='#'>Contact Us</a>
+                    <Link to='/' state={{ openBoxChat: 'true' }}>AI Assistant</Link>
+                    <Link to='/profile'>My Progress</Link>
+                    {/* <a href='#'>Help Center</a>
+                    <a href='#'>Contact Us</a> */}
                 </div>
             </div>
             <div className='footer-bottom'>
-                © 2026 <span>Hệ thống Học Lái Xe Thông Minh</span>. Bảo lưu mọi quyền.
+                © 2026 <span>Hệ thống Học Lái Xe Thông Minh</span>
+                {/* . Bảo lưu mọi quyền. */}
             </div>
         </footer>
     )
