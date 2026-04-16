@@ -36,7 +36,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className='footer-bottom'>
-                © 2026 <span>Hệ thống Học Lái Xe Thông Minh</span>. Bảo lưu mọi quyền.
+                © 2026 <span>Hệ thống Học Lái Xe Thông Minh</span>.
             </div>
         </footer>
     )
