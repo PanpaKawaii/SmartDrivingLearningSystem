@@ -66,7 +66,6 @@ export default function ListExam() {
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
-
                 if (user) {
                     const examSessionQuery = new URLSearchParams({
                         page: '1',

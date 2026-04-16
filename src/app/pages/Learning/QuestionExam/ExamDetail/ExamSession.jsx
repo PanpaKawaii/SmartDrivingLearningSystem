@@ -20,13 +20,17 @@ export default function ExamSession({
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
                         <div className='date'>{new Date(session.createAt)?.toLocaleDateString()}</div>
-                        <div>{session.score || session.totalScore || 0}%</div>
+                        <div className='score'>{session.score || session.totalScore || 0}%</div>
                         <div className='time'>
                             <i className='fa-regular fa-clock' />
                             <div>{(session.totalDuration || 0)?.toFixed(0)}s</div>
                         </div>
                         <i className={`fa-regular ${session.isPassed ? 'fa-check-circle' : 'fa-xmark-circle'}`} title={session.isPassed ? 'Đã vượt qua' : 'Chưa vượt qua'} />
-                        <Link to={`./${examId}/${type == 'exam' ? 'exam-result' : 'situation-exam-result'}/${session.id}`} className='view-detail'>
+                        <Link
+                            to={`./${examId}/${type == 'exam' ? 'exam-result' : 'situation-exam-result'}/${session.id}`}
+                            state={type}
+                            className='view-detail'
+                        >
                             <i className='fa-solid fa-play' />
                         </Link>
                     </div>
