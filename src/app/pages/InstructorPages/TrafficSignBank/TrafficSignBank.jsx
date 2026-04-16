@@ -177,17 +177,14 @@ export default function TrafficSignBank() {
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
-                <div>
-                    <h1>Ngân hàng Biển báo</h1>
-                    <p>Quản lý hệ thống biển báo giao thông đường bộ ({data.length} mục).</p>
-                </div>
+                <div><h1>Ngân hàng Biển báo</h1><p>Quản lý danh sách biển báo giao thông ({data.length} biển báo).</p></div>
                 <button className='ins-btn ins-btn-primary' onClick={() => { setSelectedSign(null); setIsModalOpen(true); }}>
                     <i className='fa-solid fa-plus'></i> Thêm biển báo
                 </button>
             </div>
 
             <DataTable
-                title="Danh sách biển báo"
+                title={`Hiển thị ${data.length} biển báo`}
                 columns={columns}
                 data={data}
                 loading={loading}
