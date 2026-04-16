@@ -152,7 +152,7 @@ export default function SituationExam() {
                 <ListScenario
                     list={SIMULATIONSCENARIOs}
                     done={done}
-                    groupBy={'simulationChapterId'}
+                    groupBy={''}
                     label={'Danh sách kịch bản mô phỏng'}
                     onClickButton={setSelectedScenarioId}
                     selected={selectedScenarioId}

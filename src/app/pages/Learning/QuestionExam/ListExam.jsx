@@ -117,71 +117,87 @@ export default function ListExam() {
                 titlePosition={'left'}
                 back={'Quay lại'}
             />
-            <button className='btn' onClick={() => setExamOrSituation('exam')}>EXAM</button>
-            <button className='btn' onClick={() => setExamOrSituation('situation')}>SITUATION</button>
             <div className='container'>
-                <div className='left'>
-                    <div className={`table-wrapper ${ExamOrSituation}`}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Bài Thi</th>
-                                    <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
-                                    <th>Thời gian</th>
-                                    <th>Điều kiện đậu</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
-                                    const isSelected = selectedId == exam.id;
-                                    const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
-
-                                    return (
-                                        <tr
-                                            key={exam.id}
-                                            onClick={() => setSelectedId(isSelected ? null : exam.id)}
-                                            className={`${isSelected ? 'active' : ''}`}
-                                            style={{ animationDelay: `${index * 0.05}s` }}
-                                        >
-                                            <td>
-                                                <div className='row'>
-                                                    <div className='icon-box'>
-                                                        <i className='fa-solid fa-file-lines' />
-                                                    </div>
-                                                    <div>
-                                                        <div className='title'>{exam.title}</div>
-                                                        <div className='desc'>{exam.description}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{numberLength}</td>
-                                            <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
-                                            <td>{exam.passScore}%</td>
-                                            <td><i className='fa-solid fa-chevron-right' /></td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className='btns'>
+                    <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
+                        ĐỀ THI LÝ THUYẾT
+                    </button>
+                    <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
+                        ĐỀ THI MÔ PHỎNG
+                    </button>
                 </div>
-                <div className='right' key={selectedId}>
-                    {selectedExam ? (
-                        <>
-                            <ExamDetail exam={selectedExam} type={ExamOrSituation} />
-                            {ExamOrSituation == 'exam' ?
-                                <ExamSession examSessions={EXAMSESSIONs.filter((session) => session.examId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))} />
-                                :
-                                <ExamSession examSessions={SIMULATIONSESSIONs.filter((session) => session.situationExamId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))} />
-                            }
-                        </>
-                    ) : (
-                        <div className='empty'>
-                            <h2>Chọn bài thi</h2>
-                            <p>Nhấn vào một bài thi để xem chi tiết</p>
+                <div className='content'>
+                    <div className='left'>
+                        <div className={`table-wrapper ${ExamOrSituation}`}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Bài Thi</th>
+                                        <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
+                                        <th>Thời gian</th>
+                                        <th>Điều kiện đậu</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
+                                        const isSelected = selectedId == exam.id;
+                                        const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
+
+                                        return (
+                                            <tr
+                                                key={exam.id}
+                                                onClick={() => setSelectedId(isSelected ? null : exam.id)}
+                                                className={`${isSelected ? 'active' : ''}`}
+                                                style={{ animationDelay: `${index * 0.05}s` }}
+                                            >
+                                                <td>
+                                                    <div className='row'>
+                                                        <div className='icon-box'>
+                                                            <i className='fa-solid fa-file-lines' />
+                                                        </div>
+                                                        <div>
+                                                            <div className='title'>{exam.title}</div>
+                                                            <div className='desc'>{exam.description}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{numberLength}</td>
+                                                <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
+                                                <td>{exam.passScore}%</td>
+                                                <td><i className='fa-solid fa-chevron-right' /></td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
-                    )}
+                    </div>
+                    <div className='right' key={selectedId}>
+                        {selectedExam ? (
+                            <>
+                                <ExamDetail exam={selectedExam} type={ExamOrSituation} />
+                                {ExamOrSituation == 'exam' ?
+                                    <ExamSession
+                                        examSessions={EXAMSESSIONs.filter((session) => session.examId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))}
+                                        examId={selectedId}
+                                        type={ExamOrSituation}
+                                    />
+                                    :
+                                    <ExamSession
+                                        examSessions={SIMULATIONSESSIONs.filter((session) => session.situationExamId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))}
+                                        examId={selectedId}
+                                        type={ExamOrSituation}
+                                    />
+                                }
+                            </>
+                        ) : (
+                            <div className='empty'>
+                                <h2>Chọn bài thi</h2>
+                                <p>Nhấn vào một bài thi để xem chi tiết</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
