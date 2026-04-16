@@ -28,7 +28,6 @@ export default function ExamSessionDetail() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log('useEffect');
         (async () => {
             setError(null);
             setLoading(true);
@@ -57,6 +56,15 @@ export default function ExamSessionDetail() {
 
     console.log('ThisSession', ThisSession);
 
+    const correctCount = ThisSession?.exam?.examQuestions?.filter(examQuestion => {
+        const question = examQuestion.question;
+        const correctAnswers = question.answers?.filter(a => a.isCorrect) || [];
+        const myAnswers = ThisSession?.examDetails;
+        const isSelectedCorrect = correctAnswers.every(correct => myAnswers?.some(ans => ans.answer?.id == correct.id));
+        return isSelectedCorrect;
+    }).length || 0;
+    console.log('correctCount', correctCount);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
@@ -68,9 +76,77 @@ export default function ExamSessionDetail() {
                 back={'Quay lại'}
             />
             <div className='container'>
-                ExamSessionDetail Question/Simulation
-                <div>{sessionId}</div>
-                <div>{ExamOrSituation}</div>
+                <div className='overal'>
+                    <div className='item count'>
+                        <div className='value'>{correctCount || 0}/{ThisSession?.exam?.examQuestions?.length || 0}</div>
+                        <div>Trả lời đúng</div>
+                    </div>
+                    <div className='item score'>
+                        <div className='value'>{ThisSession?.score || 0}%</div>
+                        <div>Làm bài chính xác</div>
+                    </div>
+                    <div className='item duration'>
+                        <div className='value'>{(ThisSession?.totalDuration || 0)?.toFixed(0)}s</div>
+                        <div>Thời gian làm bài</div>
+                    </div>
+                </div>
+                <div className='detail'>
+                    <h2>Chi tiết đáp án</h2>
+                    <div className='list-question'>
+                        {ThisSession?.exam?.examQuestions?.map((examQuestion, qIndex) => {
+                            const question = examQuestion.question;
+
+                            const correctAnswers = question.answers?.filter(a => a.isCorrect) || [];
+                            const myAnswers = ThisSession?.examDetails;
+                            const isSelectedCorrect = correctAnswers.every(correct => myAnswers?.some(ans => ans.answer?.id == correct.id));
+
+                            return (
+                                <div
+                                    key={qIndex}
+                                    className={`question-item ${isSelectedCorrect ? 'correct-question' : 'incorrect-question'}`}
+                                >
+                                    <h3>
+                                        <span>Câu hỏi {qIndex + 1}</span>
+                                        <i className={`fa-regular fa-${isSelectedCorrect ? 'check-circle' : 'xmark-circle'}`} />
+                                    </h3>
+                                    <p>{question.content}</p>
+                                    <div className='list-answer'>
+                                        {question.answers?.map((answer) => {
+                                            const isSelected = ThisSession?.examDetails?.some(detail => detail.answerId == answer.id);
+                                            const isAnswerCorrect = answer.isCorrect;
+
+                                            return (
+                                                <div
+                                                    key={answer.id}
+                                                    className={`
+                                                    answer-item
+                                                    ${isSelected ? 'selected' : ''}
+                                                    ${isAnswerCorrect ? 'correct-answer' : ''}
+                                                `}
+                                                >
+                                                    <div>{answer.content}</div>
+                                                    {isAnswerCorrect ?
+                                                        <div className='tag-correct'>
+                                                            <i className={'fa-regular fa-check-circle'} />
+                                                            <span>{isSelected ? 'Trả lời chính xác' : 'Đáp án đúng'}</span>
+                                                        </div>
+                                                        :
+                                                        (isSelected &&
+                                                            <div className='tag-selected'>
+                                                                <i className={'fa-regular fa-xmark-circle'} />
+                                                                <span>Đáp án của bạn</span>
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     )
