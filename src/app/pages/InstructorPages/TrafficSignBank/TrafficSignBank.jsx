@@ -1,4 +1,3 @@
-//src/app/pages/InstructorPages/TrafficSignBank/TrafficSignBank.jsx
 import { useEffect, useState, useCallback } from 'react';
 import { fetchData, patchData, deleteData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -118,9 +117,21 @@ export default function TrafficSignBank() {
             key: 'index', label: 'STT', width: '56px',
             render: (_, __, rIdx) => rIdx + 1,
         },
+        // Trong mảng columns của TrafficSignBank.jsx
         {
-            key: 'image', label: 'Ảnh', width: '70px',
-            render: (val) => val ? <img src={val} alt="sign" style={{ width: '35px', height: '35px', objectFit: 'contain' }} /> : <i className="fa-solid fa-image" style={{ opacity: 0.2 }}></i>
+            key: 'image',
+            label: 'Ảnh',
+            width: '70px',
+            render: (val) => val ? (
+                <img
+                    // Thêm ?t=... vào sau URL để tránh cache
+                    src={`${val}?t=${refresh}`}
+                    alt="sign"
+                    style={{ width: '35px', height: '35px', objectFit: 'contain' }}
+                />
+            ) : (
+                <i className="fa-solid fa-image" style={{ opacity: 0.2 }}></i>
+            )
         },
         { key: 'code', label: 'Mã', width: '90px' },
         { key: 'name', label: 'Tên biển báo' },
