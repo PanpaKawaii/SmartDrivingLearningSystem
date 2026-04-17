@@ -11,6 +11,7 @@ import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import ProfileView from './ProfileView';
 import ProfileEdit from './ProfileEdit';
 import LearningProgress from './LearningProgress';
+import ChangePasswordModal from './ChangePasswordModal';
 
 import './UserProfile.css';
 
@@ -20,6 +21,7 @@ export default function UserProfile() {
 
     const [saving, setSaving] = useState(false);
     const [feedback, setFeedback] = useState({ show: false, type: '', message: '' });
+    const [showResetModal, setShowResetModal] = useState(false);
     
     const [activeTab, setActiveTab] = useState('profile');
     const [isEditing, setIsEditing] = useState(false);
@@ -89,7 +91,7 @@ export default function UserProfile() {
                         drivingLicenses: result.userLicenses?.map(ul => ul.drivingLicense?.name) || [], // Lưu danh sách tên (để hiển thị ở View)
                     });
                 }
-                {activeTab === 'progress' && <LearningProgress stats={formData} />}
+                // {activeTab === 'progress' && <LearningProgress stats={formData} />}
             } catch (error) {
                 console.error("Lỗi khi fetch profile:", error);
                 setError(error);
@@ -198,6 +200,20 @@ export default function UserProfile() {
                     <span>{feedback.message}</span>
                 </div>
             )}
+
+            {showResetModal && (
+                <div className="fixed-overlay"> 
+                    <div className="modal-content-animation">
+                        <ChangePasswordModal 
+                            user={authUser}
+                            onClose={() => setShowResetModal(false)}
+                            showFeedback={showFeedback}
+                            refreshNewToken={refreshNewToken} // Truyền thêm hàm này
+                            logout={logout}                   // Truyền thêm hàm này
+                        />
+                    </div>
+                </div>
+            )}
             
             <div className='content-wrapper'>
                 <div className='profile-container'>
@@ -223,8 +239,11 @@ export default function UserProfile() {
                             <button className={`sidebar-btn ${activeTab === 'progress' ? 'primary-btn glow' : 'outline-btn'}`} onClick={() => setActiveTab('progress')}>
                                 <i className='fa-solid fa-chart-pie'></i> Tiến độ học tập
                             </button>
-                            <button className='sidebar-btn outline-btn mt-auto'>
-                                 <i className='fa-solid fa-lock'></i> Đổi mật khẩu
+                            <button 
+                                className='sidebar-btn outline-btn mt-auto' 
+                                onClick={() => setShowResetModal(true)}
+                            >
+                                <i className='fa-solid fa-lock'></i> Đổi mật khẩu
                             </button>
                         </div>
                     </div>
