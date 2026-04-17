@@ -5,20 +5,31 @@ import './HeadingComponent.css';
 export default function HeadingComponent({
     title = '',
     subtitle = '',
-    titlePosition = 'left',
+    titlePosition = 'center',
     back = 'back',
+    badge = '',
 }) {
-    const navigate= useNavigate();
+    const navigate = useNavigate();
+    const positionClass = titlePosition === 'left' ? 'is-left' : 'is-center';
+
     return (
-        <div className='heading-component-container'>
+        <div className={`heading-component-container ${positionClass}`}>
             {back && (
-                <button className='btn' onClick={() => navigate(-1)}>
+                <button className='btn heading-back-btn' onClick={() => navigate(-1)}>
                     <i className='fa-solid fa-chevron-left' />
                     <span>{back}</span>
                 </button>
             )}
-            <h1 style={{ textAlign: titlePosition }}>{title}</h1>
-            {subtitle && <p>{subtitle}</p>}
+
+            {badge && (
+                <div className='heading-badge'>
+                    <i className='fa-solid fa-book-open' />
+                    <span>{badge}</span>
+                </div>
+            )}
+
+            <h1>{title}</h1>
+            {subtitle && <p className='heading-subtitle'>{subtitle}</p>}
         </div>
-    )
+    );
 }

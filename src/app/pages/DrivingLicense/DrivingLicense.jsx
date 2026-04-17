@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchData } from '../../../mocks/CallingAPI';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
+import HeadingComponent from '../../components/HeadingComponent/HeadingComponent';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
@@ -58,15 +59,12 @@ export default function DrivingLicense() {
     return (
         <div className='driving-license-container container'>
             <StarsBackground />
-            <div className='licenses-header'>
-                <div className='badge'>
-                    <span>Chương trình ôn tập thi lấy giấy phép lái xe</span>
-                </div>
-                <h1>Chọn lộ trình <span className='gradient'>bằng lái của bạn</span></h1>
-                <p>
-                    Hãy chọn một chương trình cấp bằng để bắt đầu hành trình của bạn. Mỗi chương trình đều bao gồm các bài học lý thuyết toàn diện và các bài kiểm tra thực hành.
-                </p>
-            </div>
+            <HeadingComponent
+                badge='Chương trình ôn tập thi lấy giấy phép lái xe'
+                title='Chọn lộ trình bằng lái của bạn'
+                subtitle='Hãy chọn một chương trình cấp bằng để bắt đầu hành trình của bạn. Mỗi chương trình đều bao gồm các bài học lý thuyết toàn diện và các bài kiểm tra thực hành.'
+                back={false}
+            />
 
             <div className='license-grid'>
                 {DRIVINGLICENSEs.map((license, index) => (
