@@ -72,10 +72,13 @@ export default function ExamSessionDetail() {
             <StarsBackground />
             <HeadingComponent
                 title={'CHI TIẾT BÀI THI'}
+                subtitle=''
                 titlePosition={'center'}
                 back={'Quay lại'}
+                linkBack={'./../../..'}
             />
             <div className='container'>
+                <div>{ExamOrSituation}</div>
                 <div className='overal'>
                     <div className='item count'>
                         <div className='value'>{correctCount || 0}/{ThisSession?.exam?.examQuestions?.length || 0}</div>

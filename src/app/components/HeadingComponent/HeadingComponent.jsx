@@ -6,13 +6,14 @@ export default function HeadingComponent({
     title = '',
     subtitle = '',
     titlePosition = 'left',
-    back = 'back',
+    back = 'Back',
+    linkBack = '',
 }) {
-    const navigate= useNavigate();
+    const navigate = useNavigate();
     return (
         <div className='heading-component-container'>
             {back && (
-                <button className='btn' onClick={() => navigate(-1)}>
+                <button className='btn' onClick={() => linkBack ? navigate(linkBack) : navigate(-1)}>
                     <i className='fa-solid fa-chevron-left' />
                     <span>{back}</span>
                 </button>

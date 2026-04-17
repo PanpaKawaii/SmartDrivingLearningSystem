@@ -137,7 +137,7 @@ export default function Answer({
         try {
             const result = await postData('ExamSessions', ExamSessionData, token);
             console.log('result', result);
-            navigate(`./../exam-result/${result?.id}`);
+            navigate(`./../exam-result/${result?.id}`, { state: 'exam' });
 
             await sleep(1000);
         } catch (error) {

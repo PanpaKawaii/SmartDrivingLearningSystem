@@ -26,6 +26,8 @@ export default function ListExam() {
     const [selectedId, setSelectedId] = useState(null);
     const [ExamOrSituation, setExamOrSituation] = useState('exam');
 
+    const [textInput, setTextInput] = useState('');
+
     const selectedExam = ExamOrSituation == 'exam' ?
         EXAMs.find(e => e.id == selectedId)
         : SITUATIONEXAMs.find(e => e.id == selectedId);
@@ -105,6 +107,12 @@ export default function ListExam() {
     console.log('EXAMs', EXAMs);
     console.log('SITUATIONEXAMs', SITUATIONEXAMs);
 
+    const filteredExams = (ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs)?.filter(exam => {
+        const matchTitleDescription = !textInput || exam.title?.toLowerCase().includes(textInput.toLowerCase()) || exam.description?.toLowerCase().includes(textInput.toLowerCase());
+        return matchTitleDescription;
+    });
+    console.log('filteredExams', filteredExams);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
@@ -117,13 +125,14 @@ export default function ListExam() {
                 back={'Quay lại'}
             />
             <div className='container'>
-                <div className='btns'>
+                <div className='filters'>
                     <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
                         ĐỀ THI LÝ THUYẾT
                     </button>
                     <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
                         ĐỀ THI MÔ PHỎNG
                     </button>
+                    <input type='text' placeholder='Tìm kiếm...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
                 </div>
                 <div className='content'>
                     <div className='left'>
@@ -139,7 +148,7 @@ export default function ListExam() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
+                                    {filteredExams?.map((exam, index) => {
                                         const isSelected = selectedId == exam.id;
                                         const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
 

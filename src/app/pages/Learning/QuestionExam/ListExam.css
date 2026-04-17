@@ -1,6 +1,6 @@
 .list-exam-container {
     .container {
-        .btns {
+        .filters {
             margin: 0 0 8px;
             padding: 8px;
             width: fit-content;
@@ -25,6 +25,12 @@
                     background: #374e6e;
                     box-sizing: border-box;
                 }
+            }
+
+            input {
+                color: var(--text-primary);
+                background-color: var(--gray-2);
+                border: 2px solid var(--gray-3);
             }
         }
 
