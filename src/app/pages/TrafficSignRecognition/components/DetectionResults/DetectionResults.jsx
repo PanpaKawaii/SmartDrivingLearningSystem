@@ -14,7 +14,34 @@ export default function DetectionResults({ rawOutput }) {
     const aiResult = rawData?.result;
     const hasAiResult = Array.isArray(aiResult) && aiResult.length > 0;
 
-    const isCustomEmpty = Array.isArray(aiResult) && aiResult.length === 0;
+    let parsedAiResults = [];
+    let isParsedResult = false;
+
+    if (hasAiResult) {
+        try {
+            const firstResult = aiResult[0];
+            let contentString = null;
+            
+            if (typeof firstResult === 'object' && firstResult.content) {
+                contentString = firstResult.content;
+            } else if (typeof firstResult === 'string') {
+                contentString = firstResult;
+            }
+
+            if (contentString) {
+                const cleanContent = contentString.replace(/```json/gi, '').replace(/```/g, '').trim();
+                const parsed = JSON.parse(cleanContent);
+                if (Array.isArray(parsed)) {
+                    parsedAiResults = parsed;
+                    isParsedResult = true;
+                }
+            }
+        } catch (e) {
+            console.warn("Could not parse AI result content as JSON", e);
+        }
+    }
+
+    const isCustomEmpty = hasAiResult && isParsedResult && parsedAiResults.length === 0;
 
     if (!hasPredictions && !hasOcr && !hasAiResult) {
         if (isCustomEmpty) {
@@ -74,11 +101,34 @@ export default function DetectionResults({ rawOutput }) {
                         <i className='fa-solid fa-list-check' />
                         <span>Kết quả nhận diện</span>
                     </div>
-                    {aiResult.map((text, idx) => (
-                        <div key={idx} className='formatted-text-block'>
-                            {formatMarkdownList(text)}
+                    {isParsedResult ? (
+                        <div className='parsed-results-list'>
+                            {parsedAiResults.map((item, idx) => (
+                                <div key={idx} className='parsed-result-item'>
+                                    {item.Capston && (
+                                        <div className='result-capston'>
+                                            <span className='label'>Biển báo:</span>
+                                            <span className='value'>{item.Capston}</span>
+                                        </div>
+                                    )}
+                                    {item.result && (
+                                        <div className='result-desc'>
+                                            {item.result}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    ) : (
+                        aiResult.map((text, idx) => {
+                            const content = typeof text === 'object' ? text.content : text;
+                            return (
+                                <div key={idx} className='formatted-text-block'>
+                                    {formatMarkdownList(content || '')}
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
             )}
 

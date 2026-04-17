@@ -126,6 +126,45 @@
     }
 }
 
+.parsed-results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.parsed-result-item {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(96, 165, 250, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.result-capston {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .value {
+        font-weight: 700;
+        color: #60a5fa;
+        font-size: 1.05rem;
+    }
+}
+
+.result-desc {
+    color: var(--text-main);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
 .ocr-result {
     padding: 1rem;
 

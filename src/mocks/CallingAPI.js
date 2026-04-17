@@ -229,7 +229,7 @@ export const deleteMedia = async (fileUrl, imageTarget, token) => {
 };
 
 export const fetchRoboflowData = async (imageUrl) => {
-    const response = await fetch('/roboflow/sub-wtikx/workflows/text-recognition', { 
+    const response = await fetch('/roboflow/sub-wtikx/workflows/text-recognition-3', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
