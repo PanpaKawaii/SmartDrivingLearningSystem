@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import ImageUpload from '../../components/ImageUpload/ImageUpload';
-import { fetchData, putData } from '../../../mocks/CallingAPI';
+import { fetchData, putData, uploadMedia } from '../../../mocks/CallingAPI';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 
 import ProfileView from './ProfileView';
@@ -15,8 +15,11 @@ import LearningProgress from './LearningProgress';
 import './UserProfile.css';
 
 export default function UserProfile() {
-    const { user: authUser, logout, refreshNewToken } = useAuth();
+    const { user: authUser, logout, refreshNewToken, updateUser } = useAuth();
     const navigate = useNavigate();
+
+    const [saving, setSaving] = useState(false);
+    const [feedback, setFeedback] = useState({ show: false, type: '', message: '' });
     
     const [activeTab, setActiveTab] = useState('profile');
     const [isEditing, setIsEditing] = useState(false);
@@ -26,9 +29,25 @@ export default function UserProfile() {
     
     const [formData, setFormData] = useState({
         name: '', phone: '', gender: 'Male', description: '', 
-        dateOfBirth: '', licenseType: 'B2', avatar: '',
-        createAt: '', updateAt: ''
+        dateOfBirth: '', licenseType: '', avatar: '',
+        createAt: '', updateAt: '',
+        learningProgressQuestionCount: 0,
+        totalQuestionCount: 0,
+        examPassRate: 0,
+        simulationPassRate: 0,
+        examSessionCount: 0, // Số đề thi đã làm
+        simulationSessionCount: 0, // Số đề mô phỏng đã làm
+        lessonProgressCount: 0,
+        drivingLicenses: []
     });
+
+    const showFeedback = (type, message) => {
+        setFeedback({ show: true, type, message });
+        // Dùng functional update để đảm bảo tắt đúng popup hiện tại
+        setTimeout(() => {
+            setFeedback(prev => ({ ...prev, show: false }));
+        }, 3000);
+    };
 
     useEffect(() => {
         (async () => {
@@ -46,6 +65,8 @@ export default function UserProfile() {
                 const result = await fetchData(`User/${authUser.id}`, token);
                 
                 if (result) {
+                    const existingLicenses = result.userLicenses?.map(ul => ul.drivingLicense?.name).filter(Boolean) || [];
+
                     setFormData({
                         name: result.name || '',
                         phone: result.phone || '',
@@ -55,9 +76,20 @@ export default function UserProfile() {
                         licenseType: result.licenseType || '',
                         avatar: result.avatar || '',
                         createAt: result.createAt || result.createdAt, 
-                        updateAt: result.updateAt || result.updatedAt
+                        updateAt: result.updateAt || result.updatedAt,
+                        drivingLicenses: existingLicenses,
+                        learningProgressQuestionCount: result.learningProgressQuestionCount || 0,
+                        totalQuestionCount: result.totalQuestionCount || 0,
+                        examPassRate: result.examPassRate || 0,
+                        simulationPassRate: result.simulationPassRate || 0,
+                        examSessionCount: result.examSessions?.length || 0,
+                        simulationSessionCount: result.simulationSessions?.length || 0,
+                        lessonProgressCount: result.lessonProgresses?.length || 0,
+                        drivingLicenseIds: result.userLicenses?.map(ul => ul.drivingLicenseId) || [], // Lưu danh sách ID
+                        drivingLicenses: result.userLicenses?.map(ul => ul.drivingLicense?.name) || [], // Lưu danh sách tên (để hiển thị ở View)
                     });
                 }
+                {activeTab === 'progress' && <LearningProgress stats={formData} />}
             } catch (error) {
                 console.error("Lỗi khi fetch profile:", error);
                 setError(error);
@@ -77,40 +109,78 @@ export default function UserProfile() {
     }, [authUser?.token, refresh]); // Chạy lại khi token thay đổi hoặc refresh tăng
 
     const handleUpdateProfile = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
+        setSaving(true);
+        
+        setSaving(true); // Bắt đầu loading
         try {
-            // 1. Tạo Payload đúng chuẩn UserUpdateDTO của Backend
+            let finalAvatarUrl = formData.avatar;
+
+            // 1. Kiểm tra nếu người dùng đã chọn ảnh mới (là đối tượng File)
+            if (formData.avatarFile) {
+                const uploadResult = await uploadMedia(
+                    [formData.avatarFile], 
+                    authUser.id, 
+                    'UserAvatar', 
+                    authUser.token
+                );
+
+                // Kết quả trả về đã được normalize thành mảng qua hàm normalizeMediaUploadResponse
+                if (uploadResult && uploadResult.length > 0) {
+                    finalAvatarUrl = uploadResult[0].url; 
+                }
+            }
+
             const updatePayload = {
-                roleId: authUser.roleId, // RoleId là bắt buộc theo [NotEmptyGuid]
+                roleId: authUser.roleId,
                 email: authUser.email,
                 name: formData.name,
-                avatar: formData.avatar,
+                avatar: finalAvatarUrl,
                 phone: formData.phone,
                 gender: formData.gender,
                 description: formData.description,
-                // Backend dùng DateOnly nên gửi format YYYY-MM-DD
                 dateOfBirth: formData.dateOfBirth || null,
                 licenseType: formData.licenseType,
-                status: 1, // Hoặc giá trị status mặc định của bạn
-                // Password: "", // Chỉ gửi nếu bạn làm tính năng đổi pass ở đây
+                status: 1,
+                drivingLicenseIds: formData.drivingLicenseIds
             };
 
-            // 2. Gọi API PUT (Đảm bảo URL đúng: api/user/{id})
             const response = await putData(`User/${authUser.id}`, updatePayload, authUser.token);
             
             if (response) {
-                alert('Cập nhật thông tin thành công!');
+                // Cập nhật AuthContext và LocalStorage ngay lập tức
+                updateUser({ 
+                    avatar: finalAvatarUrl, 
+                    name: formData.name 
+                });
+
+                showFeedback('success', 'Cập nhật hồ sơ thành công!');
                 setIsEditing(false);
+                
+                // Xóa file tạm và cập nhật URL mới vào state nội bộ
+                setFormData(prev => ({ 
+                    ...prev, 
+                    avatarFile: null, 
+                    avatar: finalAvatarUrl 
+                }));
+                
                 setRefresh(prev => prev + 1); 
             }
+        
         } catch (error) {
-            alert('Cập nhật thất bại! Vui lòng kiểm tra lại dữ liệu.');
-            console.error("Update Error Detail:", error.response?.data || error);
+            console.error("Update Error:", error);
+            showFeedback('error', 'Có lỗi xảy ra khi cập nhật. Vui lòng thử lại!');
+        } finally {
+            setSaving(false); // Kết thúc loading
         }
     };
 
-    const handleFieldChange = (name, value) => {
-        setFormData(prev => ({ ...prev, [name]: value }));
+    const handleFieldChange = (name, value, file = null) => {
+        setFormData(prev => ({ 
+            ...prev, 
+            [name]: value,
+            ...(file && { avatarFile: file }) // Lưu file vào state nếu có
+        }));
     };
 
     // UI Loading & Error đồng bộ với ChapterLesson
@@ -120,6 +190,15 @@ export default function UserProfile() {
     return (
         <div className='user-profile-page'>
             <StarsBackground />
+            
+            {/* PHẦN POPUP THÔNG BÁO */}
+            {feedback.show && (
+                <div className={`feedback-popup ${feedback.type} slide-in`}>
+                    <i className={feedback.type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'}></i>
+                    <span>{feedback.message}</span>
+                </div>
+            )}
+            
             <div className='content-wrapper'>
                 <div className='profile-container'>
                     {/* Cột trái - Sidebar */}
@@ -128,7 +207,8 @@ export default function UserProfile() {
                             <div className='avatar-wrapper'>
                                 <ImageUpload
                                     imageUrl={formData.avatar || DefaultAvatar}
-                                    onImageChange={({ preview }) => handleFieldChange('avatar', preview)}
+                                    // Object trả về từ ImageUpload của bạn thường có { preview, file }
+                                    onImageChange={({ preview, file }) => handleFieldChange('avatar', preview, file)}
                                     disabled={!isEditing || activeTab !== 'profile'}
                                 />
                             </div>
@@ -167,13 +247,14 @@ export default function UserProfile() {
 
                                 <div className='profile-content'>
                                     {isEditing ? (
-                                        <ProfileEdit 
-                                            formData={formData} 
-                                            handleFieldChange={handleFieldChange}
-                                            handleSaveProfile={handleUpdateProfile}
-                                            setIsEditing={setIsEditing}
-                                            user={authUser}
-                                        />
+                                    <ProfileEdit 
+                                        formData={formData} 
+                                        handleFieldChange={handleFieldChange}
+                                        handleSaveProfile={handleUpdateProfile}
+                                        setIsEditing={setIsEditing}
+                                        user={authUser}
+                                        isSaving={saving} // Truyền state saving xuống
+                                    />
                                     ) : (
                                         <ProfileView formData={formData} user={authUser} />
                                     )}

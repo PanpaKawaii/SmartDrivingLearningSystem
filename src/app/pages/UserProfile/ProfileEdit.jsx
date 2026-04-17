@@ -3,19 +3,20 @@ import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput
 import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect';
 import { fetchData } from '../../../mocks/CallingAPI';
 
-export default function ProfileEdit({ formData, handleFieldChange, handleSaveProfile, setIsEditing, user }) {
-    const [licenseOptions, setLicenseOptions] = useState([]);
+export default function ProfileEdit({ formData, handleFieldChange, handleSaveProfile, setIsEditing, user, isSaving }) {
+    const [licenseOptions, setLicenseOptions] = useState([]); // Danh sách toàn bộ bằng lái từ API
     const [errors, setErrors] = useState({});
 
-    // 1. Lấy danh sách bằng lái từ API DrivingLicenses/all
+    // 1. Lấy danh sách bằng lái từ API
     useEffect(() => {
         const getLicenses = async () => {
             try {
                 const data = await fetchData('DrivingLicenses/all', user?.token);
                 if (data && Array.isArray(data)) {
+                    // Cần giữ lại ID để gửi về Backend
                     const formattedList = data.map(item => ({
-                        id: item.name,
-                        name: item.name
+                        id: item.id,   // GUID của bằng lái
+                        name: item.name // Tên hiển thị (A1, B2...)
                     }));
                     setLicenseOptions(formattedList);
                 }
@@ -31,7 +32,16 @@ export default function ProfileEdit({ formData, handleFieldChange, handleSavePro
         { id: 'Female', name: 'Nữ' }
     ];
 
-    // 2. Hàm Validate các điều kiện
+    // Hàm xử lý khi tick/untick một bằng lái đã có
+    const handleToggleOwnedLicense = (licenseId) => {
+        const currentIds = formData.drivingLicenseIds || [];
+        if (currentIds.includes(licenseId)) {
+            handleFieldChange('drivingLicenseIds', currentIds.filter(id => id !== licenseId));
+        } else {
+            handleFieldChange('drivingLicenseIds', [...currentIds, licenseId]);
+        }
+    };
+
     const validate = () => {
         let newErrors = {};
         const today = new Date().toISOString().split('T')[0];
@@ -75,7 +85,6 @@ export default function ProfileEdit({ formData, handleFieldChange, handleSavePro
             </div>
 
             <div className='form-row'>
-                {/* Số điện thoại */}
                 <div className='form-group half'>
                     <MovingLabelInput
                         type='tel' label='Số điện thoại' labelStyle='moving left'
@@ -84,7 +93,6 @@ export default function ProfileEdit({ formData, handleFieldChange, handleSavePro
                     />
                     {errors.phone && <span className="error-text">{errors.phone}</span>}
                 </div>
-                {/* Ngày sinh */}
                 <div className='form-group half'>
                     <MovingLabelInput
                         type='date' label='Ngày sinh' labelStyle='stay left'
@@ -96,7 +104,6 @@ export default function ProfileEdit({ formData, handleFieldChange, handleSavePro
             </div>
 
             <div className='form-row'>
-                {/* Giới tính - Chỉ Nam/Nữ */}
                 <div className='form-group half'>
                     <StyleLabelSelect
                         label='Giới tính' labelStyle='left' list={genderList}
@@ -104,14 +111,30 @@ export default function ProfileEdit({ formData, handleFieldChange, handleSavePro
                         onValueChange={(val) => handleFieldChange('gender', val)}
                     />
                 </div>
-                {/* Hạng bằng lái - Lấy từ API */}
                 <div className='form-group half'>
                     <StyleLabelSelect
-                        label='Hạng bằng lái' labelStyle='left'
-                        list={licenseOptions}
+                        label='Hạng bằng đang học' labelStyle='left'
+                        list={licenseOptions.map(l => ({ id: l.name, name: l.name }))} // Dùng name cho licenseType
                         value={formData.licenseType}
                         onValueChange={(val) => handleFieldChange('licenseType', val)}
                     />
+                </div>
+            </div>
+
+            {/* PHẦN MỚI: Chọn các bằng lái đã có (Driving Licenses) */}
+            <div className='form-group full-width-input'>
+                <label className='default-label'>Các bằng lái đã sở hữu</label>
+                <div className='license-checkbox-grid'>
+                    {licenseOptions.map((license) => (
+                        <label key={license.id} className={`license-checkbox-item ${formData.drivingLicenseIds?.includes(license.id) ? 'active' : ''}`}>
+                            <input
+                                type="checkbox"
+                                checked={formData.drivingLicenseIds?.includes(license.id) || false}
+                                onChange={() => handleToggleOwnedLicense(license.id)}
+                            />
+                            <span>{license.name}</span>
+                        </label>
+                    ))}
                 </div>
             </div>
 
@@ -140,8 +163,28 @@ export default function ProfileEdit({ formData, handleFieldChange, handleSavePro
             </div>
 
             <div className='form-actions'>
-                <button type='button' className='cancel-btn outline-btn' onClick={() => setIsEditing(false)}>Hủy</button>
-                <button type='submit' className='save-btn primary-btn'>Lưu thay đổi</button>
+                <button
+                    type='button'
+                    className='cancel-btn outline-btn'
+                    onClick={() => setIsEditing(false)}
+                    disabled={isSaving} // Khóa nút khi đang lưu
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type='submit'
+                    className={`save-btn primary-btn ${isSaving ? 'loading' : ''}`}
+                    disabled={isSaving}
+                >
+                    {isSaving ? (
+                        <>
+                            <i className="fa-solid fa-spinner fa-spin"></i> Đang lưu...
+                        </>
+                    ) : (
+                        'Lưu thay đổi'
+                    )}
+                </button>
             </div>
         </form>
     );

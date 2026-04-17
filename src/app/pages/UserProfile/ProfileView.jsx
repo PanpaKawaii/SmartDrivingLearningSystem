@@ -29,6 +29,20 @@ export default function ProfileView({ formData, user }) {
                     <span className='detail-value license-badge'>{formData.licenseType || 'Chưa cung cấp thông tin.'}</span>
                 </div>
                 <div className='detail-item full-width'>
+                    <span className='detail-label'>Bằng lái đã sở hữu</span>
+                    <div className='license-list'>
+                        {formData.drivingLicenses && formData.drivingLicenses.length > 0 ? (
+                            formData.drivingLicenses.map((name, index) => (
+                                <span key={index} className='glass-badge license-owned-item'>
+                                    <i className="fa-solid fa-address-card"></i> {name}
+                                </span>
+                            ))
+                        ) : (
+                            <span className='detail-value italic text-gray-500'>Chưa có thông tin bằng lái cũ.</span>
+                        )}
+                    </div>
+                </div>
+                <div className='detail-item full-width'>
                     <span className='detail-label'>Mô tả cá nhân</span>
                     <span className='detail-value description-text'>{formData.description || 'Chưa cung cấp thông tin.'}</span>
                 </div>
