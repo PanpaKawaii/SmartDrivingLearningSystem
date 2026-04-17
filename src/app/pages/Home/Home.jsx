@@ -19,7 +19,6 @@ export default function Home() {
             setIsLoading(false);
 
             const urlParams = new URLSearchParams(window.location.search);
-            console.log('window.location.search', urlParams);
             const messageParam = urlParams.get('message');
             if (messageParam) navigate(`/payment-status/?${(window.location.search)?.split('?')?.[1]}`);
         }, 3000);

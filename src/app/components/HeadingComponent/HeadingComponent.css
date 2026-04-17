@@ -1,0 +1,32 @@
+.heading-component-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+
+    .btn {
+        width: fit-content;
+        color: #93c5fd;
+        background-color: transparent;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: .2s;
+
+        &:hover {
+            color: #5f9ce2;
+        }
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 4rem;
+        margin: 12px 0 0;
+    }
+
+    p {
+        margin: 12px 0;
+        color: #94a3b8;
+    }
+}
