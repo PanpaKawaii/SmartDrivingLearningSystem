@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { patchData } from '../../../mocks/CallingAPI.js'; // Đảm bảo bạn có patchData hoặc dùng axios.patch
-import '../LoginRegister/LoginFace.css'; // Dùng chung CSS với Login/Register nếu phù hợp
+import { useNavigate } from 'react-router-dom'; // Thêm để điều hướng nếu logout
+import { patchData } from '../../../mocks/CallingAPI.js';
+import '../LoginRegister/LoginFace.css';
 
-export default function ChangePasswordModal({ user, onClose, showFeedback }) {
+export default function ChangePasswordModal({ user, onClose, showFeedback, refreshNewToken, logout }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({ value: '', name: '' });
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const navigate = useNavigate();
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
@@ -13,48 +15,68 @@ export default function ChangePasswordModal({ user, onClose, showFeedback }) {
         const newPassword = e.target.newPassword.value;
         const confirmPassword = e.target.confirmPassword.value;
 
-        // 1. Validation tại chỗ
+        // --- Validate (giữ nguyên logic cũ của bạn) ---
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!currentPassword) {
             setError({ value: 'Vui lòng nhập mật khẩu hiện tại', name: 'currentPassword' });
             return;
         }
-        if (newPassword.length < 6) {
-            setError({ value: 'Mật khẩu mới phải từ 6 ký tự trở lên', name: 'newPassword' });
+        if (!passwordRegex.test(newPassword)) {
+            setError({
+                value: 'Mật khẩu cần: ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.',
+                name: 'newPassword'
+            });
             return;
         }
         if (newPassword !== confirmPassword) {
-            setError({ value: 'Mật khẩu xác nhận không khớp', name: 'confirmPassword' });
+            setError({ value: 'Mật khẩu xác nhận không trùng khớp', name: 'confirmPassword' });
             return;
         }
+
+        const executeRequest = async (token) => {
+            const payload = { currentPassword, newPassword };
+            return await patchData('User/change-password', payload, token);
+        };
 
         try {
             setLoading(true);
             setError({ value: '', name: '' });
 
-            const payload = {
-                currentPassword: currentPassword,
-                newPassword: newPassword
-            };
+            try {
+                // Lần thử 1 với token hiện tại
+                await executeRequest(user.token);
+            } catch (err) {
+                // Nếu lỗi 401 (Unauthorized), thử refresh token
+                if (err.status === 401) {
+                    const refreshResult = await refreshNewToken(user);
 
-            // 2. Gọi API 
-            // Vì CallingAPI.js viết 'return;', result sẽ là undefined kể cả khi thành công.
-            await patchData('User/change-password', payload, user.token);
+                    // Nếu refresh thành công và trả về token mới
+                    if (refreshResult && refreshResult.token) {
+                        // Lần thử 2 với token mới
+                        await executeRequest(refreshResult.token);
+                    } else {
+                        // Nếu refresh thất bại (hết hạn hoàn toàn)
+                        logout();
+                        navigate('/', { state: { openLogin: 'true' } });
+                        throw new Error('Session expired');
+                    }
+                } else {
+                    // Nếu là lỗi khác (400, 500...), ném lỗi ra ngoài để xử lý ở khối catch tổng
+                    throw err;
+                }
+            }
 
-            // 3. Nếu code chạy được đến đây mà không nhảy vào catch, nghĩa là thành công!
             showFeedback('success', 'Đổi mật khẩu thành công!');
-            onClose(); // Đóng popup ngay lập tức
+            onClose();
 
         } catch (err) {
             console.error("Lỗi đổi mật khẩu:", err);
+            if (err.message === 'Session expired') return;
 
-            // 4. Xử lý lỗi dựa trên status trả về từ CallingAPI
-            if (err.status === 400) {
-                setError({ value: 'Mật khẩu hiện tại không đúng hoặc dữ liệu không hợp lệ', name: 'api' });
-            } else if (err.status === 401) {
-                setError({ value: 'Phiên làm việc hết hạn, vui lòng đăng nhập lại', name: 'api' });
-            } else {
-                setError({ value: 'Đã có lỗi xảy ra, vui lòng thử lại', name: 'api' });
-            }
+            setError({
+                value: err.status === 400 ? 'Mật khẩu hiện tại không chính xác' : 'Đã có lỗi xảy ra, vui lòng thử lại',
+                name: 'api'
+            });
         } finally {
             setLoading(false);
         }

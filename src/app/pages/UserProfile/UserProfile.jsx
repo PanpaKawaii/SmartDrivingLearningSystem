@@ -205,9 +205,11 @@ export default function UserProfile() {
                 <div className="fixed-overlay"> 
                     <div className="modal-content-animation">
                         <ChangePasswordModal 
-                            user={authUser} // Truyền authUser để lấy token
+                            user={authUser}
                             onClose={() => setShowResetModal(false)}
                             showFeedback={showFeedback}
+                            refreshNewToken={refreshNewToken} // Truyền thêm hàm này
+                            logout={logout}                   // Truyền thêm hàm này
                         />
                     </div>
                 </div>
