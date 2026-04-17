@@ -38,7 +38,7 @@ export default function LearningProgress({ stats }) {
                     </div>
                     <div className='stat-info'>
                         <span className='stat-label'>Tỉ lệ đỗ lý thuyết</span>
-                        <span className='stat-value'>{Math.round(stats.examPassRate * 100)}<small>%</small></span>
+                        <span className='stat-value'>{stats.examPassRate.toFixed(2)}<small>%</small></span>
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@ export default function LearningProgress({ stats }) {
                     </div>
                     <div className='stat-info'>
                         <span className='stat-label'>Tỉ lệ đỗ mô phỏng</span>
-                        <span className='stat-value'>{Math.round(stats.simulationPassRate * 100)}<small>%</small></span>
+                        <span className='stat-value'>{stats.simulationPassRate.toFixed(2)}<small>%</small></span>
                     </div>
                 </div>
             </div>
