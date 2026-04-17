@@ -261,7 +261,7 @@ export default function UserProfile() {
                                 </div>
                             </>
                         )}
-                        {activeTab === 'progress' && <LearningProgress />}
+                        {activeTab === 'progress' && <LearningProgress stats={formData} />}
                     </div>
                 </div>
             </div>
