@@ -79,13 +79,33 @@ export default function UserProfile() {
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         try {
-            await putData(`User/${authUser.id}`, formData, authUser.token);
-            alert('Cập nhật thông tin thành công!');
-            setIsEditing(false);
-            setRefresh(prev => prev + 1); // Trigger useEffect tải lại data mới
+            // 1. Tạo Payload đúng chuẩn UserUpdateDTO của Backend
+            const updatePayload = {
+                roleId: authUser.roleId, // RoleId là bắt buộc theo [NotEmptyGuid]
+                email: authUser.email,
+                name: formData.name,
+                avatar: formData.avatar,
+                phone: formData.phone,
+                gender: formData.gender,
+                description: formData.description,
+                // Backend dùng DateOnly nên gửi format YYYY-MM-DD
+                dateOfBirth: formData.dateOfBirth || null,
+                licenseType: formData.licenseType,
+                status: 1, // Hoặc giá trị status mặc định của bạn
+                // Password: "", // Chỉ gửi nếu bạn làm tính năng đổi pass ở đây
+            };
+
+            // 2. Gọi API PUT (Đảm bảo URL đúng: api/user/{id})
+            const response = await putData(`User/${authUser.id}`, updatePayload, authUser.token);
+            
+            if (response) {
+                alert('Cập nhật thông tin thành công!');
+                setIsEditing(false);
+                setRefresh(prev => prev + 1); 
+            }
         } catch (error) {
-            alert('Cập nhật thất bại!');
-            console.error(error);
+            alert('Cập nhật thất bại! Vui lòng kiểm tra lại dữ liệu.');
+            console.error("Update Error Detail:", error.response?.data || error);
         }
     };
 
