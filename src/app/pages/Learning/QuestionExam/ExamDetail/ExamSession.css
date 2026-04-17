@@ -62,6 +62,16 @@
             }
 
             .view-detail {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: .75rem;
+                border-bottom: 1px solid #94a3b8;
+
+                span {
+                    color: #94a3b8;
+                }
+
                 i {
                     color: #fff;
                 }

@@ -19,7 +19,8 @@ export default function ExamSession({
                         className='session-item'
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                        <div className='date'>{new Date(session.createAt)?.toLocaleDateString()}</div>
+                        {/* <div className='date'>{new Date(session.createAt)?.toLocaleDateString()}</div> */}
+                        <div className='date'>{session.createAt?.replace('T', ' ')?.slice(0, 19)}</div>
                         <div className='score'>{session.score || session.totalScore || 0}%</div>
                         <div className='time'>
                             <i className='fa-regular fa-clock' />
@@ -31,6 +32,7 @@ export default function ExamSession({
                             state={type}
                             className='view-detail'
                         >
+                            <span>View</span>
                             <i className='fa-solid fa-play' />
                         </Link>
                     </div>

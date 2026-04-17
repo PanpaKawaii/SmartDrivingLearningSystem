@@ -226,6 +226,15 @@ export default function ControlledVideo({
                         <div className='detail'>
                             <h2>{selectedScenario.name}</h2>
                             <p>{selectedScenario.description}</p>
+                            <div className='category'>Phân loại: {selectedScenario.simulationCategory?.name}</div>
+                            <div className={`difficulty ${selectedScenario.simulationDifficultyLevel?.name.includes('dài') ?
+                                'easy'
+                                : selectedScenario.simulationDifficultyLevel?.name.includes('vừa') ?
+                                    'medium'
+                                    : 'hard'}`}
+                            >
+                                Độ khó: {selectedScenario.simulationDifficultyLevel?.name}
+                            </div>
                         </div>
                     </div>
                     {myResults?.length > 0 &&

@@ -78,78 +78,139 @@ export default function ExamSessionDetail() {
                 linkBack={'./../../..'}
             />
             <div className='container'>
-                <div>{ExamOrSituation}</div>
-                <div className='overal'>
-                    <div className='item count'>
-                        <div className='value'>{correctCount || 0}/{ThisSession?.exam?.examQuestions?.length || 0}</div>
-                        <div>Trả lời đúng</div>
-                    </div>
-                    <div className='item score'>
-                        <div className='value'>{ThisSession?.score || 0}%</div>
-                        <div>Làm bài chính xác</div>
-                    </div>
-                    <div className='item duration'>
-                        <div className='value'>{(ThisSession?.totalDuration || 0)?.toFixed(0)}s</div>
-                        <div>Thời gian làm bài</div>
-                    </div>
-                </div>
-                <div className='detail'>
-                    <h2>Chi tiết đáp án</h2>
-                    <div className='list-question'>
-                        {ThisSession?.exam?.examQuestions?.map((examQuestion, qIndex) => {
-                            const question = examQuestion.question;
+                {ExamOrSituation == 'exam' ?
+                    <>
+                        <div className='overal'>
+                            <div className='item count'>
+                                <div className='value'>{correctCount || 0}/{ThisSession?.exam?.examQuestions?.length || 0}</div>
+                                <div>Trả lời đúng</div>
+                            </div>
+                            <div className='item score'>
+                                <div className='value'>{ThisSession?.score || 0}%</div>
+                                <div>Làm bài chính xác</div>
+                            </div>
+                            <div className='item duration'>
+                                <div className='value'>{(ThisSession?.totalDuration || 0)?.toFixed(0)}s</div>
+                                <div>Thời gian làm bài</div>
+                            </div>
+                        </div>
+                        <div className='detail exam'>
+                            <h2>Chi tiết đáp án</h2>
+                            <div className='list-question'>
+                                {ThisSession?.exam?.examQuestions?.map((examQuestion, qIndex) => {
+                                    const question = examQuestion.question;
 
-                            const correctAnswers = question.answers?.filter(a => a.isCorrect) || [];
-                            const myAnswers = ThisSession?.examDetails;
-                            const isSelectedCorrect = correctAnswers.every(correct => myAnswers?.some(ans => ans.answer?.id == correct.id));
+                                    const correctAnswers = question.answers?.filter(a => a.isCorrect) || [];
+                                    const myAnswers = ThisSession?.examDetails;
+                                    const isSelectedCorrect = correctAnswers.every(correct => myAnswers?.some(ans => ans.answer?.id == correct.id));
 
-                            return (
-                                <div
-                                    key={qIndex}
-                                    className={`question-item ${isSelectedCorrect ? 'correct-question' : 'incorrect-question'}`}
-                                >
-                                    <h3>
-                                        <span>Câu hỏi {qIndex + 1}</span>
-                                        <i className={`fa-regular fa-${isSelectedCorrect ? 'check-circle' : 'xmark-circle'}`} />
-                                    </h3>
-                                    <p>{question.content}</p>
-                                    <div className='list-answer'>
-                                        {question.answers?.map((answer) => {
-                                            const isSelected = ThisSession?.examDetails?.some(detail => detail.answerId == answer.id);
-                                            const isAnswerCorrect = answer.isCorrect;
+                                    return (
+                                        <div
+                                            key={qIndex}
+                                            className={`question-item ${isSelectedCorrect ? 'correct-question' : 'incorrect-question'}`}
+                                        >
+                                            <h3>
+                                                <span>Câu hỏi {qIndex + 1}</span>
+                                                <i className={`fa-regular fa-${isSelectedCorrect ? 'check-circle' : 'xmark-circle'}`} />
+                                            </h3>
+                                            <p>{question.content}</p>
+                                            <div className='list-answer'>
+                                                {question.answers?.map((answer) => {
+                                                    const isSelected = ThisSession?.examDetails?.some(detail => detail.answerId == answer.id);
+                                                    const isAnswerCorrect = answer.isCorrect;
 
-                                            return (
-                                                <div
-                                                    key={answer.id}
-                                                    className={`
+                                                    return (
+                                                        <div
+                                                            key={answer.id}
+                                                            className={`
                                                     answer-item
                                                     ${isSelected ? 'selected' : ''}
                                                     ${isAnswerCorrect ? 'correct-answer' : ''}
                                                 `}
-                                                >
-                                                    <div>{answer.content}</div>
-                                                    {isAnswerCorrect ?
-                                                        <div className='tag-correct'>
-                                                            <i className={'fa-regular fa-check-circle'} />
-                                                            <span>{isSelected ? 'Trả lời chính xác' : 'Đáp án đúng'}</span>
+                                                        >
+                                                            <div>{answer.content}</div>
+                                                            {isAnswerCorrect ?
+                                                                <div className='tag-correct'>
+                                                                    <i className={'fa-regular fa-check-circle'} />
+                                                                    <span>{isSelected ? 'Trả lời chính xác' : 'Đáp án đúng'}</span>
+                                                                </div>
+                                                                :
+                                                                (isSelected &&
+                                                                    <div className='tag-selected'>
+                                                                        <i className={'fa-regular fa-xmark-circle'} />
+                                                                        <span>Đáp án của bạn</span>
+                                                                    </div>
+                                                                )
+                                                            }
                                                         </div>
-                                                        :
-                                                        (isSelected &&
-                                                            <div className='tag-selected'>
-                                                                <i className={'fa-regular fa-xmark-circle'} />
-                                                                <span>Đáp án của bạn</span>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <div className='overal'>
+                            <div className='item count'>
+                                <div className='value'>{ThisSession?.simulationSessionDetails?.reduce((sum, a) => sum + a.score, 0) || 0}/{ThisSession?.situationExam?.simulationExams?.reduce((sum, a) => sum + a.baseScore, 0) || 0}</div>
+                                <div>Số điểm đạt được</div>
+                            </div>
+                            <div className='item score'>
+                                <div className='value'>{ThisSession?.totalScore || 0}%</div>
+                                <div>Phản hồi chính xác</div>
+                            </div>
+                            <div className='item duration'>
+                                <div className='value'>{(ThisSession?.totalDuration || 0)?.toFixed(0)}s</div>
+                                <div>Thời gian làm bài</div>
+                            </div>
+                        </div>
+                        <div className='detail situation'>
+                            <h2>Chi tiết bài làm</h2>
+                            <div className='list-simulation'>
+                                {ThisSession?.situationExam?.simulationExams?.map((simulationExam, sIndex) => {
+                                    const simulation = simulationExam.simulation;
+
+                                    const thisSession = ThisSession?.simulationSessionDetails?.find(detail => detail.simulationExamId == simulationExam.id);
+                                    const sessionPoint = thisSession?.score || 0;
+                                    const sessionDurationSecond = (thisSession?.durationSecond || 0)?.toFixed(3);
+
+                                    return (
+                                        <div
+                                            key={sIndex}
+                                            className='simulation-item'
+                                        >
+                                            <h3>Kịch bản {sIndex + 1}</h3>
+                                            <p>{simulation.name}</p>
+                                            <p><span className={sessionPoint > 0 ? 'good' : 'bad'}>Thời điểm phản ứng:</span> {sessionDurationSecond}s</p>
+                                            <div className='list-point'>
+                                                {[...Array((Math.floor(simulationExam.baseScore) + 1) || 1)].map((_, bIndex) => {
+                                                    const isSelected = sessionPoint == bIndex;
+
+                                                    return (
+                                                        <div
+                                                            key={bIndex}
+                                                            className={`point-item ${isSelected ? 'selected' : ''}`}
+                                                            style={{
+                                                                background: bIndex == 0 ? '#374e6e80' : `linear-gradient(to right, hsla(${bIndex * 30 - 30}, 60%, 60%, 0.4), hsla(${bIndex * 30 - 30}, 60%, 50%, 0.4))`,
+                                                                border: bIndex == 0 ? '2px solid #374e6ebb' : `2px solid hsla(${bIndex * 30 - 30}, 60%, 60%, 0.8)`,
+                                                            }}
+                                                        >
+                                                            {bIndex}
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    </>
+                }
             </div>
         </div>
     )

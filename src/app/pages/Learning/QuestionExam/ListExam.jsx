@@ -132,7 +132,7 @@ export default function ListExam() {
                     <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
                         ĐỀ THI MÔ PHỎNG
                     </button>
-                    <input type='text' placeholder='Tìm kiếm...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
+                    <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
                 </div>
                 <div className='content'>
                     <div className='left'>
@@ -140,6 +140,7 @@ export default function ListExam() {
                             <table>
                                 <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Bài Thi</th>
                                         <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
                                         <th>Thời gian</th>
@@ -159,7 +160,8 @@ export default function ListExam() {
                                                 className={`${isSelected ? 'active' : ''}`}
                                                 style={{ animationDelay: `${index * 0.05}s` }}
                                             >
-                                                <td>
+                                                <td>{index + 1}</td>
+                                                <td className='td-row'>
                                                     <div className='row'>
                                                         <div className='icon-box'>
                                                             <i className='fa-solid fa-file-lines' />

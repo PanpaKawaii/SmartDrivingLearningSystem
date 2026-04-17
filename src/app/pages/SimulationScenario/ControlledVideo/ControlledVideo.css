@@ -90,6 +90,35 @@
             h2 {
                 margin: 0 0 12px;
             }
+
+            p {
+                margin: 0 0 20px;
+            }
+
+            .category,
+            .difficulty {
+                width: fit-content;
+                margin: 0 0 8px;
+                padding: 8px 16px;
+                border: 1px solid #5f6a7c;
+                background-color: #5f6a7c40;
+                border-radius: 999px;
+
+                &.easy {
+                    border-color: #22c55e;
+                    background-color: #22c55e40;
+                }
+
+                &.medium {
+                    border-color: #eab308;
+                    background-color: #eab30840;
+                }
+
+                &.hard {
+                    border-color: #ef4444;
+                    background-color: #ef444440;
+                }
+            }
         }
     }
 
