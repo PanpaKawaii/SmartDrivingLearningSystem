@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { fetchData } from '../../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
+import Explanation from '../../../../components/Explanation/Explanation';
 import HeadingComponent from '../../../../components/HeadingComponent/HeadingComponent';
 import StarsBackground from '../../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../../components/TrafficLight/TrafficLight';
@@ -124,12 +125,12 @@ export default function ExamSessionDetail() {
                                                         <div
                                                             key={answer.id}
                                                             className={`
-                                                    answer-item
-                                                    ${isSelected ? 'selected' : ''}
-                                                    ${isAnswerCorrect ? 'correct-answer' : ''}
-                                                `}
+                                                                answer-item
+                                                                ${isSelected ? 'selected' : ''}
+                                                                ${isAnswerCorrect ? 'correct-answer' : ''}
+                                                            `}
                                                         >
-                                                            <div>{answer.content}</div>
+                                                            <div className='answer-content'>{answer.content}</div>
                                                             {isAnswerCorrect ?
                                                                 <div className='tag-correct'>
                                                                     <i className={'fa-regular fa-check-circle'} />
@@ -147,6 +148,11 @@ export default function ExamSessionDetail() {
                                                     )
                                                 })}
                                             </div>
+                                            <Explanation
+                                                questionProp={question.content}
+                                                answersProp={question.answers}
+                                                explanation={question.explanation}
+                                            />
                                         </div>
                                     )
                                 })}
