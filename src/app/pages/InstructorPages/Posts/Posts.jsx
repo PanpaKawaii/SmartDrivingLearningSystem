@@ -2,26 +2,34 @@ import DataTable from '../../../components/Shared/DataTable.jsx';
 import { Post } from '../../../../mocks/DataSample.js';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
+import PostModal from './PostModal';
 import '../InstructorPages.css';
 import { useEffect, useState } from 'react';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
-const PostItems = [...Post];
+
 const STATUS_LABELS = {
     '1': 'Public',
     '4': 'Đã ẩn',
 };
-
+const normalizeItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.items)) return payload.items;
+    return [];
+};
 
 export default function Posts() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const [items, setItems] = useState([]);
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
+    // Modal state
+    const [showPostModal, setShowPostModal] = useState(false);
+    const [editPost, setEditPost] = useState(null);
 
     // State for view popup
     const [selectedPostId, setSelectedPostId] = useState(null);
@@ -35,15 +43,15 @@ export default function Posts() {
                 // Lấy topics (chỉ lấy 1 lần)
                 if (topics.length === 0) {
                     const topicRes = await fetchData('ForumTopics/all', token);
-                    setTopics(Array.isArray(topicRes) ? topicRes : topicRes?.items || []);
+                    setTopics(normalizeItems(topicRes));
                 }
-                // Lấy posts phân trang
                 const query = new URLSearchParams({
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
+                    userId: user?.id ,
                 });
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
-                setItems(res?.items || []);
+                setItems(normalizeItems(res));
                 setServerPagination(prev => ({
                     ...prev,
                     page: res?.page || prev.page,
@@ -53,7 +61,11 @@ export default function Posts() {
                     
                 }));
             } catch (err) {
-                setError('Lỗi tải dữ liệu');
+                if (err.status === 401) {
+                    refreshNewToken(user);
+                }else {
+                    setError('Lỗi tải dữ liệu bài viết. Vui lòng thử lại.');
+                }
             } finally {
                 setLoading(false);
             }
@@ -63,18 +75,38 @@ export default function Posts() {
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
     };
-    const handleDelete = async (id) => {
+    const handleOpenCreate = () => {
+        setEditPost(null);
+        setShowPostModal(true);
+    };
+    const handleOpenEdit = (post) => {
+        setEditPost(post);
+        setShowPostModal(true);
+    };
+    const handleCloseModal = () => {
+        setShowPostModal(false);
+        setEditPost(null);
+    };
+    const handleSavePost = () => {
+        setRefresh(r => r + 1);
+        handleCloseModal();
+    };
+    // Toggle post status between 1 (public) and 4 (hidden)
+    const handleToggleStatus = async (id, currentStatus) => {
         try {
-            setLoading(true);
             const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/`, { status: 3 }, token);
+            const newStatus = currentStatus === 1 ? 4 : 1;
+            await patchData(`ForumPosts/${id}/toggle-status`, { }, token);
             setRefresh(r => r + 1);
-        } catch (err) {
-            setError('Lỗi từ chối bài');
+        } catch (error) {
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi cập nhật trạng thái bài viết.');
+            }
         } finally {
-            setLoading(false);
         }
-    };    
+    };
     const selectedPost = items.find(item => item.id === selectedPostId);
 
     const formatDateTimeLines = (value) => {
@@ -131,8 +163,15 @@ export default function Posts() {
                 >
                     <i className='fa-solid fa-eye' ></i>
                 </button>
-                <button className='ins-action-btn edit' title='Sửa'><i className='fa-solid fa-pen'></i></button>
-                <button className='ins-action-btn delete' title='Xóa' onClick={() => handleDelete(row.id)}><i className='fa-solid fa-trash'></i></button>
+                <button className='ins-action-btn edit' title='Sửa' onClick={() => handleOpenEdit(row)}><i className='fa-solid fa-pen'></i></button>
+                <button
+                    className={`ins-action-btn ${row.status === 1 ? 'hide' : 'show'}`}
+                    title={row.status === 1 ? 'Ẩn bài viết' : 'Hiện bài viết'}
+                    onClick={() => handleToggleStatus(row.id, row.status)}
+                    disabled={loading}
+                >
+                    <i className={`fa-solid fa-toggle-${row.status === 1 ? 'on' : 'off'}`} style={{ fontSize: '1rem' }} ></i>
+                </button>
             </div>
         )},
     ];
@@ -145,7 +184,7 @@ export default function Posts() {
                     <p>Quản lý các bài viết do bạn tạo.</p>
                 </div>
                 
-                <button className='ins-btn ins-btn-primary'>
+                <button className='ins-btn ins-btn-primary' onClick={handleOpenCreate}>
                     <i className='fa-solid fa-plus'></i> Tạo bài viết
                 </button>
             </div>
@@ -163,7 +202,17 @@ export default function Posts() {
                 <PopupContainer onClose={() => setSelectedPostId(null)} titleName={`Bài viết của ${selectedPost?.user?.name || ''}`} modalStyle={{}} innerStyle={{ width: 700 }}>
                     <ForumCard post={selectedPost} parentLoading={loading} />
                 </PopupContainer>
-            )}            
+            )}
+            {/* Post Modal for create/edit */}
+            {showPostModal && (
+                <PostModal
+                    isOpen={showPostModal}
+                    onClose={handleCloseModal}
+                    onSave={handleSavePost}
+                    post={editPost}
+                    action={editPost ? 'edit' : 'create'}
+                />
+            )}
         </div>
     );
 }

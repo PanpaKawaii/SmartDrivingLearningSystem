@@ -13,15 +13,19 @@ export default function DataTable({
   serverPagination = null,
   onPageChange,
   filters = [],
-  contextBadge = null,
+  contextBadge = [],
+  searchValue,
+  onSearchValueChange,
 }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
+  const searchInput = typeof searchValue === 'string' ? searchValue : search;
+
   const filtered = data.filter((row) =>
     columns.some((col) => {
       const val = row[col.key];
-      return val && String(val).toLowerCase().includes(search.toLowerCase());
+      return val && String(val).toLowerCase().includes(searchInput.toLowerCase());
     }),
   );
 
@@ -54,9 +58,18 @@ export default function DataTable({
 
   const handleSearch = (e) => {
     const val = e.target.value;
-    setSearch(val);
-    setPage(1);
-    if (onSearch) onSearch(val);
+    if (onSearchValueChange) {
+      onSearchValueChange(val);
+    } else {
+      setSearch(val);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    if (e.key === 'Enter') {
+      setPage(1);
+      if (onSearch) onSearch(searchInput);
+    }
   };
 
   const goToPage = (nextPage) => {
@@ -69,7 +82,7 @@ export default function DataTable({
   };
 
   const hasFilters = filters.length > 0;
-  const hasBadge = contextBadge && contextBadge.text;
+  const hasBadge = Array.isArray(contextBadge) && contextBadge.length > 0;
 
   return (
     <div className="ins-data-table-wrapper">
@@ -87,8 +100,9 @@ export default function DataTable({
               <input
                 type="text"
                 placeholder="Tìm kiếm..."
-                value={search}
+                value={searchInput}
                 onChange={handleSearch}
+                onKeyDown={handleSearchSubmit}
               />
             </div>
             {hasFilters && (
@@ -120,10 +134,12 @@ export default function DataTable({
         <div className="ins-data-table-badge-row">
           <div className="ins-context-badge">
             <i className="fa-solid fa-filter" />
-            Đang lọc theo:&nbsp;<strong>{contextBadge.text}</strong>
-            <button className="ins-badge-clear" onClick={contextBadge.onClear}>
-              <i className="fa-solid fa-xmark" /> Xóa filter
-            </button>
+            Đang lọc theo:&nbsp;
+            {contextBadge.map((badge, index) => (
+              <button key={index} className="ins-badge-clear" onClick={badge.onClear}>
+                <i className="fa-solid fa-xmark" /> {badge.text}
+              </button>
+            ))}
           </div>
         </div>
       )}

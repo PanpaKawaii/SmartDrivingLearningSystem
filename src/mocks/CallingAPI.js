@@ -1,7 +1,8 @@
 const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-
+const apiRoboflow = import.meta.env.VITE_REACT_ROBOFLOW_API ;
 if (import.meta.env.DEV) {
     console.log('API URL:', apiUrl);
+    console.log('Roboflow API Key:', apiRoboflow);
 }
 
 // Hàm gọi API GET
@@ -226,3 +227,23 @@ export const deleteMedia = async (fileUrl, imageTarget, token) => {
         throw error;
     }
 };
+
+export const fetchRoboflowData = async (imageUrl) => {
+    const response = await fetch('/roboflow/sub-wtikx/workflows/text-recognition-3', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            api_key: apiRoboflow,
+            inputs: {
+                "image": {"type": "url", "value": imageUrl}
+            }
+        })
+    });
+    if (!response.ok) {
+        throw new Error(`Roboflow API error: ${response.statusText}`);
+    }
+    return await response.json();
+};
+

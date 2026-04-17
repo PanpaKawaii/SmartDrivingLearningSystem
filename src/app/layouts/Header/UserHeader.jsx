@@ -33,6 +33,7 @@ export default function UserHeader({
         { name: 'MÔ PHỎNG', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
         { name: 'DIỄN ĐÀN', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'HỌC TẬP', icon: 'book-open', iconType: 'solid', path: '/learning' },
+        { name: 'NHẬN DIỆN', icon: 'camera', iconType: 'solid', path: '/traffic-sign-recognition' },
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
