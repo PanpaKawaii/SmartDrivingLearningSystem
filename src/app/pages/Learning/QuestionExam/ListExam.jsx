@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI.js';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground.jsx';
 import HeadingComponent from '../../../components/HeadingComponent/HeadingComponent.jsx';
@@ -14,6 +15,13 @@ import './ListExam.css';
 export default function ListExam() {
     const { user, refreshNewToken } = useAuth();
 
+    const location = useLocation();
+
+    const selectedIdState = location.state?.selectedId;
+    console.log('selectedIdState', selectedIdState);
+    const ExamOrSituationState = location.state?.ExamOrSituation;
+    console.log('ExamOrSituationState', ExamOrSituationState);
+
     const [EXAMs, setEXAMs] = useState([]);
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
     const [EXAMSESSIONs, setEXAMSESSIONs] = useState([]);
@@ -23,8 +31,8 @@ export default function ListExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [selectedId, setSelectedId] = useState(null);
-    const [ExamOrSituation, setExamOrSituation] = useState('exam');
+    const [selectedId, setSelectedId] = useState(selectedIdState || '');
+    const [ExamOrSituation, setExamOrSituation] = useState(ExamOrSituationState || 'exam');
 
     const [textInput, setTextInput] = useState('');
 

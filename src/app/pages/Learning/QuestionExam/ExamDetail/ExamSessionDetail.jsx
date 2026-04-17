@@ -76,6 +76,7 @@ export default function ExamSessionDetail() {
                 titlePosition={'center'}
                 back={'Quay lại'}
                 linkBack={'./../../..'}
+                stateProp={{ selectedId: examId, ExamOrSituation: ExamOrSituation }}
             />
             <div className='container'>
                 {ExamOrSituation == 'exam' ?
@@ -182,6 +183,9 @@ export default function ExamSessionDetail() {
                                         <div
                                             key={sIndex}
                                             className='simulation-item'
+                                            style={{
+                                                border: sessionPoint == 0 ? '2px solid #374e6ebb' : `2px solid hsla(${sessionPoint * 30 - 30}, 60%, 60%, 0.8)`,
+                                            }}
                                         >
                                             <h3>Kịch bản {sIndex + 1}</h3>
                                             <p>{simulation.name}</p>
@@ -196,7 +200,7 @@ export default function ExamSessionDetail() {
                                                             className={`point-item ${isSelected ? 'selected' : ''}`}
                                                             style={{
                                                                 background: bIndex == 0 ? '#374e6e80' : `linear-gradient(to right, hsla(${bIndex * 30 - 30}, 60%, 60%, 0.4), hsla(${bIndex * 30 - 30}, 60%, 50%, 0.4))`,
-                                                                border: bIndex == 0 ? '2px solid #374e6ebb' : `2px solid hsla(${bIndex * 30 - 30}, 60%, 60%, 0.8)`,
+                                                                border: bIndex == 0 ? '4px solid #374e6ebb' : `4px solid hsla(${bIndex * 30 - 30}, 60%, 60%, 0.8)`,
                                                             }}
                                                         >
                                                             {bIndex}

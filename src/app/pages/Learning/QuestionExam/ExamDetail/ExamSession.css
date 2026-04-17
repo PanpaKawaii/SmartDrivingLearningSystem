@@ -26,6 +26,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: .15s;
 
             opacity: 0;
             animation: slideInUp .6s ease forwards;
@@ -40,17 +41,18 @@
                 background-color: #19223C;
                 border-top: 2px solid #94a3b8;
                 border-left: 2px solid #94a3b8;
+                transition: .15s;
             }
 
-            .score,
-            .time {
-                width: 60px;
-            }
+            &:hover {
+                border-color: #3b82f6bb;
+                background: #2B4B8D;
+                box-shadow: 0 20px 50px #3b82f633;
 
-            .time {
-                display: flex;
-                align-items: center;
-                gap: 8px;
+                .date {
+                    border-color: #3b82f6bb;
+                    background: #2B4B8D;
+                }
             }
 
             .fa-check-circle {
@@ -61,20 +63,30 @@
                 color: #ef4444;
             }
 
+            .score,
+            .time {
+                width: 60px;
+
+                &.score {
+                    color: #fff;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                &.time {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+            }
+
             .view-detail {
                 display: flex;
                 align-items: center;
                 gap: 4px;
+                color: #94a3b8;
                 font-size: .75rem;
                 border-bottom: 1px solid #94a3b8;
-
-                span {
-                    color: #94a3b8;
-                }
-
-                i {
-                    color: #fff;
-                }
             }
         }
     }
