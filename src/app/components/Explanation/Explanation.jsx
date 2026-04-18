@@ -21,14 +21,10 @@ export default function Explanation({
     const [error, setError] = useState(null);
 
     const AskAI = async (newMessage) => {
-        const SendMessage = {
-            prompt: newMessage,
-            userIdentifier: user?.id,
-        };
         setLoading(true);
         const token = user?.token;
         try {
-            const result = await postData('Chat/ask/Exercise', SendMessage, token);
+            const result = await postData('Chat/ask/Exercise', newMessage, token);
             console.log('result', result);
             if (result.reply?.includes('The model is overloaded. Please try again later.')) {
                 setAiExplanation('Kết nối không ổn định, bạn hãy thử lại sau nhé!');
