@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
+import LoadingAnimation from '../../components/LoadingAnimation/LoadingAnimation';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import CTA from './CTA';
 import Hero from './Hero';
 import Journey from './Journey';
@@ -27,11 +26,8 @@ export default function Home() {
         };
     }, []);
 
-    return isLoading ?
-        <div>
-            <CloudsBackground />
-            <TrafficLight text={'success'} faceText={''} setRefresh={() => { }} />
-        </div> : (
+    return isLoading ? <LoadingAnimation />
+        : (
             <div className='home-container'>
                 <StarsBackground />
                 <Hero />
