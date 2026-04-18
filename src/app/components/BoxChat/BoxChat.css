@@ -193,6 +193,7 @@
                 animation: messageSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 font-weight: 400;
                 backdrop-filter: blur(10px);
+                white-space: pre-line;
 
                 &.user-message {
                     background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);

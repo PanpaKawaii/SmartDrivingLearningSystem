@@ -43,7 +43,7 @@ export default function LearningPath() {
     }, [refresh, user?.token]);
 
     useEffect(() => {
-        setMessages(['Xin chào! Tôi là trợ lý AI của bạn. Hãy đặt câu hỏi để tôi hỗ trợ nhé!']);
+        setMessages(['Chào bạn! 👋 Tôi là trợ lý AI đào tạo lái xe thông minh của SDLS.']);
     }, [user]);
 
     const addMessage = async (newMessage) => {
@@ -93,7 +93,7 @@ export default function LearningPath() {
 
     const renderFormattedText = (text) => {
         // Bước 1: Tách từng dòng theo dấu `*`
-        const lines = text.split(/(?<=\s)\*(?=\s)/);
+        const lines = text.replace(/###/g, '').replace(/##/g, '').split(/(?<=\s)\*(?=\s)/);
 
         return lines.map((line, idx) => {
             // Bước 2: Tách và xử lý in đậm từng phần trong dòng
@@ -129,6 +129,7 @@ export default function LearningPath() {
                                     <p>Xác định mục tiêu</p>
                                 </div>
                             </div>
+                            <button className='btn' onClick={() => setRefresh(p => p + 1)} disabled={loading}>Tải lại danh sách</button>
                         </div>
 
                         <div className='list-license'>
@@ -171,7 +172,7 @@ export default function LearningPath() {
                             )}
                         </div>
                         <div className='quick-question'>
-                            
+
                         </div>
                         <form onSubmit={handleSend}>
                             <div className='form-group'>
@@ -196,10 +197,6 @@ export default function LearningPath() {
                 </div>
 
                 <div className='right'>
-                    <div className='how-it-work card'>
-
-                    </div>
-
                     <div className='learning-material card'>
 
                     </div>

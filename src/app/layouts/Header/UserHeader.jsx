@@ -32,7 +32,7 @@ export default function UserHeader({
 
     const menuItems = [
         // { name: 'TRANG CHỦ', icon: 'house', iconType: 'solid', path: '/' },
-        { name: 'BẰNG LÁI XE', icon: 'book', iconType: 'solid', path: '/driving-license' },
+        { name: 'BẰNG LÁI', icon: 'book', iconType: 'solid', path: '/driving-license' },
         { name: 'MÔ PHỎNG', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
         { name: 'DIỄN ĐÀN', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'HỌC TẬP', icon: 'book-open', iconType: 'solid', path: '/learning' },

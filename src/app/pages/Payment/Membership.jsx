@@ -42,14 +42,15 @@ export default function Membership() {
         const token = user?.token || null;
         try {
             const PaymentData = {
+                // ==FIX==
                 orderId: crypto.randomUUID(),
                 amount: amount,
             };
             console.log('PaymentData:', PaymentData);
 
-            // const resultPaymentData = await postData('Payment/create-payos-voucher', PaymentData, token);
-            // console.log('resultPaymentData', resultPaymentData);
-            // window.location.href = resultPaymentData.paymentUrl;
+            const resultPaymentData = await postData('payos/create', PaymentData, token);
+            console.log('resultPaymentData', resultPaymentData);
+            window.location.href = resultPaymentData.paymentUrl;
         } catch (error) {
             console.error('Error', error);
             if (error.status == 401) refreshNewToken(user);
@@ -58,27 +59,23 @@ export default function Membership() {
         };
     };
 
-    // const features = [
-    //     { name: 'Đặt sân theo thời gian thực', role: 'Guest' },
-    //     { name: 'Xem giờ trống, giá sân, địa điểm', role: 'Guest' },
-    //     { name: 'Đánh giá và xem đánh giá sân', role: 'Guest' },
-    //     { name: 'Tích điểm đổi quà', role: 'Guest' },
-    //     { name: 'Gợi ý sân gần nhất', role: 'Guest' },
-    //     { name: 'Gợi ý sân theo thói quen', role: 'Guest' },
-    //     { name: 'Ưu đãi (Dùng điểm đổi)', role: 'Guest' },
-    //     { name: 'Nhắc lịch tự động (Khi đã đặt)', role: 'Guest' },
-    //     { name: 'Tạo nhóm chơi', role: 'Guest' },
-    //     { name: 'Tạo giải đấu', role: 'Student' },
-    //     { name: 'Gợi ý khung giờ trống phù hợp nhóm bạn', role: 'Student' },
-    //     { name: 'Nhắc lịch đặt sân (Khi chưa đặt)', role: 'Student' },
-    //     { name: 'Nhận voucher siêu hot', role: 'Student' },
-    //     { name: 'Tặng điểm mỗi tháng', role: 'Student' },
-    //     { name: 'Hủy đặt sân hoàn tiền', role: 'Student' },
-    // ];
-
     const features = [
-        { name: 'Student', role: 'Student' },
         { name: 'Guest', role: 'Guest' },
+        { name: 'Guest', role: 'Guest' },
+        { name: 'Guest', role: 'Guest' },
+        { name: 'Guest', role: 'Guest' },
+        { name: 'Guest', role: 'Guest' },
+        { name: 'Guest', role: 'Guest' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
+        { name: 'Student', role: 'Student' },
     ];
 
     return (
@@ -99,7 +96,7 @@ export default function Membership() {
                                 <li key={idx}>
                                     <div className='feature'>
                                         <div>{feature.name}</div>
-                                        <i className={`fa-solid fa-${feature.role == 'Student' ? 'check' : 'xmark'}`}></i>
+                                        <i className={`fa-solid fa-${feature.role == 'Guest' ? 'check' : 'xmark'}`}></i>
                                     </div>
                                 </li>
                             ))}
