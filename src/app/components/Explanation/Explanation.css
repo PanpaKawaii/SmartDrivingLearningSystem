@@ -1,0 +1,74 @@
+.explanation-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .explanation-box {
+        position: relative;
+        padding: 16px;
+        background-color: #3b82f61a;
+        border: 1px solid #3b82f64d;
+        border-radius: 8px;
+        font-size: .875rem;
+
+        h4 {
+            margin: 0 0 4px;
+            color: #60a5fa;
+        }
+
+        p {
+            margin: 0 !important;
+            color: #cbd5e1;
+
+            &.no-explanation {
+                font-style: italic;
+                color: #cbd5e180;
+            }
+        }
+
+        .cube-wrapper {
+            width: fit-content;
+            position: absolute;
+            top: -8px;
+            right: 12px;
+            padding: 0;
+            height: 42px;
+            background-color: transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+
+            .text {
+                max-width: 0ch;
+                color: #80FCFF;
+                font-weight: bold;
+                overflow: hidden;
+                white-space: nowrap;
+                transition: 0.5s ease;
+                user-select: none;
+            }
+
+            &.cube-wrapper:hover {
+                .text {
+                    max-width: 6ch;
+                }
+            }
+        }
+
+        &.ai-explanation {
+            border: 2px solid #68FCFFFF;
+            background-color: #48939b40;
+
+            h4 {
+                color: #68FCFF;
+            }
+
+            .text-explanation {
+                white-space: pre-line;
+            }
+        }
+    }
+}

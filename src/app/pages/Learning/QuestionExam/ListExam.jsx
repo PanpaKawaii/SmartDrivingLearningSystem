@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI.js';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground.jsx';
 import HeadingComponent from '../../../components/HeadingComponent/HeadingComponent.jsx';
@@ -14,6 +15,13 @@ import './ListExam.css';
 export default function ListExam() {
     const { user, refreshNewToken } = useAuth();
 
+    const location = useLocation();
+
+    const selectedIdState = location.state?.selectedId;
+    console.log('selectedIdState', selectedIdState);
+    const ExamOrSituationState = location.state?.ExamOrSituation;
+    console.log('ExamOrSituationState', ExamOrSituationState);
+
     const [EXAMs, setEXAMs] = useState([]);
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
     const [EXAMSESSIONs, setEXAMSESSIONs] = useState([]);
@@ -23,8 +31,10 @@ export default function ListExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [selectedId, setSelectedId] = useState(null);
-    const [ExamOrSituation, setExamOrSituation] = useState('exam');
+    const [selectedId, setSelectedId] = useState(selectedIdState || '');
+    const [ExamOrSituation, setExamOrSituation] = useState(ExamOrSituationState || 'exam');
+
+    const [textInput, setTextInput] = useState('');
 
     const selectedExam = ExamOrSituation == 'exam' ?
         EXAMs.find(e => e.id == selectedId)
@@ -105,6 +115,12 @@ export default function ListExam() {
     console.log('EXAMs', EXAMs);
     console.log('SITUATIONEXAMs', SITUATIONEXAMs);
 
+    const filteredExams = (ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs)?.filter(exam => {
+        const matchTitleDescription = !textInput || exam.title?.toLowerCase().includes(textInput.toLowerCase()) || exam.description?.toLowerCase().includes(textInput.toLowerCase());
+        return matchTitleDescription;
+    });
+    console.log('filteredExams', filteredExams);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
@@ -117,13 +133,14 @@ export default function ListExam() {
                 back={'Quay lại'}
             />
             <div className='container'>
-                <div className='btns'>
+                <div className='filters'>
                     <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
                         ĐỀ THI LÝ THUYẾT
                     </button>
                     <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
                         ĐỀ THI MÔ PHỎNG
                     </button>
+                    <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
                 </div>
                 <div className='content'>
                     <div className='left'>
@@ -131,6 +148,7 @@ export default function ListExam() {
                             <table>
                                 <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Bài Thi</th>
                                         <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
                                         <th>Thời gian</th>
@@ -139,7 +157,7 @@ export default function ListExam() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
+                                    {filteredExams?.map((exam, index) => {
                                         const isSelected = selectedId == exam.id;
                                         const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
 
@@ -150,7 +168,8 @@ export default function ListExam() {
                                                 className={`${isSelected ? 'active' : ''}`}
                                                 style={{ animationDelay: `${index * 0.05}s` }}
                                             >
-                                                <td>
+                                                <td>{index + 1}</td>
+                                                <td className='td-row'>
                                                     <div className='row'>
                                                         <div className='icon-box'>
                                                             <i className='fa-solid fa-file-lines' />

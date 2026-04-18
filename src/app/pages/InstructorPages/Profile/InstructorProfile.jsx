@@ -6,14 +6,14 @@ import ImageUpload from '../../../components/ImageUpload/ImageUpload';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { fetchData, putData, uploadMedia } from '../../../../mocks/CallingAPI';
 
-import AdminProfileView from './AdminProfileView';
-import AdminProfileEdit from './AdminProfileEdit';
+import InstructorProfileView from './InstructorProfileView';
+import InstructorProfileEdit from './InstructorProfileEdit';
 import ChangePasswordModal from '../../UserProfile/ChangePasswordModal';
 
-import '../AdminPages.css';
-import './AdminProfile.css';
+import '../InstructorPages.css';
+import './InstructorProfile.css';
 
-export default function AdminProfile() {
+export default function InstructorProfile() {
     const { user: authUser, logout, refreshNewToken, updateUser } = useAuth();
     const navigate = useNavigate();
 
@@ -72,7 +72,7 @@ export default function AdminProfile() {
                     });
                 }
             } catch (err) {
-                console.error("Lỗi khi fetch admin profile:", err);
+                console.error("Lỗi khi fetch Instructor profile:", err);
                 setError(err);
 
                 if (err.status === 401) {
@@ -132,7 +132,7 @@ export default function AdminProfile() {
             const response = await putData(`User/${authUser.id}`, updatePayload, authUser.token);
 
             if (response) {
-                // Cập nhật context để thay đổi header/sidebar admin ngay lập tức
+                // Cập nhật context để thay đổi header/sidebar Instructor ngay lập tức
                 updateUser({
                     avatar: finalAvatarUrl,
                     name: formData.name
@@ -151,11 +151,11 @@ export default function AdminProfile() {
         }
     };
 
-    if (loading) return <div className='admin-profile-page'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>;
-    if (error) return <div className='admin-profile-page'><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>;
+    if (loading) return <div className='Instructor-profile-page'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>;
+    if (error) return <div className='Instructor-profile-page'><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>;
 
     return (
-        <div className='ins-page admin-profile-page'>
+        <div className='ins-page Instructor-profile-page'>
             {/* Render Feedback Popup */}
             {feedback.show && (
                 <div className={`feedback-popup ${feedback.type} slide-in`}>
@@ -181,7 +181,7 @@ export default function AdminProfile() {
 
             <div className='ins-page-header'>
                 <div>
-                    <h1>Hồ sơ Quản trị viên</h1>
+                    <h1>Hồ sơ Giảng viên</h1>
                     <p>Quản lý thông tin cá nhân của bạn.</p>
                 </div>
             </div>
@@ -193,20 +193,20 @@ export default function AdminProfile() {
                 </div>
             )} */}
 
-            <div className='admin-profile-container'>
+            <div className='Instructor-profile-container'>
                 {/* Sidebar */}
-                <div className='admin-profile-sidebar'>
+                <div className='Instructor-profile-sidebar'>
                     <div className='avatar-section'>
                         <div className='avatar-wrapper'>
                             <ImageUpload
                                 imageUrl={formData.avatar || DefaultAvatar}
                                 onImageChange={({ preview, file }) => handleFieldChange('avatar', preview, file)}
                                 disabled={!isEditing}
-                                className='admin-profile-avatar-upload'
+                                className='Instructor-profile-avatar-upload'
                             />
                         </div>
                         <h2 className='user-name'>{formData.name || 'Quản trị viên'}</h2>
-                        <span className='user-role'>{authUser?.roleName || 'Admin'}</span>
+                        <span className='user-role'>{authUser?.roleName || 'Instructor'}</span>
                     </div>
 
                     <div className='sidebar-info'>
@@ -230,7 +230,7 @@ export default function AdminProfile() {
                 </div>
 
                 {/* Main Content */}
-                <div className='admin-profile-main'>
+                <div className='Instructor-profile-main'>
                     <div className='ins-page-header' style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                         <div className='header-title'>
                             <i className='fa-regular fa-user'></i>
@@ -245,7 +245,7 @@ export default function AdminProfile() {
 
                     <div className='ins-detail-card'>
                         {isEditing ? (
-                            <AdminProfileEdit
+                            <InstructorProfileEdit
                                 formData={formData}
                                 handleFieldChange={handleFieldChange}
                                 handleSaveProfile={handleSaveProfile}
@@ -254,7 +254,7 @@ export default function AdminProfile() {
                                 isSaving={saving}
                             />
                         ) : (
-                            <AdminProfileView formData={formData} user={authUser} />
+                            <InstructorProfileView formData={formData} user={authUser} />
                         )}
                     </div>
                 </div>

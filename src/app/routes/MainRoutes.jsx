@@ -30,7 +30,9 @@ import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSes
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
 import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
 import TrafficSignRecognition from '../pages/TrafficSignRecognition/TrafficSignRecognition.jsx'
+import LearningPath from '../pages/LearningPath/LearningPath.jsx'
 
+import Membership from '../pages/Payment/Membership.jsx'
 import PaymentStatus from '../pages/Payment/PaymentStatus.jsx'
 
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
@@ -51,6 +53,7 @@ import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
 /* Instructor CMS Pages */
 import InsDashboard from '../pages/InstructorPages/Dashboard/Dashboard.jsx'
+import InstructorProfile from '../pages/InstructorPages/Profile/InstructorProfile.jsx';
 import InsQuestionBank from '../pages/InstructorPages/QuestionBank/QuestionBank.jsx'
 import InsQuestionDetail from '../pages/InstructorPages/QuestionBank/QuestionDetail.jsx'
 import InsLessonMgmt from '../pages/InstructorPages/LessonManagement/LessonManagement.jsx'
@@ -102,7 +105,9 @@ export default function MainRoutes() {
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
                     <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
                     <Route path='traffic-sign-recognition' element={<TrafficSignRecognition />} />
+                    <Route path='learning-path' element={<LearningPath />} />
 
+                    <Route path='/membership' element={<Membership />} />
                     <Route path='/payment-status/?' element={<PaymentStatus />} />
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />
@@ -111,22 +116,23 @@ export default function MainRoutes() {
                 <Route path='/three-scene' element={<ThreeScene />} />
                 <Route path='/car' element={<CarScene />} />
 
-                <Route path='admin'element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
+                <Route path='admin' element={<Require allowedRoles={['Admin']}><AdminLayout /></Require>}>
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<AdminDashboard />} />
-                    <Route path='user-management' element={<AdminUserManagement/>}/>
+                    <Route path='user-management' element={<AdminUserManagement />} />
                     <Route path='user-management/create' element={<AdminUserManagement openCreateInitially />} />
                     <Route path='user-management/:userId' element={<AdminUserManagement />} />
                     <Route path='pending-posts' element={<AdminPendingPosts />} />
                     <Route path='community-reports' element={<AdminCommunityReports />} />
                     <Route path='report-entity/:entityType/:entityId' element={<InsReportEntityDetail />} />
-                    <Route path='profile' element={<AdminProfile />}/>
+                    <Route path='profile' element={<AdminProfile />} />
                 </Route>
 
                 {/* Instructor CMS Routes */}
                 <Route path='/instructor' element={<Require allowedRoles={['Instructor']}><InstructorLayout /></Require>} >
                     <Route index element={<Navigate to='dashboard' replace />} />
                     <Route path='dashboard' element={<InsDashboard />} />
+                    <Route path='profile' element={<InstructorProfile />} />
                     <Route path='question-bank' element={<InsQuestionBank />} />
                     <Route path='question-bank/:questionId' element={<InsQuestionDetail />} />
                     <Route path='lesson-management' element={<InsLessonMgmt />} />

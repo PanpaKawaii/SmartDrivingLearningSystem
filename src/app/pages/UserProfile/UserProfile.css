@@ -719,3 +719,171 @@
         }
     }
 }
+
+.license-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.license-owned-item {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.license-owned-item i {
+    color: #4ade80; /* Màu xanh lá cho icon bằng lái đã có */
+}
+
+.license-badge.learning {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.license-checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.license-checkbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.license-checkbox-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.license-checkbox-item.active {
+    background: var(--primary-color, #3b82f6);
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.license-checkbox-item input {
+    display: none; /* Ẩn checkbox mặc định */
+}
+
+.license-checkbox-item span {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Feedback Popup */
+.feedback-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+}
+
+.feedback-popup.success {
+    background: rgba(34, 197, 94, 0.9); /* Xanh lá */
+    border-left: 5px solid #166534;
+}
+
+.feedback-popup.error {
+    background: rgba(239, 68, 68, 0.9); /* Đỏ */
+    border-left: 5px solid #991b1b;
+}
+
+/* Hiệu ứng trượt cho popup */
+.slide-in {
+    animation: slideInRight 0.4s ease forwards;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Loading Button */
+.save-btn.loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.save-btn i {
+    margin-right: 8px;
+}
+
+/* Style cho input bị disabled khi đang lưu */
+button:disabled {
+    filter: grayscale(0.5);
+    pointer-events: none;
+}
+
+/* Lớp phủ mờ toàn màn hình */
+.fixed-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Hiệu ứng xuất hiện cho Modal */
+.modal-content-animation {
+    animation: zoomIn 0.3s ease-out;
+    background: rgba(20, 20, 30, 0.95);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Tùy chỉnh riêng cho popup reset trong trường hợp CSS LoginFace có width cố định */
+.reset-password-popup {
+    min-width: 400px;
+    background: transparent !important; /* Để dùng màu của modal-content-animation */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+}

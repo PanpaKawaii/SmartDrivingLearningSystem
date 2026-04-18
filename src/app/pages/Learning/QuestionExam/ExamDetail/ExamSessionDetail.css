@@ -50,87 +50,159 @@
                 margin: 0 0 20px;
             }
 
-            .list-question {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
+            &.exam {
+                .list-question {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
 
-                .question-item {
-                    padding: 20px;
-                    border-radius: 12px;
+                    .question-item {
+                        padding: 20px;
+                        border-radius: 12px;
 
-                    &.correct-question {
-                        border: 2px solid #22c55e80;
-                        background-color: #22c55e1a;
-                    }
+                        &.correct-question {
+                            border: 2px solid #22c55e80;
+                            background-color: #22c55e1a;
+                        }
 
-                    &.incorrect-question {
-                        border: 2px solid #ef444480;
-                        background-color: #ef44441a;
-                    }
+                        &.incorrect-question {
+                            border: 2px solid #ef444480;
+                            background-color: #ef44441a;
+                        }
 
-                    h3 {
-                        margin: 0 0 4px;
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                    }
-
-                    p {
-                        margin: 0 0 12px;
-                    }
-
-                    .fa-check-circle {
-                        color: #4ade80;
-                    }
-
-                    .fa-xmark-circle {
-                        color: #f87171;
-                    }
-
-                    .list-answer {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 8px;
-
-                        .answer-item {
-                            padding: 12px;
+                        h3 {
+                            margin: 0 0 4px;
+                            color: #fff;
                             display: flex;
-                            justify-content: space-between;
                             align-items: center;
-                            gap: 20px;
-                            color: var(--text-secondary);
-                            border: 2px solid #2f5099;
-                            border-radius: 8px;
+                            gap: 12px;
+                        }
 
-                            &.selected {
-                                color: #fff;
-                                border-color: #ef4444;
-                                background-color: #ef444433;
-                            }
+                        p {
+                            margin: 0 0 12px;
+                        }
 
-                            &.correct-answer {
-                                color: #fff;
-                                border-color: #22c55e;
-                            }
+                        .fa-check-circle {
+                            color: #4ade80;
+                        }
 
-                            &.selected {
-                                &.correct-answer {
-                                    border-color: #22c55e;
-                                    background-color: #22c55e33;
-                                }
-                            }
+                        .fa-xmark-circle {
+                            color: #f87171;
+                        }
 
-                            .tag-correct,
-                            .tag-selected {
-                                width: 140px;
+                        .list-answer {
+                            margin: 0 0 16px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 8px;
+
+                            .answer-item {
+                                padding: 12px;
                                 display: flex;
                                 justify-content: space-between;
                                 align-items: center;
-                                gap: 8px;
+                                gap: 40px;
+                                color: var(--text-secondary);
+                                border: 2px solid #2f5099;
+                                border-radius: 8px;
 
-                                span {
-                                    font-size: .875rem;
+                                &.selected {
+                                    color: #fff;
+                                    border-color: #ef4444;
+                                    background-color: #ef444433;
+                                }
+
+                                &.correct-answer {
+                                    color: #fff;
+                                    border-color: #22c55e;
+                                }
+
+                                &.selected {
+                                    &.correct-answer {
+                                        border-color: #22c55e;
+                                        background-color: #22c55e33;
+                                    }
+                                }
+
+                                .answer-content {
+                                    max-width: calc(100% - 140px - 40px);
+                                    overflow-wrap: break-word;
+                                    word-break: break-word;
+                                }
+
+                                .tag-correct,
+                                .tag-selected {
+                                    width: 140px;
+                                    min-width: 140px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    gap: 8px;
+
+                                    span {
+                                        font-size: .875rem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.situation {
+                .list-simulation {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+
+                    .simulation-item {
+                        padding: 20px;
+                        border-radius: 12px;
+                        background: #0f172ab3;
+                        border: 2px solid #374e6e80;
+
+                        h3 {
+                            margin: 0 0 4px;
+                            color: #fff;
+                        }
+
+                        p {
+                            margin: 0 0 12px;
+
+                            span {
+                                font-weight: bold;
+
+                                &.good {
+                                    color: #4ade80;
+                                }
+
+                                &.bad {
+                                    color: #f87171;
+                                }
+                            }
+                        }
+
+                        .list-point {
+                            display: flex;
+                            flex-direction: row-reverse;
+                            justify-content: space-between;
+                            gap: 8px;
+
+                            .point-item {
+                                flex: 1;
+                                height: 48px;
+                                box-sizing: border-box;
+                                color: var(--text-secondary);
+                                text-align: center;
+                                align-content: center;
+                                border-radius: 8px;
+                                opacity: 0.4;
+
+                                &.selected {
+                                    opacity: 1;
+                                    color: #fff;
+                                    font-size: 1.5rem;
+                                    font-weight: bold;
                                 }
                             }
                         }

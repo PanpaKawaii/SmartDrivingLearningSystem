@@ -65,8 +65,8 @@ export default function BoxChat() {
             setError(error);
         } finally {
             setLoading(false);
-        }
-    }
+        };
+    };
 
     const chatContainerRef = useRef(null);
     useEffect(() => {
@@ -86,28 +86,28 @@ export default function BoxChat() {
             addMessage(e.target.chat.value);
             e.target.chat.value = '';
         }
-    }
+    };
 
     const StyleNormal = {
         width: '320px',
         height: '420px',
-    }
+    };
     const StyleHeight = {
         width: '320px',
         height: '80vh',
-    }
+    };
     const StyleFull = {
         width: 'calc(100vw - 40px)',
         height: '80vh',
         maxWidth: '1000px',
-    }
+    };
 
     let chatStyle = StyleNormal;
     if (WidthFull) {
         chatStyle = StyleFull;
     } else if (HeightFull) {
         chatStyle = StyleHeight;
-    }
+    };
 
     const blocks = [block1, block2, block3, block4, block5, block6];
     const changeBlock = () => {

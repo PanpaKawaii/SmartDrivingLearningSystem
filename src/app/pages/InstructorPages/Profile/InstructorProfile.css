@@ -1,12 +1,12 @@
-/* Admin Profile Page Styling */
+/* Instructor Profile Page Styling */
 
-.admin-profile-page {
+.Instructor-profile-page {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-.admin-profile-container {
+.Instructor-profile-container {
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 24px;
@@ -14,7 +14,7 @@
 }
 
 /* Sidebar */
-.admin-profile-sidebar {
+.Instructor-profile-sidebar {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -44,7 +44,7 @@
     background: var(--ins-surface-variant);
 }
 
-.admin-profile-avatar-upload {
+.Instructor-profile-avatar-upload {
     width: 100%;
     height: 100%;
 }
@@ -163,7 +163,7 @@
 }
 
 /* Main Content Area */
-.admin-profile-main {
+.Instructor-profile-main {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -424,11 +424,11 @@
 
 /* Responsive */
 @media (max-width: 960px) {
-    .admin-profile-container {
+    .Instructor-profile-container {
         grid-template-columns: 1fr;
     }
 
-    .admin-profile-sidebar {
+    .Instructor-profile-sidebar {
         position: relative;
         top: auto;
     }
@@ -443,7 +443,7 @@
 }
 
 @media (max-width: 640px) {
-    .admin-profile-sidebar {
+    .Instructor-profile-sidebar {
         display: none;
     }
 
@@ -522,7 +522,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* --- Sửa lỗi khung ảnh Avatar bị lệch/hở --- */
-.admin-profile-sidebar .avatar-wrapper {
+.Instructor-profile-sidebar .avatar-wrapper {
     width: 150px;  /* Kích thước khung */
     height: 150px;
     border-radius: 50%; /* Khung tròn */
@@ -538,8 +538,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Fix container chứa ảnh trong component ImageUpload (nếu cần) */
-.admin-profile-avatar-upload img,
-.admin-profile-avatar-upload .image-preview {
+.Instructor-profile-avatar-upload img,
+.Instructor-profile-avatar-upload .image-preview {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Quan trọng: Ảnh lấp đầy khung không bị méo */
@@ -576,7 +576,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     backdrop-filter: blur(4px);
 }
 
-/* Tùy chỉnh nút Submit trong Modal nếu cần đồng bộ style Admin */
+/* Tùy chỉnh nút Submit trong Modal nếu cần đồng bộ style Instructor */
 .reset-password-popup .btn-submit {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border-radius: 8px;

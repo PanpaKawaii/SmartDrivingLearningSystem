@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/roboflow",
+      "destination": "/api/roboflow"
+    }
+  ]
+}

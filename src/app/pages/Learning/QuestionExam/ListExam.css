@@ -1,6 +1,6 @@
 .list-exam-container {
     .container {
-        .btns {
+        .filters {
             margin: 0 0 8px;
             padding: 8px;
             width: fit-content;
@@ -24,6 +24,26 @@
                 &.off {
                     background: #374e6e;
                     box-sizing: border-box;
+                }
+            }
+
+            input {
+                color: var(--text-primary);
+                background: transparent;
+                border: 2px solid var(--gray-2);
+
+                &.input-exam {
+                    &:focus {
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 4px #3b82f660;
+                    }
+                }
+
+                &.input-situation {
+                    &:focus {
+                        border-color: #e43efa;
+                        box-shadow: 0 0 0 4px #e43efa60;
+                    }
                 }
             }
         }
@@ -114,7 +134,7 @@
                                 }
                             }
 
-                            td:nth-child(n+2) {
+                            td:nth-child(n+3) {
                                 color: #fff;
                             }
                         }
@@ -150,6 +170,10 @@
 
                         td {
                             border-top: 2px solid #374e6e80;
+
+                            &.td-row {
+                                padding: 20px 8px;
+                            }
 
                             .row {
                                 display: flex;

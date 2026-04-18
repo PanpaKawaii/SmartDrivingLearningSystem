@@ -1,6 +1,9 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
+import { fetchData } from '../../../mocks/CallingAPI'; // Import fetchData
 import LOGO from '../../assets/Logo.png';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import './AdminSidebar.css';
 
 const menuSections = [
@@ -8,7 +11,6 @@ const menuSections = [
         label: 'Tổng quan',
         items: [
             { name: 'Dashboard', icon: 'fa-chart-column', path: '/admin/dashboard' },
-            // { name: 'Thống kê hệ thống', icon: 'fa-chart-line', path: '/admin/dashboard' },
         ],
     },
     {
@@ -33,21 +35,36 @@ const menuSections = [
         label: 'Cá nhân',
         items: [
             { name: 'Thông báo', icon: 'fa-bell', path: '/admin/notifications' },
-            { name: 'Hồ sơ', icon: 'fa-id-card', path: '/admin/profile' },
         ],
     },
 ];
 
 export default function AdminSidebar() {
     const location = useLocation();
-    const { logout, user } = useAuth();
+    const { logout, user, refreshNewToken } = useAuth();
+    const [thisUser, setThisUser] = useState(null); // State lưu dữ liệu fetch từ API
 
-    const getUserInitials = () => {
-        if (!user?.name) return 'AD';
-        const parts = user.name.split(' ');
-        return parts.length >= 2
-            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-            : parts[0][0].toUpperCase();
+    // Fetch dữ liệu admin chi tiết giống UserHeader
+    useEffect(() => {
+        (async () => {
+            const token = user?.token || '';
+            const userId = user?.id || '';
+            try {
+                if (userId) {
+                    const result = await fetchData(`User/${userId}`, token);
+                    setThisUser(result);
+                }
+            } catch (error) {
+                console.error('Error fetching admin data', error);
+                if (error.status === 401) refreshNewToken(user);
+            }
+        })();
+    }, [user?.id, user?.avatar, user?.name]); // Re-fetch khi user context thay đổi (sau khi update profile)
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        logout();
     };
 
     return (
@@ -83,15 +100,34 @@ export default function AdminSidebar() {
                 ))}
             </nav>
 
-            <div className='sidebar-user'>
-                <div className='sidebar-user-avatar'>{getUserInitials()}</div>
-                <div className='sidebar-user-info'>
-                    <span className='sidebar-user-name'>{user?.name || 'Quản trị viên'}</span>
-                    <span className='sidebar-user-role'>Admin</span>
-                </div>
-                <button className='sidebar-logout' onClick={() => logout()} title='Đăng xuất'>
-                    <i className='fa-solid fa-right-from-bracket'></i>
-                </button>
+            <div className='sidebar-footer'>
+                <Link
+                    to="/admin/profile"
+                    className={`sidebar-user-card ${location.pathname === '/admin/profile' ? 'active' : ''}`}
+                >
+                    <div className='user-card-content'>
+                        <div className='sidebar-user-avatar'>
+                            {/* Ưu tiên hiển thị: Dữ liệu API (thisUser) > Dữ liệu Context (user) > Ảnh mặc định */}
+                            <img
+                                src={thisUser?.avatar || user?.avatar || DefaultAvatar}
+                                alt="avatar"
+                                onError={(e) => e.target.src = DefaultAvatar}
+                            />
+                        </div>
+                        <div className='sidebar-user-info'>
+                            <span className='sidebar-user-name'>
+                                {thisUser?.name || user?.name || 'Quản trị viên'}
+                            </span>
+                            <span className='sidebar-user-role'>
+                                {thisUser?.roleName || user?.roleName || 'Admin'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button className='sidebar-logout-inline' onClick={handleLogout} title='Đăng xuất'>
+                        <i className='fa-solid fa-right-from-bracket'></i>
+                    </button>
+                </Link>
             </div>
         </aside>
     );

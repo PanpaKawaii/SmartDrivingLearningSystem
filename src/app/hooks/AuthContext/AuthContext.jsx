@@ -82,11 +82,20 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const updateUser = (newData) => {//dùng khi update profile để cập nhật thông tin user mới nhất vào context và localStorage
+        setUser(prev => {
+            const updated = { ...prev, ...newData };
+            localStorage.setItem('user', JSON.stringify(updated));
+            return updated;
+        });
+    };
+
     const authContextValue = {
         user,
         login,
         logout,
         refreshNewToken,
+        updateUser, //dùng khi update profile để cập nhật thông tin user mới nhất vào context và localStorage
         isLoading
     };
 
