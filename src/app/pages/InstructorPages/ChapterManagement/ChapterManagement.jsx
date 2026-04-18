@@ -12,7 +12,7 @@ const normalizeItems = (payload) => {
     return [];
 };
 export default function ChapterManagement() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const token = user?.token || '';
@@ -128,8 +128,12 @@ export default function ChapterManagement() {
             // Toggle: 1 (Public) <-> 0 (Hidden)
             await putData(`QuestionChapters/${id}`, { }, token);
             setRefresh(r => r + 1);
-        } catch (err) {
-            setError('Lỗi cập nhật trạng thái');
+        } catch (error) {
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi cập nhật trạng thái');
+            }
         } finally {
             setLoading(false);
         }
@@ -153,7 +157,7 @@ export default function ChapterManagement() {
     const columns = [
         {
             key: 'index_col', label: 'STT', width: '56px',
-            render: (_, __, rIdx) => rIdx + 1,
+            render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1,
         },
         {
             key: 'index', label: 'Vị trí', width: '70px',
