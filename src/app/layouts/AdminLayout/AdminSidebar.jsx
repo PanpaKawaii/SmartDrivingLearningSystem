@@ -1,6 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import LOGO from '../../assets/Logo.png';
+import DefaultAvatar from '../../assets/DefaultAvatar.png'; // Thêm Default Avatar
 import './AdminSidebar.css';
 
 const menuSections = [
@@ -8,7 +9,6 @@ const menuSections = [
         label: 'Tổng quan',
         items: [
             { name: 'Dashboard', icon: 'fa-chart-column', path: '/admin/dashboard' },
-            // { name: 'Thống kê hệ thống', icon: 'fa-chart-line', path: '/admin/dashboard' },
         ],
     },
     {
@@ -33,21 +33,20 @@ const menuSections = [
         label: 'Cá nhân',
         items: [
             { name: 'Thông báo', icon: 'fa-bell', path: '/admin/notifications' },
-            { name: 'Hồ sơ', icon: 'fa-id-card', path: '/admin/profile' },
+            // ĐÃ XÓA MỤC HỒ SƠ Ở ĐÂY
         ],
     },
 ];
 
 export default function AdminSidebar() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { logout, user } = useAuth();
 
-    const getUserInitials = () => {
-        if (!user?.name) return 'AD';
-        const parts = user.name.split(' ');
-        return parts.length >= 2
-            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-            : parts[0][0].toUpperCase();
+    const handleLogout = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        logout();
     };
 
     return (
@@ -83,15 +82,29 @@ export default function AdminSidebar() {
                 ))}
             </nav>
 
-            <div className='sidebar-user'>
-                <div className='sidebar-user-avatar'>{getUserInitials()}</div>
-                <div className='sidebar-user-info'>
-                    <span className='sidebar-user-name'>{user?.name || 'Quản trị viên'}</span>
-                    <span className='sidebar-user-role'>Admin</span>
-                </div>
-                <button className='sidebar-logout' onClick={() => logout()} title='Đăng xuất'>
-                    <i className='fa-solid fa-right-from-bracket'></i>
-                </button>
+            <div className='sidebar-footer'>
+                <Link
+                    to="/admin/profile"
+                    className={`sidebar-user-card ${location.pathname === '/admin/profile' ? 'active' : ''}`}
+                >
+                    <div className='user-card-content'>
+                        <div className='sidebar-user-avatar'>
+                            <img
+                                src={user?.avatar || DefaultAvatar}
+                                alt="avatar"
+                                onError={(e) => e.target.src = DefaultAvatar}
+                            />
+                        </div>
+                        <div className='sidebar-user-info'>
+                            <span className='sidebar-user-name'>{user?.name || 'Quản trị viên'}</span>
+                            <span className='sidebar-user-role'>{user?.roleName || 'Admin'}</span>
+                        </div>
+                    </div>
+
+                    <button className='sidebar-logout-inline' onClick={handleLogout} title='Đăng xuất'>
+                        <i className='fa-solid fa-right-from-bracket'></i>
+                    </button>
+                </Link>
             </div>
         </aside>
     );

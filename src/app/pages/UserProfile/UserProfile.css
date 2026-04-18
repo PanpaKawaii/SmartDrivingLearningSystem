@@ -883,3 +883,7 @@ button:disabled {
     min-width: 400px;
     background: transparent !important; /* Để dùng màu của modal-content-animation */
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+}
