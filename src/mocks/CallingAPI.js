@@ -229,21 +229,29 @@ export const deleteMedia = async (fileUrl, imageTarget, token) => {
 };
 
 export const fetchRoboflowData = async (imageUrl) => {
-    const response = await fetch('/roboflow/sub-wtikx/workflows/text-recognition-3', { 
+    const response = await fetch('/roboflow', {   // ← gọi vào serverless function
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             api_key: apiRoboflow,
             inputs: {
-                "image": {"type": "url", "value": imageUrl}
+                "image": { "type": "url", "value": imageUrl }
             }
         })
     });
+
     if (!response.ok) {
-        throw new Error(`Roboflow API error: ${response.statusText}`);
+        let errorDetail = `Status: ${response.status}`;
+        try {
+            const errorBody = await response.json();
+            errorDetail += ` | ${JSON.stringify(errorBody)}`;
+        } catch {
+            const errorText = await response.text();
+            errorDetail += ` | ${errorText}`;
+        }
+        throw new Error(`Roboflow API error: ${errorDetail}`);
     }
+
     return await response.json();
 };
 
