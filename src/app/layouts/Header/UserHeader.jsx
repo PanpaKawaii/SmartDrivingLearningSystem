@@ -26,8 +26,8 @@ export default function UserHeader({
     };
 
     const profileList = [
-        { name: 'Profile', onToggle: () => navigate('profile'), },
-        { name: 'Logout', onToggle: () => logout(), },
+        { name: 'Hồ sơ', onToggle: () => navigate('profile'), },
+        { name: 'Đăng xuất', onToggle: () => logout(), },
     ];
 
     const menuItems = [
@@ -140,7 +140,7 @@ export default function UserHeader({
                     :
                     <button className='login-btn' onClick={() => setLoginOpen(true)}>
                         <i className='fa-solid fa-user' />
-                        <span>LOGIN</span>
+                        <span>Đăng nhập</span>
                     </button>
                 }
 

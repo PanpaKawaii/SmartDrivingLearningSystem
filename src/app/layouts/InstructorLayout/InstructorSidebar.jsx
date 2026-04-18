@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
+import { fetchData } from '../../../mocks/CallingAPI';
 import LOGO from '../../assets/Logo.png';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import './InstructorSidebar.css';
 
 const menuSections = [
@@ -37,14 +40,30 @@ const menuSections = [
 
 export default function InstructorSidebar() {
     const location = useLocation();
-    const { logout, user } = useAuth();
+    const { logout, user, refreshNewToken } = useAuth();
+    const [thisUser, setThisUser] = useState(null);
 
-    const getUserInitials = () => {
-        if (!user?.name) return 'GV';
-        const parts = user.name.split(' ');
-        return parts.length >= 2
-            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-            : parts[0][0].toUpperCase();
+    // Fetch dữ liệu giảng viên chi tiết
+    useEffect(() => {
+        (async () => {
+            const token = user?.token || '';
+            const userId = user?.id || '';
+            try {
+                if (userId) {
+                    const result = await fetchData(`User/${userId}`, token);
+                    setThisUser(result);
+                }
+            } catch (error) {
+                console.error('Error fetching instructor data', error);
+                if (error.status === 401) refreshNewToken(user);
+            }
+        })();
+    }, [user?.id, user?.avatar, user?.name]);
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        logout();
     };
 
     return (
@@ -61,31 +80,52 @@ export default function InstructorSidebar() {
                 {menuSections.map((section, sIdx) => (
                     <div key={sIdx}>
                         <div className='sidebar-section-label'>{section.label}</div>
-                        {section.items.map((item, iIdx) => (
-                            <Link
-                                key={iIdx}
-                                to={item.path}
-                                className={`sidebar-nav-item ${location.pathname === item.path || location.pathname.startsWith(item.path + '/') ? 'active' : ''}`}
-                            >
-                                <span className='nav-icon'>
-                                    <i className={`fa-solid ${item.icon}`}></i>
-                                </span>
-                                <span>{item.name}</span>
-                            </Link>
-                        ))}
+                        {section.items.map((item, iIdx) => {
+                            const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
+                            return (
+                                <Link
+                                    key={iIdx}
+                                    to={item.path}
+                                    className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+                                >
+                                    <span className='nav-icon'>
+                                        <i className={`fa-solid ${item.icon}`}></i>
+                                    </span>
+                                    <span>{item.name}</span>
+                                </Link>
+                            );
+                        })}
                     </div>
                 ))}
             </nav>
 
-            <div className='sidebar-user'>
-                <div className='sidebar-user-avatar'>{getUserInitials()}</div>
-                <div className='sidebar-user-info'>
-                    <span className='sidebar-user-name'>{user?.name || 'Lê Minh Anh'}</span>
-                    <span className='sidebar-user-role'>Giảng viên</span>
-                </div>
-                <button className='sidebar-logout' onClick={() => logout()} title='Đăng xuất'>
-                    <i className='fa-solid fa-right-from-bracket'></i>
-                </button>
+            <div className='sidebar-footer'>
+                <Link
+                    to="/instructor/profile"
+                    className={`sidebar-user-card ${location.pathname === '/instructor/profile' ? 'active' : ''}`}
+                >
+                    <div className='user-card-content'>
+                        <div className='sidebar-user-avatar'>
+                            <img
+                                src={thisUser?.avatar || user?.avatar || DefaultAvatar}
+                                alt="avatar"
+                                onError={(e) => e.target.src = DefaultAvatar}
+                            />
+                        </div>
+                        <div className='sidebar-user-info'>
+                            <span className='sidebar-user-name'>
+                                {thisUser?.name || user?.name || 'Giảng viên'}
+                            </span>
+                            <span className='sidebar-user-role'>
+                                {thisUser?.roleName || user?.roleName || 'Instructor'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button className='sidebar-logout-inline' onClick={handleLogout} title='Đăng xuất'>
+                        <i className='fa-solid fa-right-from-bracket'></i>
+                    </button>
+                </Link>
             </div>
         </aside>
     );
