@@ -38,7 +38,7 @@ export default function UserHeader({
         { name: 'HỌC TẬP', icon: 'book-open', iconType: 'solid', path: '/learning' },
         { name: 'NHẬN DIỆN', icon: 'camera', iconType: 'solid', path: '/traffic-sign-recognition' },
         { name: 'THÀNH VIÊN', icon: 'users', iconType: 'solid', path: '/membership' },
-        { name: 'LỘ TRÌNH HỌC', icon: 'map', iconType: 'solid', path: '/learning-path' },
+        { name: 'LỘ TRÌNH', icon: 'map', iconType: 'solid', path: '/learning-path' },
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
