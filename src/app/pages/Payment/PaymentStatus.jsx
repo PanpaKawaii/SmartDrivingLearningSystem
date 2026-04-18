@@ -9,7 +9,7 @@ export default function PaymentStatus() {
     const { user } = useAuth();
 
     const [message, setMessage] = useState('');
-    const [ThisUser, setThisUser] = useState(null);
+    const [thisUser, setThisUser] = useState(null);
     const [refresh, setRefresh] = useState(0);
 
     useEffect(() => {
@@ -51,7 +51,7 @@ export default function PaymentStatus() {
                     <button className='btn-in-payment-status' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
                     <Link to='/payment-status/?message=Thanh%20toán%20thành%20công'><button className='btn-in-payment-status'>Thanh toán thành công</button></Link>
                     <Link to='/payment-status/?message=Thanh%20toán%20thất%20bại'><button className='btn-in-payment-status'>Thanh toán thất bại</button></Link> */}
-                    {/* <div>{ThisUser?.name} - {ThisUser?.type}</div> */}
+                    {/* <div>{thisUser?.name} - {thisUser?.type}</div> */}
                     {/* <button className='btn-in-payment-status' onClick={() => localStorage.setItem('ActivateMembership', 'ReadyToActivate')}>SET ReadyToActivate</button> */}
                     {/* <button className='btn-in-payment-status' onClick={() => localStorage.removeItem('ActivateMembership')}>REMOVE</button> */}
                     {/* <button className='btn-in-payment-status' onClick={() => changeUserType('Regular')}>BỎ KÍCH HOẠT</button> */}
