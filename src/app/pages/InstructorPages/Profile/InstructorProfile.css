@@ -1,0 +1,585 @@
+/* Instructor Profile Page Styling */
+
+.Instructor-profile-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.Instructor-profile-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    min-height: calc(100vh - 300px);
+}
+
+/* Sidebar */
+.Instructor-profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+    background: var(--ins-surface);
+    border: 1px solid var(--ins-surface-variant);
+    border-radius: 8px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--ins-primary);
+    background: var(--ins-surface-variant);
+}
+
+.Instructor-profile-avatar-upload {
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ins-on-surface);
+    margin: 0;
+}
+
+.user-role {
+    display: inline-block;
+    padding: 6px 16px;
+    /* Đổi từ var(--ins-primary) sang màu xanh biển */
+    background: rgba(59, 130, 246, 0.15); 
+    color: #3b82f6; 
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase; /* Làm cho vai trò trông trang trọng hơn */
+}
+
+.sidebar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--ins-surface-variant);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--ins-on-surface-variant);
+}
+
+.info-item i {
+    color: #3b82f6;
+    width: 16px;
+}
+
+.info-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--ins-surface-variant);
+}
+
+.sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-btn i {
+    width: 16px;
+}
+
+.sidebar-btn.primary-btn {
+    /* Sử dụng gradient xanh biển đồng bộ với nút Lưu */
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    transition: all 0.3s ease;
+}
+
+.sidebar-btn.primary-btn:hover {
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+    opacity: 1; /* Ghi đè lại các thuộc tính hover cũ nếu có */
+}
+
+.sidebar-btn.primary-btn i {
+    color: white; /* Đảm bảo icon luôn là màu trắng */
+}
+
+.sidebar-btn.outline-btn {
+    background: transparent;
+    color: var(--ins-on-surface-variant);
+    border-color: var(--ins-surface-variant);
+}
+
+.sidebar-btn.outline-btn:hover {
+    background: var(--ins-surface-variant);
+    color: var(--ins-on-surface);
+}
+
+.sidebar-btn.mt-auto {
+    margin-top: auto;
+}
+
+/* Main Content Area */
+.Instructor-profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-row .ins-form-group {
+    margin: 0;
+}
+
+.profile-form .ins-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--ins-on-surface);
+}
+
+.profile-form .ins-form-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--ins-surface-variant);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    color: var(--ins-on-surface);
+}
+
+.profile-form .ins-form-textarea::placeholder {
+    color: var(--ins-on-surface-variant);
+}
+
+/* Readonly Group */
+.form-readonly-group {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--ins-surface-variant);
+    border-radius: 6px;
+}
+
+.readonly-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ins-on-surface-variant);
+}
+
+.readonly-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.readonly-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.readonly-item label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ins-on-surface-variant);
+}
+
+.readonly-item input {
+    padding: 8px;
+    border: none;
+    background: var(--ins-surface);
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--ins-on-surface);
+    cursor: not-allowed;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ins-action-btn {
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ins-action-btn.primary {
+    background: var(--ins-primary);
+    color: white;
+    border-color: var(--ins-primary);
+}
+
+.ins-action-btn.primary:hover {
+    opacity: 0.9;
+}
+
+.ins-action-btn.outline {
+    background: transparent;
+    color: var(--ins-primary);
+    border-color: var(--ins-primary);
+}
+
+.ins-action-btn.outline:hover {
+    background: var(--ins-primary);
+    color: white;
+}
+
+/* Profile View Details */
+.profile-view-details {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* System Meta Info */
+.system-meta-info {
+    display: flex;
+    gap: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ins-surface-variant);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ins-on-surface-variant);
+}
+
+.meta-item i {
+    color: var(--ins-primary);
+}
+
+/* Settings Tab */
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--ins-surface-variant);
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+}
+
+.settings-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ins-on-surface);
+    margin: 0 0 8px 0;
+}
+
+.settings-desc {
+    font-size: 13px;
+    color: var(--ins-on-surface-variant);
+    margin: 0 0 12px 0;
+}
+
+.settings-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.setting-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ins-on-surface);
+}
+
+.setting-option input[type='checkbox'] {
+    cursor: pointer;
+    accent-color: var(--ins-primary);
+}
+
+.setting-option input[type='checkbox']:hover {
+    transform: scale(1.1);
+}
+
+/* Success Banner */
+.ins-success-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 6px;
+    color: #155724;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+}
+
+.ins-success-banner i {
+    color: #28a745;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header Title */
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-title h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--ins-on-surface);
+}
+
+.header-title i {
+    font-size: 20px;
+    color: var(--ins-primary);
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .Instructor-profile-container {
+        grid-template-columns: 1fr;
+    }
+
+    .Instructor-profile-sidebar {
+        position: relative;
+        top: auto;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .readonly-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .Instructor-profile-sidebar {
+        display: none;
+    }
+
+    .system-meta-info {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        justify-content: space-between;
+    }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+}
+
+/* --- Cập nhật Nút Chỉnh sửa (header) --- */
+.edit-mode-btn {
+    background: rgba(59, 130, 246, 0.1); /* Màu xanh dương nhạt */
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    padding: 8px 16px;
+    border-radius: 20px; /* Bo góc tròn */
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-mode-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); /* Hiệu ứng glow */
+    transform: translateY(-1px);
+}
+
+/* Base button style giống UserProfile */
+.profile-action-btn {
+    padding: 10px 24px;
+    border-radius: 12px; /* Bo góc vừa phải */
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Nút Hủy */
+.profile-action-btn.cancel {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-action-btn.cancel:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Nút Lưu */
+.profile-action-btn.save {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); /* Gradient xanh */
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); /* Glow xanh */
+}
+
+.profile-action-btn.save:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    transform: translateY(-1px);
+}
+
+.profile-action-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- Sửa lỗi khung ảnh Avatar bị lệch/hở --- */
+.Instructor-profile-sidebar .avatar-wrapper {
+    width: 150px;  /* Kích thước khung */
+    height: 150px;
+    border-radius: 50%; /* Khung tròn */
+    margin: 0 auto 15px;
+    padding: 5px; /* Khoảng cách giữa viền và ảnh */
+    background: rgba(255, 255, 255, 0.05); /* Nền kính mờ */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box; /* Quan trọng để padding không làm tăng size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Cắt ảnh thừa */
+}
+
+/* Fix container chứa ảnh trong component ImageUpload (nếu cần) */
+.Instructor-profile-avatar-upload img,
+.Instructor-profile-avatar-upload .image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Quan trọng: Ảnh lấp đầy khung không bị méo */
+    border-radius: 50%;
+}
+
+/* Feedback Popup */
+.feedback-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+.feedback-popup.success { background: #2ecc71; }
+.feedback-popup.error { background: #e74c3c; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Overlay cho Modal */
+.fixed-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+/* Tùy chỉnh nút Submit trong Modal nếu cần đồng bộ style Instructor */
+.reset-password-popup .btn-submit {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}

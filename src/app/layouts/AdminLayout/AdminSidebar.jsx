@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
+import { fetchData } from '../../../mocks/CallingAPI'; // Import fetchData
 import LOGO from '../../assets/Logo.png';
-import DefaultAvatar from '../../assets/DefaultAvatar.png'; // Thêm Default Avatar
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import './AdminSidebar.css';
 
 const menuSections = [
@@ -33,15 +35,31 @@ const menuSections = [
         label: 'Cá nhân',
         items: [
             { name: 'Thông báo', icon: 'fa-bell', path: '/admin/notifications' },
-            // ĐÃ XÓA MỤC HỒ SƠ Ở ĐÂY
         ],
     },
 ];
 
 export default function AdminSidebar() {
     const location = useLocation();
-    const navigate = useNavigate();
-    const { logout, user } = useAuth();
+    const { logout, user, refreshNewToken } = useAuth();
+    const [thisUser, setThisUser] = useState(null); // State lưu dữ liệu fetch từ API
+
+    // Fetch dữ liệu admin chi tiết giống UserHeader
+    useEffect(() => {
+        (async () => {
+            const token = user?.token || '';
+            const userId = user?.id || '';
+            try {
+                if (userId) {
+                    const result = await fetchData(`User/${userId}`, token);
+                    setThisUser(result);
+                }
+            } catch (error) {
+                console.error('Error fetching admin data', error);
+                if (error.status === 401) refreshNewToken(user);
+            }
+        })();
+    }, [user?.id, user?.avatar, user?.name]); // Re-fetch khi user context thay đổi (sau khi update profile)
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -89,15 +107,20 @@ export default function AdminSidebar() {
                 >
                     <div className='user-card-content'>
                         <div className='sidebar-user-avatar'>
+                            {/* Ưu tiên hiển thị: Dữ liệu API (thisUser) > Dữ liệu Context (user) > Ảnh mặc định */}
                             <img
-                                src={user?.avatar || DefaultAvatar}
+                                src={thisUser?.avatar || user?.avatar || DefaultAvatar}
                                 alt="avatar"
                                 onError={(e) => e.target.src = DefaultAvatar}
                             />
                         </div>
                         <div className='sidebar-user-info'>
-                            <span className='sidebar-user-name'>{user?.name || 'Quản trị viên'}</span>
-                            <span className='sidebar-user-role'>{user?.roleName || 'Admin'}</span>
+                            <span className='sidebar-user-name'>
+                                {thisUser?.name || user?.name || 'Quản trị viên'}
+                            </span>
+                            <span className='sidebar-user-role'>
+                                {thisUser?.roleName || user?.roleName || 'Admin'}
+                            </span>
                         </div>
                     </div>
 
