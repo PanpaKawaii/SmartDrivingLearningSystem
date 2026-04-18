@@ -30,6 +30,7 @@ import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSes
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
 import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
 import TrafficSignRecognition from '../pages/TrafficSignRecognition/TrafficSignRecognition.jsx'
+import LearningPath from '../pages/LearningPath/LearningPath.jsx'
 
 import Membership from '../pages/Payment/Membership.jsx'
 import PaymentStatus from '../pages/Payment/PaymentStatus.jsx'
@@ -103,6 +104,7 @@ export default function MainRoutes() {
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
                     <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
                     <Route path='traffic-sign-recognition' element={<TrafficSignRecognition />} />
+                    <Route path='learning-path' element={<LearningPath />} />
 
                     <Route path='/membership' element={<Membership />} />
                     <Route path='/payment-status/?' element={<PaymentStatus />} />

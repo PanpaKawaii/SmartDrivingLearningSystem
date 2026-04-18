@@ -41,7 +41,7 @@ export default function Explanation({
     };
 
     const renderFormattedText = (text) => {
-        const lines = text.split(/(?<=\s)\*(?=\s)/);
+        const lines = text.replace(/###/g, '').split(/(?<=\s)\*(?=\s)/);
 
         return lines.map((line, idx) => {
             const parts = line.split(/(\*\*.*?\*\*)/g);
@@ -89,7 +89,7 @@ export default function Explanation({
             {aiExplanation &&
                 <div className='explanation-box ai-explanation'>
                     <h4>AI giải đáp:</h4>
-                    <div>{renderFormattedText(aiExplanation)}</div>
+                    <div className='text-explanation'>{renderFormattedText(aiExplanation)}</div>
                 </div>
             }
         </div>
