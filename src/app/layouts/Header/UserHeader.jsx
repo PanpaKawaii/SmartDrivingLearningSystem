@@ -31,12 +31,14 @@ export default function UserHeader({
     ];
 
     const menuItems = [
-        { name: 'TRANG CHỦ', icon: 'house', iconType: 'solid', path: '/' },
+        // { name: 'TRANG CHỦ', icon: 'house', iconType: 'solid', path: '/' },
         { name: 'BẰNG LÁI XE', icon: 'book', iconType: 'solid', path: '/driving-license' },
         { name: 'MÔ PHỎNG', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
         { name: 'DIỄN ĐÀN', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'HỌC TẬP', icon: 'book-open', iconType: 'solid', path: '/learning' },
         { name: 'NHẬN DIỆN', icon: 'camera', iconType: 'solid', path: '/traffic-sign-recognition' },
+        { name: 'THÀNH VIÊN', icon: 'users', iconType: 'solid', path: '/membership' },
+        { name: 'LỘ TRÌNH HỌC', icon: 'map', iconType: 'solid', path: '/learning-path' },
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
@@ -99,8 +101,11 @@ export default function UserHeader({
                 <div className='nav-links'>
                     {menuItems.map((item, index) => {
                         const locationPathname = location.pathname;
+                        console.log('locationPathname', locationPathname);
+
                         const itemPath = item.path;
-                        const isActive = (itemPath !== '/' && (locationPathname)?.includes(itemPath)) || (itemPath === '/' && locationPathname === '/');
+                        console.log('itemPath', itemPath);
+                        const isActive = (itemPath !== '/' && (locationPathname?.split('/'))?.includes(itemPath.replace('/', ''))) || (itemPath === '/' && locationPathname === '/');
 
                         return (
                             <Link

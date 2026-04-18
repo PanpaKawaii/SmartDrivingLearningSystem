@@ -63,6 +63,13 @@ const CheckValidation = (Email, Name, Phone, Gender, Password, Confirm, Accept) 
             name: 'Password',
         };
     }
+    if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/).test(Password)) {
+        console.error('Mật khẩu cần bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt');
+        return {
+            value: 'Mật khẩu cần bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt',
+            name: 'Password',
+        };
+    }
     if (Password != Confirm) {
         console.error('Wrong password confirmation');
         return {

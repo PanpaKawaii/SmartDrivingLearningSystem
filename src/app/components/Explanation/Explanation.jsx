@@ -28,7 +28,7 @@ export default function Explanation({
         setLoading(true);
         const token = user?.token;
         try {
-            const result = await postData('Chat/ask', SendMessage, token);
+            const result = await postData('Chat/ask/Exercise', SendMessage, token);
             console.log('result', result);
             if (result.reply?.includes('The model is overloaded. Please try again later.')) {
                 setAiExplanation('Kết nối không ổn định, bạn hãy thử lại sau nhé!');

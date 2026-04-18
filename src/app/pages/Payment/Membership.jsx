@@ -77,8 +77,8 @@ export default function Membership() {
     // ];
 
     const features = [
-        { name: 'Guest', role: 'Guest' },
         { name: 'Student', role: 'Student' },
+        { name: 'Guest', role: 'Guest' },
     ];
 
     return (
@@ -89,7 +89,6 @@ export default function Membership() {
                 subtitle=''
                 titlePosition={'center'}
                 back={'Quay lại'}
-                linkBack={'./../../..'}
             />
             <div className='plans'>
                 <div className='card-normal'>
@@ -100,7 +99,7 @@ export default function Membership() {
                                 <li key={idx}>
                                     <div className='feature'>
                                         <div>{feature.name}</div>
-                                        <i className={`fa-solid fa-${feature.role == 'Guest' ? 'check' : 'xmark'}`}></i>
+                                        <i className={`fa-solid fa-${feature.role == 'Student' ? 'check' : 'xmark'}`}></i>
                                     </div>
                                 </li>
                             ))}
