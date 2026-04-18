@@ -38,7 +38,7 @@ export default function SituationExam() {
 
     useEffect(() => {
         if (user?.roleName != 'Student' && localStorage.getItem('SituationExam') == new Date().toLocaleDateString()) {
-            navigate('./../../');
+            navigate('./../..');
             return;
         }
         (async () => {
@@ -114,7 +114,7 @@ export default function SituationExam() {
         try {
             const result = await postData('SimulationSessions', SimulationSessionsData, token);
             console.log('result', result);
-            navigate(`./../situation-exam-result/${result?.id}`);
+            navigate(`./../situation-exam-result/${result?.id}`, { state: 'situation' });
 
             await sleep(1000);
         } catch (error) {
@@ -152,7 +152,7 @@ export default function SituationExam() {
                 <ListScenario
                     list={SIMULATIONSCENARIOs}
                     done={done}
-                    groupBy={'simulationChapterId'}
+                    groupBy={''}
                     label={'Danh sách kịch bản mô phỏng'}
                     onClickButton={setSelectedScenarioId}
                     selected={selectedScenarioId}

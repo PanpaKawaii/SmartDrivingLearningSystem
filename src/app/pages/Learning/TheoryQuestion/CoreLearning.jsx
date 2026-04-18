@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { deleteData, fetchData, postData, putData } from '../../../../mocks/CallingAPI';
 import ButtonList from '../../../components/ButtonList/ButtonList';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
+import Explanation from '../../../components/Explanation/Explanation';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ProgressBar from '../../../components/ProgressBar/ProgressBar';
 import ReportModal from '../../../components/ReportModal/ReportModal';
@@ -98,7 +99,7 @@ export default function CoreLearning({
     const handleEndQuiz = async () => {
         console.log('QUESTIONs', QUESTIONs);
         console.log('myAnswers', myAnswers);
-        const correctCount = myAnswers?.filter(m => m.answers?.some(a => a.isCorrect == true))?.length || 0;
+        const correctCount = myAnswers.filter(m => m.answers?.every(a => getAnswerStatus(QUESTIONs.find(q => q.id == m.questionId), QUESTIONs.find(q => q.id == m.questionId)?.answers?.find(qa => qa.id == a.answerId), myAnswers) == 'btn-correct'))?.length || 0;
         console.log('correctCount:', correctCount);
         const correctPercent = Number((100 * correctCount / (QUESTIONs?.length || 1))?.toFixed(0));
         console.log('correctPercent:', correctPercent);
@@ -212,6 +213,9 @@ export default function CoreLearning({
         };
     };
 
+    console.log('selectedQuestion', selectedQuestion);
+    console.log('myAnswers', myAnswers);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error && error.status != 401) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
@@ -275,15 +279,19 @@ export default function CoreLearning({
                                         className={`${getAnswerStatus(selectedQuestion, answer, myAnswers)}`}
                                         style={{ animationDelay: `${aIndex * 0.1}s` }}
                                         onClick={() => toggleAnswerInMyAnswers(selectedQuestion?.id, answer.id, answer.isCorrect)}
-                                        disabled={disableAfterAnswer && myAnswers.some(a => a.questionId == selectedQuestionId)}
+                                        disabled={disableAfterAnswer && ((myAnswers.find(item => item.questionId == selectedQuestionId)?.answers.map(a => a.answerId) || []).length == selectedQuestion?.correctAnswer || myAnswers.some(m => m.answers?.find(a => a.answerId == answer.id)))}
                                     >
                                         {aIndex + 1}. {answer.content}
                                     </button>
                                 ))}
                             </div>
-                            <div className={`explanation ${selectedQuestion?.explanation ? '' : 'no-explanation'}`}>
-                                {selectedQuestion?.explanation ? 'Giải thích: ' + selectedQuestion?.explanation : 'Không có giải thích'}
-                            </div>
+                            {myAnswers.find(m => m.questionId == selectedQuestionId) &&
+                                <Explanation
+                                    questionProp={selectedQuestion?.content}
+                                    answersProp={selectedQuestion?.answers}
+                                    explanation={selectedQuestion?.explanation}
+                                />
+                            }
                         </div>
                         <div className='btns'>
                             <button className='btn-left' onClick={() => handleMoveCard('left')}>Câu trước</button>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import HeadingComponent from '../../components/HeadingComponent/HeadingComponent';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 
 import './Learning.css';
@@ -74,16 +75,12 @@ export default function Learning() {
         <div className='learning-container'>
             <StarsBackground />
             <div className='content'>
-                <div className='learn-header'>
-                    <div className='badge'>
-                        <i className='fa-solid fa-book-open' />
-                        <span>Tài liệu đào tạo</span>
-                    </div>
-                    <h1>Làm chủ kiến thức lái xe</h1>
-                    <p>
-                        Các mô-đun đào tạo toàn diện về luật giao thông, biển báo, kỹ thuật và an toàn giao thông
-                    </p>
-                </div>
+                <HeadingComponent
+                    badge='Tài liệu đào tạo'
+                    title='Làm chủ kiến thức lái xe'
+                    subtitle='Các mô-đun đào tạo toàn diện về luật giao thông, biển báo, kỹ thuật và an toàn giao thông'
+                    back={false}
+                />
 
                 <div className='category-grid'>
                     {categories.map((category, index) => (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Thêm navigate để xử lý logout
+import { Link, useNavigate } from 'react-router-dom'; // Thêm navigate để xử lý logout
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
@@ -244,6 +244,11 @@ export default function UserProfile() {
                             >
                                 <i className='fa-solid fa-lock'></i> Đổi mật khẩu
                             </button>
+                            <Link to='/membership'>
+                                <button className='sidebar-btn outline-btn mt-auto'>
+                                    <i className='fa-solid fa-lock'></i> Đăng ký thành viên
+                                </button>
+                            </Link>
                         </div>
                     </div>
 

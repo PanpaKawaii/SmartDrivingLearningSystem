@@ -146,19 +146,6 @@
                         }
                     }
                 }
-
-                .explanation {
-                    padding: 12px;
-                    color: #ccc;
-                    text-align: center;
-                    background-color: #ffffff10;
-                    border: 1px solid #ffffff20;
-                    border-radius: 12px;
-
-                    &.no-explanation {
-                        font-style: italic;
-                    }
-                }
             }
 
             .btns {

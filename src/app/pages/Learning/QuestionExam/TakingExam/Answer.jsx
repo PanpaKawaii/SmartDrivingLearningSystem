@@ -122,12 +122,13 @@ export default function Answer({
         console.log('resultFlat', resultFlat);
         const score = Number(((100 * correctCount / (QuestionsAnswers?.length || 1)) || 0)?.toFixed(0) || 0);
         console.log('score', score);
+        console.log('passScore', passScore);
 
         const ExamSessionData = {
             examId: examId,
             score: score,
             totalDuration: Math.max(0, Math.min(examDuration, ((endTime ? endTime : new Date()) - startTime) / 1000)),
-            isPass: score >= passScore,
+            isPassed: score >= passScore,
             examDetails: resultFlat,
         };
         console.log('ExamSessionData:', ExamSessionData);
@@ -136,7 +137,7 @@ export default function Answer({
         try {
             const result = await postData('ExamSessions', ExamSessionData, token);
             console.log('result', result);
-            navigate(`./../exam-result/${result?.id}`);
+            navigate(`./../exam-result/${result?.id}`, { state: 'exam' });
 
             await sleep(1000);
         } catch (error) {

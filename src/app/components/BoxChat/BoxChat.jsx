@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { block1, block2, block3, block4, block5, block6 } from '../../../mocks/blocks.js';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
@@ -9,6 +10,8 @@ import './BoxChat.css';
 
 export default function BoxChat() {
     const { user } = useAuth();
+
+    const location = useLocation();
 
     const [Messages, setMessages] = useState([]);
     const [WidthFull, setWidthFull] = useState(false);
@@ -26,6 +29,11 @@ export default function BoxChat() {
             return () => clearTimeout(timer);
         }
     }, [visible]);
+
+    useEffect(() => {
+        if (location.state?.openBoxChat == 'true') setDisplayChat(true);
+        else if (location.state?.openBoxChat == 'false') setDisplayChat(false);
+    }, [location.state]);
 
     useEffect(() => {
         setMessages(['Xin chào! Tôi là trợ lý AI của bạn. Hãy đặt câu hỏi để tôi hỗ trợ nhé!']);
@@ -57,8 +65,8 @@ export default function BoxChat() {
             setError(error);
         } finally {
             setLoading(false);
-        }
-    }
+        };
+    };
 
     const chatContainerRef = useRef(null);
     useEffect(() => {
@@ -78,28 +86,28 @@ export default function BoxChat() {
             addMessage(e.target.chat.value);
             e.target.chat.value = '';
         }
-    }
+    };
 
     const StyleNormal = {
         width: '320px',
         height: '420px',
-    }
+    };
     const StyleHeight = {
         width: '320px',
         height: '80vh',
-    }
+    };
     const StyleFull = {
         width: 'calc(100vw - 40px)',
         height: '80vh',
         maxWidth: '1000px',
-    }
+    };
 
     let chatStyle = StyleNormal;
     if (WidthFull) {
         chatStyle = StyleFull;
     } else if (HeightFull) {
         chatStyle = StyleHeight;
-    }
+    };
 
     const blocks = [block1, block2, block3, block4, block5, block6];
     const changeBlock = () => {

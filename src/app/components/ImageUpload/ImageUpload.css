@@ -10,13 +10,39 @@
     width: 110px;
     height: 110px;
 
-    img {
+    img,
+    .image-empty-placeholder {
       width: 100%;
       height: 100%;
       border-radius: 50%;
+    }
+
+    img {
       object-fit: cover;
       border: 3px solid rgba(59, 130, 246, .4);
       box-shadow: 0 0 20px rgba(59, 130, 246, .2);
+    }
+
+    .image-empty-placeholder {
+      border: 3px dashed rgba(59, 130, 246, .35);
+      background: rgba(15, 23, 42, 0.65);
+      color: #93c5fd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-align: center;
+
+      i {
+        font-size: 1.1rem;
+      }
+
+      span {
+        font-size: 0.72rem;
+        line-height: 1.1;
+        padding: 0 8px;
+      }
     }
 
     .upload-btn {

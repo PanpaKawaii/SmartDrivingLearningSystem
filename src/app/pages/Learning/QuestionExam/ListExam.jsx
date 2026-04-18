@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI.js';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground.jsx';
 import HeadingComponent from '../../../components/HeadingComponent/HeadingComponent.jsx';
@@ -14,15 +15,26 @@ import './ListExam.css';
 export default function ListExam() {
     const { user, refreshNewToken } = useAuth();
 
+    const location = useLocation();
+
+    const selectedIdState = location.state?.selectedId;
+    console.log('selectedIdState', selectedIdState);
+    const ExamOrSituationState = location.state?.ExamOrSituation;
+    console.log('ExamOrSituationState', ExamOrSituationState);
+
     const [EXAMs, setEXAMs] = useState([]);
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
+    const [EXAMSESSIONs, setEXAMSESSIONs] = useState([]);
+    const [SIMULATIONSESSIONs, setSIMULATIONSESSIONs] = useState([]);
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [selectedId, setSelectedId] = useState(null);
-    const [ExamOrSituation, setExamOrSituation] = useState('exam');
+    const [selectedId, setSelectedId] = useState(selectedIdState || '');
+    const [ExamOrSituation, setExamOrSituation] = useState(ExamOrSituationState || 'exam');
+
+    const [textInput, setTextInput] = useState('');
 
     const selectedExam = ExamOrSituation == 'exam' ?
         EXAMs.find(e => e.id == selectedId)
@@ -64,6 +76,29 @@ export default function ListExam() {
                     chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
                 }));
 
+                if (user) {
+                    const examSessionQuery = new URLSearchParams({
+                        page: '1',
+                        pageSize: '500',
+                        userId: user?.id,
+                        status: 1,
+                    });
+                    const simulationSessionQuery = new URLSearchParams({
+                        page: '1',
+                        pageSize: '500',
+                        userId: user?.id,
+                        status: 1,
+                    });
+                    const ExamSessionResponse = await fetchData(`ExamSessions?${examSessionQuery.toString()}`, token);
+                    const SimulationSessionResponse = await fetchData(`SimulationSessions?${simulationSessionQuery.toString()}`, token);
+                    console.log('ExamSessionResponse', ExamSessionResponse);
+                    console.log('SimulationSessionResponse', SimulationSessionResponse);
+                    const ExamSessionItems = ExamSessionResponse?.items;
+                    const SimulationSessionItems = SimulationSessionResponse?.items;
+                    setEXAMSESSIONs(ExamSessionItems);
+                    setSIMULATIONSESSIONs(SimulationSessionItems);
+                }
+
                 setEXAMs(ExamItems);
                 setSITUATIONEXAMs(SituationExamItems);
                 setDRIVINGLICENSEs(DrivingLicenses);
@@ -80,6 +115,12 @@ export default function ListExam() {
     console.log('EXAMs', EXAMs);
     console.log('SITUATIONEXAMs', SITUATIONEXAMs);
 
+    const filteredExams = (ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs)?.filter(exam => {
+        const matchTitleDescription = !textInput || exam.title?.toLowerCase().includes(textInput.toLowerCase()) || exam.description?.toLowerCase().includes(textInput.toLowerCase());
+        return matchTitleDescription;
+    });
+    console.log('filteredExams', filteredExams);
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
@@ -91,68 +132,90 @@ export default function ListExam() {
                 titlePosition={'left'}
                 back={'Quay lại'}
             />
-            <button className='btn' onClick={() => setExamOrSituation('exam')}>EXAM</button>
-            <button className='btn' onClick={() => setExamOrSituation('situation')}>SITUATION</button>
             <div className='container'>
-                <div className='left'>
-                    <div className='table-wrapper'>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Bài Thi</th>
-                                    <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
-                                    <th>Thời gian</th>
-                                    <th>Điều kiện đậu</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {(ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs).map((exam, index) => {
-                                    const isSelected = selectedId == exam.id;
-                                    const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
-                                    const passCondition = (ExamOrSituation == 'exam' ? ' điểm' : '%') || '';
-
-                                    return (
-                                        <tr
-                                            key={exam.id}
-                                            onClick={() => setSelectedId(isSelected ? null : exam.id)}
-                                            className={`${isSelected ? 'active' : ''}`}
-                                            style={{ animationDelay: `${index * 0.05}s` }}
-                                        >
-                                            <td>
-                                                <div className='row'>
-                                                    <div className='icon-box'>
-                                                        <i className='fa-solid fa-file-lines' />
-                                                    </div>
-                                                    <div>
-                                                        <div className='title'>{exam.title}</div>
-                                                        <div className='desc'>{exam.description}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{numberLength}</td>
-                                            <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
-                                            <td>{exam.passScore}{passCondition}</td>
-                                            <td><i className='fa-solid fa-chevron-right' /></td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className='filters'>
+                    <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
+                        ĐỀ THI LÝ THUYẾT
+                    </button>
+                    <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
+                        ĐỀ THI MÔ PHỎNG
+                    </button>
+                    <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
                 </div>
-                <div className='right' key={selectedId}>
-                    {selectedExam ? (
-                        <>
-                            <ExamDetail exam={selectedExam} type={ExamOrSituation} />
-                            <ExamSession />
-                        </>
-                    ) : (
-                        <div className='empty'>
-                            <h2>Chọn bài thi</h2>
-                            <p>Nhấn vào một bài thi để xem chi tiết</p>
+                <div className='content'>
+                    <div className='left'>
+                        <div className={`table-wrapper ${ExamOrSituation}`}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Bài Thi</th>
+                                        <th>{(ExamOrSituation == 'exam' ? 'Câu hỏi' : 'Kịch bản')}</th>
+                                        <th>Thời gian</th>
+                                        <th>Điều kiện đậu</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredExams?.map((exam, index) => {
+                                        const isSelected = selectedId == exam.id;
+                                        const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
+
+                                        return (
+                                            <tr
+                                                key={exam.id}
+                                                onClick={() => setSelectedId(isSelected ? null : exam.id)}
+                                                className={`${isSelected ? 'active' : ''}`}
+                                                style={{ animationDelay: `${index * 0.05}s` }}
+                                            >
+                                                <td>{index + 1}</td>
+                                                <td className='td-row'>
+                                                    <div className='row'>
+                                                        <div className='icon-box'>
+                                                            <i className='fa-solid fa-file-lines' />
+                                                        </div>
+                                                        <div>
+                                                            <div className='title'>{exam.title}</div>
+                                                            <div className='desc'>{exam.description}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{numberLength}</td>
+                                                <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
+                                                <td>{exam.passScore}%</td>
+                                                <td><i className='fa-solid fa-chevron-right' /></td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
-                    )}
+                    </div>
+                    <div className='right' key={selectedId}>
+                        {selectedExam ? (
+                            <>
+                                <ExamDetail exam={selectedExam} type={ExamOrSituation} />
+                                {ExamOrSituation == 'exam' ?
+                                    <ExamSession
+                                        examSessions={EXAMSESSIONs.filter((session) => session.examId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))}
+                                        examId={selectedId}
+                                        type={ExamOrSituation}
+                                    />
+                                    :
+                                    <ExamSession
+                                        examSessions={SIMULATIONSESSIONs.filter((session) => session.situationExamId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))}
+                                        examId={selectedId}
+                                        type={ExamOrSituation}
+                                    />
+                                }
+                            </>
+                        ) : (
+                            <div className='empty'>
+                                <h2>Chọn bài thi</h2>
+                                <p>Nhấn vào một bài thi để xem chi tiết</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

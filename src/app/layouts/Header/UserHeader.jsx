@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { fetchData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import GREENLIGHT_LOGO from '../../assets/GREENLIGHT_LOGO.png';
-import LOGO from '../../assets/Logo.png';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
+// import LOGO from '../../assets/Logo.png';
 
 import './UserHeader.css';
 
 export default function UserHeader({
     setLoginOpen = () => { },
 }) {
-    const { logout, user } = useAuth();
+    const { logout, user, refreshNewToken } = useAuth();
+
     const location = useLocation();
     const navigate = useNavigate();
 
+    const [thisUser, setThisUser] = useState(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [showProfileList, setShowProfileList] = useState(false);
 
@@ -33,6 +36,7 @@ export default function UserHeader({
         { name: 'MÔ PHỎNG', icon: 'circle-play', iconType: 'regular', path: '/simulation' },
         { name: 'DIỄN ĐÀN', icon: 'message', iconType: 'solid', path: '/forum' },
         { name: 'HỌC TẬP', icon: 'book-open', iconType: 'solid', path: '/learning' },
+        { name: 'NHẬN DIỆN', icon: 'camera', iconType: 'solid', path: '/traffic-sign-recognition' },
         // { name: 'GROUND', icon: 'map', iconType: 'solid', path: '/three-scene' },
         // { name: 'CAR', icon: 'car', iconType: 'solid', path: '/car' },
         // { name: 'ADMIN', icon: 'user', iconType: 'solid', path: '/admin' },
@@ -57,6 +61,24 @@ export default function UserHeader({
             console.log('Admin');
             navigate('/admin');
         }
+
+        (async () => {
+            const token = user?.token || '';
+            const userId = user?.id || '';
+            try {
+                if (userId) {
+                    const result = await fetchData(`User/${userId}`, token);
+                    console.log('result', result);
+
+                    setThisUser(result);
+                }
+            } catch (error) {
+                console.error('Error', error);
+                if (error.status == 401) refreshNewToken(user);
+            } finally {
+                // setLoading(false);
+            };
+        })();
     }, [user?.id]);
 
     useEffect(() => {
@@ -96,11 +118,11 @@ export default function UserHeader({
                 {user ?
                     <div className='user-profile-link' onClick={() => setShowProfileList(p => !p)}>
                         <div className='avatar'>
-                            <img src={user?.avatar || DefaultAvatar} alt={user?.name} />
+                            <img src={thisUser?.avatar || user?.avatar || DefaultAvatar} alt={user?.name} />
                         </div>
                         <div className='name-role'>
-                            <div className='name'>{user?.name || 'THIS IS USER NAME'}</div>
-                            <div className='role'>{user?.roleName || 'This is role'}</div>
+                            <div className='name'>{thisUser?.name || user?.name || 'THIS IS USER NAME'}</div>
+                            <div className='role'>{thisUser?.roleName || user?.roleName || 'This is role'}</div>
                         </div>
                         <div className='list-button'>
                             {showProfileList && profileList?.map((item, index) => (

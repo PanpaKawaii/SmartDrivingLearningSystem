@@ -48,7 +48,9 @@ export default function PendingPosts() {
                     query.set('status', filterStatus);
                 }
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
-                setItems(res?.items || []);
+                // Filter out posts with status 4
+                const filteredItems = (res?.items || []).filter(item => item.status !== 4);
+                setItems(filteredItems);
                 setServerPagination(prev => ({
                     ...prev,
                     page: res?.page || prev.page,
@@ -75,7 +77,6 @@ export default function PendingPosts() {
     const handleApprove = async (id) => {
         try {
             setSelectedActions(prev => ({ ...prev, [id]: 'approve' }));
-            setLoading(true);
             const token = user?.token || '';
             await patchData(`ForumPosts/${id}/approve`, { status: 1 }, token);
             setRefresh(r => r + 1);
@@ -91,15 +92,12 @@ export default function PendingPosts() {
                 return next;
             });
             setError('Lỗi duyệt bài');
-
-        } finally {
-            setLoading(false);
         }
     };
     const handleReject = async (id) => {
+        
         try {
             setSelectedActions(prev => ({ ...prev, [id]: 'reject' }));
-            setLoading(true);
             const token = user?.token || '';
             await patchData(`ForumPosts/${id}/disapprove`, { status: 3 }, token);
             setRefresh(r => r + 1);
@@ -115,15 +113,12 @@ export default function PendingPosts() {
                 return next;
             });
             setError('Lỗi từ chối bài');
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
     const handleForceDelete = async (id) => {
         try {
             setSelectedActions(prev => ({ ...prev, [id]: 'forceDelete' }));
-            setLoading(true);
             const token = user?.token || '';
             await patchData(`ForumPosts/${id}/force-delete`, { status: 2 }, token);
             setRefresh(r => r + 1);
@@ -139,8 +134,6 @@ export default function PendingPosts() {
                 return next;
             });
             setError('Lỗi xóa bài viết');
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -230,8 +223,7 @@ export default function PendingPosts() {
         setServerPagination(prev => ({ ...prev, page }));
     };
 
-    // Find the selected post object
-    const selectedPost = items.find(item => item.id === selectedPostId);
+    const selectedPost = items.find(item => item.id === selectedPostId && item.status !== 4);
 
     return (
         <div className='ins-page'>

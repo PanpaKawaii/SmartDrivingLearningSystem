@@ -29,7 +29,9 @@ import ListExam from '../pages/Learning/QuestionExam/ListExam.jsx'
 import ExamSessionDetail from '../pages/Learning/QuestionExam/ExamDetail/ExamSessionDetail.jsx'
 import QuestionExam from '../pages/Learning/QuestionExam/TakingExam/QuestionExam.jsx'
 import SituationExam from '../pages/Learning/QuestionExam/TakingSituationExam/SituationExam.jsx'
+import TrafficSignRecognition from '../pages/TrafficSignRecognition/TrafficSignRecognition.jsx'
 
+import Membership from '../pages/Payment/Membership.jsx'
 import PaymentStatus from '../pages/Payment/PaymentStatus.jsx'
 
 import ExcelMultiSheetViewer from '../pages/ReadExcelData/ExcelMultiSheetViewer.jsx'
@@ -100,7 +102,9 @@ export default function MainRoutes() {
                     <Route path='learning/list-exam/:examId/situation-exam-result/:sessionId' element={<ExamSessionDetail />} />
                     <Route path='learning/list-exam/:examId/taking-exam' element={<QuestionExam />} />
                     <Route path='learning/list-exam/:examId/taking-situation-exam' element={<SituationExam />} />
+                    <Route path='traffic-sign-recognition' element={<TrafficSignRecognition />} />
 
+                    <Route path='/membership' element={<Membership />} />
                     <Route path='/payment-status/?' element={<PaymentStatus />} />
 
                     <Route path='read-excel-data' element={<ExcelMultiSheetViewer />} />

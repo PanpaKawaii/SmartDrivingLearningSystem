@@ -1,32 +1,99 @@
 .heading-component-container {
+    --heading-accent: #60a5fa;
+    --heading-text-main: #ffffff;
+    --heading-text-muted: #94a3b8;
+
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px 20px 60px 20px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 
-    .btn {
+    &.is-left {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    &.is-center {
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.4rem;
+        border-radius: 999px;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        background: rgba(59, 130, 246, 0.1);
+
+        i {
+            color: var(--heading-accent);
+            font-size: 0.9rem;
+        }
+
+        span {
+            color: #93c5fd;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+    }
+
+    .heading-back-btn {
         width: fit-content;
-        color: #93c5fd;
-        background-color: transparent;
+        color: #bfdbfe;
+        background: rgba(59, 130, 246, 0.09);
+        border: 1px solid rgba(59, 130, 246, 0.22);
+        border-radius: 999px;
+        padding: 0.45rem 0.85rem;
         font-weight: 500;
         display: flex;
         align-items: center;
         gap: 8px;
-        transition: .2s;
+        transition: 0.2s;
 
         &:hover {
-            color: #5f9ce2;
+            color: #dbeafe;
+            border-color: rgba(59, 130, 246, 0.35);
+            background: rgba(59, 130, 246, 0.16);
         }
     }
 
     h1 {
-        text-align: center;
-        font-size: 4rem;
-        margin: 12px 0 0;
+        margin: 0;
+        font-size: clamp(2rem, 4.2vw, 2.8rem);
+        font-weight: 800;
+        color: var(--heading-text-main);
+        line-height: 1.2;
     }
 
-    p {
-        margin: 12px 0;
-        color: #94a3b8;
+    .heading-subtitle {
+        margin: 0;
+        max-width: 800px;
+        color: var(--heading-text-muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+}
+
+@media (max-width: 900px) {
+    .heading-component-container {
+        gap: 1.0rem;
+
+        .heading-badge {
+            padding: 0.7rem 1.15rem;
+
+            span {
+                font-size: 0.84rem;
+            }
+        }
+
+        .heading-subtitle {
+            font-size: 0.98rem;
+        }
     }
 }
