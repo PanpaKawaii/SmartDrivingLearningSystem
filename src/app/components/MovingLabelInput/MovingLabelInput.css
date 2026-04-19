@@ -11,6 +11,10 @@
         color: var(--text-primary);
         background: var(--gray-2);
         border: 2px solid var(--gray-3);
+
+        &:focus {
+            border-color: var(--gray-4);
+        }
     }
 
     label {
@@ -21,20 +25,7 @@
         font-weight: bold;
         white-space: nowrap;
         pointer-events: none;
-        transition: all 0.2s ease, transform 0.5s ease;
-
-        &.center {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        &.left {
-            left: 0px;
-        }
-
-        &.right {
-            right: 0px;
-        }
+        transition: all 0.2s ease;
 
         &.stay {
             padding: 2px 8px;
@@ -45,23 +36,39 @@
             border-radius: 8px 8px 0 0;
             box-shadow: inset 1.8px 1.8px 0px var(--gray-3);
 
+            &.left {
+                left: 0px;
+            }
+
             &.center {
                 padding: 2px 8px 0;
                 top: -15px;
+                left: 50%;
+                transform: translateX(-50%);
             }
 
             &.right {
                 box-shadow: inset -1.8px 1.8px 0px var(--gray-3);
+                right: 0px;
             }
         }
 
         &.moving {
             top: 10px;
-            left: 10px;
+            left: 12px;
             opacity: 0.4;
 
+            &.left {
+                left: 12px;
+            }
+
             &.center {
-                transform: translateX(0%);
+                left: 12px;
+            }
+
+            &.right {
+                left: 12px;
+                right: 0;
             }
         }
     }
@@ -74,7 +81,11 @@
         background: var(--gray-2);
         font-size: 12px;
         border-radius: 8px 8px 0 0;
-        box-shadow: inset 1.8px 1.8px 0px var(--gray-3);
+        box-shadow: inset 1.8px 1.8px 0px var(--gray-4);
+
+        &.left {
+            left: 0px;
+        }
 
         &.center {
             left: 50%;
@@ -83,15 +94,25 @@
             top: -15px;
         }
 
-        &.left {
-            left: 0px;
-        }
-
         &.right {
             left: 100%;
+            right: 0;
             transform: translateX(-100%);
-            box-shadow: inset -1.8px 1.8px 0px var(--gray-3);
+            box-shadow: inset -1.8px 1.8px 0px var(--gray-4);
         }
+    }
+
+    input:focus+.stay,
+    input:not(:placeholder-shown)+.stay {
+        box-shadow: inset 1.8px 1.8px 0px var(--gray-4);
+
+        &.right {
+            box-shadow: inset -1.8px 1.8px 0px var(--gray-4);
+        }
+    }
+
+    input:not(:placeholder-shown) {
+        border-color: var(--gray-4);
     }
 
     input:disabled+.stay {

@@ -14,45 +14,52 @@
 
         &:focus {
             border-color: var(--gray-4);
-            box-shadow: 0 0 0 4px var(--gray-4-80);
         }
     }
 
     .option {
         color: var(--text-primary);
-        background: var(--gray-3);
+        background-color: #0f172a;
     }
 
     label {
-        color: var(--text-secondary);
-        width: fit-content;
-        white-space: nowrap;
-        padding: 0 4px;
         position: absolute;
+        width: fit-content;
+        padding: 2px 8px;
+        color: var(--text-secondary);
         font-weight: bold;
+        white-space: nowrap;
         pointer-events: none;
+        transition: all 0.15s ease;
 
-        top: -8px;
+        top: -12px;
         background: var(--gray-2);
-        box-shadow: 0 0 0 2px var(--gray-3);
-        border-radius: 10px;
+        box-shadow: inset 1.8px 1.8px 0px var(--gray-3);
+        border-radius: 8px 8px 0 0;
         font-size: 12px;
 
+        &.left {
+            left: 0px;
+        }
+
         &.center {
+            padding: 2px 8px 0;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        &.left {
-            left: 10px;
-        }
-
         &.right {
-            right: 10px;
+            box-shadow: inset -1.8px 1.8px 0px var(--gray-3);
+            right: 0px;
         }
     }
 
     select:focus+label {
-        box-shadow: 0 0 0 2px var(--gray-4);
+        box-shadow: inset 1.8px 1.8px 0px var(--gray-4);
+
+        &.right {
+            box-shadow: inset -1.8px 1.8px 0px var(--gray-4);
+        }
     }
 }
