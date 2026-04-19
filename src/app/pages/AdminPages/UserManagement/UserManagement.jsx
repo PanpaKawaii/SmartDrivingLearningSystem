@@ -1,176 +1,135 @@
-import { useEffect, useState } from 'react';
-import { fetchData, putData } from '../../../../mocks/CallingAPI';
-import { roles, users } from '../../../../mocks/DataSample';
+import { useEffect, useState, useCallback } from 'react';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI';
+import { useNavigate } from 'react-router-dom';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
-import Cube from '../../../components/Cube/Cube';
-import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
-import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
-import EditUserModal from './EditUserModal';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
+import EditUserModal from './EditUserModal';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
+import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
 
 import './UserManagement.css';
 
 export default function UserManagement() {
-    const { user } = useAuth();
+    const { user: authUser, logout, refreshNewToken } = useAuth();
+    const navigate = useNavigate();
 
     const [USERs, setUSERs] = useState([]);
+    const [roles, setRoles] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
     const [editing, setEditing] = useState(null);
     const [creating, setCreating] = useState(false);
+
     const [popupProps, setPopupProps] = useState(null);
 
-    useEffect(() => {
-        (async () => {
-            setError(null);
-            setLoading(true);
-            const token = user?.token || '';
-            try {
-                // const UserResponse = await fetchData('users', token);
-                // console.log('UserResponse', UserResponse);
-                // const RoleResponse = await fetchData('roles', token);
-                // console.log('RoleResponse', RoleResponse);
-
-                const UserResponse = users;
-                const RoleResponse = roles;
-
-                console.log('RoleResponse', RoleResponse);
-                const Users = UserResponse.map(user => ({
-                    ...user,
-                    role: RoleResponse.find(r => r.id === user.roleId) || null
-                }));
-                console.log('Users', Users);
-
-                setUSERs(Users);
-            } catch (error) {
-                console.error('Error', error);
-                setError(error);
-            } finally {
-                setLoading(false);
+    const handleRefreshAction = async (err) => {
+        if (err.status === 401) {
+            const refreshResult = await refreshNewToken(authUser);
+            if (refreshResult?.message === 'Logout') {
+                logout();
+                navigate('/', { state: { openLogin: 'true' } });
+                return false;
             }
-        })();
-    }, [refresh]);
+            return true; // Đã refresh thành công, useEffect sẽ tự chạy lại vì authUser thay đổi
+        }
+        setError(err);
+        return false;
+    };
 
-    const openEditModal = (data) => { setEditing(data); };
-    const closeEditModal = () => { setEditing(null); };
-    const openCreateModal = () => { setCreating(true); };
-    const closeCreateModal = () => { setCreating(false); };
+    const handleApiError = async (err, retryFunction) => {
+        if (err.status === 401) {
+            const refreshResult = await refreshNewToken(authUser);
+            if (refreshResult?.message === 'Logout') {
+                logout();
+                navigate('/', { state: { openLogin: 'true' } });
+                return;
+            }
+            // Nếu refresh thành công, thực thi lại hàm vừa bị lỗi
+            if (retryFunction) return await retryFunction();
+        }
+        setError(err);
+        console.error("API Error:", err);
+    };
 
-    const inactiveUser = async (user) => {
-        // const token = user?.token || ''; ==FIX==
-        const token = '';
-        const newUser = { ...user, status: user.status == 1 ? 0 : 1 };
+    const loadData = async () => {
+        const token = authUser?.token;
+        if (!token) return;
+
         try {
-            const UserResult = await putData(`users/${newUser.id}`, newUser, token);
-            console.log('UserResult', UserResult);
-            setRefresh(p => p + 1);
-        } catch (error) {
-            setErrorFunction('Error');
+            // Chỉ hiện loading khi không có dữ liệu (tránh nháy màn hình khi retry)
+            if (USERs.length === 0) setLoading(true);
+            setError(null);
+
+            const [roleRes, userRes] = await Promise.all([
+                fetchData('roles/all', token),
+                fetchData('user/paged?page=1&pageSize=100', token)
+            ]);
+
+            setRoles(roleRes);
+            const mappedUsers = userRes.items.map(u => ({
+                ...u,
+                role: roleRes.find(r => r.id === u.roleId) || null
+            }));
+            setUSERs(mappedUsers);
+        } catch (err) {
+            console.error("Fetch error:", err);
+            await handleRefreshAction(err);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const [searchUser, setSearchUser] = useState('');
-    const [selectType, setSelectType] = useState('');
-    const [selectStatus, setSelectStatus] = useState('');
-    const usersFilter = USERs.filter((user) => {
-        const userName = user.name?.toLowerCase();
-        const userEmail = user.email?.toLowerCase();
-        const userPhone = user.phone?.toLowerCase();
+    useEffect(() => {
+        if (authUser?.token) {
+            loadData();
+        }
+    }, [authUser?.id, authUser?.token, refresh]);
 
-        const userType = user.type?.toLowerCase();
-        const userStatus = user.status === 1 ? 'Active' : 'Inactive';
-
-        const matchSearch = !searchUser
-            || userName?.includes(searchUser.toLowerCase())
-            || userEmail?.includes(searchUser.toLowerCase())
-            || userPhone?.includes(searchUser.toLowerCase());
-        const matchSelectType = !selectType || userType === selectType.toLowerCase();
-        const matchSelectStatus = !selectStatus || userStatus == selectStatus;
-
-        return matchSearch && matchSelectType && matchSelectStatus;
-    });
-    console.log('usersFilter', usersFilter);
-    const handleClear = () => {
-        setSearchUser('');
-        setSelectType('');
-        setSelectStatus('');
+    // Hàm Toggle Active Status
+    const handleToggleActive = async (targetUser) => {
+        try {
+            await patchData(`user/${targetUser.id}/toggle-active`, {}, authUser.token);
+            setRefresh(p => p + 1);
+        } catch (err) {
+            const canRetry = await handleRefreshAction(err);
+            if (canRetry) await handleToggleActive(targetUser);
+        }
     };
-    console.log('selectType', selectType);
-    console.log('selectStatus', selectStatus);
 
-    // if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
-    // if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
-    if (loading) return <div className='admin-container'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    const handleToggleLock = async (targetUser) => {
+        try {
+            await patchData(`user/${targetUser.id}/toggle-lock`, {}, authUser.token);
+            setRefresh(p => p + 1);
+        } catch (err) {
+            const canRetry = await handleRefreshAction(err);
+            if (canRetry) await handleToggleLock(targetUser);
+        }
+    };
+
+    // Filter logic giữ nguyên nhưng sửa field check phù hợp với DTO (status là int)
+    const [searchUser, setSearchUser] = useState('');
+    const usersFilter = USERs.filter((u) => {
+        const matchSearch = !searchUser
+            || u.name?.toLowerCase().includes(searchUser.toLowerCase())
+            || u.email?.toLowerCase().includes(searchUser.toLowerCase());
+        return matchSearch;
+    });
+
+    if (loading) return <div className='admin-container'><TrafficLight text={'loading'} /></div>;
     if (error) return <div className='admin-container'><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+
     return (
         <div className='admin-container'>
-            {/* {JSON.stringify(usersFilter?.[0], null, 0)} */}
             <div className='inner-container management-container user-management-container'>
-
                 <header className='main-header'>
                     <h1>User Management</h1>
-                    <button className='btn-primary' onClick={() => openCreateModal(true)}>
-                        <i className='fa-solid fa-plus' />
-                        Add more account
+                    <button className='btn-primary' onClick={() => setCreating(true)}>
+                        <i className='fa-solid fa-plus' /> Add more account
                     </button>
                 </header>
-
-                <form className='controls'>
-                    <div className='count'>{usersFilter?.length} results</div>
-                    <div className='search-bar'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={searchUser || ''}
-                            onValueChange={(propE) => setSearchUser(propE)}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Name'}
-                            labelStyle={'left moving'}
-                        />
-                    </div>
-                    <div className='field'>
-                        <StyleLabelSelect
-                            id={`selectType`}
-                            list={[
-                                { id: 'Vip', name: 'Vip', extraOptionClassName: 'option-vip' },
-                                { id: 'Regular', name: 'Regular', extraOptionClassName: 'option-regular' },
-                            ]}
-                            value={selectType}
-                            onValueChange={(propE) => {
-                                setSelectType(propE);
-                            }}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Type'}
-                            labelStyle={'left'}
-                        />
-                        <StyleLabelSelect
-                            id={`selectStatus`}
-                            list={[
-                                { id: 'Active', name: 'Active', extraOptionClassName: 'option-active' },
-                                { id: 'Inactive', name: 'Inactive', extraOptionClassName: 'option-inactive' },
-                            ]}
-                            value={selectStatus}
-                            onValueChange={(propE) => {
-                                setSelectStatus(propE);
-                            }}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Status'}
-                            labelStyle={'left'}
-                        />
-                    </div>
-                    <button type='button' className='btn-secondary' onClick={handleClear}>
-                        CLEAR
-                    </button>
-                    <button type='button' className='btn-secondary' onClick={() => setRefresh(p => p + 1)}>
-                        Refresh
-                    </button>
-                </form>
 
                 <section className='admin-table-container'>
                     <table className='admin-table'>
@@ -179,45 +138,44 @@ export default function UserManagement() {
                                 <th>#</th>
                                 <th>USER</th>
                                 <th>EMAIL</th>
-                                <th>PHONE</th>
-                                <th>TYPE</th>
+                                <th>ROLE</th>
+                                <th>STATUS</th>
                                 <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {usersFilter?.map((user, index) => (
-                                <tr key={index}>
+                            {usersFilter.map((u, index) => (
+                                <tr key={u.id}>
                                     <td>{index + 1}</td>
                                     <td>
                                         <div className='user-name-cell'>
                                             <div className='avatar'>
-                                                <img src={`${user.avatar || DefaultAvatar}`} alt='avatar' />
+                                                <img src={u.avatar || DefaultAvatar} alt='avatar' />
                                             </div>
-                                            <div className='user-info'>
-                                                <span className='name'>{user.name}</span>
-                                                <span className='role'>{user.role?.name}</span>
-                                            </div>
+                                            <span className='name'>{u.name}</span>
                                         </div>
                                     </td>
+                                    <td>{u.email}</td>
+                                    <td>{u.roleName || u.role?.name}</td>
                                     <td>
-                                        <div className='email'>
-                                            <span>{user.email}</span>
-                                        </div>
+                                        {/* Hiển thị badge trạng thái */}
+                                        <span className={`badge ${u.status === 1 ? 'active' : 'inactive'}`}>
+                                            {u.status === 1 ? 'Active' : 'Inactive'}
+                                        </span>
                                     </td>
-                                    <td><span>{user.phone}</span></td>
                                     <td>
                                         <div className='action-buttons'>
-                                            <button onClick={() => openEditModal(user)}>
-                                                <span>Modify</span>
+                                            <button onClick={() => setEditing(u)} title="Edit">
                                                 <i className='fa-solid fa-pencil' />
                                             </button>
-                                            <button className={`btn-active ${user.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 1}>
-                                                <span>Active</span>
-                                                <i className='fa-solid fa-unlock' />
+
+                                            {/* Nút Toggle Active/Inactive */}
+                                            <button className='btn-toggle' onClick={() => handleToggleActive(u)}>
+                                                <i className={u.status === 1 ? 'fa-solid fa-lock' : 'fa-solid fa-unlock'} />
+                                                {u.status === 1 ? ' Inactive' : ' Active'}
                                             </button>
-                                            <button className={`btn-inactive ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
-                                                <span>Inactive</span>
-                                                <i className='fa-solid fa-lock' />
+                                            <button className='btn-ban' onClick={() => handleToggleLock(u)}>
+                                                <i className="fa-solid fa-user-slash" style={{ color: u.isLocked ? 'red' : 'gray' }} />
                                             </button>
                                         </div>
                                     </td>
@@ -230,57 +188,22 @@ export default function UserManagement() {
                 {editing && (
                     <EditUserModal
                         userprop={editing}
-                        onClose={closeEditModal}
+                        roles={roles}
+                        onClose={() => setEditing(null)}
                         setRefresh={setRefresh}
                         action={'edit'}
                     />
                 )}
-
                 {creating && (
                     <EditUserModal
-                        userprop={{
-                            roleId: '',
-                            email: '',
-                            password: '123456',
-                            name: '',
-                            avatar: '',
-                            phone: '',
-                            gender: '',
-                            type: 'Regular',
-                            description: '',
-                            dateOfBirth: '',
-                            licenseType: '',
-                        }}
-                        onClose={closeCreateModal}
+                        userprop={{ roleId: '', email: '', password: '', name: '', status: 1 }}
+                        roles={roles}
+                        onClose={() => setCreating(false)}
                         setRefresh={setRefresh}
                         action={'create'}
                     />
                 )}
-
-                {popupProps && (
-                    <ConfirmDialog
-                        title={'CONFIRMATION'}
-                        message={`Are you sure you want to ${popupProps.status == 1 ? 'inactive' : 'active'} this user?`}
-                        confirm={popupProps.status == 1 ? 'INACTIVE' : 'ACTIVE'}
-                        cancel={'CANCEL'}
-                        color={popupProps.status == 1 ? '#ff4d4f80' : '#52c41a80'}
-                        onConfirm={() => { inactiveUser(popupProps), setPopupProps(null) }}
-                        onCancel={() => setPopupProps(null)}
-                    />
-                )}
-
-                {errorFunction && (
-                    <ConfirmDialog
-                        title={'ERROR'}
-                        message={`An error has occurred!`}
-                        confirm={'OKAY'}
-                        cancel={''}
-                        color={'#ff4d4f80'}
-                        onConfirm={() => setErrorFunction(null)}
-                        onCancel={() => setErrorFunction(null)}
-                    />
-                )}
             </div>
         </div>
-    )
+    );
 }
