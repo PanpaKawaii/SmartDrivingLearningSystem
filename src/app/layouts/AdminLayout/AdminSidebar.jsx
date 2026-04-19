@@ -30,13 +30,7 @@ const menuSections = [
             { name: 'Quy tắc chấm điểm', icon: 'fa-scale-balanced', path: '/admin/scoring-rules' },
             { name: 'Danh mục nội dung', icon: 'fa-layer-group', path: '/admin/categories' },
         ],
-    },
-    {
-        label: 'Cá nhân',
-        items: [
-            { name: 'Thông báo', icon: 'fa-bell', path: '/admin/notifications' },
-        ],
-    },
+    }
 ];
 
 export default function AdminSidebar() {
