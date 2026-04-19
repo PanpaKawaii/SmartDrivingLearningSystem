@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
 import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
@@ -35,7 +35,7 @@ export default function LessonModal({
     const [drivingLicenseId, setDrivingLicenseId] = useState('');
     const [editorInitialHtml, setEditorInitialHtml] = useState(lessonProp?.content || "");
     const token = user?.token || "";
-    //const hasPersistedLessonId = Boolean(lesson?.id && String(lesson.id).trim());
+    const persistedLessonId = useMemo(() => lessonProp?.id || lesson?.id || null, [lessonProp?.id, lesson?.id]);
 
     // Đồng bộ initialHtml khi lessonProp thay đổi
     useEffect(() => {
@@ -53,6 +53,8 @@ export default function LessonModal({
                     ...lessonProp,
                     chapter: currentChapter ? currentChapter.id : (filteredChapters[0]?.id || '')
                 });
+                console.log('Updating lesson.id:', lesson.id);
+                console.log('Updating persistedLessonId:', persistedLessonId);
             } else if (action === 'add') {
                 // Pre-fill chapter nếu đến từ Quick Navigate
                 if (defaultChapterId) {
@@ -118,7 +120,6 @@ export default function LessonModal({
 
         try {
             let savedLesson = null;
-
             if (action === 'edit' && lesson.id) {
                 await putData(`QuestionLessons/${lesson.id}`, normalizedPayload, token);
                 savedLesson = { ...lesson, ...normalizedPayload };
@@ -247,7 +248,7 @@ export default function LessonModal({
                     onChange={content => setLesson(prev => ({ ...prev, content }))}
                     placeholder= 'Nhập nội dung bài học tại đây...'
                     action={action}
-                    entityId={lesson.id}
+                    entityId={persistedLessonId}
                     imageTarget= 'LessonImage'
 
                 />

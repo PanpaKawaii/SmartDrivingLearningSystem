@@ -32,7 +32,7 @@ const getEntityRoute = (report) => {
 };
 
 export default function ContentErrorReports() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     const [loading, setLoading] = useState(true);
@@ -62,8 +62,12 @@ export default function ContentErrorReports() {
                     totalCount: res?.totalCount || prev.totalCount,
                     totalPages: res?.totalPages || 1,
                 }));
-            } catch (err) {
-                setError('Lỗi tải dữ liệu');
+            } catch (error) {
+                if (error.status === 401) {
+                    refreshNewToken(user);
+                } else {
+                    setError('Lỗi tải dữ liệu');
+                }
             } finally {
                 setLoading(false);
             }

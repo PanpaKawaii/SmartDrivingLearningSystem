@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fetchData } from '../../../mocks/CallingAPI';
+import { fetchData, patchData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import GREENLIGHT_LOGO from '../../assets/GREENLIGHT_LOGO.png';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import NotificationDropdown from '../../pages/Notification/NotificationDropdown';
 // import LOGO from '../../assets/Logo.png';
 
 import './UserHeader.css';
@@ -19,6 +20,13 @@ export default function UserHeader({
     const [thisUser, setThisUser] = useState(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [showProfileList, setShowProfileList] = useState(false);
+
+    // State cho Notification
+    const [notifications, setNotifications] = useState([]);
+    const [showNoti, setShowNoti] = useState(false);
+
+    // Kiểm tra xem có thông báo nào chưa đọc (status === 2) không
+    const hasUnread = notifications.some(noti => noti.status === 2);
 
     const handleClick = (item) => {
         item.onToggle();
@@ -47,6 +55,28 @@ export default function UserHeader({
         // { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 
+    const loadNotifications = async () => {
+        if (!user?.token) return;
+        try {
+            // Gọi API lấy thông báo của user hiện tại
+            const res = await fetchData(`Notifications/user/${user.id}`, user.token);
+            setNotifications(Array.isArray(res) ? res : res?.items || []);
+        } catch (error) {
+            console.error('Error loading notifications', error);
+        }
+    };
+
+    const handleSelectNoti = async (notiId) => {
+        try {
+            // Cập nhật status thành đã đọc (giả sử 1 là đã đọc)
+            await patchData(`Notifications/${notiId}`, { status: 1 }, user.token);
+            // Reload lại danh sách
+            loadNotifications();
+        } catch (error) {
+            console.error('Error updating notification', error);
+        }
+    };
+
     useEffect(() => {
         const UserSession = localStorage.getItem('user');
         if (!UserSession) {
@@ -73,6 +103,9 @@ export default function UserHeader({
                     console.log('result', result);
 
                     setThisUser(result);
+
+                    // Load thông báo khi có user
+                    loadNotifications();
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -116,36 +149,57 @@ export default function UserHeader({
                     })}
                 </div>
 
-                {user ?
-                    <div className='user-profile-link' onClick={() => setShowProfileList(p => !p)}>
-                        <div className='avatar'>
-                            <img src={thisUser?.avatar || user?.avatar || DefaultAvatar} alt={user?.name} />
-                        </div>
-                        <div className='name-role'>
-                            <div className='name'>{thisUser?.name || user?.name || 'THIS IS USER NAME'}</div>
-                            <div className='role'>{thisUser?.roleName || user?.roleName || 'This is role'}</div>
-                        </div>
-                        <div className='list-button'>
-                            {showProfileList && profileList?.map((item, index) => (
-                                <button className='item' key={index} onClick={() => handleClick(item)}>
-                                    {item.name?.toUpperCase()}
+                <div className='header-right'>
+                    {user ? (
+                        <>
+                            {/* CHUÔNG THÔNG BÁO */}
+                            <div className='notification-wrapper'>
+                                <button className='noti-bell-btn' onClick={() => setShowNoti(!showNoti)}>
+                                    <i className="fa-solid fa-bell"></i>
+                                    {hasUnread && <span className="red-dot"></span>}
                                 </button>
-                            ))}
-                        </div>
-                    </div>
-                    :
-                    <button className='login-btn' onClick={() => setLoginOpen(true)}>
-                        <i className='fa-solid fa-user' />
-                        <span>Đăng nhập</span>
-                    </button>
-                }
 
-                <button
-                    className='mobile-toggle'
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                    {mobileMenuOpen ? <i className='fa-solid fa-xmark' /> : <i className='fa-solid fa-bars' />}
-                </button>
+                                {showNoti && (
+                                    <NotificationDropdown
+                                        notifications={notifications}
+                                        onClose={() => setShowNoti(false)}
+                                        onSelectNoti={handleSelectNoti}
+                                    />
+                                )}
+                            </div>
+
+                            {/* USER PROFILE */}
+                            <div className='user-profile-link' onClick={() => setShowProfileList(p => !p)}>
+                                <div className='avatar'>
+                                    <img src={thisUser?.avatar || user?.avatar || DefaultAvatar} alt={user?.name} />
+                                </div>
+                                <div className='name-role'>
+                                    <div className='name'>{thisUser?.name || user?.name}</div>
+                                    <div className='role'>{thisUser?.roleName || user?.roleName}</div>
+                                </div>
+
+                                {showProfileList && (
+                                    <div className='list-button'>
+                                        {profileList.map((item, index) => (
+                                            <button className='item' key={index} onClick={() => handleClick(item)}>
+                                                {item.name?.toUpperCase()}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <button className='login-btn' onClick={() => setLoginOpen(true)}>
+                            <i className='fa-solid fa-user' />
+                            <span>Đăng nhập</span>
+                        </button>
+                    )}
+
+                    <button className='mobile-toggle' onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                        {mobileMenuOpen ? <i className='fa-solid fa-xmark' /> : <i className='fa-solid fa-bars' />}
+                    </button>
+                </div>
             </div>
 
             {mobileMenuOpen && (

@@ -1,122 +1,175 @@
 import { useState } from 'react';
-import { postData, putData } from '../../../../mocks/CallingAPI';
+import { postData, putData, uploadMedia } from '../../../../mocks/CallingAPI';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
-
 import '../EditModal.css';
 
-export default function EditUserModal({ userprop, onClose, setRefresh, action }) {
-    // const { user } = useAuth(); ==FIX==
+export default function EditUserModal({ userprop, roles, onClose, setRefresh, action }) {
+    const { user: authUser, refreshNewToken, logout } = useAuth();
+    const navigate = useNavigate();
 
-    const [user, setUser] = useState(userprop);
+    const [formData, setFormData] = useState(userprop);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
 
-    const Update = async (user) => {
-        // const token = user?.token || ''; ==FIX==
-        const token = '';
-        const newUser = { id: user.id, point: Number(user.point) || 0, type: user.type };
-        try {
-            await putData(`users/${newUser.id}`, newUser, token);
-            onClose();
-            setRefresh(p => p + 1);
-        } catch (error) {
-            console.error('Error', error);
-            setError(error);
-        } finally {
-            setLoading(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(userprop.avatar || '');
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
         }
     };
 
-    const Upload = async (user) => {
-        // const token = user?.token || ''; ==FIX==
-        const token = '';
-        const newUser = { point: Number(user.point) || 0, type: user.type };
+    const submitData = async (retryToken = null) => {
+        const token = retryToken || authUser?.token || '';
         try {
-            await postData('users', newUser, token);
-            onClose();
+            let finalUser = { ...formData };
+            let userId = formData.id;
+
+            if (action === 'create' && !userId) {
+                const newUser = await postData('user', { ...formData, avatar: '' }, token);
+                userId = newUser.id;
+                finalUser.id = userId;
+            }
+
+            if (selectedFile && userId) {
+                const uploadResult = await uploadMedia(
+                    [selectedFile],
+                    userId,
+                    'UserAvatar',
+                    token
+                );
+
+                if (uploadResult && uploadResult.length > 0) {
+                    const avatarUrl = uploadResult[0].url;
+                    finalUser.avatar = avatarUrl;
+                    await putData(`user/${userId}`, finalUser, token);
+                }
+            }
+            else if (action === 'edit') {
+                await putData(`user/${userId}`, finalUser, token);
+            }
+
             setRefresh(p => p + 1);
-        } catch (error) {
-            console.error('Error', error);
-            setError(error);
+            onClose();
+        } catch (err) {
+            if (err.status === 401) {
+                const refreshResult = await refreshNewToken(authUser);
+                if (refreshResult?.message === 'Logout') {
+                    logout();
+                    navigate('/', { state: { openLogin: 'true' } });
+                } else if (refreshResult?.token) {
+                    return await submitData(refreshResult.token);
+                }
+            } else {
+                alert("Lỗi: " + (err.data?.message || err.message || "Không thể lưu dữ liệu"));
+            }
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUser((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        if (action == 'edit') Update(user);
-        else if (action == 'create') Upload(user);
+        submitData();
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     return (
         <div className='edit-modal'>
             <div className='modal-box'>
-                <button className='btn close-btn' onClick={() => onClose()}><i className='fa-solid fa-xmark'></i></button>
+                <button className='btn close-btn' onClick={onClose}>
+                    <i className='fa-solid fa-xmark'></i>
+                </button>
                 <form onSubmit={handleSubmit}>
-                    <div className='edit-title'>Edit User</div>
-                    <div className='flex'>
-                        <div className='image-container'>
-                            <img src={user.image || DefaultAvatar} alt='avatar' />
+                    <div className='edit-title'>{action === 'create' ? 'Create User' : 'Edit User'}</div>
+
+                    <div className='flex' style={{ alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+                        <div className='image-container' style={{ position: 'relative' }}>
+                            <img src={previewUrl || DefaultAvatar} alt='avatar' style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eee' }} />
+
+                            {/* Nút upload màu xanh nước biển */}
+                            <label htmlFor="file-upload" className="custom-file-upload" style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                right: 0,
+                                background: '#007bff', // Màu xanh nước biển
+                                color: '#fff',         // Icon màu trắng
+                                borderRadius: '50%',
+                                width: '32px',
+                                height: '32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(0,123,255,0.4)',
+                                transition: 'all 0.2s ease'
+                            }}>
+                                <i className="fa-solid fa-camera" style={{ fontSize: '14px' }}></i>
+                            </label>
+                            <input id="file-upload" type="file" onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
                         </div>
-                        <div className='column'>
+                        <div className='column' style={{ flex: 1 }}>
                             <div className='input-group'>
-                                <input name='name' placeholder=' ' value={user.name} onChange={handleChange} required />
-                                <label htmlFor='name'>Name</label>
-                            </div>
-                            <div className='input-group'>
-                                <input name='image' placeholder=' ' value={user.image} onChange={handleChange} required />
-                                <label htmlFor='image'>Image URL</label>
+                                <input name='name' value={formData.name || ''} onChange={handleChange} required placeholder=' ' />
+                                <label>Full Name</label>
                             </div>
                         </div>
                     </div>
-                    {user.id &&
-                        <div className='input-group'>
-                            <input name='id' placeholder=' ' value={user.id} disabled />
-                            <label htmlFor='id' className='disable'>ID</label>
-                        </div>
-                    }
+
                     <div className='input-group'>
-                        <input name='email' placeholder=' ' value={user.email} onChange={handleChange} disabled={action != 'create'} />
-                        <label htmlFor='email' className={`${action == 'create' ? '' : 'disable'}`}>Email</label>
+                        <input name='email' type='email' value={formData.email || ''}
+                            onChange={handleChange} required placeholder=' '
+                            disabled={action === 'edit'} />
+                        <label className={action === 'edit' ? 'disable' : ''}>Email</label>
                     </div>
+
+                    {action === 'create' && (
+                        <div className='input-group'>
+                            <input name='password' type='password' onChange={handleChange} required placeholder=' ' />
+                            <label>Password</label>
+                        </div>
+                    )}
+
                     <div className='column'>
                         <div className='flex'>
                             <div className='input-group flex-1'>
-                                <select id='formType' name='type' value={user.type || 'Regular'} onChange={handleChange}>
-                                    <option value={'Regular'}>Regular</option>
-                                    <option value={'Vip'}>Vip</option>
+                                <select name='roleId' value={formData.roleId} onChange={handleChange} required>
+                                    <option value="">Select Role</option>
+                                    {roles.map(r => (
+                                        <option key={r.id} value={r.id}>{r.name}</option>
+                                    ))}
                                 </select>
-                                <label htmlFor='type'>Type</label>
+                                <label>Role</label>
+                            </div>
+                            <div className='input-group flex-1'>
+                                <input name='phone' value={formData.phone || ''} onChange={handleChange} placeholder=' ' />
+                                <label>Phone</label>
                             </div>
                         </div>
                     </div>
+
                     <div className='input-group'>
-                        <input name='phone' placeholder=' ' value={user.phone} onChange={handleChange} required />
-                        <label htmlFor='phone'>Phone</label>
+                        <textarea name='description' value={formData.description || ''} onChange={handleChange} placeholder=' ' />
+                        <label>Description</label>
                     </div>
-                    <div className='input-group flex-1'>
-                        <textarea
-                            name='description'
-                            placeholder=' '
-                            value={user.description || ''}
-                            onChange={handleChange}
-                        />
-                        <label htmlFor='description'>Description</label>
-                    </div>
+
                     <div className='btn-box'>
-                        <button type='submit' className='btn btn-save' disabled={loading}>SAVE</button>
-                        <button type='button' className='btn' onClick={() => onClose()}>CANCEL</button>
+                        <button type='submit' className='btn btn-save' disabled={loading}>
+                            {loading ? 'SAVING...' : 'SAVE'}
+                        </button>
+                        <button type='button' className='btn' onClick={onClose}>CANCEL</button>
                     </div>
                 </form>
             </div>
         </div>
-    )
+    );
 }

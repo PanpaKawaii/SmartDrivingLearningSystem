@@ -296,6 +296,13 @@ export default function LessonManagement() {
                         ? { text: activeBadgeText, onClear: handleClearBadge }
                         : null
                 }
+                actions={
+                    <>
+                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                            <i className='fa-solid fa-rotate-right'></i> Làm mới
+                        </button>
+                    </>
+                }
             />
             <LessonModal 
                 isOpen={showModal} 
