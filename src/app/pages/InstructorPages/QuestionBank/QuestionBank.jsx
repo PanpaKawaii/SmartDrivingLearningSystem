@@ -1,65 +1,261 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import Modal from '../../../components/Shared/Modal';
-import { QUIZ_DATA } from '../../../../mocks/QUIZ_DATA.js';
+import { fetchData, putData } from '../../../../mocks/CallingAPI';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import '../InstructorPages.css';
 
-const questions = Object.values(QUIZ_DATA).map((q) => ({
-    id: q.number,
-    content: q.question,
-    category: q.category,
-    isDiemLiet: q.isDiemLiet,
-    type: q.answers.length > 3 ? 'MULTI' : 'SINGLE',
-    difficulty: q.number <= 200 ? 'Dễ' : q.number <= 400 ? 'Trung bình' : 'Khó',
-}));
+const normalizeItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.items)) return payload.items;
+    return [];
+};
+
+const getQuestionType = (question) => {
+    if (question?.type) return String(question.type).toUpperCase();
+    const correctCount = (question?.answers || []).filter((a) => Boolean(a?.isCorrect ?? a?.correct)).length;
+    return correctCount > 1 ? 'MULTI' : 'SINGLE';
+};
+
+const getQuestionDifficulty = (question) => {
+    const name = question?.difficultyLevel?.name || question?.questionCategory?.name || '';
+    if (/de|dễ/i.test(name)) return 'Dễ';
+    if (/trung|medium/i.test(name)) return 'Trung bình';
+    if (/kho|khó|hard/i.test(name)) return 'Khó';
+    return '—';
+};
+
+const isDiemLietQuestion = (question) => Boolean(
+    question?.isDiemLiet
+    ?? question?.isDanger
+    ?? question?.isCritical
+    ?? question?.isRequired
+    ?? false,
+);
+
+const buildAnswersForDetail = (answers = []) => (
+    answers.map((answer, index) => ({
+        ...answer,
+        index: index + 1,
+        label: String.fromCharCode(65 + index),
+        text: answer?.content || answer?.text || '',
+        correct: Boolean(answer?.isCorrect ?? answer?.correct),
+    }))
+);
 
 
 export default function QuestionBank() {
+    const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const token = user?.token || '';
 
-    const questions = Object.values(QUIZ_DATA).map((q) => ({
-        id: q.number,
-        content: q.question,
-        category: q.category,
-        isDiemLiet: q.isDiemLiet,
-        type: q.answers.length > 3 ? 'MULTI' : 'SINGLE',
-        difficulty: q.number <= 200 ? 'Dễ' : q.number <= 400 ? 'Trung bình' : 'Khó',
-    }));
+    // Query params từ Quick Navigate
+    const lessonIdParam = searchParams.get('lessonId') || '';
+    const chapterIdParam = searchParams.get('chapterId') || '';
+
+    const [showModal, setShowModal] = useState(false);
+    const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [refresh, setRefresh] = useState(0);
+    const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true);
+            setError('');
+            try {
+                const query = new URLSearchParams({
+                    page: String(serverPagination.page),
+                    pageSize: String(serverPagination.pageSize),
+                });
+                if (searchTerm.trim()) {
+                    query.set('content', searchTerm.trim());
+                }
+                if (lessonIdParam) {
+                    query.set('questionLessonId', lessonIdParam);
+                }
+                if (chapterIdParam) {
+                    query.set('questionCategory.questionLesson.questionChapterId', chapterIdParam); // or similar, depending on API
+                }
+                const res = await fetchData(`Questions?${query.toString()}`, token);
+                const items = normalizeItems(res);
+                const mapped = items.map((question) => {
+                    const answersForDetail = buildAnswersForDetail(question.answers || []);
+                    const correctAnswer = answersForDetail.find((answer) => answer.correct)?.index || null;
+                    const chapterName = question?.questionLesson?.questionChapter?.name || '—';
+                    const lessonName = question?.questionLesson?.name || '—';
+                    const categoryName = question?.questionCategory?.name || '—';
+                    const topicName = question?.questionTopic?.name || '—';
+                    return {
+                        id: question.id,
+                        position: question.position,
+                        content: question.content || '—',
+                        chapterName: chapterName,
+                        lessonName: lessonName,
+                        category: categoryName,
+                        topicName: topicName,
+                        status: question.status ?? 1,
+                        isDiemLiet: isDiemLietQuestion(question),
+                        type: getQuestionType(question),
+                        answersCount: question.answers?.length || 0,
+                        rawQuestion: {
+                            id: question.id,
+                            content: question.content || '—',
+                            chapterName: chapterName,
+                            lessonName: lessonName,
+                            category: categoryName,
+                            topicName: topicName,
+                            status: question.status ?? 1,
+                            isDiemLiet: isDiemLietQuestion(question),
+                            type: getQuestionType(question),
+                            difficulty: getQuestionDifficulty(question),
+                            answers: answersForDetail,
+                            explanation: question.explanation || '',
+                            image: question.image || '',
+                            correctAnswer,
+                        },
+                    };
+                });
+
+                setQuestions(mapped);
+                setServerPagination((prev) => ({
+                    ...prev,
+                    page: res?.page || prev.page,
+                    pageSize: res?.pageSize || prev.pageSize,
+                    totalCount: res?.totalCount ?? prev.totalCount,
+                    totalPages: res?.totalPages || 1,
+                }));
+            } catch (err) {
+                setError('Lỗi tải dữ liệu câu hỏi.');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [token, refresh, serverPagination.page, serverPagination.pageSize, searchTerm, lessonIdParam, chapterIdParam]);
+
+    const handlePageChange = (page) => {
+        setServerPagination((prev) => ({ ...prev, page }));
+    };
+
+    const handleSearch = (search) => {
+        setSearchTerm(search);
+        setServerPagination((prev) => ({ ...prev, page: 1 }));
+    };
+
+    const handleToggleStatus = async (id) => {
+        try {
+            setLoading(true);
+            await putData(`Questions/${id}`, { }, token);
+            setRefresh((r) => r + 1);
+        } catch (error) {
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi cập nhật trạng thái');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const columns = [
-        { key: 'id', label: 'STT', width: '60px' },
-        { key: 'content', label: 'Nội dung câu hỏi' },
-        { key: 'category', label: 'Chương', width: '140px' },
-        { key: 'isDiemLiet', label: 'Điểm liệt', width: '90px', render: (val) => (
-            <span className={`ins-status-chip ${val ? 'rejected' : 'approved'}`}>
-                <span className='chip-dot'></span>{val ? 'Có' : 'Không'}
-            </span>
-        )},
-        { key: 'type', label: 'Loại', width: '80px' },
-        { key: 'difficulty', label: 'Độ khó', width: '100px', render: (val) => (
-            <span className={`ins-status-chip ${val === 'Dễ' ? 'approved' : val === 'Trung bình' ? 'pending' : 'rejected'}`}>
-                <span className='chip-dot'></span>{val}
-            </span>
-        )},
-        { key: 'actions', label: 'Thao tác', width: '100px', render: (_, row) => (
-            <div className='ins-action-cell'>
-                <button
-                    className='ins-action-btn view'
-                    title='Xem chi tiết'
-                    onClick={() => navigate(`/instructor/question-bank/${row.id}`)}
-                >
-                    <i className='fa-solid fa-eye'></i>
-                </button>
-                <button className='ins-action-btn edit' title='Sửa'>
-                    <i className='fa-solid fa-pen'></i>
-                </button>
-                <button className='ins-action-btn delete' title='Xóa'>
-                    <i className='fa-solid fa-trash'></i>
-                </button>
-            </div>
-        )},
+        {
+            key: 'position',
+            label: 'STT',
+            width: '60px',
+            render: (val, __, rIdx, page, pageSize) => val ?? ((page - 1) * pageSize + rIdx + 1),
+        },
+        { 
+            key: 'content', 
+            label: 'Nội dung câu hỏi', 
+            render: (val, row) => (
+                <div style={{ padding: '4px 0' }}>
+                    <div style={{ fontWeight: 600, color: 'var(--ins-on-background)', marginBottom: '8px', lineHeight: '1.4' }}>
+                        {val && val.length > 80 ? <span title={val}>{val.substring(0, 80)}...</span> : val}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--ins-on-surface)', display: 'flex', gap: '16px', alignItems: 'center' }}>
+                        <span title='Số đáp án'>
+                            <i className='fa-solid fa-list-ul' style={{ marginRight: '6px', color: 'var(--ins-primary)' }}></i>
+                            {row.answersCount} đáp án
+                        </span>
+                        <span title='Loại câu hỏi'>
+                            <i className={row.type === 'SINGLE' ? 'fa-regular fa-circle-dot' : 'fa-regular fa-square-check'} style={{ marginRight: '6px', color: 'var(--ins-primary)' }}></i>
+                            {row.type === 'SINGLE' ? 'Đơn lựa chọn' : 'Đa lựa chọn'}
+                        </span>
+                    </div>
+                </div>
+            )
+        },
+        { 
+            key: 'category', 
+            label: 'Phân loại & Chủ đề', 
+            width: '220px', 
+            render: (_, row) => (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--ins-on-background)' }}>
+                        <i className='fa-solid fa-layer-group' style={{ marginRight: '6px', opacity: 0.7 }}></i>
+                        {row.category}
+                    </span>
+                    {row.topicName !== '—' && (
+                        <span style={{ fontSize: '0.8rem', color: 'var(--ins-on-surface)' }}>
+                            <i className='fa-solid fa-hashtag' style={{ marginRight: '6px', opacity: 0.5 }}></i>
+                            {row.topicName}
+                        </span>
+                    )}
+                </div>
+            )
+        },
+        { 
+            key: 'isDiemLiet', 
+            label: 'Câu điểm liệt', 
+            width: '130px', 
+            render: (val) => (
+                <span className={`ins-status-chip ${val ? 'rejected' : 'approved'}`}>
+                    <span className='chip-dot'></span>{val ? 'Điểm liệt' : 'Bình thường'}
+                </span>
+            )
+        },
+        {
+            key: 'status', 
+            label: 'Trạng thái', 
+            width: '120px',
+            render: (val) => (
+                <span className={`ins-status-chip ${val === 1 ? 'approved' : 'pending'}`}>
+                    <span className='chip-dot' />
+                    {val === 1 ? 'Hoạt động' : 'Nháp'}
+                </span>
+            )
+        },
+        { 
+            key: 'actions', 
+            label: 'Thao tác', 
+            width: '140px', 
+            render: (_, row) => (
+                <div className='ins-action-cell'>
+                    <button
+                        className='ins-action-btn view'
+                        title='Xem chi tiết'
+                        onClick={() => navigate(`/instructor/question-bank/${row.id}`, { state: { question: row.rawQuestion } })}
+                    >
+                        <i className='fa-solid fa-eye'></i>
+                    </button>
+                    <button className='ins-action-btn edit' title='Sửa'>
+                        <i className='fa-solid fa-pen'></i>
+                    </button>
+                    <button
+                        className={`ins-action-btn ${row.status === 1 ? 'delete' : 'view'}`}
+                        title={row.status === 1 ? 'Đặt thành nháp' : 'Kích hoạt'}
+                        onClick={() => handleToggleStatus(row.id)}
+                    >
+                        <i className={`fa-solid fa-toggle-${row.status === 1 ? 'on' : 'off'}`} style={{ fontSize: '1.2rem' }} />
+                    </button>
+                </div>
+            )
+        },
     ];
 
     return (
@@ -69,23 +265,41 @@ export default function QuestionBank() {
                     <h1>Ngân hàng Câu hỏi</h1>
                     <p>Quản lý danh sách câu hỏi sát hạch lái xe các hạng.</p>
                 </div>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    {(lessonIdParam || chapterIdParam) && (
+                        <button className='ins-btn' style={{ background: 'var(--ins-surface-high)', color: 'var(--ins-on-surface)' }} onClick={() => navigate(-1)}>
+                            <i className='fa-solid fa-arrow-left'></i> Quay lại
+                        </button>
+                    )}
+                    <button className='ins-btn ins-btn-primary' onClick={() => setShowModal(true)}>
+                        <i className='fa-solid fa-plus'></i> Thêm câu hỏi
+                    </button>
+                </div>
             </div>
 
             <DataTable
-                title={`Hiển thị ${questions.length} câu hỏi (600 câu)`}
+                title={`Hiển thị ${questions.length}/${serverPagination.totalCount || questions.length} câu hỏi`}
                 columns={columns}
                 data={questions}
+                loading={loading}
+                onSearch={handleSearch}
+                searchValue={searchTerm}
+                onSearchValueChange={setSearchTerm}
+                serverPagination={serverPagination}
+                onPageChange={handlePageChange}
                 actions={
                     <>
+                        <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                            <i className='fa-solid fa-rotate-right'></i> Làm mới
+                        </button>
                         <button className='ins-btn ins-btn-secondary' onClick={() => {}}>
                             <i className='fa-solid fa-file-import'></i> Nhập Excel
-                        </button>
-                        <button className='ins-btn ins-btn-primary' onClick={() => setShowModal(true)}>
-                            <i className='fa-solid fa-plus'></i> Thêm câu hỏi
                         </button>
                     </>
                 }
             />
+
+            {error && <div className='ins-error-banner' style={{ marginTop: 12 }}><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
 
             <Modal
                 isOpen={showModal}
