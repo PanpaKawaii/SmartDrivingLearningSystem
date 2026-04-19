@@ -133,55 +133,57 @@ function QuestionDetail() {
             </div>
 
             <div className='ins-detail-card'>
-                <div className='ins-detail-grid'>
-                    <div className='ins-detail-field' style={{ gridColumn: 'span 2' }}>
-                        <span className='ins-detail-label'>Hạng bằng lái</span>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span className='ins-detail-value'>{licenseName}</span>
-                            {licenseDescription && (
-                                <span style={{ fontSize: '0.85rem', color: 'var(--ins-on-surface-variant)', lineHeight: '1.4' }}>
-                                    {licenseDescription}
-                                </span>
-                            )}
+                <div className='ins-detail-meta-card'>
+                    <div className='ins-detail-grid ins-detail-meta-grid'>
+                        <div className='ins-detail-field' style={{ gridColumn: 'span 2' }}>
+                            <span className='ins-detail-label'>Hạng bằng lái</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span className='ins-detail-value'>{licenseName}</span>
+                                {licenseDescription && (
+                                    <span className='ins-detail-subvalue'>
+                                        {licenseDescription}
+                                    </span>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Chương</span>
-                        <span className='ins-detail-value'>{chapterName}</span>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Bài học</span>
-                        <span className='ins-detail-value'>{lessonName}</span>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Phân loại</span>
-                        <span className='ins-detail-value'>{categoryName}</span>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Chủ đề</span>
-                        <span className='ins-detail-value'>{topicName}</span>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Loại câu hỏi</span>
-                        <span className='ins-detail-value'>{qType === 'SINGLE' ? 'Đơn lựa chọn' : 'Đa lựa chọn'}</span>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Trạng thái</span>
-                        <span className={`ins-status-chip ${status === 1 ? 'approved' : 'pending'}`}>
-                            <span className='chip-dot'></span>{status === 1 ? 'Hoạt động' : 'Nháp/Đã ẩn'}
-                        </span>
-                    </div>
-                    <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Điểm liệt</span>
-                        <span className={`ins-status-chip ${isDiemLiet ? 'rejected' : 'approved'}`}>
-                            <span className='chip-dot'></span>{isDiemLiet ? 'Câu điểm liệt' : 'Bình thường'}
-                        </span>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Chương</span>
+                            <span className='ins-detail-value'>{chapterName}</span>
+                        </div>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Bài học</span>
+                            <span className='ins-detail-value'>{lessonName}</span>
+                        </div>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Phân loại</span>
+                            <span className='ins-detail-value'>{categoryName}</span>
+                        </div>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Chủ đề</span>
+                            <span className='ins-detail-value'>{topicName}</span>
+                        </div>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Loại câu hỏi</span>
+                            <span className='ins-detail-value'>{qType === 'SINGLE' ? 'Đơn lựa chọn' : 'Đa lựa chọn'}</span>
+                        </div>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Trạng thái</span>
+                            <span className={`ins-status-chip ins-metadata-badge ${status === 1 ? 'approved' : 'pending'}`}>
+                                <span className='chip-dot'></span>{status === 1 ? 'Hoạt động' : 'Nháp/Đã ẩn'}
+                            </span>
+                        </div>
+                        <div className='ins-detail-field'>
+                            <span className='ins-detail-label'>Điểm liệt</span>
+                            <span className={`ins-status-chip ins-metadata-badge ${isDiemLiet ? 'rejected' : 'approved'}`}>
+                                <span className='chip-dot'></span>{isDiemLiet ? 'Câu điểm liệt' : 'Bình thường'}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
                 <div className='ins-detail-section'>
                     <h2>Nội dung câu hỏi</h2>
-                    <p>{question.content}</p>
+                    <p className='ins-question-content'>{question.content}</p>
                     {question.image && (
                         <div style={{ marginTop: '16px' }}>
                             <img src={question.image} alt='Minh họa câu hỏi' style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '8px' }} />
@@ -195,8 +197,13 @@ function QuestionDetail() {
                         {answers.map((answer) => (
                             <div key={answer.index} className={`ins-answer-item ${answer.isCorrect ? 'correct' : ''}`}>
                                 <div className='ins-answer-label'>
-                                    {answer.label}
+                                    <span className='ins-answer-letter'>{answer.label}</span>
                                     {answer.isCorrect && <span className='ins-answer-badge'>Đúng</span>}
+                                    {answer.isCorrect && (
+                                        <span className='ins-answer-check' aria-hidden='true'>
+                                            <i className='fa-solid fa-check'></i>
+                                        </span>
+                                    )}
                                 </div>
                                 <div className='ins-answer-text'>{answer.text}</div>
                             </div>
@@ -205,8 +212,13 @@ function QuestionDetail() {
                 </div>
 
                 {question.explanation && (
-                    <div className='ins-detail-section'>
-                        <h2>Giải thích</h2>
+                    <div className='ins-detail-section ins-explanation-callout'>
+                        <div className='ins-callout-header'>
+                            <span className='ins-callout-icon' aria-hidden='true'>
+                                <i className='fa-solid fa-lightbulb'></i>
+                            </span>
+                            <h2>Giải thích chi tiết</h2>
+                        </div>
                         <p>{question.explanation}</p>
                     </div>
                 )}
