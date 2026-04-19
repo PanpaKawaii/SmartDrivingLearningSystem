@@ -1,10 +1,11 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import './NotificationDetailModal.css';
 
 export default function NotificationDetailModal({ data, onClose }) {
     if (!data) return null;
 
-    return (
+    return createPortal(
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content animate-zoom-in" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
@@ -34,6 +35,7 @@ export default function NotificationDetailModal({ data, onClose }) {
                     <button className="footer-close-btn" onClick={onClose}>Đóng</button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

@@ -100,7 +100,6 @@ export default function TrafficSignRecognition() {
                     subtitle='Sử dụng công nghệ AI và thị giác máy tính, hệ thống tự động nhận diện biển báo giao thông và cung cấp tức thì: ý nghĩa biển hiệu, mức xử phạt liên quan cùng hướng dẫn lái xe an toàn. Đây là giải pháp đột phá giúp người lái xe nắm vững luật lệ và tham gia giao thông an toàn hơn.'
                     badge='AI Traffic Vision'
                     back={false}
-                    titlePosition='center'
                 />
 
                 <div className='recognition-workspace'>
