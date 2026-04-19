@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { postData, putData } from '../../../../mocks/CallingAPI';
+import { postData, putData, uploadMedia } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
@@ -8,17 +8,51 @@ import '../EditModal.css';
 export default function EditUserModal({ userprop, roles, onClose, setRefresh, action }) {
     const { user: authUser, refreshNewToken, logout } = useAuth();
     const navigate = useNavigate();
+
     const [formData, setFormData] = useState(userprop);
     const [loading, setLoading] = useState(false);
 
-    const submitData = async () => {
-        const token = authUser?.token || '';
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(userprop.avatar || '');
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        }
+    };
+
+    const submitData = async (retryToken = null) => {
+        const token = retryToken || authUser?.token || '';
         try {
-            if (action === 'edit') {
-                await putData(`user/${formData.id}`, formData, token);
-            } else {
-                await postData('user', formData, token);
+            let finalUser = { ...formData };
+            let userId = formData.id;
+
+            if (action === 'create' && !userId) {
+                const newUser = await postData('user', { ...formData, avatar: '' }, token);
+                userId = newUser.id;
+                finalUser.id = userId;
             }
+
+            if (selectedFile && userId) {
+                const uploadResult = await uploadMedia(
+                    [selectedFile],
+                    userId,
+                    'UserAvatar',
+                    token
+                );
+
+                if (uploadResult && uploadResult.length > 0) {
+                    const avatarUrl = uploadResult[0].url;
+                    finalUser.avatar = avatarUrl;
+                    await putData(`user/${userId}`, finalUser, token);
+                }
+            }
+            else if (action === 'edit') {
+                await putData(`user/${userId}`, finalUser, token);
+            }
+
             setRefresh(p => p + 1);
             onClose();
         } catch (err) {
@@ -27,12 +61,11 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
                 if (refreshResult?.message === 'Logout') {
                     logout();
                     navigate('/', { state: { openLogin: 'true' } });
-                } else {
-                    // Retry sau khi đã có token mới trong AuthContext
-                    return await submitData();
+                } else if (refreshResult?.token) {
+                    return await submitData(refreshResult.token);
                 }
             } else {
-                alert("Lỗi: " + (err.data?.message || "Không thể lưu dữ liệu"));
+                alert("Lỗi: " + (err.data?.message || err.message || "Không thể lưu dữ liệu"));
             }
         } finally {
             setLoading(false);
@@ -59,18 +92,35 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
                 <form onSubmit={handleSubmit}>
                     <div className='edit-title'>{action === 'create' ? 'Create User' : 'Edit User'}</div>
 
-                    <div className='flex'>
-                        <div className='image-container'>
-                            <img src={formData.avatar || DefaultAvatar} alt='avatar' />
+                    <div className='flex' style={{ alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+                        <div className='image-container' style={{ position: 'relative' }}>
+                            <img src={previewUrl || DefaultAvatar} alt='avatar' style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eee' }} />
+
+                            {/* Nút upload màu xanh nước biển */}
+                            <label htmlFor="file-upload" className="custom-file-upload" style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                right: 0,
+                                background: '#007bff', // Màu xanh nước biển
+                                color: '#fff',         // Icon màu trắng
+                                borderRadius: '50%',
+                                width: '32px',
+                                height: '32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(0,123,255,0.4)',
+                                transition: 'all 0.2s ease'
+                            }}>
+                                <i className="fa-solid fa-camera" style={{ fontSize: '14px' }}></i>
+                            </label>
+                            <input id="file-upload" type="file" onChange={handleFileChange} style={{ display: 'none' }} accept="image/*" />
                         </div>
-                        <div className='column'>
+                        <div className='column' style={{ flex: 1 }}>
                             <div className='input-group'>
                                 <input name='name' value={formData.name || ''} onChange={handleChange} required placeholder=' ' />
                                 <label>Full Name</label>
-                            </div>
-                            <div className='input-group'>
-                                <input name='avatar' value={formData.avatar || ''} onChange={handleChange} placeholder=' ' />
-                                <label>Avatar URL</label>
                             </div>
                         </div>
                     </div>
