@@ -11,9 +11,20 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
 
     const [formData, setFormData] = useState(userprop);
     const [loading, setLoading] = useState(false);
+    // State quản lý lỗi validate
+    const [passwordError, setPasswordError] = useState('');
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(userprop.avatar || '');
+
+    // Hàm kiểm tra password
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!regex.test(password)) {
+            return "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.";
+        }
+        return "";
+    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -74,6 +85,17 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validate mật khẩu khi CREATE
+        if (action === 'create') {
+            const error = validatePassword(formData.password || '');
+            if (error) {
+                setPasswordError(error);
+                return; // Dừng lại không submit
+            }
+        }
+
+        setPasswordError(''); // Xóa lỗi cũ nếu có
         setLoading(true);
         submitData();
     };
@@ -81,6 +103,9 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+
+        // Xóa lỗi ngay khi người dùng bắt đầu gõ lại mật khẩu
+        if (name === 'password') setPasswordError('');
     };
 
     return (
@@ -96,13 +121,12 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
                         <div className='image-container' style={{ position: 'relative' }}>
                             <img src={previewUrl || DefaultAvatar} alt='avatar' style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eee' }} />
 
-                            {/* Nút upload màu xanh nước biển */}
                             <label htmlFor="file-upload" className="custom-file-upload" style={{
                                 position: 'absolute',
                                 bottom: 0,
                                 right: 0,
-                                background: '#007bff', // Màu xanh nước biển
-                                color: '#fff',         // Icon màu trắng
+                                background: '#007bff',
+                                color: '#fff',
                                 borderRadius: '50%',
                                 width: '32px',
                                 height: '32px',
@@ -134,8 +158,21 @@ export default function EditUserModal({ userprop, roles, onClose, setRefresh, ac
 
                     {action === 'create' && (
                         <div className='input-group'>
-                            <input name='password' type='password' onChange={handleChange} required placeholder=' ' />
-                            <label>Password</label>
+                            <input
+                                name='password'
+                                type='password'
+                                onChange={handleChange}
+                                required
+                                placeholder=' '
+                                style={passwordError ? { borderBottomColor: 'red' } : {}}
+                            />
+                            <label style={passwordError ? { color: 'red' } : {}}>Password</label>
+                            {/* Hiển thị câu báo lỗi */}
+                            {passwordError && (
+                                <small style={{ color: 'red', fontSize: '11px', marginTop: '4px', display: 'block' }}>
+                                    {passwordError}
+                                </small>
+                            )}
                         </div>
                     )}
 
