@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
+import HeadingComponent from '../../../components/HeadingComponent/HeadingComponent';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -47,6 +48,12 @@ export default function TrafficSignDetail() {
     return (
         <div className='traffic-sign-detail-container'>
             <StarsBackground />
+            <HeadingComponent
+                title='CHI TIẾT BIỂN BÁO'
+                subtitle=''
+                titlePosition='center'
+                back={'Quay lại'}
+            />
             <div className='container'>
                 <div className='image'>
                     <img src={ThisTrafficSign.image || DefaultAvatar} alt={ThisTrafficSign.name} />

@@ -65,7 +65,6 @@ export default function DrivingLicense() {
                 subtitle='Hãy chọn một chương trình cấp bằng để bắt đầu hành trình của bạn. Mỗi chương trình đều bao gồm các bài học lý thuyết toàn diện và các bài kiểm tra thực hành.'
                 back={false}
             />
-
             <div className='license-grid'>
                 {DRIVINGLICENSEs.map((license, index) => (
                     <Link

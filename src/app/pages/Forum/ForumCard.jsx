@@ -146,40 +146,47 @@ export default function ForumCard({
                         <div className='topic'>{post.forumTopic?.name}</div>
                     </div>
                 </div>
-                {user &&
-                    <ButtonList
-                        list={[
-                            (
-                                post.status == 1
-                                && post.userId != user?.id
-                            ) && {
-                                name: 'report',
-                                onToggle: () => setOpenReport({
-                                    simulationId: null,
-                                    forumPostId: post.id,
-                                    forumCommentId: null,
-                                    questionId: null,
-                                }),
-                                disabled: false,
-                            },
-                            (
-                                (post.status == 1 || post.status == 4)
-                                && post.userId == user?.id
-                            ) && {
-                                name: post.status == 4 ? 'unhidden' : 'hidden',
-                                onToggle: () => TogglePostStatus(post.id, 'hidden'),
-                                disabled: loading,
-                            },
-                            (
-                                post.userId == user?.id
-                            ) && {
-                                name: 'delete',
-                                onToggle: () => TogglePostStatus(post.id, 'delete'),
-                                disabled: loading,
-                            }
-                        ].filter(Boolean)}
-                    />
-                }
+                <div className='pin-ellipsis'>
+                    {post.status == 5 &&
+                        <div>
+                            <i className='fa-solid fa-bookmark' />
+                        </div>
+                    }
+                    {user &&
+                        <ButtonList
+                            list={[
+                                (
+                                    post.status == 1
+                                    && post.userId != user?.id
+                                ) && {
+                                    name: 'report',
+                                    onToggle: () => setOpenReport({
+                                        simulationId: null,
+                                        forumPostId: post.id,
+                                        forumCommentId: null,
+                                        questionId: null,
+                                    }),
+                                    disabled: false,
+                                },
+                                (
+                                    (post.status == 1 || post.status == 4)
+                                    && post.userId == user?.id
+                                ) && {
+                                    name: post.status == 4 ? 'unhidden' : 'hidden',
+                                    onToggle: () => TogglePostStatus(post.id, 'hidden'),
+                                    disabled: loading,
+                                },
+                                (
+                                    post.userId == user?.id
+                                ) && {
+                                    name: 'delete',
+                                    onToggle: () => TogglePostStatus(post.id, 'delete'),
+                                    disabled: loading,
+                                }
+                            ].filter(Boolean)}
+                        />
+                    }
+                </div>
             </div>
             <div className='content'>
                 <h2>{post.title}</h2>

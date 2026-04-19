@@ -116,11 +116,6 @@ export default function UserHeader({
         })();
     }, [user?.id]);
 
-    useEffect(() => {
-        if (location.state?.openLogin == 'true') setLoginOpen(true);
-        else if (location.state?.openLogin == 'false') setLoginOpen(false);
-    }, [location.state]);
-
     return (
         <nav className='user-header-container'>
             <div className='nav-wrapper'>
@@ -134,10 +129,11 @@ export default function UserHeader({
                 <div className='nav-links'>
                     {menuItems.map((item, index) => {
                         const locationPathname = location.pathname;
-                        console.log('locationPathname', locationPathname);
+                        // console.log('locationPathname', locationPathname);
 
                         const itemPath = item.path;
-                        console.log('itemPath', itemPath);
+                        // console.log('itemPath', itemPath);
+
                         const isActive = (itemPath !== '/' && (locationPathname?.split('/'))?.includes(itemPath.replace('/', ''))) || (itemPath === '/' && locationPathname === '/');
 
                         return (
