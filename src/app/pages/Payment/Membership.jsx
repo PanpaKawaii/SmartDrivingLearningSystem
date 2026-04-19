@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { fetchData, postData } from '../../../mocks/CallingAPI';
+import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
 import HeadingComponent from '../../components/HeadingComponent/HeadingComponent';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
+import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './Membership.css';
@@ -10,9 +12,11 @@ export default function Membership() {
     const { user, refreshNewToken } = useAuth();
 
     const [thisUser, setThisUser] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [paymentOrderId, setPaymentOrderId] = useState(0);
+    const [Amount, setAmount] = useState(99000);
+    const [refresh, setRefresh] = useState(0);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const amount = 89000;
 
     useEffect(() => {
         (async () => {
@@ -22,10 +26,21 @@ export default function Membership() {
             const userId = user?.id || '';
             try {
                 if (userId) {
-                    const result = await fetchData(`User/${userId}`, token);
-                    console.log('result', result);
+                    // ==FIX==
+                    const ThisUserResponse = await fetchData(`User/${userId}`, token);
+                    console.log('ThisUserResponse', ThisUserResponse);
+                    const SystemConfigResponse = await fetchData(`SystemConfigs/all`, token);
+                    console.log('SystemConfigResponse', SystemConfigResponse);
+                    // const PaymentResponse = await fetchData(`Payment`, token);
+                    // console.log('PaymentResponse', PaymentResponse);
 
-                    setThisUser(result);
+                    // const newOrderId = PaymentResponse?.length > 0 ? Math.max(...PaymentResponse.map(p => Number(p.orderId) || 0)) : 0;
+
+                    const MembershipAmount = SystemConfigResponse?.find(sc => sc.name == 'Student Fee')?.value || 0;
+
+                    setThisUser(ThisUserResponse);
+                    setAmount(MembershipAmount);
+                    // setPaymentOrderId(newOrderId);
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -42,9 +57,8 @@ export default function Membership() {
         const token = user?.token || null;
         try {
             const PaymentData = {
-                // ==FIX==
-                orderId: crypto.randomUUID(),
-                amount: amount,
+                orderId: paymentOrderId,
+                amount: Amount,
             };
             console.log('PaymentData:', PaymentData);
 
@@ -78,6 +92,8 @@ export default function Membership() {
         { name: 'Student', role: 'Student' },
     ];
 
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='membership-container container'>
             <StarsBackground />
@@ -123,13 +139,16 @@ export default function Membership() {
                         <button
                             className='btn'
                             onClick={() => Purchase()}
-                            disabled={loading || thisUser?.roleName == 'Student'}
+                            disabled={loading || thisUser?.roleName == 'Student' || !user}
                         >
                             {loading ?
                                 'ĐANG XỬ LÝ...'
                                 : (thisUser?.roleName == 'Student' ?
                                     'ĐÃ ĐĂNG KÝ'
-                                    : `ĐĂNG KÝ NGAY ${amount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`
+                                    : (!user ?
+                                        'VUI LÒNG ĐĂNG NHẬP'
+                                        : `ĐĂNG KÝ NGAY ${Amount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`
+                                    )
                                 )
                             }
                         </button>

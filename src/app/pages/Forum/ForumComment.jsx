@@ -190,10 +190,10 @@ export default function ForumComment({
                                         <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''} ${isReportedComment ? 'reported-comment' : ''}`}>
                                             <div className='name-btn-list'>
                                                 <div className='name'>{comment.user?.name}</div>
-                                                {allowButtonListAction &&
+                                                {allowButtonListAction && user &&
                                                     <ButtonList
                                                         list={[
-                                                            {
+                                                            (comment.userId != user?.id) && {
                                                                 name: 'report',
                                                                 onToggle: () => setOpenReport({
                                                                     simulationId: null,
@@ -203,7 +203,7 @@ export default function ForumComment({
                                                                 }),
                                                                 disabled: false,
                                                             },
-                                                            (user?.id && comment.userId == user?.id) && {
+                                                            (comment.userId == user?.id) && {
                                                                 name: 'takedown',
                                                                 onToggle: () => TakeDownComment(comment.id),
                                                                 disabled: loading,
