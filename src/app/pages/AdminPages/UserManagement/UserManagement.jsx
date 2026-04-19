@@ -1,286 +1,283 @@
 import { useEffect, useState } from 'react';
-import { fetchData, putData } from '../../../../mocks/CallingAPI';
-import { roles, users } from '../../../../mocks/DataSample';
-import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
-import Cube from '../../../components/Cube/Cube';
-import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
-import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
-import EditUserModal from './EditUserModal';
-import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
-
-import './UserManagement.css';
+import EditUserModal from './EditUserModal';
+import DataTable from '../../../components/Shared/DataTable'; // Import DataTable
+import '../AdminPages.css'; // Sử dụng chung style với trang AdminPendingPosts
 
 export default function UserManagement() {
-    const { user } = useAuth();
+    const { user: authUser, logout, refreshNewToken } = useAuth();
+    const navigate = useNavigate();
 
-    const [USERs, setUSERs] = useState([]);
-    const [refresh, setRefresh] = useState(0);
+    // Dữ liệu và trạng thái
+    const [items, setItems] = useState([]);
+    const [roles, setRoles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [errorFunction, setErrorFunction] = useState(null);
+    const [refresh, setRefresh] = useState(0);
+
+    // Phân trang chuẩn theo DataTable
+    const [serverPagination, setServerPagination] = useState({
+        page: 1,
+        pageSize: 10,
+        totalPages: 1,
+        totalCount: 0
+    });
+
+    // Filter tách biệt Name và Email
+    const [filters, setFilters] = useState({
+        name: '',
+        email: '',
+        roleId: ''
+    });
+
     const [editing, setEditing] = useState(null);
     const [creating, setCreating] = useState(false);
-    const [popupProps, setPopupProps] = useState(null);
+
+    // Hàm xử lý Refresh Token & Retry
+    const handleRefreshAction = async (err) => {
+        if (err.status === 401) {
+            const refreshResult = await refreshNewToken(authUser);
+            if (refreshResult?.message === 'Logout') {
+                logout();
+                navigate('/', { state: { openLogin: 'true' } });
+                return false;
+            }
+            return true;
+        }
+        setError('Lỗi kết nối hệ thống');
+        return false;
+    };
 
     useEffect(() => {
         (async () => {
-            setError(null);
+            if (!authUser?.token) return;
             setLoading(true);
-            const token = user?.token || '';
+            setError(null);
             try {
-                // const UserResponse = await fetchData('users', token);
-                // console.log('UserResponse', UserResponse);
-                // const RoleResponse = await fetchData('roles', token);
-                // console.log('RoleResponse', RoleResponse);
+                // Fetch Roles một lần duy nhất
+                if (roles.length === 0) {
+                    const roleRes = await fetchData('roles/all', authUser.token);
+                    setRoles(roleRes);
+                }
 
-                const UserResponse = users;
-                const RoleResponse = roles;
+                const query = new URLSearchParams({
+                    page: serverPagination.page,
+                    pageSize: serverPagination.pageSize,
+                    name: filters.name,
+                    email: filters.email,
+                    roleId: filters.roleId
+                });
 
-                console.log('RoleResponse', RoleResponse);
-                const Users = UserResponse.map(user => ({
-                    ...user,
-                    role: RoleResponse.find(r => r.id === user.roleId) || null
+                const res = await fetchData(`user/paged?${query.toString()}`, authUser.token);
+
+                setItems(res?.items || []);
+                setServerPagination(prev => ({
+                    ...prev,
+                    totalCount: res?.totalItems || 0,
+                    totalPages: res?.totalPages || 1,
                 }));
-                console.log('Users', Users);
-
-                setUSERs(Users);
-            } catch (error) {
-                console.error('Error', error);
-                setError(error);
+            } catch (err) {
+                await handleRefreshAction(err);
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh]);
+    }, [refresh, authUser?.token, serverPagination.page, serverPagination.pageSize]);
 
-    const openEditModal = (data) => { setEditing(data); };
-    const closeEditModal = () => { setEditing(null); };
-    const openCreateModal = () => { setCreating(true); };
-    const closeCreateModal = () => { setCreating(false); };
+    const handleResetFilter = () => {
+        setFilters({ name: '', email: '', roleId: '' });
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        setRefresh(r => r + 1);
+    };
 
-    const inactiveUser = async (user) => {
-        // const token = user?.token || ''; ==FIX==
-        const token = '';
-        const newUser = { ...user, status: user.status == 1 ? 0 : 1 };
+    const handleToggleActive = async (targetUser) => {
         try {
-            const UserResult = await putData(`users/${newUser.id}`, newUser, token);
-            console.log('UserResult', UserResult);
-            setRefresh(p => p + 1);
-        } catch (error) {
-            setErrorFunction('Error');
+            await patchData(`user/${targetUser.id}/toggle-active`, {}, authUser.token);
+            setRefresh(r => r + 1);
+        } catch (err) {
+            const canRetry = await handleRefreshAction(err);
+            if (canRetry) handleToggleActive(targetUser);
         }
     };
 
-    const [searchUser, setSearchUser] = useState('');
-    const [selectType, setSelectType] = useState('');
-    const [selectStatus, setSelectStatus] = useState('');
-    const usersFilter = USERs.filter((user) => {
-        const userName = user.name?.toLowerCase();
-        const userEmail = user.email?.toLowerCase();
-        const userPhone = user.phone?.toLowerCase();
-
-        const userType = user.type?.toLowerCase();
-        const userStatus = user.status === 1 ? 'Active' : 'Inactive';
-
-        const matchSearch = !searchUser
-            || userName?.includes(searchUser.toLowerCase())
-            || userEmail?.includes(searchUser.toLowerCase())
-            || userPhone?.includes(searchUser.toLowerCase());
-        const matchSelectType = !selectType || userType === selectType.toLowerCase();
-        const matchSelectStatus = !selectStatus || userStatus == selectStatus;
-
-        return matchSearch && matchSelectType && matchSelectStatus;
-    });
-    console.log('usersFilter', usersFilter);
-    const handleClear = () => {
-        setSearchUser('');
-        setSelectType('');
-        setSelectStatus('');
+    const handleToggleLock = async (targetUser) => {
+        try {
+            await patchData(`user/${targetUser.id}/toggle-lock`, {}, authUser.token);
+            setRefresh(r => r + 1);
+        } catch (err) {
+            const canRetry = await handleRefreshAction(err);
+            if (canRetry) handleToggleLock(targetUser);
+        }
     };
-    console.log('selectType', selectType);
-    console.log('selectStatus', selectStatus);
 
-    // if (loading) return <div className='admin-container'><Cube color={'#007bff'} setRefresh={() => { }} /></div>
-    // if (error) return <div className='admin-container'><Cube color={'#dc3545'} setRefresh={setRefresh} /></div>
-    if (loading) return <div className='admin-container'><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
-    if (error) return <div className='admin-container'><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
+    // Định nghĩa các cột cho DataTable giống Pending Posts
+    const columns = [
+        {
+            key: '',
+            label: 'STT',
+            width: '60px',
+            render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1
+        },
+        {
+            key: 'name',
+            label: 'Người dùng',
+            render: (val, row) => (
+                <div className='user-name-cell' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <img src={row.avatar || DefaultAvatar} alt='avt' style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                    <span>{val}</span>
+                </div>
+            )
+        },
+        { key: 'email', label: 'Email' },
+        {
+            key: 'roleName',
+            label: 'Vai trò',
+            width: '120px',
+            render: (val, row) => val || roles.find(r => r.id === row.roleId)?.name || '---'
+        },
+        {
+            key: 'status',
+            label: 'Trạng thái',
+            width: '120px',
+            render: (val) => {
+                let statusCls = 'pending'; // Mặc định Inactive
+                let statusText = 'Inactive';
+
+                if (val === 1) {
+                    statusCls = 'approved';
+                    statusText = 'Active';
+                } else if (val === 2) {
+                    statusCls = 'rejected'; // Dùng màu đỏ của trang pending posts
+                    statusText = 'Banned';
+                }
+
+                return (
+                    <span className={`ins-status-chip ${statusCls}`}>
+                        <span className='chip-dot'></span>
+                        {statusText}
+                    </span>
+                );
+            }
+        },
+        {
+            key: 'actions',
+            label: 'Thao tác',
+            width: '150px',
+            render: (_, row) => (
+                <div className='ins-action-cell'>
+                    {/* Nút Sửa: Vô hiệu hóa nếu bị Ban */}
+                    <button
+                        className='ins-action-btn view'
+                        title='Sửa'
+                        onClick={() => setEditing(row)}
+                        disabled={row.status === 2}
+                        style={row.status === 2 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                    >
+                        <i className='fa-solid fa-pencil'></i>
+                    </button>
+
+                    {/* Nút Kích hoạt/Khóa: ẨN HOÀN TOÀN nếu status là 2 (Bị ban) */}
+                    {row.status !== 2 && (
+                        <button
+                            className='ins-action-btn edit'
+                            title={row.status === 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                            onClick={() => handleToggleActive(row)}
+                        >
+                            <i className={row.status === 1 ? 'fa-solid fa-lock' : 'fa-solid fa-unlock'}></i>
+                        </button>
+                    )}
+
+                    {/* Nút Ban: Dựa vào status === 2 để đổi màu icon */}
+                    <button
+                        className='ins-action-btn delete'
+                        title={row.status === 2 ? 'Gỡ Ban' : 'Ban tài khoản'}
+                        onClick={() => handleToggleLock(row)}
+                    >
+                        <i
+                            className="fa-solid fa-user-slash"
+                            style={{ color: row.status === 2 ? '#d32f2f' : 'inherit' }}
+                        ></i>
+                    </button>
+                </div>
+            )
+        }
+    ];
+
     return (
-        <div className='admin-container'>
-            {/* {JSON.stringify(usersFilter?.[0], null, 0)} */}
-            <div className='inner-container management-container user-management-container'>
-
-                <header className='main-header'>
-                    <h1>User Management</h1>
-                    <button className='btn-primary' onClick={() => openCreateModal(true)}>
-                        <i className='fa-solid fa-plus' />
-                        Add more account
-                    </button>
-                </header>
-
-                <form className='controls'>
-                    <div className='count'>{usersFilter?.length} results</div>
-                    <div className='search-bar'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={searchUser || ''}
-                            onValueChange={(propE) => setSearchUser(propE)}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Name'}
-                            labelStyle={'left moving'}
-                        />
-                    </div>
-                    <div className='field'>
-                        <StyleLabelSelect
-                            id={`selectType`}
-                            list={[
-                                { id: 'Vip', name: 'Vip', extraOptionClassName: 'option-vip' },
-                                { id: 'Regular', name: 'Regular', extraOptionClassName: 'option-regular' },
-                            ]}
-                            value={selectType}
-                            onValueChange={(propE) => {
-                                setSelectType(propE);
-                            }}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Type'}
-                            labelStyle={'left'}
-                        />
-                        <StyleLabelSelect
-                            id={`selectStatus`}
-                            list={[
-                                { id: 'Active', name: 'Active', extraOptionClassName: 'option-active' },
-                                { id: 'Inactive', name: 'Inactive', extraOptionClassName: 'option-inactive' },
-                            ]}
-                            value={selectStatus}
-                            onValueChange={(propE) => {
-                                setSelectStatus(propE);
-                            }}
-                            extraClassName={''}
-                            extraStyle={{}}
-                            label={'Status'}
-                            labelStyle={'left'}
-                        />
-                    </div>
-                    <button type='button' className='btn-secondary' onClick={handleClear}>
-                        CLEAR
-                    </button>
-                    <button type='button' className='btn-secondary' onClick={() => setRefresh(p => p + 1)}>
-                        Refresh
-                    </button>
-                </form>
-
-                <section className='admin-table-container'>
-                    <table className='admin-table'>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>USER</th>
-                                <th>EMAIL</th>
-                                <th>PHONE</th>
-                                <th>TYPE</th>
-                                <th>ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {usersFilter?.map((user, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                        <div className='user-name-cell'>
-                                            <div className='avatar'>
-                                                <img src={`${user.avatar || DefaultAvatar}`} alt='avatar' />
-                                            </div>
-                                            <div className='user-info'>
-                                                <span className='name'>{user.name}</span>
-                                                <span className='role'>{user.role?.name}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className='email'>
-                                            <span>{user.email}</span>
-                                        </div>
-                                    </td>
-                                    <td><span>{user.phone}</span></td>
-                                    <td>
-                                        <div className='action-buttons'>
-                                            <button onClick={() => openEditModal(user)}>
-                                                <span>Modify</span>
-                                                <i className='fa-solid fa-pencil' />
-                                            </button>
-                                            <button className={`btn-active ${user.status == 0 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 1}>
-                                                <span>Active</span>
-                                                <i className='fa-solid fa-unlock' />
-                                            </button>
-                                            <button className={`btn-inactive ${user.status == 1 && 'abb'}`} onClick={() => setPopupProps(user)} disabled={user.status == 0}>
-                                                <span>Inactive</span>
-                                                <i className='fa-solid fa-lock' />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
-
-                {editing && (
-                    <EditUserModal
-                        userprop={editing}
-                        onClose={closeEditModal}
-                        setRefresh={setRefresh}
-                        action={'edit'}
-                    />
-                )}
-
-                {creating && (
-                    <EditUserModal
-                        userprop={{
-                            roleId: '',
-                            email: '',
-                            password: '123456',
-                            name: '',
-                            avatar: '',
-                            phone: '',
-                            gender: '',
-                            type: 'Regular',
-                            description: '',
-                            dateOfBirth: '',
-                            licenseType: '',
-                        }}
-                        onClose={closeCreateModal}
-                        setRefresh={setRefresh}
-                        action={'create'}
-                    />
-                )}
-
-                {popupProps && (
-                    <ConfirmDialog
-                        title={'CONFIRMATION'}
-                        message={`Are you sure you want to ${popupProps.status == 1 ? 'inactive' : 'active'} this user?`}
-                        confirm={popupProps.status == 1 ? 'INACTIVE' : 'ACTIVE'}
-                        cancel={'CANCEL'}
-                        color={popupProps.status == 1 ? '#ff4d4f80' : '#52c41a80'}
-                        onConfirm={() => { inactiveUser(popupProps), setPopupProps(null) }}
-                        onCancel={() => setPopupProps(null)}
-                    />
-                )}
-
-                {errorFunction && (
-                    <ConfirmDialog
-                        title={'ERROR'}
-                        message={`An error has occurred!`}
-                        confirm={'OKAY'}
-                        cancel={''}
-                        color={'#ff4d4f80'}
-                        onConfirm={() => setErrorFunction(null)}
-                        onCancel={() => setErrorFunction(null)}
-                    />
-                )}
+        <div className='ins-page'>
+            <div className='ins-page-header'>
+                <div>
+                    <h1>Quản lý tài khoản</h1>
+                    <p>Quản lý danh sách người dùng và phân quyền hệ thống.</p>
+                </div>
+                <button className='btn-primary' onClick={() => setCreating(true)}>
+                    <i className='fa-solid fa-plus' /> Thêm tài khoản
+                </button>
             </div>
+
+            {error && <div className='ins-error-banner'>{error}</div>}
+
+            {/* Thanh Filter */}
+            <div className='ins-filter-bar' style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <input
+                    className='ins-input'
+                    placeholder='Tìm theo tên...'
+                    value={filters.name}
+                    onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+                />
+                <input
+                    className='ins-input'
+                    placeholder='Tìm theo email...'
+                    value={filters.email}
+                    onChange={(e) => setFilters({ ...filters, email: e.target.value })}
+                />
+                <select
+                    className='ins-select'
+                    value={filters.roleId}
+                    onChange={(e) => setFilters({ ...filters, roleId: e.target.value })}
+                >
+                    <option value="">Tất cả vai trò</option>
+                    {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                </select>
+
+                <button className='ins-btn-search' onClick={() => { setServerPagination({ ...serverPagination, page: 1 }); setRefresh(r => r + 1); }}>
+                    <i className="fa-solid fa-magnifying-glass"></i> Lọc
+                </button>
+                <button className='ins-btn-reset' title="Reset filter" onClick={handleResetFilter}>
+                    <i className="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <DataTable
+                title={`Danh sách người dùng (${serverPagination.totalCount})`}
+                columns={columns}
+                data={items}
+                loading={loading}
+                serverPagination={serverPagination}
+                onPageChange={(page) => setServerPagination(prev => ({ ...prev, page }))}
+            />
+
+            {editing && (
+                <EditUserModal
+                    userprop={editing}
+                    roles={roles}
+                    onClose={() => setEditing(null)}
+                    setRefresh={setRefresh}
+                    action={'edit'}
+                />
+            )}
+            {creating && (
+                <EditUserModal
+                    userprop={{ roleId: '', email: '', password: '', name: '', status: 1 }}
+                    roles={roles}
+                    onClose={() => setCreating(false)}
+                    setRefresh={setRefresh}
+                    action={'create'}
+                />
+            )}
         </div>
-    )
+    );
 }
