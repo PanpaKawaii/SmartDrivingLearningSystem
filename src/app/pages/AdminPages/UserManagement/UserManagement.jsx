@@ -252,7 +252,7 @@ export default function UserManagement() {
             </div>
 
             <DataTable
-                title={`Danh sách người dùng (${serverPagination.totalCount})`}
+                title={`Danh sách người dùng`}
                 columns={columns}
                 data={items}
                 loading={loading}
