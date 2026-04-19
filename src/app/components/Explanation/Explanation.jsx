@@ -41,7 +41,7 @@ export default function Explanation({
     };
 
     const renderFormattedText = (text) => {
-        const lines = text.replace(/###/g, '').split(/(?<=\s)\*(?=\s)/);
+        const lines = text.replace(/###/g, '').replace(/##/g, '').split(/(?<=\s)\*(?=\s)/);
 
         return lines.map((line, idx) => {
             const parts = line.split(/(\*\*.*?\*\*)/g);

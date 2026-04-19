@@ -115,3 +115,35 @@
     border-radius: 50%;
     border: 2px solid var(--ins-bg);
 }
+
+.notification-wrapper {
+    position: relative;
+}
+
+/* Dấu chấm đỏ thông báo chưa đọc trên quả chuông */
+.badge-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: #ef4444; /* Màu đỏ rực */
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+/* Style cho item chưa đọc trong list */
+.notification-item.unread {
+    background-color: #f0f7ff; /* Xanh nhạt */
+}
+
+.unread-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #3b82f6; /* Xanh blue */
+    border-radius: 50%;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}

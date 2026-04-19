@@ -116,7 +116,7 @@ export default function BoxChat() {
 
     const renderFormattedText = (text) => {
         // Bước 1: Tách từng dòng theo dấu `*`
-        const lines = text.split(/(?<=\s)\*(?=\s)/);
+        const lines = text.replace(/###/g, '').replace(/##/g, '').split(/(?<=\s)\*(?=\s)/);
 
         return lines.map((line, idx) => {
             // Bước 2: Tách và xử lý in đậm từng phần trong dòng

@@ -1,0 +1,138 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 25, 47, 0.75); /* xanh đậm overlay */
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    width: 90%;
+    max-width: 600px;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    color: #e2e8f0;
+}
+
+/* HEADER */
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #38bdf8; /* xanh sáng */
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    color: #f87171; /* đỏ nhẹ khi hover */
+}
+
+/* BODY */
+.modal-body {
+    padding: 25px;
+    overflow-y: auto;
+}
+
+.detail-title {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #f1f5f9;
+}
+
+.detail-meta {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+}
+
+.detail-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 15px 0;
+}
+
+.detail-content {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #cbd5f5;
+    white-space: pre-wrap;
+}
+
+/* IMAGE */
+.detail-image {
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.detail-image img {
+    width: 100%;
+    height: auto;
+}
+
+/* FOOTER */
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.footer-close-btn {
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.footer-close-btn:hover {
+    background: #0ea5e9;
+}
+
+/* ANIMATION */
+.animate-zoom-in {
+    animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}

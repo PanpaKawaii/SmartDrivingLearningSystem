@@ -1,0 +1,196 @@
+.loading-container {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom right, #2563eb, #ffffff, #0891b2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    overflow: hidden;
+
+    .starsbackground {
+        opacity: 0.6;
+    }
+
+    .fa-play {
+        color: #fff;
+        font-size: 40px;
+    }
+
+    .loading-background {
+        position: absolute;
+        inset: 0;
+    }
+
+    .floating-dot {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background-color: #e43efa4d;
+        border-radius: 9999px;
+    }
+
+    .loading-content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+
+        .trafficlight {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+    }
+
+    .logo-wrapper {
+        margin-bottom: 3rem;
+    }
+
+    .logo {
+        width: 128px;
+        height: 128px;
+        background: linear-gradient(to right, #A8FF0080, #2563eb80);
+        border-radius: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        position: relative;
+        box-shadow: 0 30px 60px #a8ff0066, inset 0 1px 0 #ffffff33;
+        overflow: hidden;
+    }
+
+    .logo-glow {
+        position: absolute;
+        inset: 8px;
+        background: #ffffff33;
+        border-radius: 1rem;
+    }
+
+    .logo-icon {
+        width: 64px;
+        height: 64px;
+        color: white;
+        position: relative;
+        z-index: 10;
+    }
+
+    .orbit-dot {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background-color: #2563eb;
+        border-radius: 9999px;
+    }
+
+    .loading-title {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 2rem;
+        line-height: 1.2;
+        background-size: 200% 200%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 10px 20px #0000001a;
+    }
+
+    .title-gradient {
+        background: linear-gradient(135deg, #A8FF00 0%, #2563eb 50%, #A8FF00 100%);
+        background-size: 200% 200%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .loading-dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 3rem;
+    }
+
+    .loading-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 9999px;
+        background: linear-gradient(to right, #A8FF00, #2563eb);
+        box-shadow: 0 5px 15px #a8ff0066;
+    }
+
+    .loading-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #e5e7eb;
+        text-shadow: 0 0 2px #000000ff;
+        margin-bottom: 2rem;
+    }
+
+    .progress-container {
+        max-width: 28rem;
+        margin: auto;
+    }
+
+    .progress-bar {
+        height: 12px;
+        background-color: #00000060;
+        border-radius: 9999px;
+        overflow: hidden;
+        box-shadow: inset 0 1px 2px #0000000d;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(to right, #A8FF0080, #2563eb80);
+        border-radius: 9999px;
+        position: relative;
+        box-shadow: 0 0 20px #a8ff0080;
+        overflow: hidden;
+    }
+
+    .progress-shine {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, transparent, #ffffff4d, transparent);
+    }
+
+    .floating-box {
+        position: absolute;
+        border-radius: 1rem;
+        filter: blur(4px);
+        z-index: -2;
+    }
+
+    .floating-box.green {
+        top: 25%;
+        left: 25%;
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(to right, #a8ff0066, #2563eb66);
+    }
+
+    .floating-box.purple {
+        bottom: 25%;
+        right: 25%;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(to right, #2563eb66, #a8ff0066);
+    }
+
+    .lightning-bolt {
+        position: absolute;
+        top: 50%;
+        right: 25%;
+        transform: translateY(-50%);
+    }
+
+    .bolt-icon {
+        width: 32px;
+        height: 32px;
+        color: #A8FF00;
+    }
+}
