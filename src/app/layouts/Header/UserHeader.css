@@ -240,3 +240,52 @@
         }
     }
 }
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Khoảng cách giữa chuông và profile */
+    flex-shrink: 0; /* Không cho phép khu vực này bị co lại */
+}
+
+.notification-wrapper {
+    position: relative;
+}
+
+.noti-bell-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #555;
+    cursor: pointer;
+    position: relative;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.noti-bell-btn:hover {
+    color: #c7c4c4; /* Màu chủ đạo Greenlight */
+}
+
+/* Chấm đỏ thông báo */
+.noti-bell-btn .red-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff4d4f;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* Đảm bảo Dropdown hiển thị đúng vị trí */
+.notification-dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    z-index: 1000;
+}

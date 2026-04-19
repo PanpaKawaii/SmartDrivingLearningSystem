@@ -1,8 +1,10 @@
 .user-profile-page {
     /* Define local theme variables to optimize codebase */
     --glass-bg: rgb(15 23 42 / 50%);
-    --glass-border: 1px solid #ffffff0d;
-    --card-border: 1px solid #1e293b;
+    /* --glass-border: 1px solid #ffffff0d;
+    --card-border: 1px solid #1e293b; */
+    --glass-border: none; 
+    --card-border: none;
     --text-muted: #94a3b8;
     --primary-grad: linear-gradient(135deg, #2563eb, #06b6d4);
     --primary-glow: 0 0 15px rgba(59, 130, 246, 0.4);
@@ -40,7 +42,8 @@
             background: var(--glass-bg);
             border-radius: 14px;
             padding: 2rem;
-            border: var(--glass-border);
+            /* border: var(--glass-border); */
+            border: none;
             backdrop-filter: blur(10px);
             transition: .3s;
 
@@ -66,6 +69,8 @@
                     position: relative;
                     width: 110px;
                     height: 110px;
+                    overflow: visible; /* QUAN TRỌNG: Để nút upload không bị cắt mất */
+                    z-index: 15;
 
                     img {
                         width: 100%;
@@ -881,7 +886,7 @@ button:disabled {
 /* Tùy chỉnh riêng cho popup reset trong trường hợp CSS LoginFace có width cố định */
 .reset-password-popup {
     min-width: 400px;
-    background: transparent !important; /* Để dùng màu của modal-content-animation */
+    background: transparent; /* Để dùng màu của modal-content-animation */
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
