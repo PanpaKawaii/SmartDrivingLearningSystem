@@ -121,7 +121,7 @@ export default function LoadingAnimation() {
                         animate={{ opacity: [1, 0.5, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                        Tự nghĩ đoạn text mà chèn vào đây đi baaaa -_-
+                        Bật đèn xanh bắt đầu hành trình chinh phục bằng lái
                     </motion.span>
                 </motion.p>
 
