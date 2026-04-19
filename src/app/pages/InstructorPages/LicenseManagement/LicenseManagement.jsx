@@ -33,8 +33,8 @@ export default function LicenseManagement() {
                 const items = normalizeItems(res);
                 setLicenses(items);
             } catch (error) {
-                setError('Lỗi tải dữ liệu bằng lái. Vui lòng thử lại.');
                 if (error.status == 401) refreshNewToken(user);
+                else setError('Lỗi tải dữ liệu bằng lái. Vui lòng thử lại.');
             } finally {
                 setLoading(false);
             }
@@ -46,9 +46,12 @@ export default function LicenseManagement() {
             // Toggle: 1 (Public) <-> 0 (Hidden)
             await patchData(`DrivingLicenses/${id}`, { }, token);
             setRefresh(r => r + 1);
-        } catch (error) {
+        } catch (error) { 
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
             setError('Lỗi cập nhật trạng thái, vui lòng thử lại.');
-            if (error.status == 401) refreshNewToken(user);
+            }
         }
     };
 

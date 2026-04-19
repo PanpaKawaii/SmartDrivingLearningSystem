@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { QUIZ_DATA } from '../../../../mocks/QUIZ_DATA.js';
 import '../InstructorPages.css';
 
@@ -11,15 +11,19 @@ const getQuestionDifficulty = (number) => {
     return 'Khó';
 };
 
-export default function QuestionDetail() {
+function QuestionDetail() {
     const navigate = useNavigate();
     const { questionId } = useParams();
+    const location = useLocation();
 
+    // Ưu tiên lấy từ state nếu có
     const question = useMemo(() => {
+        if (location.state && location.state.question) {
+            return location.state.question;
+        }
+        // fallback: lấy từ QUIZ_DATA cũ (hoặc có thể fetch từ API nếu cần)
         const matched = Object.values(QUIZ_DATA).find((item) => String(item.number) === String(questionId));
-
         if (!matched) return null;
-
         return {
             id: matched.number,
             content: matched.question,
@@ -32,7 +36,7 @@ export default function QuestionDetail() {
             image: matched.image,
             correctAnswer: matched.correctAnswer,
         };
-    }, [questionId]);
+    }, [questionId, location.state]);
 
     if (!question) {
         return (
@@ -71,31 +75,45 @@ export default function QuestionDetail() {
             <div className='ins-detail-card'>
                 <div className='ins-detail-grid'>
                     <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>STT</span>
-                        <span className='ins-detail-value'>#{question.id}</span>
-                    </div>
-                    <div className='ins-detail-field'>
                         <span className='ins-detail-label'>Chương</span>
-                        <span className='ins-detail-value'>{question.category}</span>
+                        <span className='ins-detail-value'>{question.chapterName || question.category}</span>
                     </div>
                     <div className='ins-detail-field'>
-                        <span className='ins-detail-label'>Loại</span>
-                        <span className='ins-detail-value'>{question.type}</span>
+                        <span className='ins-detail-label'>Bài học</span>
+                        <span className='ins-detail-value'>{question.lessonName || '—'}</span>
+                    </div>
+                    <div className='ins-detail-field'>
+                        <span className='ins-detail-label'>Phân loại</span>
+                        <span className='ins-detail-value'>{question.category || '—'}</span>
+                    </div>
+                    <div className='ins-detail-field'>
+                        <span className='ins-detail-label'>Chủ đề</span>
+                        <span className='ins-detail-value'>{question.topicName || '—'}</span>
+                    </div>
+                    <div className='ins-detail-field'>
+                        <span className='ins-detail-label'>Loại câu hỏi</span>
+                        <span className='ins-detail-value'>{question.type === 'SINGLE' ? 'Đơn lựa chọn' : 'Đa lựa chọn'}</span>
+                    </div>
+                    <div className='ins-detail-field'>
+                        <span className='ins-detail-label'>Trạng thái</span>
+                        <span className={`ins-status-chip ${question.status === 1 ? 'approved' : 'pending'}`}>
+                            <span className='chip-dot'></span>{question.status === 1 ? 'Hoạt động' : 'Nháp'}
+                        </span>
                     </div>
                     <div className='ins-detail-field'>
                         <span className='ins-detail-label'>Độ khó</span>
-                        <span className='ins-detail-value'>{question.difficulty}</span>
+                        <span className='ins-detail-value'>{question.difficulty || '—'}</span>
                     </div>
                     <div className='ins-detail-field'>
                         <span className='ins-detail-label'>Điểm liệt</span>
                         <span className={`ins-status-chip ${question.isDiemLiet ? 'rejected' : 'approved'}`}>
-                            <span className='chip-dot'></span>{question.isDiemLiet ? 'Có' : 'Không'}
+                            <span className='chip-dot'></span>{question.isDiemLiet ? 'Câu điểm liệt' : 'Không'}
                         </span>
                     </div>
-                    <div className='ins-detail-field'>
+                    <div className='ins-detail-field' style={{ gridColumn: 'span 2' }}>
                         <span className='ins-detail-label'>Đáp án đúng</span>
                         <span className='ins-detail-value'>
-                            {question.answers.find((answer) => answer.index === question.correctAnswer)?.label || 'N/A'}
+                            {question.answers?.find((answer) => answer.index === question.correctAnswer || answer.correct)?.label || 'N/A'}
                         </span>
                     </div>
                 </div>
@@ -139,3 +157,5 @@ export default function QuestionDetail() {
         </div>
     );
 }
+
+export default QuestionDetail;

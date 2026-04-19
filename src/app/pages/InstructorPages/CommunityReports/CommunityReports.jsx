@@ -41,7 +41,7 @@ const getReportTargetLabel = (report) => {
 };
 
 export default function CommunityReports() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
@@ -80,8 +80,12 @@ export default function CommunityReports() {
                     totalCount: res?.totalCount || prev.totalCount,
                     totalPages: res?.totalPages || 1,
                 }));
-            } catch (err) {
-                setError('Lỗi tải dữ liệu');
+            } catch (error) {
+                if (error.status === 401) {
+                    refreshNewToken(user);
+                } else {
+                    setError('Lỗi tải dữ liệu');
+                }
             } finally {
                 setLoading(false);
             }
@@ -130,8 +134,12 @@ export default function CommunityReports() {
             const post = await fetchData(`ForumPosts/${postId}`, token);
             setViewPost(post || null);
             setHighlightCommentId(commentId || null);
-        } catch (err) {
-            setError('Lỗi tải chi tiết bài viết');
+        } catch (error) {
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
+                setError('Lỗi tải chi tiết bài viết');
+            }
             setViewPost(null);
             setHighlightCommentId(null);
         } finally {
@@ -155,13 +163,17 @@ export default function CommunityReports() {
 
             await patchData(endpoint, { title, content }, token);
         } catch (error) {
-            const apiErrors = error?.payload?.errors;
-            if (apiErrors && typeof apiErrors === 'object') {
-                const firstKey = Object.keys(apiErrors)[0];
-                const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
-                return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
+                const apiErrors = error?.payload?.errors;
+                if (apiErrors && typeof apiErrors === 'object') {
+                    const firstKey = Object.keys(apiErrors)[0];
+                    const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
+                    return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
+                }
+                return { error: error?.message || 'Xử lý báo cáo thất bại.' };
             }
-            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
         }
 
         setRefresh((current) => current + 1);

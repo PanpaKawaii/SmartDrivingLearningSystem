@@ -12,7 +12,7 @@ const defaultChapter = {
 };
 
 export default function ChapterModal({ isOpen, onClose, onSave, chapter: chapterProp, action, defaultLicenseId }) {
-    const { user } = useAuth?.() || {};
+    const { user, refreshNewToken } = useAuth?.() || {};
     const token = user?.token || '';
 
     const [chapter, setChapter] = useState({ ...defaultChapter });
@@ -80,8 +80,12 @@ export default function ChapterModal({ isOpen, onClose, onSave, chapter: chapter
                 onSave && onSave(res, 'create');
             }
             onClose();
-        } catch (err) {
-            setError(err?.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+        } catch (error) {
+            if (error.status === 401) {
+                refreshNewToken(user);
+            } else {
+                setError(error?.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+            }
         } finally {
             setSaving(false);
         }
