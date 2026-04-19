@@ -5,14 +5,14 @@
     width: 100%;
     /* background-color: #8000ff; */
 
-    .left,
-    .right {
+    .left-area,
+    .right-area {
         flex: 1;
         max-width: 360px;
         /* background-color: #80ff80; */
     }
 
-    .center {
+    .center-area {
         width: 100%;
         max-width: 720px;
         display: flex;

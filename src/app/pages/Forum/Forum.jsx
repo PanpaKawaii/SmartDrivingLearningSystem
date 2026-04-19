@@ -91,13 +91,13 @@ export default function Forum() {
     return (
         <div className='forum-container'>
             <StarsBackground />
-            <div className='left'></div>
-            <div className='center'>
+            <div className='left-area'></div>
+            <div className='center-area'>
                 <div className='list-forum-card'>
                     <div className='control-heading'>
                         <div className='create-post'>
                             <div className='image'>
-                                <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                                <img src={user?.avatar || DefaultAvatar} alt={user?.name} />
                             </div>
                             <button className='btn' onClick={() => setOpenCreatePost(true)} disabled={!user}>
                                 Tạo bài viết
@@ -135,7 +135,7 @@ export default function Forum() {
                     ))}
                 </div>
             </div>
-            <div className='right'></div>
+            <div className='right-area'></div>
 
             {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
