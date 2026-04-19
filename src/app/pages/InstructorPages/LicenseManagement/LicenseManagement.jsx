@@ -20,6 +20,8 @@ export default function LicenseManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
     const [showModal, setShowModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -29,9 +31,23 @@ export default function LicenseManagement() {
             setLoading(true);
             setError(null);
             try {
-                const res = await fetchData(`DrivingLicenses/all`, token);
+                const query = new URLSearchParams({
+                    page: serverPagination.page,
+                    pageSize: serverPagination.pageSize,
+                });
+                if (searchTerm.trim()) {
+                    query.set('name', searchTerm.trim());
+                }
+                const res = await fetchData(`DrivingLicenses/all?${query.toString()}`, token);
                 const items = normalizeItems(res);
                 setLicenses(items);
+                setServerPagination(prev => ({
+                    ...prev,
+                    page: res?.page || prev.page,
+                    pageSize: res?.pageSize || prev.pageSize,
+                    totalCount: res?.totalCount ?? prev.totalCount,
+                    totalPages: res?.totalPages || 1,
+                }));
             } catch (error) {
                 if (error.status == 401) refreshNewToken(user);
                 else setError('Lỗi tải dữ liệu bằng lái. Vui lòng thử lại.');
@@ -39,7 +55,7 @@ export default function LicenseManagement() {
                 setLoading(false);
             }
         })();
-    }, [refresh, token]);
+    }, [refresh, token, searchTerm, serverPagination.page, serverPagination.pageSize]);
 
     const handleToggleStatus = async (id) => {
         try {
@@ -63,6 +79,22 @@ export default function LicenseManagement() {
         }
     };
 
+    const handleSearch = (search) => {
+        setSearchTerm(search);
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handlePageChange = (page) => {
+        setServerPagination(prev => ({ ...prev, page }));
+    };
+
+    const handleClearFilter = () => {
+        if(searchTerm.trim()){
+            setSearchTerm('');
+        }
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
     const handleNavigateChapters = (row) => {
         navigate(`/instructor/chapter-management?licenseId=${row.id}&licenseName=${encodeURIComponent(row.name)}`);
     };
@@ -70,7 +102,7 @@ export default function LicenseManagement() {
     const columns = [
         {
             key: 'index', label: 'STT', width: '56px',
-            render: (_, __, rIdx) => rIdx + 1,
+            render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1,
         },
         { key: 'name', label: 'Tên bằng lái' },
         { key: 'description', label: 'Mô tả' },
@@ -134,6 +166,15 @@ export default function LicenseManagement() {
         },
     ];
 
+    // Context Badge 
+    const activeBadge = (() => {
+        let badge = [];
+        if(searchTerm.trim()){
+            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearFilter() });
+        }
+        return badge;
+    })();
+
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
@@ -150,11 +191,24 @@ export default function LicenseManagement() {
             </div>
 
             <DataTable
-                title={`Danh sách bằng lái (${licenses.length})`}
+                title={`Danh sách bằng lái (${serverPagination.totalCount})`}
                 columns={columns}
                 data={licenses}
                 loading={loading}
                 error={error}
+                serverPagination={serverPagination}
+                onPageChange={handlePageChange}
+                onSearch={handleSearch}
+                searchValue={searchTerm}
+                onSearchValueChange={setSearchTerm}
+                contextBadge={ activeBadge.length > 0 ? activeBadge : null }
+                actions={
+                    <>
+                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                            <i className='fa-solid fa-rotate-right'></i> Làm mới
+                        </button>
+                    </>
+                }
             />
 
             <LicenseModal

@@ -38,6 +38,7 @@ export default function LessonManagement() {
     // Filter state
     const [filterLicense, setFilterLicense] = useState('');
     const [filterChapter, setFilterChapter] = useState(chapterIdParam);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [selectedItem, setSelectedItem] = useState(null);
 
@@ -95,6 +96,9 @@ export default function LessonManagement() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
+                if (searchTerm.trim()) {
+                    query.set('name', searchTerm.trim());
+                }
                 let items = [];
                 if (filterChapter) {
                     query.set('questionChapterId', filterChapter);
@@ -114,6 +118,10 @@ export default function LessonManagement() {
                     if (chapterIds.length > 0) {
                         const res = await fetchData(`QuestionLessons?page=1&pageSize=5000`, token);
                         items = normalizeItems(res).filter(lesson => chapterIds.includes(lesson.questionChapterId));
+                        // Apply search filter if needed
+                        if (searchTerm.trim()) {
+                            items = items.filter(lesson => lesson.name?.toLowerCase().includes(searchTerm.toLowerCase()));
+                        }
                         setServerPagination(prev => ({
                             ...prev,
                             page: 1,
@@ -147,7 +155,7 @@ export default function LessonManagement() {
             }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense]);
+    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense, searchTerm]);
 
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
@@ -188,24 +196,47 @@ export default function LessonManagement() {
     };
 
     const handleClearBadge = () => {
-        setFilterLicense('');
-        setFilterChapter('');
+        if(filterLicense){
+            setFilterLicense('');
+        }
+        if(filterChapter){
+            setFilterChapter('');
+        }
         setSearchParams({});
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+    const handleClearSearch = () => {
+        setSearchTerm('');
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleSearch = (search) => {
+        setSearchTerm(search);
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };    
     const handleSave = () => {
-        setRefresh(r => r + 1);
         setShowModal(false);
         setSelectedItem(null);
+        setSearchParams({});
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        setRefresh(r => r + 1);
     };
 
+
     // Label cho context badge
-    const activeBadgeText = (() => {
+    const activeBadge = (() => {
+        let badge = [];
+        if(searchTerm.trim()){
+            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearSearch() });
+        }
         if (filterChapter) {
             const ch = allChapters.find(c => c.id === filterChapter);
-            return chapterNameParam || ch?.name || '';
+            badge.push({ text: chapterNameParam || ch?.name || '', onClear: () => handleClearBadge() });
+        } else if (filterLicense) {
+            const license = drivingLicenses.find(l => l.id === filterLicense);
+            badge.push({ text: license?.name || '', onClear: () => handleClearBadge() });
         }
-        return '';
+        return badge;
     })();
 
     const columns = [
@@ -273,7 +304,10 @@ export default function LessonManagement() {
                 data={lessons}
                 loading={loading}
                 serverPagination={serverPagination}
-                onPageChange={handlePageChange} 
+                onPageChange={handlePageChange}
+                onSearch={handleSearch}
+                searchValue={searchTerm}
+                onSearchValueChange={setSearchTerm}
                 filters={[
                     {
                         id: 'license-filter',
@@ -291,11 +325,7 @@ export default function LessonManagement() {
                         disabled: !filterLicense,
                     },
                 ]}
-                contextBadge={
-                    activeBadgeText
-                        ? { text: activeBadgeText, onClear: handleClearBadge }
-                        : null
-                }
+                contextBadge={ activeBadge.length > 0 ? activeBadge : null }
                 actions={
                     <>
                     <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
