@@ -7,16 +7,14 @@ export default function Pagination({
     totalPages = 0,
     onPageChange = () => { },
 }) {
-    // if (totalPages <= 1) return null;
-
     useEffect(() => {
         if (currentPage > totalPages) goToLast();
     }, [totalPages]);
 
     const goToFirst = () => onPageChange(1);
-    const goToLast = () => onPageChange(totalPages);
+    const goToLast = () => onPageChange(Math.max(1, totalPages));
     const goToPrev = () => onPageChange(Math.min(totalPages, (Math.max(currentPage - 1, 1))));
-    const goToNext = () => onPageChange(Math.min(currentPage + 1, totalPages));
+    const goToNext = () => onPageChange(Math.min(currentPage + 1, 1));
 
     // Hiển thị tối đa 3 trang
     const getPageNumbers = () => {

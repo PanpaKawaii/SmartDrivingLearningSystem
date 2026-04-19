@@ -48,6 +48,15 @@
                 font-size: .75rem;
             }
         }
+
+        .pin-ellipsis {
+            display: flex;
+            gap: 20px;
+
+            .fa-bookmark {
+                color: #FFC800;
+            }
+        }
     }
 
     .content {
