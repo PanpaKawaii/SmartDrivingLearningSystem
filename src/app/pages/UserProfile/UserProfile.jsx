@@ -87,7 +87,7 @@ export default function UserProfile() {
                         simulationSessionCount: result.simulationSessions?.length || 0,
                         lessonProgressCount: result.lessonProgresses?.length || 0,
                         drivingLicenseIds: result.userLicenses?.map(ul => ul.drivingLicenseId) || [], // Lưu danh sách ID
-                        drivingLicenses: result.userLicenses?.map(ul => ul.drivingLicense?.name) || [], // Lưu danh sách tên (để hiển thị ở View)
+                        // drivingLicenses: result.userLicenses?.map(ul => ul.drivingLicense?.name) || [], // Lưu danh sách tên (để hiển thị ở View)
                     });
                 }
                 // {activeTab === 'progress' && <LearningProgress stats={formData} />}
