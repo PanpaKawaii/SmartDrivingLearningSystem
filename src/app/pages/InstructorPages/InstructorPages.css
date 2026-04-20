@@ -107,17 +107,6 @@
 
 
 
-.ins-filter-select {
-    padding: 8px 12px;
-    background-color: var(--ins-surface);
-    border: 1px solid rgba(95, 117, 165, 0.15);
-    border-radius: 8px;
-    color: var(--ins-on-surface);
-    font-size: 0.8125rem;
-    font-family: var(--ins-font-body);
-    cursor: pointer;
-    height: auto;
-}
 
 .ins-form-static {
     padding: 10px 12px;

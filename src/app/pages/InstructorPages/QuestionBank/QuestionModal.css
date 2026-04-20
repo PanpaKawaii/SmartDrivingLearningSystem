@@ -21,16 +21,16 @@
 }
 
 .ins-answer-marker.correct {
-    background: var(--ins-primary-container);
-    color: var(--ins-on-primary-container);
-    border-color: var(--ins-primary);
+    background: color-mix(in srgb, var(--ins-success) 20%, var(--ins-surface-high));
+    color: var(--ins-success);
+    border-color: var(--ins-success);
 }
 
 .ins-answer-input {
     border-color: var(--ins-outline);
 }
 .ins-answer-input.correct {
-    border-color: var(--ins-primary);
+    border-color: var(--ins-success);
 }
 
 .ins-tag-chip {
@@ -77,6 +77,7 @@
     display: flex;
     gap: 12px;
     align-items: flex-start;
+    
 }
 
 .ins-answer-input-container {

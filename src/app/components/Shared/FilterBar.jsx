@@ -1,4 +1,5 @@
 import React from 'react';
+import './FilterBar.css';
 
 export default function FilterBar({
     searchOptions = [],
@@ -18,7 +19,7 @@ export default function FilterBar({
     };
 
     return (
-        <div className='ins-filter-bar' style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <div className='ins-filter-bar'>
             {searchOptions.map((opt, index) => (
                 <input
                     key={index}
