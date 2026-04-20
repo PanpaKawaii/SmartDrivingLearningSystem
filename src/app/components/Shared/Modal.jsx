@@ -1,6 +1,6 @@
 import './Modal.css';
 
-export default function Modal({ isOpen, onClose, title, children, footer, wide }) {
+export default function Modal({ isOpen, onClose, title, children, footer, wide, message }) {
     if (!isOpen) return null;
 
     return (
@@ -13,7 +13,12 @@ export default function Modal({ isOpen, onClose, title, children, footer, wide }
                     </button>
                 </div>
                 <div className='ins-modal-body'>{children}</div>
-                {footer && <div className='ins-modal-footer'>{footer}</div>}
+                {(footer || message) && (
+                    <div className='ins-modal-footer'>
+                        <div className='ins-modal-footer-message'>{message}</div>
+                        <div className='ins-modal-footer-actions'>{footer}</div>
+                    </div>
+                )}
             </div>
         </div>
     );
