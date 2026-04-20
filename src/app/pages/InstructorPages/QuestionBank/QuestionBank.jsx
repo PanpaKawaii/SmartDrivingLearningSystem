@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import FilterBar from '../../../components/Shared/FilterBar';
-import Modal from '../../../components/Shared/Modal';
+import QuestionModal from './QuestionModal';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import '../InstructorPages.css';
@@ -50,6 +50,7 @@ export default function QuestionBank() {
     const chapterIdParam = searchParams.get('chapterId') || '';
 
     const [showModal, setShowModal] = useState(false);
+    const [editingQuestion, setEditingQuestion] = useState(null);
     const [questions, setQuestions] = useState([]);
     const [allLessons, setAllLessons] = useState([]);
     const [allChapters, setAllChapters] = useState([]);
@@ -302,7 +303,7 @@ export default function QuestionBank() {
                     >
                         <i className='fa-solid fa-eye'></i>
                     </button>
-                    <button className='ins-action-btn edit' title='Sửa'>
+                    <button className='ins-action-btn edit' title='Sửa' onClick={() => { setEditingQuestion(row.rawQuestion); setShowModal(true); }}>
                         <i className='fa-solid fa-pen'></i>
                     </button>
                     <button
@@ -346,7 +347,7 @@ export default function QuestionBank() {
                             <i className='fa-solid fa-arrow-left'></i> Quay lại
                         </button>
                     )}
-                    <button className='ins-btn ins-btn-primary' onClick={() => setShowModal(true)}>
+                    <button className='ins-btn ins-btn-primary' onClick={() => { setEditingQuestion(null); setShowModal(true); }}>
                         <i className='fa-solid fa-plus'></i> Thêm câu hỏi
                     </button>
                 </div>
@@ -397,42 +398,12 @@ export default function QuestionBank() {
 
             {error && <div className='ins-error-banner' style={{ marginTop: 12 }}><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
 
-            <Modal
+            <QuestionModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                title='Thêm câu hỏi mới'
-                footer={
-                    <>
-                        <button className='ins-btn ins-btn-secondary' onClick={() => setShowModal(false)}>Hủy</button>
-                        <button className='ins-btn ins-btn-primary'>Lưu câu hỏi</button>
-                    </>
-                }
-            >
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Nội dung câu hỏi</label>
-                    <textarea className='ins-form-textarea' placeholder='Nhập nội dung câu hỏi...'></textarea>
-                </div>
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Chương</label>
-                    <select className='ins-form-select'>
-                        <option>Luật giao thông</option>
-                        <option>Kỹ thuật lái xe</option>
-                        <option>Biển báo</option>
-                    </select>
-                </div>
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Hạng bằng lái</label>
-                    <select className='ins-form-select'>
-                        <option>A1</option><option>A2</option><option>B1</option><option>B2</option>
-                    </select>
-                </div>
-                <div className='ins-form-group'>
-                    <label className='ins-form-label'>Độ khó</label>
-                    <select className='ins-form-select'>
-                        <option>Dễ</option><option>Trung bình</option><option>Khó</option>
-                    </select>
-                </div>
-            </Modal>
+                onSuccess={() => setRefresh(r => r + 1)}
+                initialData={editingQuestion}
+            />
         </div>
     );
 }

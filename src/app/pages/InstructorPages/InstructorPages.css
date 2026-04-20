@@ -406,7 +406,7 @@
 .ins-detail-empty i {
     font-size: 2rem;
     color: #f59e0b;
-
+}
     /* Entity Detail Section - for report drill-down display */
     .ins-report-entity-detail {
         border: 1px solid rgba(95, 117, 165, 0.18);
@@ -673,4 +673,48 @@
         border-radius: 50%;
         background: currentColor;
     }
+
+
+.ins-answer-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--ins-outline);
+    transition: all 0.2s ease;
+    background: var(--ins-surface-high);
+    color: var(--ins-on-surface);
+}
+
+.ins-answer-marker.correct {
+    background: var(--ins-primary-container);
+    color: var(--ins-on-primary-container);
+    border-color: var(--ins-primary);
+}
+
+.ins-answer-input {
+    border-color: var(--ins-outline);
+}
+.ins-answer-input.correct {
+    border-color: var(--ins-primary);
+}
+
+.ins-tag-chip {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--ins-outline);
+    background: transparent;
+    color: var(--ins-on-surface);
+}
+
+.ins-tag-chip.selected {
+    border-color: var(--tag-color, var(--ins-primary));
+    background: color-mix(in srgb, var(--tag-color, var(--ins-primary)) 20%, transparent);
+    color: var(--tag-color, var(--ins-primary));
 }
