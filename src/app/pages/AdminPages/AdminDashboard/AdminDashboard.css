@@ -299,3 +299,94 @@
     .admin-dashboard .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
     .admin-dashboard .dashboard-columns { grid-template-columns: 1fr; }
 }
+
+/* Container bọc header */
+.dashboard-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Đổi thành center để cân đối hơn */
+    margin-bottom: 25px;
+    padding: 10px 0;
+}
+
+/* Nút Export phong cách Glassmorphism */
+.ins-btn-export {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05); /* Nền mờ nhẹ */
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px); /* Hiệu ứng làm mờ nền */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ins-btn-export i {
+    font-size: 1rem;
+    color: #4ade80; /* Màu xanh lá đặc trưng cho Excel/Báo cáo */
+    transition: transform 0.3s ease;
+}
+
+/* Hiệu ứng khi Hover */
+.ins-btn-export:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #302d6a; /* Đổi màu viền sang xanh lá khi hover */
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(74, 222, 128, 0.15); /* Đổ bóng màu xanh nhẹ */
+    transform: translateY(-2px);
+}
+
+.ins-btn-export:hover i {
+    transform: scale(1.2);
+    color: #ffffff; /* Icon chuyển trắng khi hover cùng text */
+}
+
+/* Hiệu ứng khi Click */
+.ins-btn-export:active {
+    transform: translateY(0);
+}
+
+/* Trạng thái Loading/Disabled */
+.ins-btn-export:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ins-btn-export:disabled i {
+    color: inherit;
+}
+
+/* Thêm hiệu ứng xoay icon nếu đang loading */
+.ins-btn-export.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-header-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .ins-btn-export {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+    }
+}

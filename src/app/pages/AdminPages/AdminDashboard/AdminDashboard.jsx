@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DataTable, StatsCard } from '../../../components/Shared';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
-import { fetchData } from '../../../../mocks/CallingAPI';
+import { fetchData, fetchBlob } from '../../../../mocks/CallingAPI';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -10,6 +10,7 @@ export default function AdminDashboard() {
     const navigate = useNavigate();
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [exporting, setExporting] = useState(false);
 
     const loadDashboardData = useCallback(async () => {
         if (!authUser?.token) return;
@@ -34,6 +35,50 @@ export default function AdminDashboard() {
     useEffect(() => {
         loadDashboardData();
     }, [loadDashboardData]);
+
+    // Hàm xử lý xuất báo cáo
+    const handleExportReport = async () => {
+        if (!authUser?.token || exporting) return;
+
+        try {
+            setExporting(true);
+
+            const blob = await fetchBlob('SystemConfigs/dashboard-summary/export', authUser.token);
+
+            // Tạo URL từ Blob và thực hiện tải xuống
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+
+            // Đặt tên file (nên khớp với định dạng server trả về, vd: .xlsx hoặc .pdf)
+            const fileName = `Bao_Cao_He_Thong_${new Date().toISOString().split('T')[0]}.xlsx`;
+            a.download = fileName;
+
+            document.body.appendChild(a);
+            a.click();
+
+            // Dọn dẹp bộ nhớ
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+        } catch (err) {
+            // Xử lý Refresh Token nếu lỗi 401 (giống loadDashboardData)
+            if (err.status === 401) {
+                const refreshResult = await refreshNewToken(authUser);
+                if (refreshResult?.message === 'Logout') {
+                    logout();
+                    navigate('/', { state: { openLogin: 'true' } });
+                } else {
+                    return handleExportReport(); // Thử lại sau khi có token mới
+                }
+            } else {
+                console.error("Export error:", err);
+                alert("Không thể xuất báo cáo. Lỗi: " + err.message);
+            }
+        } finally {
+            setExporting(false);
+        }
+    };
 
     if (loading) return <div className='admin-dashboard'><h3>Đang tải dữ liệu...</h3></div>;
     if (!summary) return <div className='admin-dashboard'><h3>Không thể tải dữ liệu.</h3></div>;
@@ -86,14 +131,25 @@ export default function AdminDashboard() {
 
     return (
         <div className='admin-dashboard'>
-            <div className='dashboard-greeting'>
-                <h1>Bảng điều khiển hệ thống</h1>
-                <p>Tổng quan vận hành tháng {summary.month}/{summary.year}</p>
+            <div className='dashboard-header-wrapper'>
+                <div className='dashboard-greeting'>
+                    <h1>Bảng điều khiển hệ thống</h1>
+                    <p>Tổng quan vận hành tháng {summary.month}/{summary.year}</p>
+                </div>
+                {/* Nút Xuất báo cáo mới */}
+                <button
+                    className={`ins-btn-export ${exporting ? 'loading' : ''}`}
+                    onClick={handleExportReport}
+                    disabled={exporting}
+                >
+                    <i className={`fa-solid ${exporting ? 'fa-spinner fa-spin' : 'fa-file-export'}`}></i>
+                    {exporting ? 'Đang xuất...' : 'Xuất báo cáo hệ thống'}
+                </button>
             </div>
 
             <div className='dashboard-stats'>
                 <StatsCard
-                    icon='fa-solid fa-dollar-sign' // Icon này cực kỳ phổ biến
+                    icon='fa-solid fa-dollar-sign'
                     iconColor='green'
                     value={summary.totalPaymentAmount.toLocaleString('vi-VN') + ' đ'}
                     label='Doanh thu tháng này'
