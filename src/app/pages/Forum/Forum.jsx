@@ -79,19 +79,25 @@ export default function Forum() {
         return matchStatus && matchTopic;
     }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
+    const pinPosts = FORUMPOSTs.filter(pp => {
+        let matchStatus = false;
+        if (selectedStatus == '') matchStatus = pp.status == '5';
+        return matchStatus;
+    }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
+    console.log('pinPosts', pinPosts);
     const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
     console.log('selectedPost', selectedPost);
 
     return (
         <div className='forum-container'>
             <StarsBackground />
-            <div className='left'></div>
-            <div className='center'>
+            <div className='left-area'></div>
+            <div className='center-area'>
                 <div className='list-forum-card'>
                     <div className='control-heading'>
                         <div className='create-post'>
                             <div className='image'>
-                                <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                                <img src={user?.avatar || DefaultAvatar} alt={user?.name} />
                             </div>
                             <button className='btn' onClick={() => setOpenCreatePost(true)} disabled={!user}>
                                 Tạo bài viết
@@ -101,11 +107,12 @@ export default function Forum() {
                             <i className='fa-solid fa-arrow-rotate-right' />
                         </button>
                         <div className='result'>
-                            {filteredFORUMPOSTs?.length}
+                            {filteredFORUMPOSTs?.length + pinPosts?.length}
                         </div>
                         <div className='filters'>
                             <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
                                 <option value=''>Tất cả</option>
+                                <option value='5'>Bảng tin</option>
                                 <option value='-2'>Đã thích</option>
                                 <option value='1'>Của tôi</option>
                                 <option value='4'>Đã ẩn</option>
@@ -121,14 +128,14 @@ export default function Forum() {
                             </select>
                         </div>
                     </div>
-                    {filteredFORUMPOSTs.map((post, i) => (
+                    {[...pinPosts, ...filteredFORUMPOSTs].map((post, i) => (
                         <React.Fragment key={i}>
                             <ForumCard post={post} setSelectedPostId={setSelectedPostId} setRefresh={setRefresh} parentLoading={loading} />
                         </React.Fragment>
                     ))}
                 </div>
             </div>
-            <div className='right'></div>
+            <div className='right-area'></div>
 
             {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>

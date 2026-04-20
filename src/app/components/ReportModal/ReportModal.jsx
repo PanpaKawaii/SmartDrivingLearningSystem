@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { fetchData, postData, uploadMedia, deleteMedia } from '../../../mocks/CallingAPI';
+import { fetchData, postData, uploadMedia } from '../../../mocks/CallingAPI';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import AutoResizeTextarea from '../AutoResizeTextarea/AutoResizeTextarea';
 import CloudsBackground from '../CloudsBackground/CloudsBackground';
+import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput';
+import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect';
 import TrafficLight from '../TrafficLight/TrafficLight';
 
 import './ReportModal.css';
@@ -15,6 +17,8 @@ export default function ReportModal({
 
     const refContent = useRef(null);
 
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [content, setContent] = useState('');
@@ -22,6 +26,7 @@ export default function ReportModal({
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [createStatus, setCreateStatus] = useState('');
 
     const [imageUrl, setImageUrl] = useState(null);
     const fileInputRef = useRef(null);
@@ -50,9 +55,8 @@ export default function ReportModal({
         const token = user?.token || '';
         try {
             const result = await uploadMedia([file], user?.id, 'ReportImage', token);
-            //const result = await postData('media/upload', ImageData, token);
-            //console.log('result', result);
             console.log('result', result[0]?.url);
+
             setImageUrl(result[0]?.url);
         } catch (error) {
             console.error('Error', error);
@@ -103,8 +107,13 @@ export default function ReportModal({
             const result = await postData('Reports', ReportData, token);
             console.log('result', result);
 
+            setLoading(false);
+            setCreateStatus('success');
+            await sleep(2000);
+
             onClose();
         } catch (error) {
+            setCreateStatus('fail');
             console.error('Error', error);
             setError(error);
             if (error.status == 401) refreshNewToken(user);
@@ -128,16 +137,28 @@ export default function ReportModal({
     return (
         <div className='report-modal-container'>
             <div className='report-information'>
-                <input type='text' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly />
+                <input type='text' className='input-read-only' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly />
             </div>
             <div className='report-information'>
-                <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Tiêu đề' />
-                <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                    <option value='' disabled>Chọn loại báo cáo</option>
-                    {REPORTCATEGORIes?.map((report, index) => (
-                        <option key={index} value={report.id}>{report.name}</option>
-                    ))}
-                </select>
+                <div className='form-group'>
+                    <MovingLabelInput
+                        type={'text'}
+                        value={title || ''}
+                        onValueChange={(propE) => setTitle(propE)}
+                        label={'Tiêu đề'}
+                        labelStyle={'left moving'}
+                    />
+                </div>
+                <div className='form-group'>
+                    <StyleLabelSelect
+                        id={`select-category`}
+                        list={REPORTCATEGORIes}
+                        value={category}
+                        onValueChange={(propE) => setCategory(propE)}
+                        label={'Phân loại'}
+                        labelStyle={'left'}
+                    />
+                </div>
                 <button className='btn' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
             </div>
             <div className='upload-image'>
@@ -151,6 +172,11 @@ export default function ReportModal({
                     </div>
                 }
             </div>
+            {createStatus &&
+                <div className={`create-status ${createStatus}`}>
+                    {createStatus == 'success' ? 'Báo cáo thành công! Tự động tắt popup.' : 'Báo cáo thất bại, vui lòng thử lại sau.'}
+                </div>
+            }
             <form className='content-area'>
                 <AutoResizeTextarea
                     refer={refContent}

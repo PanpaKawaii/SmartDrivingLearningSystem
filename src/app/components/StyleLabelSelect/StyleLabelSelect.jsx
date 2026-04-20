@@ -23,7 +23,7 @@ export default function StyleLabelSelect({
                 className={`select ${extraClassName}`}
                 disabled={disable}
             >
-                <option value={''} className='option'>--</option>
+                <option value={''} className='option' disabled>--</option>
                 {list.map((item, index) => (
                     <option key={index} value={item.id} className={`option ${item.extraOptionClassName || ''}`}>{item.name}</option>
                 ))}

@@ -183,17 +183,17 @@ export default function ForumComment({
                             <div className='next-reply'>
                                 <div key={i} className='content'>
                                     <div className='image head-block'>
-                                        <img src={comment.user?.image || DefaultAvatar} alt={comment.user?.email} />
+                                        <img src={comment.user?.avatar || DefaultAvatar} alt={comment.user?.email} />
                                         <div className={`vertical-line ${(COMMENTs.filter(c => c.replyId == comment.id)?.length != 0 || comment.id == inputComment) ? 'line-img' : 'no-line'}`}></div>
                                     </div>
                                     <div className='comment-block'>
                                         <div className={`name-comment ${(user?.id && comment.userId == user?.id) ? 'my-comment' : ''} ${isReportedComment ? 'reported-comment' : ''}`}>
                                             <div className='name-btn-list'>
                                                 <div className='name'>{comment.user?.name}</div>
-                                                {allowButtonListAction &&
+                                                {allowButtonListAction && user &&
                                                     <ButtonList
                                                         list={[
-                                                            {
+                                                            (comment.userId != user?.id) && {
                                                                 name: 'report',
                                                                 onToggle: () => setOpenReport({
                                                                     simulationId: null,
@@ -203,7 +203,7 @@ export default function ForumComment({
                                                                 }),
                                                                 disabled: false,
                                                             },
-                                                            (user?.id && comment.userId == user?.id) && {
+                                                            (comment.userId == user?.id) && {
                                                                 name: 'takedown',
                                                                 onToggle: () => TakeDownComment(comment.id),
                                                                 disabled: loading,
@@ -237,7 +237,7 @@ export default function ForumComment({
                                         <div className='next-reply'>
                                             <div className='content input-reply'>
                                                 <div className='image head-block'>
-                                                    <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                                                    <img src={user?.avatar || DefaultAvatar} alt={user?.email} />
                                                 </div>
                                                 <form className='comment-area'>
                                                     <AutoResizeTextarea
@@ -276,7 +276,7 @@ export default function ForumComment({
 
             <div className='content input-comment'>
                 <div className='image head-block'>
-                    <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                    <img src={user?.avatar || DefaultAvatar} alt={user?.email} />
                 </div>
                 <div className='comment-area'>
                     <AutoResizeTextarea

@@ -2,9 +2,10 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 
     .user-information {
+        margin: 0 0 8px;
         display: flex;
         align-items: start;
         gap: 12px;
@@ -33,30 +34,24 @@
         display: flex;
         gap: 20px;
 
-        input {
-            flex: 2;
-            color: #fff;
-            background-color: #0E1527;
-            border: 2px solid #374e6e80;
-            box-sizing: border-box;
-        }
-
-        select {
-            flex: 1;
-            color: #fff;
-            background-color: #0E1527;
-            border: 2px solid #374e6e80;
-
-            option {
-                background-color: #0f172a;
-            }
-        }
-
         .btn {
             flex: 1;
             height: 38px;
             color: #fff;
             background: linear-gradient(to right, #3b82f6, #06b6d4);
+        }
+    }
+
+    .create-status {
+        text-align: center;
+        font-weight: bold;
+
+        &.success {
+            color: #4ade80;
+        }
+
+        &.fail {
+            color: #f87171;
         }
     }
 

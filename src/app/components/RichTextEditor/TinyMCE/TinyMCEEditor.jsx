@@ -40,7 +40,7 @@ export default function TinyMCEEditor({ value = '', onChange, useImage = true, e
 
   const basePlugins = [
     'accordion', 'advlist', 'lists', 'anchor', 'charmap', 'emoticons', 
-    'code', 'codesample', 'directionality', 'fullscreen', 'preview', 
+    'code', 'codesample', 'directionality', 'fullscreen',
     'help', 'insertdatetime', 'nonbreaking', 'pagebreak', 'quickbars', 
     'searchreplace', 'table', 'visualblocks', 'visualchars', 'wordcount'
   ];
@@ -50,7 +50,7 @@ export default function TinyMCEEditor({ value = '', onChange, useImage = true, e
   const mediaToolbar = useImage ? 'link image | ' : '';
   
   const activeToolbar = 
-    `fullscreen preview | undo redo | blocks fontfamily fontsizeinput forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | searchreplace | ltr rtl | bullist numlist outdent indent | accordion codesample ${mediaToolbar}table emoticons charmap | pagebreak nonbreaking insertdatetime | visualblocks visualchars | removeformat code help`;
+    `fullscreen | undo redo | blocks fontfamily fontsizeinput forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | searchreplace | ltr rtl | bullist numlist outdent indent | accordion codesample ${mediaToolbar}table emoticons charmap | pagebreak nonbreaking insertdatetime | visualblocks visualchars | removeformat code help`;
 
   // lấy url ảnh từ content
   const extractImageUrls = html => {

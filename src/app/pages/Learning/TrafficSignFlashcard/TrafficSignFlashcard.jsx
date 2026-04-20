@@ -58,8 +58,8 @@ export default function TrafficSignFlashcard() {
         const relatedAnswers = [{
             id: i,
             content: <>
-                <h2 style={{ marginBottom: 12 }}>{q.name}</h2>
-                <p>{q.description}</p>
+                <h2 style={{ marginBottom: 12, fontSize: '1.75rem' }}>{q.name}</h2>
+                <p style={{ fontSize: '1.25rem' }}>{q.description}</p>
             </>,
             isCorrect: true,
         }];

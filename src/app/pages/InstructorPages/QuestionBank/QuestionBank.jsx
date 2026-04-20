@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import Modal from '../../../components/Shared/Modal';
-import { fetchData, putData } from '../../../../mocks/CallingAPI';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import '../InstructorPages.css';
+import { li } from 'framer-motion/client';
 
 const normalizeItems = (payload) => {
     if (Array.isArray(payload)) return payload;
@@ -16,14 +17,6 @@ const getQuestionType = (question) => {
     if (question?.type) return String(question.type).toUpperCase();
     const correctCount = (question?.answers || []).filter((a) => Boolean(a?.isCorrect ?? a?.correct)).length;
     return correctCount > 1 ? 'MULTI' : 'SINGLE';
-};
-
-const getQuestionDifficulty = (question) => {
-    const name = question?.difficultyLevel?.name || question?.questionCategory?.name || '';
-    if (/de|dễ/i.test(name)) return 'Dễ';
-    if (/trung|medium/i.test(name)) return 'Trung bình';
-    if (/kho|khó|hard/i.test(name)) return 'Khó';
-    return '—';
 };
 
 const isDiemLietQuestion = (question) => Boolean(
@@ -79,11 +72,13 @@ export default function QuestionBank() {
                     query.set('questionLessonId', lessonIdParam);
                 }
                 if (chapterIdParam) {
-                    query.set('questionCategory.questionLesson.questionChapterId', chapterIdParam); // or similar, depending on API
+                    query.set('questionCategory.questionLesson.questionChapterId', chapterIdParam); 
                 }
                 const res = await fetchData(`Questions?${query.toString()}`, token);
                 const items = normalizeItems(res);
                 const mapped = items.map((question) => {
+                    const drivingLicenseId = question?.questionLesson?.questionChapter?.drivingLicenseId;
+                    //console.log('Fetching license for drivingLicenseId:', drivingLicenseId);
                     const answersForDetail = buildAnswersForDetail(question.answers || []);
                     const correctAnswer = answersForDetail.find((answer) => answer.correct)?.index || null;
                     const chapterName = question?.questionLesson?.questionChapter?.name || '—';
@@ -106,13 +101,13 @@ export default function QuestionBank() {
                             id: question.id,
                             content: question.content || '—',
                             chapterName: chapterName,
+                            drivingLicenseId: drivingLicenseId,
                             lessonName: lessonName,
                             category: categoryName,
                             topicName: topicName,
                             status: question.status ?? 1,
                             isDiemLiet: isDiemLietQuestion(question),
                             type: getQuestionType(question),
-                            difficulty: getQuestionDifficulty(question),
                             answers: answersForDetail,
                             explanation: question.explanation || '',
                             image: question.image || '',
@@ -129,8 +124,13 @@ export default function QuestionBank() {
                     totalCount: res?.totalCount ?? prev.totalCount,
                     totalPages: res?.totalPages || 1,
                 }));
-            } catch (err) {
-                setError('Lỗi tải dữ liệu câu hỏi.');
+            } catch (error) {
+                if (error.status === 401) {
+                    refreshNewToken(user);
+                } else {
+                    setError('Lỗi tải dữ liệu câu hỏi.');
+                }
+                
             } finally {
                 setLoading(false);
             }
@@ -148,8 +148,7 @@ export default function QuestionBank() {
 
     const handleToggleStatus = async (id) => {
         try {
-            setLoading(true);
-            await putData(`Questions/${id}`, { }, token);
+            await patchData(`Questions/${id}`, { }, token);
             setRefresh((r) => r + 1);
         } catch (error) {
             if (error.status === 401) {
@@ -157,9 +156,7 @@ export default function QuestionBank() {
             } else {
                 setError('Lỗi cập nhật trạng thái');
             }
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
     const columns = [
@@ -214,7 +211,7 @@ export default function QuestionBank() {
             label: 'Câu điểm liệt', 
             width: '130px', 
             render: (val) => (
-                <span className={`ins-status-chip ${val ? 'rejected' : 'approved'}`}>
+                <span className={`ins-status-chip ${val ? 'rejected' : 'active'}`}>
                     <span className='chip-dot'></span>{val ? 'Điểm liệt' : 'Bình thường'}
                 </span>
             )
@@ -224,9 +221,9 @@ export default function QuestionBank() {
             label: 'Trạng thái', 
             width: '120px',
             render: (val) => (
-                <span className={`ins-status-chip ${val === 1 ? 'approved' : 'pending'}`}>
+                <span className={`ins-status-chip ${val === 1 ? 'approved' : 'rejected'}`}>
                     <span className='chip-dot' />
-                    {val === 1 ? 'Hoạt động' : 'Nháp'}
+                    {val === 1 ? 'Hoạt động' : 'Đã ẩn'}
                 </span>
             )
         },
