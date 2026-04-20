@@ -82,9 +82,22 @@
     padding: 16px 24px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 12px;
     border-top: 1px solid rgba(95, 117, 165, 0.1);
+}
+
+.ins-modal-footer-message {
+    flex: 1;
+    min-width: 0;
+}
+
+.ins-modal-footer-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 /* Instructor buttons */
@@ -103,8 +116,8 @@
 }
 
 .ins-btn-primary {
-    background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-container));
-    color: var(--ins-bg);
+    background: #4f46e5;
+        color: #ffffff;
 }
 
 .ins-btn-primary:hover {
@@ -140,12 +153,18 @@
     background-color: rgba(34, 197, 94, 0.25);
 }
 
+.ins-btn-add {
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
 /* Form elements */
 .ins-form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
     margin-bottom: 16px;
+    min-width: 0;
 }
 
 .ins-form-label {
@@ -153,6 +172,9 @@
     font-weight: 600;
     color: var(--ins-on-surface-variant);
     font-family: var(--ins-font-body);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ins-form-input,
@@ -167,6 +189,14 @@
     font-family: var(--ins-font-body);
     transition: all 0.2s ease;
     height: auto;
+    width: 100%;
+}
+
+.ins-form-input,
+.ins-form-select {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .ins-form-input:focus,

@@ -1,0 +1,76 @@
+.ins-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.ins-filter-bar .ins-input,
+.ins-filter-bar .ins-select {
+    padding: 10px 14px;
+    background-color: var(--ins-surface-low);
+    border: 1px solid rgba(95, 117, 165, 0.15);
+    border-radius: 8px;
+    color: var(--ins-on-surface);
+    font-size: 0.8125rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    height: auto;
+    
+    /* Layout preservation logic */
+    min-width: 0;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ins-filter-bar .ins-input {
+    flex: 1;
+    min-width: 150px;
+}
+
+.ins-filter-bar .ins-input:focus,
+.ins-filter-bar .ins-select:focus {
+    outline: none;
+    border-color: var(--ins-primary, #6366f1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    background: var(--ins-surface);
+}
+
+.ins-btn-search {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ins-btn-search:hover {
+    background: var(--ins-primary-container);
+    color: var(--ins-on-primary-container);
+}
+
+.ins-btn-reset {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ins-btn-reset:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
