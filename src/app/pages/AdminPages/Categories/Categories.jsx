@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import DataTable from '../../../components/Shared/DataTable';
+import EditCategoryModal from './EditCategoryModal';
+import { fetchData as callGet, patchData } from '../../../../mocks/CallingAPI.js';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 import './Categories.css';
-// Đảm bảo đường dẫn này trỏ đúng đến file chứa các hàm fetch, post, put, patch của bạn
-import { fetchData as callGet, postData, putData, patchData } from '../../../../mocks/CallingAPI';
 
 const CATEGORY_CONFIG = {
     TAGS: { label: 'Tags', endpoint: 'Tags', hasColor: true },
@@ -14,213 +17,179 @@ const CATEGORY_CONFIG = {
     FORUM_TOPIC: { label: 'Chủ đề diễn đàn', endpoint: 'ForumTopics' },
 };
 
-const Categories = () => {
+export default function Categories() {
+    const { user: authUser, logout, refreshNewToken } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('TAGS');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState(null);
-    const [formData, setFormData] = useState({ name: '', description: '', colorCode: '', status: 1 });
+    const [refresh, setRefresh] = useState(0);
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [modalAction, setModalAction] = useState('create');
+
+    // State cho feedback thông báo
+    const [feedback, setFeedback] = useState({ show: false, type: '', message: '' });
 
     const currentConfig = CATEGORY_CONFIG[activeTab];
-    const token = localStorage.getItem('token');
 
-    // Load dữ liệu từ API
-    const loadData = async () => {
+    // Hàm hiển thị thông báo giống Profile
+    const showFeedback = (type, message) => {
+        setFeedback({ show: true, type, message });
+        setTimeout(() => {
+            setFeedback(prev => ({ ...prev, show: false }));
+        }, 3000);
+    };
+
+    const handleRefreshAction = async (err) => {
+        if (err.status === 401) {
+            const refreshResult = await refreshNewToken(authUser);
+            if (refreshResult?.message === 'Logout') {
+                logout();
+                navigate('/', { state: { openLogin: 'true' } });
+                return false;
+            }
+            return true;
+        }
+        return false;
+    };
+
+    const loadData = useCallback(async () => {
+        if (!authUser?.token) return;
         setLoading(true);
         try {
-            const result = await callGet(`${currentConfig.endpoint}/all`, token);
-            setData(result || []);
+            const result = await callGet(`${currentConfig.endpoint}/all`, authUser.token);
+            setData(Array.isArray(result) ? result : (result?.items || []));
         } catch (error) {
-            console.error("Fetch error:", error);
-            alert(`Không thể tải dữ liệu cho ${currentConfig.label}`);
+            const canRetry = await handleRefreshAction(error);
+            if (canRetry) setRefresh(prev => prev + 1);
         } finally {
             setLoading(false);
         }
-    };
+    }, [activeTab, authUser?.token, currentConfig.endpoint]);
 
     useEffect(() => {
         loadData();
-    }, [activeTab]);
+    }, [loadData, refresh]);
 
-    // Xử lý mở Modal
-    const handleOpenModal = (item = null) => {
-        if (item) {
-            setEditingItem(item);
-            setFormData({
-                name: item.name,
-                description: item.description || '',
-                colorCode: item.colorCode || '',
-                status: item.status
-            });
-        } else {
-            setEditingItem(null);
-            setFormData({ name: '', description: '', colorCode: '', status: 1 });
-        }
-        setIsModalOpen(true);
-    };
-
-    // Xử lý Submit Form (Create/Update)
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (editingItem) {
-                await putData(`${currentConfig.endpoint}/${editingItem.id}`, formData, token);
-            } else {
-                await postData(`${currentConfig.endpoint}`, formData, token);
-            }
-            setIsModalOpen(false);
-            loadData();
-        } catch (error) {
-            alert('Lỗi khi lưu dữ liệu. Vui lòng kiểm tra lại.');
-        }
-    };
-
-    // Xử lý Thay đổi trạng thái (Soft Delete)
+    // Hàm thay đổi trạng thái (Đã bỏ alert/confirm)
     const handleToggleStatus = async (id) => {
-        if (window.confirm('Bạn có muốn thay đổi trạng thái hoạt động của mục này?')) {
-            try {
-                await patchData(`${currentConfig.endpoint}/${id}`, {}, token);
-                loadData();
-            } catch (error) {
-                alert('Cập nhật trạng thái thất bại.');
+        try {
+            await patchData(`${currentConfig.endpoint}/${id}`, {}, authUser.token);
+            showFeedback('success', 'Cập nhật trạng thái thành công!');
+            setRefresh(p => p + 1);
+        } catch (error) {
+            if (error.status === 401) {
+                const canRetry = await handleRefreshAction(error);
+                if (canRetry) {
+                    // Thử lại một lần duy nhất với token mới từ authUser (đã được update bởi refreshNewToken)
+                    try {
+                        await patchData(`${currentConfig.endpoint}/${id}`, {}, authUser.token);
+                        showFeedback('success', 'Cập nhật trạng thái thành công!');
+                        setRefresh(p => p + 1);
+                    } catch (retryError) {
+                        showFeedback('error', 'Phiên đăng nhập hết hạn');
+                    }
+                }
+            } else {
+                showFeedback('error', 'Thao tác thất bại!');
             }
         }
     };
+
+    const columns = [
+        { key: '', label: 'STT', width: '60px', render: (_, __, idx) => idx + 1 },
+        { key: 'name', label: 'Tên danh mục', render: (val) => <b style={{ color: 'var(--ins-on-surface)' }}>{val}</b> },
+        { key: 'description', label: 'Mô tả', render: (val) => val || '---' },
+        ...(currentConfig.hasColor ? [{
+            key: 'colorCode', label: 'Màu sắc', width: '120px',
+            render: (val) => (
+                <div className="cat-color-cell">
+                    <span className="cat-color-dot" style={{ backgroundColor: val }}></span>
+                    {val}
+                </div>
+            )
+        }] : []),
+        {
+            key: 'status', label: 'Trạng thái', width: '140px',
+            render: (val) => (
+                <span className={`ins-status-chip ${val === 1 ? 'approved' : 'rejected'}`}>
+                    <span className='chip-dot'></span>{val === 1 ? 'Hoạt động' : 'Đang khóa'}
+                </span>
+            )
+        },
+        {
+            key: 'actions', label: 'Thao tác', width: '120px',
+            render: (_, row) => (
+                <div className='ins-action-cell'>
+                    <button className='ins-action-btn view' title='Sửa' onClick={() => {
+                        setSelectedItem(row);
+                        setModalAction('edit');
+                        setShowModal(true);
+                    }}>
+                        <i className='fa-solid fa-pen-to-square'></i>
+                    </button>
+                    <button
+                        className={`ins-action-btn ${row.status === 1 ? 'delete' : 'edit'}`}
+                        title={row.status === 1 ? 'Khóa' : 'Mở khóa'}
+                        onClick={() => handleToggleStatus(row.id)}
+                    >
+                        <i className={`fa-solid ${row.status === 1 ? 'fa-lock' : 'fa-lock-open'}`}></i>
+                    </button>
+                </div>
+            )
+        }
+    ];
 
     return (
-        <div className="cat-page-container">
-            <header className="cat-page-header">
-                <div className="header-title">
-                    <h1>Quản lý danh mục</h1>
-                    <p>Quản lý các loại tag, chủ đề và cấp độ trong hệ thống</p>
+        <div className='ins-page'>
+            {/* Render Feedback Popup tương tự Profile */}
+            {feedback.show && (
+                <div className={`feedback-popup ${feedback.type} slide-in`}>
+                    <i className={feedback.type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'}></i>
+                    <span>{feedback.message}</span>
                 </div>
-                <button className="btn-primary" onClick={() => handleOpenModal()}>
-                    + Thêm {currentConfig.label}
-                </button>
-            </header>
+            )}
 
-            <nav className="cat-tabs">
+            <div className='ins-page-header'>
+                <div>
+                    <h1>Cấu hình hệ thống</h1>
+                    <p>Quản lý các danh mục và tag hệ thống.</p>
+                </div>
+                <button className='btn-add-category' onClick={() => {
+                    setSelectedItem(null);
+                    setModalAction('create');
+                    setShowModal(true);
+                }}>
+                    <i className="fa-solid fa-plus"></i> Thêm {currentConfig.label}
+                </button>
+            </div>
+
+            <div className="cat-tabs-grid">
                 {Object.keys(CATEGORY_CONFIG).map(key => (
                     <button
                         key={key}
-                        className={`tab-btn ${activeTab === key ? 'active' : ''}`}
+                        className={`cat-tab-item ${activeTab === key ? 'active' : ''}`}
                         onClick={() => setActiveTab(key)}
                     >
                         {CATEGORY_CONFIG[key].label}
                     </button>
                 ))}
-            </nav>
+            </div>
 
-            <main className="cat-content">
-                {loading ? (
-                    <div className="loader">Đang tải dữ liệu...</div>
-                ) : (
-                    <div className="table-responsive">
-                        <table className="cat-table">
-                            <thead>
-                                <tr>
-                                    <th>Tên danh mục</th>
-                                    <th>Mô tả</th>
-                                    {currentConfig.hasColor && <th>Màu sắc</th>}
-                                    <th>Trạng thái</th>
-                                    <th style={{ textAlign: 'right' }}>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.length > 0 ? data.map(item => (
-                                    <tr key={item.id}>
-                                        <td className="col-name">{item.name}</td>
-                                        <td className="col-desc">{item.description || '---'}</td>
-                                        {currentConfig.hasColor && (
-                                            <td>
-                                                <div className="color-preview">
-                                                    <span className="color-circle" style={{ backgroundColor: item.colorCode }}></span>
-                                                    {item.colorCode}
-                                                </div>
-                                            </td>
-                                        )}
-                                        <td>
-                                            <span className={`badge ${item.status === 1 ? 'status-active' : 'status-locked'}`}>
-                                                {item.status === 1 ? 'Hoạt động' : 'Đang khóa'}
-                                            </span>
-                                        </td>
-                                        <td className="col-actions">
-                                            <button className="btn-text edit" onClick={() => handleOpenModal(item)}>Sửa</button>
-                                            <button className="btn-text delete" onClick={() => handleToggleStatus(item.id)}>
-                                                {item.status === 1 ? 'Khóa' : 'Mở'}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                )) : (
-                                    <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>Không có dữ liệu</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </main>
+            <DataTable title={`Danh sách ${currentConfig.label}`} columns={columns} data={data} loading={loading} />
 
-            {/* Modal Components */}
-            {isModalOpen && (
-                <div className="modal-backdrop">
-                    <div className="modal-card">
-                        <div className="modal-header">
-                            <h3>{editingItem ? 'Cập nhật danh mục' : 'Thêm mới danh mục'}</h3>
-                            <button className="btn-close" onClick={() => setIsModalOpen(false)}>&times;</button>
-                        </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="modal-body">
-                                <div className="form-item">
-                                    <label>Tên hiển thị <span className="required">*</span></label>
-                                    <input
-                                        type="text"
-                                        value={formData.name}
-                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        placeholder="Ví dụ: Câu hỏi điểm liệt"
-                                        required
-                                    />
-                                </div>
-                                <div className="form-item">
-                                    <label>Mô tả chi tiết</label>
-                                    <textarea
-                                        rows="3"
-                                        value={formData.description}
-                                        onChange={e => setFormData({ ...formData, description: e.target.value })}
-                                        placeholder="Nhập mô tả ngắn gọn..."
-                                    />
-                                </div>
-                                {currentConfig.hasColor && (
-                                    <div className="form-item">
-                                        <label>Mã màu hiển thị (HEX)</label>
-                                        <div className="color-input-group">
-                                            <input
-                                                type="color"
-                                                value={formData.colorCode || '#1890ff'}
-                                                onChange={e => setFormData({ ...formData, colorCode: e.target.value })}
-                                            />
-                                            <input
-                                                type="text"
-                                                value={formData.colorCode}
-                                                onChange={e => setFormData({ ...formData, colorCode: e.target.value })}
-                                                placeholder="#ffffff"
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Hủy bỏ</button>
-                                <button type="submit" className="btn-primary">Lưu thông tin</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            {showModal && (
+                <EditCategoryModal
+                    item={selectedItem}
+                    config={currentConfig}
+                    action={modalAction}
+                    onClose={() => setShowModal(false)}
+                    setRefresh={setRefresh}
+                    showFeedback={showFeedback} // Truyền hàm thông báo vào modal
+                />
             )}
         </div>
     );
-};
-
-export default Categories;
+}
