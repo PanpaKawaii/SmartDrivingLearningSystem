@@ -19,7 +19,6 @@ const menuSections = [
             { name: 'Bài viết chờ duyệt', icon: 'fa-clock', path: '/admin/pending-posts' },
             { name: 'Báo cáo cộng đồng', icon: 'fa-users', path: '/admin/community-reports' },
             { name: 'Yêu cầu thay đổi', icon: 'fa-code-pull-request', path: '/admin/change-requests' },
-            { name: 'Báo cáo hệ thống', icon: 'fa-file-export', path: '/admin/generate-reports' },
         ],
     },
     {
