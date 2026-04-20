@@ -39,7 +39,7 @@
     background-color: var(--ins-surface);
     border-radius: 12px;
     padding: 20px;
-    height: fit-content; /* Sửa lỗi khoảng trắng: Chỉ cao bằng nội dung */
+    height: fit-content; 
 }
 
 .admin-dashboard .dashboard-section-header {

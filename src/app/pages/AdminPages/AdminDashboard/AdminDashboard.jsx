@@ -154,7 +154,7 @@ export default function AdminDashboard() {
                     value={summary.totalPaymentAmount.toLocaleString('vi-VN') + ' đ'}
                     label='Doanh thu tháng này'
                     trend='Tổng thanh toán'
-                    trendDir='up'
+                    trendDir='none'
                 />
                 <StatsCard
                     icon='fa-solid fa-user-graduate'
@@ -162,15 +162,15 @@ export default function AdminDashboard() {
                     value={roleSummaryRows.find(r => r.role === 'Student')?.totalUsers || 0}
                     label='Học viên (Student)'
                     trend='Hệ thống'
-                    trendDir='up'
+                    trendDir='none'
                 />
                 <StatsCard
                     icon='fa-solid fa-square-poll-vertical' // Đã sửa icon
                     iconColor='yellow'
                     value={(summary.monthlyExamSessionCount + summary.monthlySimulationSessionCount).toLocaleString('vi-VN')}
                     label='Lượt thi & Mô phỏng'
-                    trend={`Thi: ${summary.monthlyExamSessionCount} | MP: ${summary.monthlySimulationSessionCount}`}
-                    trendDir='up'
+                    trend={`Thi: ${summary.monthlyExamSessionCount} | Mô phỏng: ${summary.monthlySimulationSessionCount}`}
+                    trendDir='none'
                 />
                 <StatsCard
                     icon='fa-solid fa-circle-check'
@@ -178,7 +178,7 @@ export default function AdminDashboard() {
                     value={`${summary.monthlyExamStats.passRate}%`}
                     label='Tỷ lệ Pass trung bình'
                     trend='Kỳ thi thử'
-                    trendDir='up'
+                    trendDir='none'
                 />
             </div>
 

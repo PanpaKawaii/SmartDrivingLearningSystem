@@ -9,7 +9,10 @@ export default function StatsCard({ icon, iconColor = 'blue', value, label, tren
                 </div>
                 {trend && (
                     <span className={`stats-card-trend ${trendDir || 'up'}`}>
-                        <i className={`fa-solid fa-arrow-${trendDir === 'down' ? 'down' : 'up'}`}></i>
+                        {/* Chỉ hiển thị mũi tên nếu trendDir khác 'none' */}
+                        {trendDir !== 'none' && (
+                            <i className={`fa-solid fa-arrow-${trendDir === 'down' ? 'down' : 'up'}`}></i>
+                        )}
                         {trend}
                     </span>
                 )}
