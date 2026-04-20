@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import { fetchData, patchData, putData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import LicenseModal from './LicenseModal';
@@ -20,7 +21,7 @@ export default function LicenseManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [filters, setFilters] = useState({ search: '' });
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
     const [showModal, setShowModal] = useState(false);
@@ -35,8 +36,8 @@ export default function LicenseManagement() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-                if (searchTerm.trim()) {
-                    query.set('name', searchTerm.trim());
+                if (filters.search.trim()) {
+                    query.set('name', filters.search.trim());
                 }
                 const res = await fetchData(`DrivingLicenses/all?${query.toString()}`, token);
                 const items = normalizeItems(res);
@@ -55,7 +56,7 @@ export default function LicenseManagement() {
                 setLoading(false);
             }
         })();
-    }, [refresh, token, searchTerm, serverPagination.page, serverPagination.pageSize]);
+    }, [refresh, token, filters.search, serverPagination.page, serverPagination.pageSize]);
 
     const handleToggleStatus = async (id) => {
         try {
@@ -80,7 +81,7 @@ export default function LicenseManagement() {
     };
 
     const handleSearch = (search) => {
-        setSearchTerm(search);
+        setFilters(prev => ({ ...prev, search }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
 
@@ -89,9 +90,7 @@ export default function LicenseManagement() {
     };
 
     const handleClearFilter = () => {
-        if(searchTerm.trim()){
-            setSearchTerm('');
-        }
+        setFilters(prev => ({ ...prev, search: '' }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
 
@@ -169,8 +168,8 @@ export default function LicenseManagement() {
     // Context Badge 
     const activeBadge = (() => {
         let badge = [];
-        if(searchTerm.trim()){
-            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearFilter() });
+        if(filters.search.trim()){
+            badge.push({ text: `"${filters.search.trim()}"`, onClear: () => handleClearFilter() });
         }
         return badge;
     })();
@@ -190,6 +189,14 @@ export default function LicenseManagement() {
                 </button>
             </div>
 
+            <FilterBar
+                searchOptions={[
+                    { placeholder: 'Tìm kiếm bằng lái...', value: filters.search, onChange: (val) => setFilters(prev => ({ ...prev, search: val })) }
+                ]}
+                onSearch={() => setServerPagination(prev => ({ ...prev, page: 1 }))}
+                onReset={() => { setFilters({ search: '' }); setServerPagination(prev => ({ ...prev, page: 1 })); }}
+            />
+
             <DataTable
                 title={`Danh sách bằng lái (${serverPagination.totalCount})`}
                 columns={columns}
@@ -198,9 +205,6 @@ export default function LicenseManagement() {
                 error={error}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
-                onSearch={handleSearch}
-                searchValue={searchTerm}
-                onSearchValueChange={setSearchTerm}
                 contextBadge={ activeBadge.length > 0 ? activeBadge : null }
                 actions={
                     <>

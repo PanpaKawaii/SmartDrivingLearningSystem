@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import LessonModal from './LessonModal';
 import '../InstructorPages.css';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
@@ -35,16 +36,17 @@ export default function LessonManagement() {
     const allChaptersRef = useRef([]);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
-    // Filter state
-    const [filterLicense, setFilterLicense] = useState('');
-    const [filterChapter, setFilterChapter] = useState(chapterIdParam);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [filters, setFilters] = useState({
+        search: '',
+        licenseId: '',
+        chapterId: chapterIdParam
+    });
 
     const [selectedItem, setSelectedItem] = useState(null);
 
     // Chỉ cho chọn chương khi đã chọn bằng lái
-    const availableChapters = filterLicense
-        ? allChapters.filter(c => c.drivingLicenseId === filterLicense)
+    const availableChapters = filters.licenseId
+        ? allChapters.filter(c => c.drivingLicenseId === filters.licenseId)
         : [];
 
     // Chỉ pre-fill một lần khi chapters được load lần đầu
@@ -54,8 +56,11 @@ export default function LessonManagement() {
             didPreFill.current = true;
             const preChapter = allChapters.find(c => c.id === chapterIdParam);
             if (preChapter) {
-                setFilterLicense(preChapter.drivingLicenseId || '');
-                setFilterChapter(chapterIdParam);
+                setFilters(prev => ({
+                    ...prev,
+                    licenseId: preChapter.drivingLicenseId || '',
+                    chapterId: chapterIdParam
+                }));
             }
         }
     }, [chapterIdParam, allChapters]);
@@ -96,12 +101,12 @@ export default function LessonManagement() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-                if (searchTerm.trim()) {
-                    query.set('name', searchTerm.trim());
+                if (filters.search.trim()) {
+                    query.set('name', filters.search.trim());
                 }
                 let items = [];
-                if (filterChapter) {
-                    query.set('questionChapterId', filterChapter);
+                if (filters.chapterId) {
+                    query.set('questionChapterId', filters.chapterId);
                     const res = await fetchData(`QuestionLessons?${query.toString()}`, token);
                     items = normalizeItems(res);
                     setServerPagination(prev => ({
@@ -111,16 +116,16 @@ export default function LessonManagement() {
                         totalCount: res?.totalCount ?? prev.totalCount,
                         totalPages: res?.totalPages || 1,
                     }));
-                } else if (filterLicense) {
+                } else if (filters.licenseId) {
                     const chapterIds = allChaptersRef.current
-                        .filter(c => c.drivingLicenseId === filterLicense)
+                        .filter(c => c.drivingLicenseId === filters.licenseId)
                         .map(c => c.id);
                     if (chapterIds.length > 0) {
                         const res = await fetchData(`QuestionLessons?page=1&pageSize=5000`, token);
                         items = normalizeItems(res).filter(lesson => chapterIds.includes(lesson.questionChapterId));
                         // Apply search filter if needed
-                        if (searchTerm.trim()) {
-                            items = items.filter(lesson => lesson.name?.toLowerCase().includes(searchTerm.toLowerCase()));
+                        if (filters.search.trim()) {
+                            items = items.filter(lesson => lesson.name?.toLowerCase().includes(filters.search.toLowerCase()));
                         }
                         setServerPagination(prev => ({
                             ...prev,
@@ -155,7 +160,7 @@ export default function LessonManagement() {
             }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense, searchTerm]);
+    }, [refresh, token, serverPagination.page, serverPagination.pageSize, filters.chapterId, filters.licenseId, filters.search]);
 
     const handleNavigateQuestions = (row) => {
         navigate(`/instructor/question-bank?lessonId=${row.id}&chapterId=${row.questionChapterId}`);
@@ -179,17 +184,14 @@ export default function LessonManagement() {
         }
     };
     
-    const handleFilterLicense = (e) => {
-        const val = e.target.value;
-        setFilterLicense(val);
-        setFilterChapter('');
+    const handleFilterLicense = (val) => {
+        setFilters(prev => ({ ...prev, licenseId: val, chapterId: '' }));
         setSearchParams({});
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
 
-    const handleFilterChapter = (e) => {
-        const val = e.target.value;
-        setFilterChapter(val);
+    const handleFilterChapter = (val) => {
+        setFilters(prev => ({ ...prev, chapterId: val }));
         if (val) {
             const ch = allChapters.find(c => c.id === val);
             setSearchParams({ chapterId: val, chapterName: ch?.name || '' });
@@ -200,22 +202,17 @@ export default function LessonManagement() {
     };
 
     const handleClearBadge = () => {
-        if(filterLicense){
-            setFilterLicense('');
-        }
-        if(filterChapter){
-            setFilterChapter('');
-        }
+        setFilters(prev => ({ ...prev, licenseId: '', chapterId: '' }));
         setSearchParams({});
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
     const handleClearSearch = () => {
-        setSearchTerm('');
+        setFilters(prev => ({ ...prev, search: '' }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
 
     const handleSearch = (search) => {
-        setSearchTerm(search);
+        setFilters(prev => ({ ...prev, search }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };    
     const handleSave = () => {
@@ -230,14 +227,14 @@ export default function LessonManagement() {
     // Label cho context badge
     const activeBadge = (() => {
         let badge = [];
-        if(searchTerm.trim()){
-            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearSearch() });
+        if(filters.search.trim()){
+            badge.push({ text: `"${filters.search.trim()}"`, onClear: () => handleClearSearch() });
         }
-        if (filterChapter) {
-            const ch = allChapters.find(c => c.id === filterChapter);
+        if (filters.chapterId) {
+            const ch = allChapters.find(c => c.id === filters.chapterId);
             badge.push({ text: chapterNameParam || ch?.name || '', onClear: () => handleClearBadge() });
-        } else if (filterLicense) {
-            const license = drivingLicenses.find(l => l.id === filterLicense);
+        } else if (filters.licenseId) {
+            const license = drivingLicenses.find(l => l.id === filters.licenseId);
             badge.push({ text: license?.name || '', onClear: () => handleClearBadge() });
         }
         return badge;
@@ -312,6 +309,28 @@ export default function LessonManagement() {
                     </button>
                 </div>
             </div>
+            <FilterBar
+                searchOptions={[
+                    { placeholder: 'Tìm kiếm bài học...', value: filters.search, onChange: (val) => setFilters(prev => ({ ...prev, search: val })) }
+                ]}
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả hạng bằng —',
+                        value: filters.licenseId,
+                        options: drivingLicenses,
+                        onChange: handleFilterLicense
+                    },
+                    {
+                        placeholder: filters.licenseId ? '— Tất cả chương —' : '— Chọn bằng trước —',
+                        value: filters.chapterId,
+                        options: availableChapters,
+                        disabled: !filters.licenseId,
+                        onChange: handleFilterChapter
+                    }
+                ]}
+                onSearch={() => setServerPagination(prev => ({ ...prev, page: 1 }))}
+                onReset={() => { setFilters({ search: '', licenseId: '', chapterId: '' }); setServerPagination(prev => ({ ...prev, page: 1 })); setSearchParams({}); }}
+            />
             <DataTable 
                 title={`Danh sách bài học (${serverPagination.totalCount})`} 
                 columns={columns} 
@@ -319,26 +338,6 @@ export default function LessonManagement() {
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
-                onSearch={handleSearch}
-                searchValue={searchTerm}
-                onSearchValueChange={setSearchTerm}
-                filters={[
-                    {
-                        id: 'license-filter',
-                        value: filterLicense,
-                        onChange: handleFilterLicense,
-                        options: drivingLicenses,
-                        placeholder: '— Tất cả hạng bằng —',
-                    },
-                    {
-                        id: 'chapter-filter',
-                        value: filterChapter,
-                        onChange: handleFilterChapter,
-                        options: availableChapters,
-                        placeholder: filterLicense ? '— Tất cả chương —' : '— Chọn bằng trước —',
-                        disabled: !filterLicense,
-                    },
-                ]}
                 contextBadge={ activeBadge.length > 0 ? activeBadge : null }
                 actions={
                     <>
@@ -354,7 +353,7 @@ export default function LessonManagement() {
                 action={selectedItem ? 'edit' : 'add'}
                 listLicenses={drivingLicenses}
                 listChapters={allChapters}
-                defaultChapterId={filterChapter}
+                defaultChapterId={filters.chapterId}
                 onClose={() => {
                     setShowModal(false);
                     setSelectedItem(null);
