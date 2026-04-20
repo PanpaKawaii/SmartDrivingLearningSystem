@@ -19,7 +19,6 @@ const menuSections = [
             { name: 'Bài viết chờ duyệt', icon: 'fa-clock', path: '/admin/pending-posts' },
             { name: 'Báo cáo cộng đồng', icon: 'fa-users', path: '/admin/community-reports' },
             { name: 'Yêu cầu thay đổi', icon: 'fa-code-pull-request', path: '/admin/change-requests' },
-            { name: 'Báo cáo hệ thống', icon: 'fa-file-export', path: '/admin/generate-reports' },
         ],
     },
     {
@@ -30,13 +29,7 @@ const menuSections = [
             { name: 'Quy tắc chấm điểm', icon: 'fa-scale-balanced', path: '/admin/scoring-rules' },
             { name: 'Danh mục nội dung', icon: 'fa-layer-group', path: '/admin/categories' },
         ],
-    },
-    {
-        label: 'Cá nhân',
-        items: [
-            { name: 'Thông báo', icon: 'fa-bell', path: '/admin/notifications' },
-        ],
-    },
+    }
 ];
 
 export default function AdminSidebar() {

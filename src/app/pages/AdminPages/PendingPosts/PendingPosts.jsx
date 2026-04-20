@@ -2,9 +2,10 @@ import DataTable from '../../../components/Shared/DataTable';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
 import '../AdminPages.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const STATUS_LABELS = {
     '-1': 'Chờ duyệt',
@@ -13,7 +14,8 @@ const STATUS_LABELS = {
 };
 
 export default function AdminPendingPosts() {
-    const { user } = useAuth();
+    const { user, refreshNewToken, logout } = useAuth();
+    const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,55 +24,75 @@ export default function AdminPendingPosts() {
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     const [selectedPostId, setSelectedPostId] = useState(null);
 
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const token = user?.token || '';
-                if (topics.length === 0) {
-                    const topicRes = await fetchData('ForumTopics/all', token);
-                    setTopics(Array.isArray(topicRes) ? topicRes : topicRes?.items || []);
-                }
-                const query = new URLSearchParams({ page: serverPagination.page, pageSize: serverPagination.pageSize });
-                const res = await fetchData(`ForumPosts?${query.toString()}`, token);
-                setItems(res?.items || []);
-                setServerPagination((prev) => ({
-                    ...prev,
-                    page: res?.page || prev.page,
-                    pageSize: res?.pageSize || prev.pageSize,
-                    totalCount: res?.totalCount || prev.totalCount,
-                    totalPages: res?.totalPages || 1,
-                }));
-            } catch {
-                setError('Lỗi tải dữ liệu');
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, topics.length]);
+    // Hàm bọc logic gọi API để tái sử dụng và xử lý Refresh Token
+    const loadData = useCallback(async () => {
+        if (!user?.token) return;
 
-    const handleApprove = async (id) => {
+        setLoading(true);
+        setError(null);
         try {
-            setLoading(true);
-            const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/approve`, {}, token);
-            setRefresh((r) => r + 1);
-        } catch {
-            setError('Lỗi duyệt bài');
+            const token = user.token;
+
+            // Tải Topics nếu chưa có
+            if (topics.length === 0) {
+                const topicRes = await fetchData('ForumTopics/all', token);
+                setTopics(Array.isArray(topicRes) ? topicRes : topicRes?.items || []);
+            }
+
+            // Tải danh sách bài viết
+            const query = new URLSearchParams({ page: serverPagination.page, pageSize: serverPagination.pageSize });
+            const res = await fetchData(`ForumPosts?${query.toString()}`, token);
+
+            setItems(res?.items || []);
+            setServerPagination((prev) => ({
+                ...prev,
+                page: res?.page || prev.page,
+                pageSize: res?.pageSize || prev.pageSize,
+                totalCount: res?.totalCount || prev.totalCount,
+                totalPages: res?.totalPages || 1,
+            }));
+        } catch (err) {
+            console.error("Load Data Error:", err);
+            // Xử lý Refresh Token nếu lỗi 401
+            if (err.status === 401) {
+                const refreshResult = await refreshNewToken(user);
+                if (refreshResult?.message === 'Logout') {
+                    logout();
+                    navigate('/', { state: { openLogin: 'true' } });
+                } else {
+                    // Nếu refresh thành công, effect sẽ tự chạy lại do user.token thay đổi
+                    // Hoặc ta có thể kích hoạt refresh thủ công: setRefresh(r => r + 1);
+                }
+            } else {
+                setError('Lỗi tải dữ liệu hệ thống');
+            }
         } finally {
             setLoading(false);
         }
-    };
+    }, [user, serverPagination.page, serverPagination.pageSize, topics.length, refreshNewToken, logout, navigate]);
 
-    const handleReject = async (id) => {
+    useEffect(() => {
+        loadData();
+    }, [loadData, refresh]); // refresh dùng để load lại sau khi Duyệt/Từ chối
+
+    const handleAction = async (id, actionType) => {
         try {
             setLoading(true);
             const token = user?.token || '';
-            await patchData(`ForumPosts/${id}/disapprove`, {}, token);
+            const endpoint = actionType === 'approve' ? `ForumPosts/${id}/approve` : `ForumPosts/${id}/disapprove`;
+
+            await patchData(endpoint, {}, token);
             setRefresh((r) => r + 1);
-        } catch {
-            setError('Lỗi từ chối bài');
+        } catch (err) {
+            if (err.status === 401) {
+                const refreshResult = await refreshNewToken(user);
+                if (refreshResult?.message === 'Logout') {
+                    logout();
+                    navigate('/', { state: { openLogin: 'true' } });
+                }
+            } else {
+                setError(actionType === 'approve' ? 'Lỗi duyệt bài' : 'Lỗi từ chối bài');
+            }
         } finally {
             setLoading(false);
         }
@@ -117,8 +139,8 @@ export default function AdminPendingPosts() {
             render: (_, row) => (
                 <div className='ins-action-cell'>
                     <button className='ins-action-btn view' title='Xem' onClick={() => setSelectedPostId(row.id)} disabled={loading}><i className='fa-solid fa-eye'></i></button>
-                    <button className='ins-action-btn edit' title='Duyệt' onClick={() => handleApprove(row.id)} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
-                    <button className='ins-action-btn delete' title='Từ chối' onClick={() => handleReject(row.id)} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
+                    <button className='ins-action-btn edit' title='Duyệt' onClick={() => handleAction(row.id, 'approve')} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
+                    <button className='ins-action-btn delete' title='Từ chối' onClick={() => handleAction(row.id, 'reject')} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
                 </div>
             ),
         },
@@ -131,12 +153,14 @@ export default function AdminPendingPosts() {
             <div className='ins-page-header'>
                 <div>
                     <h1>Bài viết chờ duyệt</h1>
-                    <p>Danh sách bài viết đang chờ phê duyệt.</p>
+                    <p>Danh sách bài viết từ cộng đồng đang chờ phê duyệt nội dung.</p>
                 </div>
             </div>
+
             {error && <div className='ins-error-banner'>{error}</div>}
+
             <DataTable
-                title={`Bài viết chờ duyệt (${serverPagination.totalCount})`}
+                title={`Danh sách bài viết (${serverPagination.totalCount})`}
                 columns={columns}
                 data={items}
                 loading={loading}
@@ -145,7 +169,11 @@ export default function AdminPendingPosts() {
             />
 
             {selectedPost && (
-                <PopupContainer onClose={() => setSelectedPostId(null)} titleName={`Bài viết của ${selectedPost?.user?.name || ''}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                <PopupContainer
+                    onClose={() => setSelectedPostId(null)}
+                    titleName={`Chi tiết bài viết: ${selectedPost?.title}`}
+                    innerStyle={{ width: 800 }}
+                >
                     <ForumCard post={selectedPost} parentLoading={loading} />
                 </PopupContainer>
             )}

@@ -3,6 +3,8 @@ import { fetchData, postData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
 import AutoResizeTextarea from '../../components/AutoResizeTextarea/AutoResizeTextarea';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
+import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput';
+import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
@@ -16,6 +18,8 @@ export default function ForumCreatePost({
 
     const refContent = useRef(null);
 
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     const [name, setName] = useState('');
     const [title, setTitle] = useState('');
     const [topic, setTopic] = useState('');
@@ -24,6 +28,7 @@ export default function ForumCreatePost({
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [createStatus, setCreateStatus] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -64,9 +69,14 @@ export default function ForumCreatePost({
             const result = await postData('ForumPosts', PostData, token);
             console.log('result', result);
 
+            setLoading(false);
+            setCreateStatus('success');
+            await sleep(2000);
+
             setRefreshParent(p => p + 1);
             onClose();
         } catch (error) {
+            setCreateStatus('fail');
             console.error('Error', error);
             setError(error);
             if (error.status == 401) refreshNewToken(user);
@@ -91,21 +101,39 @@ export default function ForumCreatePost({
         <div className='forum-create-post-container'>
             <div className='user-information'>
                 <div className='image'>
-                    <img src={user?.image || DefaultAvatar} alt={user?.email} />
+                    <img src={user?.avatar || DefaultAvatar} alt={user?.email} />
                 </div>
-                <div className='name'>{user?.name || user?.email}</div>
+                <div className='name'>{user?.name}</div>
             </div>
             <div className='post-information'>
                 {/* <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Tên bài viết' /> */}
-                <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Tiêu đề bài viết' />
-                <select value={topic} onChange={(e) => setTopic(e.target.value)}>
-                    <option value='' disabled>Chọn chủ đề</option>
-                    {FORUMTOPICs?.map((topic, index) => (
-                        <option key={index} value={topic.id}>{topic.name}</option>
-                    ))}
-                </select>
+
+                <div className='form-group'>
+                    <MovingLabelInput
+                        type={'text'}
+                        value={title || ''}
+                        onValueChange={(propE) => setTitle(propE)}
+                        label={'Tiêu đề'}
+                        labelStyle={'left moving'}
+                    />
+                </div>
+                <div className='form-group'>
+                    <StyleLabelSelect
+                        id={`select-topic`}
+                        list={FORUMTOPICs}
+                        value={topic}
+                        onValueChange={(propE) => setTopic(propE)}
+                        label={'Chủ đề'}
+                        labelStyle={'left'}
+                    />
+                </div>
                 <button className='btn' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
             </div>
+            {createStatus &&
+                <div className={`create-status ${createStatus}`}>
+                    {createStatus == 'success' ? 'Tạo bài viết thành công! Tự động tắt popup.' : 'Tạo bài viết thất bại, vui lòng thử lại sau.'}
+                </div>
+            }
             <form className='content-area'>
                 <AutoResizeTextarea
                     refer={refContent}

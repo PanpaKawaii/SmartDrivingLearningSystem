@@ -139,7 +139,7 @@ export default function ForumCard({
             <div className='user-information'>
                 <div className='image-name'>
                     <div className='image'>
-                        <img src={post.user?.image || DefaultAvatar} alt={post.user?.email} />
+                        <img src={post.user?.avatar || DefaultAvatar} alt={post.user?.email} />
                     </div>
                     <div>
                         <div className='name'>{post?.user?.name}</div>

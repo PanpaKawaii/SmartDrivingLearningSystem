@@ -48,6 +48,8 @@ import AdminPendingPosts from '../pages/AdminPages/PendingPosts/PendingPosts.jsx
 import AdminCommunityReports from '../pages/AdminPages/CommunityReports/CommunityReports.jsx'
 import AdminUserManagement from '../pages/AdminPages/UserManagement/UserManagement.jsx'
 import AdminProfile from '../pages/AdminPages/Profile/Profile.jsx'
+import AdminSystemConfig from '../pages/AdminPages/SystemConfig/SystemConfig.jsx'
+import Categories from '../pages/AdminPages/Categories/Categories.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -126,6 +128,8 @@ export default function MainRoutes() {
                     <Route path='community-reports' element={<AdminCommunityReports />} />
                     <Route path='report-entity/:entityType/:entityId' element={<InsReportEntityDetail />} />
                     <Route path='profile' element={<AdminProfile />} />
+                    <Route path='system-config' element={<AdminSystemConfig />} />
+                    <Route path='categories' element={<Categories />} />
                 </Route>
 
                 {/* Instructor CMS Routes */}
