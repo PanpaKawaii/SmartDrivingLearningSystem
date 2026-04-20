@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import { fetchData, putData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import ChapterModal from './ChapterModal';
@@ -26,17 +27,18 @@ export default function ChapterManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
-    const [searchTerm, setSearchTerm] = useState('');
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
-    // Filter state — pre-filled từ query param
-    const [filterLicense, setFilterLicense] = useState(licenseIdParam);
+    const [filters, setFilters] = useState({
+        search: '',
+        licenseId: licenseIdParam
+    });
 
     const [showModal, setShowModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
 
     // Sync filterLicense khi query param thay đổi (browser back/forward)
     useEffect(() => {
-        setFilterLicense(licenseIdParam);
+        setFilters(prev => ({ ...prev, licenseId: licenseIdParam }));
     }, [licenseIdParam]);
 
     useEffect(() => {
@@ -64,11 +66,11 @@ export default function ChapterManagement() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-                if (searchTerm.trim()) {
-                    query.set('name', searchTerm.trim());
+                if (filters.search.trim()) {
+                    query.set('name', filters.search.trim());
                 }
-                if (filterLicense) {
-                    query.set('drivingLicenseId', filterLicense);   
+                if (filters.licenseId) {
+                    query.set('drivingLicenseId', filters.licenseId);   
                 } 
                 const res = await fetchData(`QuestionChapters?${query.toString()}`, token);
                 const items = normalizeItems(res);
@@ -88,34 +90,33 @@ export default function ChapterManagement() {
                 setLoading(false);
             }
         })();
-    }, [refresh, token, filterLicense, searchTerm, serverPagination.page, serverPagination.pageSize]);
+    }, [refresh, token, filters.licenseId, filters.search, serverPagination.page, serverPagination.pageSize]);
 
     const handleClearFilter = () => {
-        if(filterLicense){
-            setFilterLicense('');
-        }
-        if(searchTerm.trim()){
-            setSearchTerm('');
-        }
+        setFilters(prev => ({ ...prev, licenseId: '' }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
-        setSearchParams({});
+        //setSearchParams({});
+    };
+    const handleClearSearch = () => {
+        setFilters(prev => ({ ...prev, search: '' }));
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        //setSearchParams({});
     };
 
-    const handleFilterChange = (e) => {
-        const val = e.target.value;
-        setFilterLicense(val);
+
+    const handleFilterChange = (val) => {
+        setFilters(prev => ({ ...prev, licenseId: val }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
         if (val) {
             const selectedLicense = licenses.find(l => l.id === val);
             setSearchParams({ licenseId: val, licenseName: selectedLicense?.name || '' });
-            
         } else {
             setSearchParams({});
         }
     };
     
     const handleSearch = (search) => {
-            setSearchTerm(search);
+            setFilters(prev => ({ ...prev, search }));
             setServerPagination(prev => ({ ...prev, page: 1 }));
     };
     const handlePageChange = (page) => {
@@ -221,11 +222,11 @@ export default function ChapterManagement() {
     // const activeFilterName =  licenseNameParam || licenses.find(l => l.id === filterLicense)?.name || '';
      const activeBadge = (() => {
         let badge = [];
-        if(searchTerm.trim()){
-            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearFilter() });
+        if(filters.search.trim()){
+            badge.push({ text: `"${filters.search.trim()}"`, onClear: () => handleClearSearch() });
         }
-        if (filterLicense) {
-            const license = licenses.find(l => l.id === filterLicense);
+        if (filters.licenseId) {
+            const license = licenses.find(l => l.id === filters.licenseId);
             badge.push({ text: licenseNameParam || license?.name, onClear: () => handleClearFilter() });
         }
         return badge;
@@ -253,6 +254,22 @@ export default function ChapterManagement() {
                 </div>
             </div>
 
+            <FilterBar
+                searchOptions={[
+                    { placeholder: 'Tìm kiếm chương...', value: filters.search, onChange: (val) => setFilters(prev => ({ ...prev, search: val })) }
+                ]}
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả hạng bằng —',
+                        value: filters.licenseId,
+                        options: licenses,
+                        onChange: handleFilterChange
+                    }
+                ]}
+                onSearch={() => setServerPagination(prev => ({ ...prev, page: 1 }))}
+                onReset={() => { setFilters({ search: '', licenseId: '' }); setServerPagination(prev => ({ ...prev, page: 1 })); setSearchParams({}); }}
+            />
+
             <DataTable
                 title={`Danh sách chương (${serverPagination.totalCount})`}
                 columns={columns}
@@ -260,26 +277,21 @@ export default function ChapterManagement() {
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
-                onSearch={handleSearch}
-                filters={[
-                    {
-                        id: 'license-filter',
-                        value: filterLicense,
-                        onChange: handleFilterChange,
-                        options: licenses,
-                        placeholder: '— Tất cả hạng bằng —',
-                    },
-                ]}
                 contextBadge={ activeBadge.length > 0 ? activeBadge : null }
-                    searchValue={searchTerm}
-                    onSearchValueChange={setSearchTerm}
+                actions={
+                    <>
+                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                            <i className='fa-solid fa-rotate-right'></i> Làm mới
+                        </button>
+                    </>
+                }
                 />
 
             <ChapterModal
                 isOpen={showModal}
                 chapter={selectedItem}
                 action={selectedItem ? 'edit' : 'create'}
-                defaultLicenseId={filterLicense} // Pre-fill license khi tạo từ context
+                defaultLicenseId={filters.licenseId} // Pre-fill license khi tạo từ context
                 onClose={() => { setShowModal(false); setSelectedItem(null); }}
                 onSave={handleSave}
             />
