@@ -1,7 +1,8 @@
 .admin-dashboard {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
+    padding-bottom: 20px; /* Tạo khoảng đệm nhỏ cuối trang thay vì để hở lớn */
 }
 
 .admin-dashboard .dashboard-greeting {
@@ -11,10 +12,10 @@
 }
 
 .admin-dashboard .dashboard-greeting h1 {
-    font-family: var(--ins-font-headline);
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--ins-on-surface);
+    margin: 0;
 }
 
 .admin-dashboard .dashboard-greeting p {
@@ -25,36 +26,29 @@
 .admin-dashboard .dashboard-stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
 }
 
 .admin-dashboard .dashboard-columns {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: 20px;
 }
 
 .admin-dashboard .dashboard-section {
     background-color: var(--ins-surface);
     border-radius: 12px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    padding: 20px;
+    height: fit-content; /* Sửa lỗi khoảng trắng: Chỉ cao bằng nội dung */
 }
 
 .admin-dashboard .dashboard-section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .admin-dashboard .dashboard-section-title {
-    font-family: var(--ins-font-headline);
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
-    color: var(--ins-on-surface);
 }
 
 .admin-dashboard .dashboard-section-meta {
@@ -109,20 +103,18 @@
 .admin-dashboard .signal-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .admin-dashboard .signal-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
     padding: 12px;
-    border-radius: 10px;
-    text-decoration: none;
+    border-radius: 8px;
     background-color: var(--ins-surface-low);
-    border: 1px solid rgba(95, 117, 165, 0.12);
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .admin-dashboard .signal-item:hover {
@@ -144,13 +136,8 @@
     flex-shrink: 0;
 }
 
-.admin-dashboard .signal-priority.high {
-    background-color: var(--ins-error);
-}
-
-.admin-dashboard .signal-priority.medium {
-    background-color: #f4c95d;
-}
+.admin-dashboard .signal-priority.high { background-color: var(--ins-error); }
+.admin-dashboard .signal-priority.medium { background-color: #f59e0b; }
 
 .admin-dashboard .signal-text {
     display: flex;
@@ -170,22 +157,37 @@
 }
 
 .admin-dashboard .signal-value {
-    min-width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    background-color: rgba(95, 117, 165, 0.2);
-    color: var(--ins-on-surface);
+    min-width: 36px;
+    height: 28px;
+    border-radius: 6px; /* Bo góc nhẹ nhìn hiện đại hơn */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-family: var(--ins-font-headline);
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 0 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Tạo độ nổi */
+}
+
+.admin-dashboard .signal-item:has(.high) .signal-value {
+    background-color: #302d6a;
+    color: #ffffff;
+}
+
+/* Nếu item là medium priority (Bài viết/Yêu cầu) -> Nền cam/vàng chữ đậm */
+.admin-dashboard .signal-item:has(.medium) .signal-value {
+    background-color: #302d6a;
+    color: #ffffff;
+}
+
+.admin-dashboard .signal-item:hover .signal-value {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }
 
 .admin-dashboard .dashboard-table-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    width: 100%;
 }
 
 .admin-dashboard .dashboard-logs-card {
@@ -266,7 +268,7 @@
 }
 
 .admin-dashboard .ins-data-table-wrapper {
-    min-width: 0;
+    margin-bottom: 0;
 }
 
 @media (max-width: 1200px) {
@@ -291,4 +293,9 @@
     .admin-dashboard .trend-bars {
         gap: 6px;
     }
+}
+
+@media (max-width: 1100px) {
+    .admin-dashboard .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+    .admin-dashboard .dashboard-columns { grid-template-columns: 1fr; }
 }
