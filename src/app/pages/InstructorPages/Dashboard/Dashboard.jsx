@@ -28,7 +28,7 @@ export default function Dashboard() {
                     icon='fa-solid fa-clock'
                     iconColor='yellow'
                     value='24'
-                    label='Bài viết chờ duyệt'
+                    label='Quản lý bài viết'
                     trend='+3 hôm nay'
                     trendDir='up'
                 />
@@ -61,7 +61,7 @@ export default function Dashboard() {
             <div className='dashboard-columns'>
                 <div className='dashboard-section'>
                     <div className='dashboard-section-header'>
-                        <h3 className='dashboard-section-title'>Bài viết chờ duyệt gần đây</h3>
+                        <h3 className='dashboard-section-title'>Quản lý bài viết gần đây</h3>
                         <Link to='/instructor/pending-posts' className='dashboard-section-link'>Xem tất cả →</Link>
                     </div>
                     <div className='dashboard-table-card'>
