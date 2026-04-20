@@ -51,6 +51,13 @@ export default function UserManagement() {
         return false;
     };
 
+    // Hàm xử lý khi nhấn Lọc hoặc nhấn Enter
+    const handleFilterSubmit = (e) => {
+        if (e) e.preventDefault(); // Chặn load lại trang khi dùng thẻ <form>
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        setRefresh(r => r + 1);
+    };
+
     useEffect(() => {
         (async () => {
             if (!authUser?.token) return;
@@ -221,7 +228,11 @@ export default function UserManagement() {
             {error && <div className='ins-error-banner'>{error}</div>}
 
             {/* Thanh Filter */}
-            <div className='ins-filter-bar' style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+            <form
+                className='ins-filter-bar'
+                onSubmit={handleFilterSubmit}
+                style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}
+            >
                 <input
                     className='ins-input'
                     placeholder='Tìm theo tên...'
@@ -237,19 +248,27 @@ export default function UserManagement() {
                 <select
                     className='ins-select'
                     value={filters.roleId}
-                    onChange={(e) => setFilters({ ...filters, roleId: e.target.value })}
+                    onChange={(e) => {
+                        setFilters({ ...filters, roleId: e.target.value });
+                        // Option: Tự động lọc luôn khi đổi Role (không cần chờ Enter/Lọc)
+                        // setServerPagination(prev => ({ ...prev, page: 1 }));
+                        // setRefresh(r => r + 1);
+                    }}
                 >
                     <option value="">Tất cả vai trò</option>
                     {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                 </select>
 
-                <button className='ins-btn-search' onClick={() => { setServerPagination({ ...serverPagination, page: 1 }); setRefresh(r => r + 1); }}>
+                {/* Chuyển button thành type="submit" */}
+                <button type="submit" className='ins-btn-search'>
                     <i className="fa-solid fa-magnifying-glass"></i> Lọc
                 </button>
-                <button className='ins-btn-reset' title="Reset filter" onClick={handleResetFilter}>
+
+                {/* Button Reset phải để type="button" để tránh trigger nhầm submit */}
+                <button type="button" className='ins-btn-reset' title="Reset filter" onClick={handleResetFilter}>
                     <i className="fa-solid fa-xmark"></i>
                 </button>
-            </div>
+            </form>
 
             <DataTable
                 title={`Danh sách người dùng`}
