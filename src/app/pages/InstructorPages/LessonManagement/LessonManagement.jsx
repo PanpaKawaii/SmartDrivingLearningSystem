@@ -157,6 +157,10 @@ export default function LessonManagement() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh, token, serverPagination.page, serverPagination.pageSize, filterChapter, filterLicense, searchTerm]);
 
+    const handleNavigateQuestions = (row) => {
+        navigate(`/instructor/question-bank?lessonId=${row.id}&chapterId=${row.questionChapterId}`);
+    };
+
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
     };
@@ -259,8 +263,18 @@ export default function LessonManagement() {
                 else if (val === -1) cls = 'draft';
                 return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
         },},
-        { key: 'actions', label: 'Thao tác', width: '120px', render: (_, row) => (
+        { key: 'actions', label: 'Thao tác', width: '230px', render: (_, row) => (
          <div className='ins-action-cell'>
+                {/* Quick Navigate → Questions */}
+                <button
+                    className='ins-nav-btn'
+                    title='Quản lý câu hỏi của bài học này'
+                    onClick={() => handleNavigateQuestions(row)}
+                >
+                    <i className='fa-solid fa-circle-question' />
+                    Quản lý câu hỏi
+                    <i className='fa-solid fa-arrow-right' />
+                </button>
                 <button className='ins-action-btn edit' title='Sửa' onClick={() => {
                     setSelectedItem(row);
                     setShowModal(true);

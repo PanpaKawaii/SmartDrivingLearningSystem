@@ -62,7 +62,7 @@ export default function PostModal({ isOpen, onClose, onSave, post: postProp, act
         setSaving(true);
         setError('');
         try {
-            const payload = {
+            let payload = {
                 forumTopicId: post.forumTopicId,
                 title: post.title.trim(),
                 content: post.content,
@@ -72,6 +72,7 @@ export default function PostModal({ isOpen, onClose, onSave, post: postProp, act
                 res = await putData(`ForumPosts/${postProp.id}`, payload, token);
                 onSave && onSave(res || { ...postProp, ...payload }, 'edit');
             } else {
+                payload = { ...payload, status: 4 };
                 res = await postData('ForumPosts/instructor', payload, token);
                 onSave && onSave(res, 'create');
             }
