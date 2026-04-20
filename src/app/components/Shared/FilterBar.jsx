@@ -6,6 +6,17 @@ export default function FilterBar({
     onSearch,
     onReset
 }) {
+    const handleSearchKeyDown = (event) => {
+        if (event.key !== 'Enter') {
+            return;
+        }
+
+        event.preventDefault();
+        if (onSearch) {
+            onSearch();
+        }
+    };
+
     return (
         <div className='ins-filter-bar' style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
             {searchOptions.map((opt, index) => (
@@ -15,6 +26,7 @@ export default function FilterBar({
                     placeholder={opt.placeholder || 'Tìm kiếm...'}
                     value={opt.value}
                     onChange={(e) => opt.onChange(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
                 />
             ))}
             
