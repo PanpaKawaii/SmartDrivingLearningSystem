@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import Modal from '../../../components/Shared/Modal';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
@@ -57,16 +58,19 @@ export default function QuestionBank() {
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterLesson, setFilterLesson] = useState(lessonIdParam);
-    const [filterChapter, setFilterChapter] = useState(chapterIdParam);
+    const [filters, setFilters] = useState({
+        search: '',
+        lessonId: lessonIdParam,
+        chapterId: chapterIdParam
+    });
 
     // Sync filter khi query param thay đổi (browser back/forward)
     useEffect(() => {
-        setFilterLesson(lessonIdParam);
+        setFilters(prev => ({ ...prev, lessonId: lessonIdParam }));
     }, [lessonIdParam]);
 
     useEffect(() => {
-        setFilterChapter(chapterIdParam);
+        setFilters(prev => ({ ...prev, chapterId: chapterIdParam }));
     }, [chapterIdParam]);
 
     // Load lessons và chapters khi mở trang
@@ -96,13 +100,13 @@ export default function QuestionBank() {
                     page: String(serverPagination.page),
                     pageSize: String(serverPagination.pageSize),
                 });
-                if (searchTerm.trim()) {
-                    query.set('content', searchTerm.trim());
+                if (filters.search.trim()) {
+                    query.set('content', filters.search.trim());
                 }
-                if (filterLesson) {
-                    query.set('lessonId', filterLesson);
-                } else if (filterChapter) {
-                    query.set('chapterId', filterChapter); 
+                if (filters.lessonId) {
+                    query.set('lessonId', filters.lessonId);
+                } else if (filters.chapterId) {
+                    query.set('chapterId', filters.chapterId); 
                 }
                 const res = await fetchData(`Questions?${query.toString()}`, token);
                 const items = normalizeItems(res);
@@ -165,21 +169,19 @@ export default function QuestionBank() {
                 setLoading(false);
             }
         })();
-    }, [token, refresh, serverPagination.page, serverPagination.pageSize, searchTerm, filterLesson, filterChapter]);
+    }, [token, refresh, serverPagination.page, serverPagination.pageSize, filters.search, filters.lessonId, filters.chapterId]);
 
     const handlePageChange = (page) => {
         setServerPagination((prev) => ({ ...prev, page }));
     };
 
     const handleSearch = (search) => {
-        setSearchTerm(search);
+        setFilters(prev => ({ ...prev, search }));
         setServerPagination((prev) => ({ ...prev, page: 1 }));
     };
 
-    const handleFilterChapter = (e) => {
-        const val = e.target.value;
-        setFilterChapter(val);
-        setFilterLesson('');
+    const handleFilterChapter = (val) => {
+        setFilters(prev => ({ ...prev, chapterId: val, lessonId: '' }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
         if (val) {
             setSearchParams({ chapterId: val });
@@ -188,9 +190,8 @@ export default function QuestionBank() {
         }
     };
 
-    const handleFilterLesson = (e) => {
-        const val = e.target.value;
-        setFilterLesson(val);
+    const handleFilterLesson = (val) => {
+        setFilters(prev => ({ ...prev, lessonId: val }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
         if (val) {
             const lesson = allLessons.find(l => l.id === val);
@@ -202,15 +203,7 @@ export default function QuestionBank() {
     };
 
     const handleClearFilter = () => {
-        if(filterLesson){
-            setFilterLesson('');
-        }
-        if(filterChapter){
-            setFilterChapter('');
-        }
-        if(searchTerm.trim()){
-            setSearchTerm('');
-        }
+        setFilters(prev => ({ ...prev, search: '', lessonId: '', chapterId: '' }));
         setSearchParams({});
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
@@ -327,14 +320,14 @@ export default function QuestionBank() {
     // Context Badge
     const activeBadge = (() => {
         let badge = [];
-        if(searchTerm.trim()){
-            badge.push({ text: `"${searchTerm.trim()}"`, onClear: () => handleClearFilter() });
+        if(filters.search.trim()){
+            badge.push({ text: `"${filters.search.trim()}"`, onClear: () => handleClearFilter() });
         }
-        if (filterLesson) {
-            const lesson = allLessons.find(l => l.id === filterLesson);
+        if (filters.lessonId) {
+            const lesson = allLessons.find(l => l.id === filters.lessonId);
             badge.push({ text: lesson?.name || '', onClear: () => handleClearFilter() });
-        } else if (filterChapter) {
-            const chapter = allChapters.find(c => c.id === filterChapter);
+        } else if (filters.chapterId) {
+            const chapter = allChapters.find(c => c.id === filters.chapterId);
             badge.push({ text: chapter?.name || '', onClear: () => handleClearFilter() });
         }
         return badge;
@@ -348,7 +341,7 @@ export default function QuestionBank() {
                     <p>Quản lý danh sách câu hỏi sát hạch lái xe các hạng.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '12px' }}>
-                    {(filterLesson || filterChapter) && (
+                    {(filters.lessonId || filters.chapterId) && (
                         <button className='ins-btn' style={{ background: 'var(--ins-surface-high)', color: 'var(--ins-on-surface)' }} onClick={() => navigate(-1)}>
                             <i className='fa-solid fa-arrow-left'></i> Quay lại
                         </button>
@@ -359,33 +352,36 @@ export default function QuestionBank() {
                 </div>
             </div>
 
+            <FilterBar
+                searchOptions={[
+                    { placeholder: 'Tìm kiếm câu hỏi...', value: filters.search, onChange: (val) => setFilters(prev => ({ ...prev, search: val })) }
+                ]}
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả chương —',
+                        value: filters.chapterId,
+                        options: allChapters,
+                        onChange: handleFilterChapter
+                    },
+                    {
+                        placeholder: filters.chapterId ? '— Tất cả bài học —' : '— Chọn chương trước —',
+                        value: filters.lessonId,
+                        options: filters.chapterId ? allLessons.filter(l => l.questionChapterId === filters.chapterId) : allLessons,
+                        disabled: !filters.chapterId,
+                        onChange: handleFilterLesson
+                    }
+                ]}
+                onSearch={() => setServerPagination(prev => ({ ...prev, page: 1 }))}
+                onReset={handleClearFilter}
+            />
+
             <DataTable
                 title={`Hiển thị ${questions.length}/${serverPagination.totalCount || questions.length} câu hỏi`}
                 columns={columns}
                 data={questions}
                 loading={loading}
-                onSearch={handleSearch}
-                searchValue={searchTerm}
-                onSearchValueChange={setSearchTerm}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
-                filters={[
-                    {
-                        id: 'chapter-filter',
-                        value: filterChapter,
-                        onChange: handleFilterChapter,
-                        options: allChapters,
-                        placeholder: '— Tất cả chương —',
-                    },
-                    {
-                        id: 'lesson-filter',
-                        value: filterLesson,
-                        onChange: handleFilterLesson,
-                        options: filterChapter ? allLessons.filter(l => l.questionChapterId === filterChapter) : allLessons,
-                        placeholder: filterChapter ? '— Tất cả bài học —' : '— Chọn chương trước —',
-                        disabled: !filterChapter,
-                    },
-                ]}
                 contextBadge={ activeBadge.length > 0 ? activeBadge : null }
                 actions={
                     <>
