@@ -26,8 +26,12 @@ const formatDateTimeLines = (value) => {
 };
 
 const getEntityRoute = (report) => {
-    if (report?.questionId) return `/instructor/report-entity/question/${report.questionId}`;
-    if (report?.simulationId) return `/instructor/report-entity/simulation/${report.simulationId}`;
+    const questionId = report?.questionId || report?.question?.id;
+    const simulationId = report?.simulationId || report?.simulation?.id;
+
+    if (questionId) return `/instructor/question-bank/${questionId}`;
+    if (simulationId) return '/instructor/simulation-bank';
+    if (report?.forumPostId || report?.forumCommentId) return '/instructor/posts-list';
     return null;
 };
 
@@ -54,7 +58,10 @@ export default function ContentErrorReports() {
                     pageSize: serverPagination.pageSize,
                 });
                 const res = await fetchData(`Reports?${query.toString()}`, token);
-                setReportItems(normalizeItems(res));
+                const contentReports = normalizeItems(res).filter(
+                    (report) => report?.forumPostId == null && report?.forumCommentId == null
+                );
+                setReportItems(contentReports);
                 setServerPagination(prev => ({
                     ...prev,
                     page: res?.page || prev.page,
@@ -110,9 +117,9 @@ export default function ContentErrorReports() {
         { key: 'actions', label: 'Thao tác', width: '140px', render: (_, row) => (
             <div className='ins-action-cell'>
                 <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
-                    const route = getEntityRoute(row);
-                    if (!route) return;
-                    navigate(route);
+                    setSelectedReport(row);
+                    setModalMode('view');
+                    setActionType('approve');
                 }}>
                     <i className='fa-solid fa-eye'></i>
                 </button>
@@ -206,6 +213,7 @@ export default function ContentErrorReports() {
                 report={selectedReport}
                 resolve={selectedReport?.resolves?.[0] || null}
                 actionType={actionType}
+                showReportedContentButton
                 initialTitle={actionType === 'disapprove'
                     ? '[Kết quả] Phản hồi về báo cáo nội dung ....'
                     : '[Đã cập nhật] Xác nhận sửa đổi nội dung theo báo cáo của bạn!'}

@@ -8,6 +8,8 @@ export default function ReportFeedbackModal({
     resolve,
     actionType,
     initialTitle,
+    showReportedContentButton = false,
+    onOpenEntity,
     onClose,
     onSubmit,
 }) {
@@ -29,6 +31,7 @@ export default function ReportFeedbackModal({
 
     const isViewMode = mode === 'view';
     const isValid = title.trim().length >= 5 && content.trim().length >= 10;
+    const hasEntityNavigation = typeof onOpenEntity === 'function';
 
     const handleSubmit = async () => {
         console.log('Submitting feedback with title:', title, 'and content:', content);
@@ -72,6 +75,11 @@ export default function ReportFeedbackModal({
                     <button className='ins-btn ins-btn-secondary' onClick={onClose} disabled={submitting}>
                         {isViewMode ? 'Dong' : 'Huy'}
                     </button>
+                    {isViewMode && showReportedContentButton && hasEntityNavigation && (
+                        <button className='ins-btn ins-btn-primary' onClick={onOpenEntity}>
+                            Xem nội dung bị báo cáo
+                        </button>
+                    )}
                     {!isViewMode && (
                         <button className='ins-btn ins-btn-primary' onClick={handleSubmit} disabled={!isValid || submitting}>
                             {submitting ? 'Dang gui...' : actionType === 'disapprove' ? 'Bo qua' : 'Duyet'}
@@ -96,6 +104,19 @@ export default function ReportFeedbackModal({
                 <div className='ins-form-static'>{report?.content}</div>
             </div>
 
+            {showReportedContentButton && isViewMode && (
+                <div className='ins-form-group'>
+                    <label className='ins-form-label'>Nội dung bị báo cáo</label>
+                    <button
+                        className='ins-btn ins-btn-secondary'
+                        onClick={onOpenEntity}
+                        disabled={!hasEntityNavigation}
+                    >
+                        Đi đến trang quản lý nội dung
+                    </button>
+                </div>
+            )}
+
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Người báo cáo</label>
                 <div className='ins-form-static'>{report?.user?.name}</div>
@@ -103,7 +124,7 @@ export default function ReportFeedbackModal({
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Trạng thái</label>
-                <div className='ins-form-static'>{report?.status === 1 ? 'Chưa xử lý' : 'Đã xử lý'}</div>
+                <div className='ins-form-static'>{report?.status === -1 ? 'Chưa xử lý' : 'Đã xử lý'}</div>
             </div>
 
             {resolve && (
