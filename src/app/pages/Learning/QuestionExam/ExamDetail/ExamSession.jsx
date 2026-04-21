@@ -1,5 +1,5 @@
-
 import { Link } from 'react-router-dom';
+
 import './ExamSession.css';
 
 export default function ExamSession({
@@ -7,7 +7,7 @@ export default function ExamSession({
     examId = '',
     type = 'exam',
 }) {
-    console.log('Sessions', examSessions);
+    // console.log('Sessions', examSessions);
 
     return examSessions && examSessions.length > 0 && (
         <div className='exam-session-container'>

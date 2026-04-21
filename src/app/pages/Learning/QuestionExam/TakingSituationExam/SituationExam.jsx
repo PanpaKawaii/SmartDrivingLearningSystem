@@ -37,10 +37,6 @@ export default function SituationExam() {
     }, [selectedScenarioId])
 
     useEffect(() => {
-        if (user?.roleName != 'Student' && localStorage.getItem('SituationExam') == new Date().toLocaleDateString()) {
-            navigate('./../..');
-            return;
-        }
         (async () => {
             setError(null);
             setLoading(true);
@@ -60,7 +56,6 @@ export default function SituationExam() {
                 setThisSituationExam(ThisSituationExamResponse);
                 setSIMULATIONSCENARIOs(SimulationItems);
                 setSelectedScenarioId(p => p ? p : SimulationItems?.[0]?.id);
-                localStorage.setItem('SituationExam', new Date().toLocaleDateString());
             } catch (error) {
                 console.error('Error', error);
                 setError(error);

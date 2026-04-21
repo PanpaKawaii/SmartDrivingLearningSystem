@@ -174,7 +174,7 @@ export default function ControlledVideo({
                                     ></div>
                                 }
                             </div>
-                            {stopMoment !== null &&
+                            {stopMoment !== null && allowRestart &&
                                 <div className='bar point-bar'>
                                     <div
                                         className='fill white-point'
@@ -202,7 +202,7 @@ export default function ControlledVideo({
                                 {stopMoment !== null && (
                                     <>
                                         <p>Thời gian: {stopMoment?.toFixed(3) || 0} giây</p>
-                                        <p>Điểm: {point?.toFixed(0) || 0}</p>
+                                        {allowRestart && <p>Điểm: {point?.toFixed(0) || 0}</p>}
                                     </>
                                 )}
                             </div>
@@ -254,7 +254,7 @@ export default function ControlledVideo({
                                             <td>{result.index}</td>
                                             {/* <div>{result.simulationExamId}</div> */}
                                             <td>{result.durationSecond}</td>
-                                            <td>{result.score}</td>
+                                            <td>{'?' || result.score}</td>
                                         </tr>
                                     ))}
                                 </tbody>

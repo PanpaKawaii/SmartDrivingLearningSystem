@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import './ExamDetail.css';
 
 export default function ExamDetail({
+    roleName = '',
     exam = {},
     type = '',
+    today = [],
+    limit = 0,
 }) {
     return (
         <div className={`exam-detail-container ${type}`}>
@@ -36,14 +39,33 @@ export default function ExamDetail({
                         <p>Bài thi sẽ tự động nộp khi hết thời gian. Hãy quản lý thời gian hợp lý!</p>
                     </div>
                 }
+                {roleName != 'Student' &&
+                    <div className={`limit ${today?.length >= limit ? 'limited' : ''}`}>
+                        Giới hạn dùng thử trong ngày: {limit - (today?.length || 0)}/{limit}
+                    </div>
+                }
                 <Link
                     key={exam.id}
-                    to={type == 'exam' ? `./${exam.id}/taking-exam` : (type == 'situation' ? `./${exam.id}/taking-situation-exam` : './')}
+                    to={today?.length >= limit ? '' : (type == 'exam' ? `./${exam.id}/taking-exam` : (type == 'situation' ? `./${exam.id}/taking-situation-exam` : './'))}
                     className='link question-exam-link'
                     state='exam'
                 >
-                    <button className='btn'>
-                        Bắt đầu
+                    <button
+                        className='btn'
+                        disabled={today?.length >= limit}
+                        onClick={() => {
+                            const Today = new Date().toLocaleDateString();
+                            localStorage.setItem(type == 'exam' ? 'ExamSessionStorage' : 'SimulationSessionStorage', JSON.stringify(
+                                [...(
+                                    ((JSON.parse(
+                                        localStorage.getItem(type == 'exam' ? 'ExamSessionStorage' : 'SimulationSessionStorage') || '[]'
+                                    )))?.filter(ps => ps == Today)),
+                                    Today,
+                                ]
+                            ));
+                        }}
+                    >
+                        {today?.length >= limit ? 'Vui lòng đăng ký thành viên' : 'Bắt đầu làm bài'}
                     </button>
                 </Link>
             </div>
