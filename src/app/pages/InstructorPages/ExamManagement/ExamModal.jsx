@@ -95,6 +95,7 @@ function PickerQuestionItem({ question, selected, onToggle }) {
 
 function SelectedQuestionItem({ item, index, onRemove }) {
   const question = item.question;
+  const answers = question?.answers || [];
   return (
     <div className="ins-exam-modal-selected-item">
       <span className="ins-exam-modal-selected-index">{index + 1}</span>
@@ -109,6 +110,26 @@ function SelectedQuestionItem({ item, index, onRemove }) {
         {question?.answers && question.answers.length > 0 && (
           <div className="ins-exam-modal-selected-meta">
             {question.answers.length} đáp án · {question.answers.filter((a) => a.isCorrect).length} đúng
+          </div>
+        )}
+        {answers.length > 0 && (
+          <div className="ins-exam-modal-answer-list">
+            {answers.map((answer, answerIndex) => (
+              <div
+                key={answer.id || `${item.questionId}-${answerIndex}`}
+                className={`ins-exam-modal-answer-item ${answer.isCorrect ? "is-correct" : ""}`.trim()}
+              >
+                <span className="ins-exam-modal-answer-letter">
+                  {String.fromCharCode(65 + answerIndex)}
+                </span>
+                <span className="ins-exam-modal-answer-content">
+                  {answer.content || "—"}
+                </span>
+                {answer.isCorrect && (
+                  <i className="fa-solid fa-check ins-exam-modal-answer-check" />
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -143,6 +164,37 @@ export default function ExamModal({ isOpen, onClose, onSuccess, initialData }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const hydrateSelectedQuestions = useCallback(async (baseQuestions) => {
+    const ids = [...new Set(baseQuestions.map((sq) => sq.questionId).filter(Boolean))];
+    if (ids.length === 0) return;
+
+    try {
+      const entries = await Promise.all(
+        ids.map(async (id) => {
+          try {
+            const detail = await fetchData(`Questions/${id}`, token);
+            return [id, detail || null];
+          } catch (err) {
+            if (err?.status === 401) {
+              refreshNewToken(user);
+            }
+            return [id, null];
+          }
+        }),
+      );
+
+      const detailsMap = new Map(entries);
+      setSelectedQuestions((prev) =>
+        prev.map((sq) => ({
+          ...sq,
+          question: detailsMap.get(sq.questionId) || sq.question,
+        })),
+      );
+    } catch {
+      
+    }
+  }, [token, refreshNewToken, user]);
+
   useEffect(() => {
     if (!isOpen) return;
     setError("");
@@ -152,12 +204,14 @@ export default function ExamModal({ isOpen, onClose, onSuccess, initialData }) {
 
     if (isEdit && initialData) {
       setFormData(buildInitialForm(initialData));
-      setSelectedQuestions(buildSelectedQuestions(initialData));
+      const baseQuestions = buildSelectedQuestions(initialData);
+      setSelectedQuestions(baseQuestions);
+      hydrateSelectedQuestions(baseQuestions);
     } else {
       setFormData(FORM);
       setSelectedQuestions([]);
     }
-  }, [isOpen, isEdit, initialData]);
+  }, [isOpen, isEdit, initialData, hydrateSelectedQuestions]);
 
   const fetchPickerList = useCallback(async () => {
     setPickerLoading(true);

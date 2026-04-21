@@ -267,6 +267,56 @@
   margin-top: 4px;
 }
 
+.ins-exam-modal-answer-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ins-exam-modal-answer-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--ins-on-surface);
+}
+
+.ins-exam-modal-answer-item.is-correct {
+  color: var(--ins-primary);
+  font-weight: 600;
+}
+
+.ins-exam-modal-answer-letter {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  background: rgba(95, 117, 165, 0.15);
+  color: var(--ins-on-surface);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ins-exam-modal-answer-item.is-correct .ins-exam-modal-answer-letter {
+  background: var(--ins-primary);
+  color: #fff;
+}
+
+.ins-exam-modal-answer-content {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.ins-exam-modal-answer-check {
+  margin-top: 2px;
+  font-size: 0.72rem;
+}
+
 .ins-exam-modal-selected-remove {
   flex-shrink: 0;
 }
