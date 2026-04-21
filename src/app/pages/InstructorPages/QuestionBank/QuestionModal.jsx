@@ -315,6 +315,11 @@ export default function QuestionModal({
           </button>
         </>
       }
+      message={error && (
+            <div className="ins-error-banner">
+              <i className="fa-solid fa-triangle-exclamation"></i> {error}
+            </div>
+          )}
     >
       {loading ? (
         <div className="ins-modal-loading">
@@ -322,11 +327,7 @@ export default function QuestionModal({
         </div>
       ) : (
         <div className="ins-form-body ins-question-modal">
-          {error && (
-            <div className="ins-error-banner">
-              <i className="fa-solid fa-triangle-exclamation"></i> {error}
-            </div>
-          )}
+          
 
           <div className="ins-form-grid ins-question-grid-main">
             <div className="ins-form-group">

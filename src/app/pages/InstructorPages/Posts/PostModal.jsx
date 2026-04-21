@@ -102,8 +102,9 @@ export default function PostModal({ isOpen, onClose, onSave, post: postProp, act
                     </button>
                 </>
             }
+            message={error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
         >
-            {error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
+            
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Chủ đề <span style={{ color: 'var(--ins-error)' }}>*</span></label>
                 <select

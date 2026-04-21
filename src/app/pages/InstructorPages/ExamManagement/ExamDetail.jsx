@@ -224,14 +224,14 @@ function ExamDetail() {
               </>
             </DetailField>
 
-            <DetailField label="Ngẫu nhiên câu hỏi">
+            {/* <DetailField label="Ngẫu nhiên câu hỏi">
               <StatusChip
                 active={exam.isRandom}
                 activeText="Có"
                 inactiveText="Không"
                 className="ins-metadata-badge"
               />
-            </DetailField>
+            </DetailField> */}
 
             <DetailField label="Trạng thái">
               <StatusChip

@@ -105,8 +105,9 @@ export default function ChapterModal({ isOpen, onClose, onSave, chapter: chapter
                     </button>
                 </>
             }
+            message={error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
         >
-            {error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
+            
 
             {/* Hạng bằng lái */}
             <div className='ins-form-group'>

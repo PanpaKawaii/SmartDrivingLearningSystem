@@ -338,13 +338,14 @@ export default function ExamModal({ isOpen, onClose, onSuccess, initialData }) {
           </button>
         </>
       }
-    >
-      <div className="ins-form-body">
-        {error && (
+      message={error && (
           <div className="ins-error-banner">
             <i className="fa-solid fa-triangle-exclamation" /> {error}
           </div>
         )}
+    >
+      <div className="ins-form-body">
+        
 
         <div className="ins-form-group">
           <label className="ins-form-label">
@@ -398,7 +399,7 @@ export default function ExamModal({ isOpen, onClose, onSuccess, initialData }) {
             />
           </div>
 
-          <div className="ins-form-group">
+          {/* <div className="ins-form-group">
             <label className="ins-form-label">Ngẫu nhiên câu hỏi</label>
             <div className="ins-exam-modal-random-toggle-row">
               <RandomToggle
@@ -409,7 +410,7 @@ export default function ExamModal({ isOpen, onClose, onSuccess, initialData }) {
                 {formData.isRandom ? "Có" : "Không"}
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="ins-exam-modal-selected-section">
