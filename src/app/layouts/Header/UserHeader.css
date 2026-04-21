@@ -273,13 +273,31 @@
 /* Chấm đỏ thông báo */
 .noti-bell-btn .red-dot {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 10px;
-    height: 10px;
-    background-color: #ff4d4f;
+    top: 10px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    
+    background-color: #ef4444;
     border-radius: 50%;
-    border: 2px solid white;
+    border: 1.5px solid #0f172a; 
+    box-shadow: 0 0 4px rgba(239, 68, 68, 0.6);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
 }
 
 /* Đảm bảo Dropdown hiển thị đúng vị trí */
