@@ -24,8 +24,8 @@ export default function SimulationExamManagement() {
     const [refresh, setRefresh] = useState(0);
 
     const [showCreate, setShowCreate] = useState(false);
-    const [editingExam, setEditingExam] = useState(null);
     const [selectedExam, setSelectedExam] = useState(null);
+    const [startEditMode, setStartEditMode] = useState(false);
 
     const [serverPagination, setServerPagination] = useState({
         page: 1,
@@ -173,7 +173,7 @@ export default function SimulationExamManagement() {
                         className='fa-regular fa-clock'
                         style={{ marginRight: '6px', color: 'var(--ins-primary)', opacity: 0.8 }}
                     />
-                    {val} phút
+                    ~{Math.ceil(val / 60)} phút
                 </span>
             ),
         },
@@ -185,17 +185,17 @@ export default function SimulationExamManagement() {
                 <span style={{ fontWeight: 600, color: 'var(--ins-primary)' }}>{val} %</span>
             ),
         },
-        {
-            key: 'isRandom',
-            label: 'Ngẫu nhiên',
-            width: '110px',
-            render: (val) => (
-                <span className={`ins-status-chip ${val ? 'approved' : 'pending'}`}>
-                    <span className='chip-dot'></span>
-                    {val ? 'Có' : 'Không'}
-                </span>
-            ),
-        },
+        // {
+        //     key: 'isRandom',
+        //     label: 'Ngẫu nhiên',
+        //     width: '110px',
+        //     render: (val) => (
+        //         <span className={`ins-status-chip ${val ? 'approved' : 'pending'}`}>
+        //             <span className='chip-dot'></span>
+        //             {val ? 'Có' : 'Không'}
+        //         </span>
+        //     ),
+        // },
         {
             key: 'status',
             label: 'Trạng thái',
@@ -216,7 +216,10 @@ export default function SimulationExamManagement() {
                     <button
                         className='ins-action-btn view'
                         title='Xem chi tiết'
-                        onClick={() => setSelectedExam(row)}
+                        onClick={() => {
+                            setStartEditMode(false);
+                            setSelectedExam(row);
+                        }}
                     >
                         <i className='fa-solid fa-eye' />
                     </button>
@@ -224,8 +227,8 @@ export default function SimulationExamManagement() {
                         className='ins-action-btn edit'
                         title='Chỉnh sửa'
                         onClick={() => {
-                            setEditingExam(row);
-                            setShowCreate(true);
+                            setStartEditMode(true);
+                            setSelectedExam(row);
                         }}
                     >
                         <i className='fa-solid fa-pen' />
@@ -258,10 +261,7 @@ export default function SimulationExamManagement() {
                 <div style={{ display: 'flex', gap: '12px' }}>
                     <button
                         className='ins-btn ins-btn-primary'
-                        onClick={() => {
-                            setEditingExam(null);
-                            setShowCreate(true);
-                        }}
+                        onClick={() => setShowCreate(true)}
                     >
                         <i className='fa-solid fa-plus' /> Tạo đề thi mới
                     </button>
@@ -318,22 +318,22 @@ export default function SimulationExamManagement() {
                 }
             />
 
-            {/* Modal Tạo mới / Chỉnh sửa */}
+            {/* Modal Tạo mới */}
             <CreateSituationExamModal
                 isOpen={showCreate}
-                onClose={() => {
-                    setShowCreate(false);
-                    setEditingExam(null);
-                }}
+                onClose={() => setShowCreate(false)}
                 onSuccess={() => setRefresh((r) => r + 1)}
-                initialData={editingExam}
             />
 
-            {/* Modal Xem chi tiết */}
+            {/* Modal Xem chi tiết / Chỉnh sửa */}
             <SituationExamDetailModal
                 isOpen={!!selectedExam}
                 exam={selectedExam}
-                onClose={() => setSelectedExam(null)}
+                startInEditMode={startEditMode}
+                onClose={() => {
+                    setSelectedExam(null);
+                    setStartEditMode(false);
+                }}
                 onSuccess={() => setRefresh((r) => r + 1)}
             />
         </div>
