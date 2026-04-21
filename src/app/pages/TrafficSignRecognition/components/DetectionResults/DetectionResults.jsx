@@ -1,4 +1,7 @@
 import DetectionCard from '../DetectionCard/DetectionCard';
+import parse from 'html-react-parser';
+import DOMPurify from 'dompurify';
+
 import './DetectionResults.css';
 
 export default function DetectionResults({ rawOutput }) {
@@ -90,7 +93,7 @@ export default function DetectionResults({ rawOutput }) {
         // Clean up consecutive <br />
         html = html.replace(/(<br \/>){3,}/g, '<br /><br />');
         
-        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+        return <div>{parse(DOMPurify.sanitize(html || ''))}</div>;
     };
 
     return (
