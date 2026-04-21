@@ -65,6 +65,7 @@ import InsVehicleMgmt from '../pages/InstructorPages/VehicleManagement/VehicleMa
 import InsTrafficSignBank from '../pages/InstructorPages/TrafficSignBank/TrafficSignBank.jsx'
 import InsSimulationBank from '../pages/InstructorPages/SimulationBank/SimulationBank.jsx'
 import InsExamMgmt from '../pages/InstructorPages/ExamManagement/ExamManagement.jsx'
+import InsExamDetail from '../pages/InstructorPages/ExamManagement/ExamDetail.jsx'
 import InsPendingPosts from '../pages/InstructorPages/PendingPosts/PendingPosts.jsx'
 import InsPosts from '../pages/InstructorPages/Posts/Posts.jsx'
 import InsCommunityReports from '../pages/InstructorPages/CommunityReports/CommunityReports.jsx'
@@ -146,6 +147,7 @@ export default function MainRoutes() {
                     <Route path='traffic-sign-bank' element={<InsTrafficSignBank />} />
                     <Route path='simulation-bank' element={<InsSimulationBank />} />
                     <Route path='exam-management' element={<InsExamMgmt />} />
+                    <Route path='exam-management/:examId' element={<InsExamDetail />} />
                     <Route path='pending-posts' element={<InsPendingPosts />} />
                     <Route path='posts-list' element={<InsPosts />} />
                     <Route path='community-reports' element={<InsCommunityReports />} />

@@ -263,13 +263,6 @@ export default function ExamManagement() {
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
           <button
-            className="ins-btn ins-btn-secondary"
-            onClick={() => setRefresh((r) => r + 1)}
-            disabled={loading}
-          >
-            <i className="fa-solid fa-rotate-right" /> Làm mới
-          </button>
-          <button
             className="ins-btn ins-btn-primary"
             onClick={() => {}}
           >
@@ -329,6 +322,15 @@ export default function ExamManagement() {
         loading={loading}
         serverPagination={serverPagination}
         onPageChange={handlePageChange}
+        actions={
+          <button
+            className="ins-btn ins-btn-secondary"
+            onClick={() => setRefresh((r) => r + 1)}
+            disabled={loading}
+          >
+            <i className="fa-solid fa-rotate-right" /> Làm mới
+          </button>
+        }
       />
     </div>
   );
