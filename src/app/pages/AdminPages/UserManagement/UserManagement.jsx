@@ -7,7 +7,6 @@ import EditUserModal from './EditUserModal';
 import DataTable from '../../../components/Shared/DataTable'; // Import DataTable
 import FilterBar from '../../../components/Shared/FilterBar'; // Import FilterBar
 import '../AdminPages.css'; // Sử dụng chung style với trang AdminPendingPosts
-
 export default function UserManagement() {
     const { user: authUser, logout, refreshNewToken } = useAuth();
     const navigate = useNavigate();
@@ -50,6 +49,13 @@ export default function UserManagement() {
         }
         setError('Lỗi kết nối hệ thống');
         return false;
+    };
+
+    // Hàm xử lý khi nhấn Lọc hoặc nhấn Enter
+    const handleFilterSubmit = (e) => {
+        if (e) e.preventDefault(); // Chặn load lại trang khi dùng thẻ <form>
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        setRefresh(r => r + 1);
     };
 
     useEffect(() => {
@@ -214,7 +220,7 @@ export default function UserManagement() {
                     <h1>Quản lý tài khoản</h1>
                     <p>Quản lý danh sách người dùng và phân quyền hệ thống.</p>
                 </div>
-                <button className='btn-primary' onClick={() => setCreating(true)}>
+                <button className='ins-action-add' onClick={() => setCreating(true)}>
                     <i className='fa-solid fa-plus' /> Thêm tài khoản
                 </button>
             </div>

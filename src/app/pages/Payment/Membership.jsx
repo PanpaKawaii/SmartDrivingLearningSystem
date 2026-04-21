@@ -17,6 +17,7 @@ export default function Membership() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [loadingFunction, setLoadingFunction] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -31,65 +32,68 @@ export default function Membership() {
                     console.log('ThisUserResponse', ThisUserResponse);
                     const SystemConfigResponse = await fetchData(`SystemConfigs/all`, token);
                     console.log('SystemConfigResponse', SystemConfigResponse);
-                    // const PaymentResponse = await fetchData(`Payment`, token);
-                    // console.log('PaymentResponse', PaymentResponse);
+                    const PaymentResponse = await fetchData(`payos/GetAll`, token);
+                    console.log('PaymentResponse', PaymentResponse);
 
-                    // const newOrderId = PaymentResponse?.length > 0 ? Math.max(...PaymentResponse.map(p => Number(p.orderId) || 0)) : 0;
+                    const newOrderId = (PaymentResponse?.length + 1) || 0;
+                    console.log('newOrderId', newOrderId);
 
                     const MembershipAmount = SystemConfigResponse?.find(sc => sc.name == 'Student Fee')?.value || 0;
 
                     setThisUser(ThisUserResponse);
                     setAmount(MembershipAmount);
-                    // setPaymentOrderId(newOrderId);
+                    setPaymentOrderId(newOrderId);
                 }
             } catch (error) {
                 console.error('Error', error);
+                setError(error);
                 if (error.status == 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             };
         })();
-    }, [user?.id]);
+    }, [refresh, user?.id]);
 
     const Purchase = async () => {
-        setError(null);
-        setLoading(true);
-        const token = user?.token || null;
-        try {
-            const PaymentData = {
-                orderId: paymentOrderId,
-                amount: Amount,
-            };
-            console.log('PaymentData:', PaymentData);
+        const PaymentData = {
+            orderId: paymentOrderId,
+            amount: Amount,
+        };
+        console.log('PaymentData:', PaymentData);
 
-            const resultPaymentData = await postData('payos/create', PaymentData, token);
+        setError(null);
+        setLoadingFunction(true);
+        const token = user?.token || '';
+        const userId = user?.id || 'no-user';
+        try {
+            const paymentQuery = new URLSearchParams({
+                userId: userId,
+            });
+            console.log('userId:', userId);
+            console.log('`payos/create?${paymentQuery.toString()}`:', `payos/create?${paymentQuery.toString()}`);
+            const resultPaymentData = await postData(`payos/create?${paymentQuery.toString()}`, PaymentData, token);
             console.log('resultPaymentData', resultPaymentData);
+
             window.location.href = resultPaymentData.paymentUrl;
         } catch (error) {
             console.error('Error', error);
+            setError(error);
             if (error.status == 401) refreshNewToken(user);
         } finally {
-            setLoading(false);
+            setLoadingFunction(false);
         };
     };
 
     const features = [
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
+        { name: 'Học các bài học theo bằng lái', role: 'Guest' },
+        { name: 'Học câu hỏi lý thuyết', role: 'Guest' },
+        { name: 'Xem các bài đăng trên diễn đàn', role: 'Guest' },
+        { name: 'AI Chatbot', role: 'Guest' },
+        { name: 'Tập luyện theo tình huống mô phỏng', role: 'Student' },
+        { name: 'Luyện tập thi thử', role: 'Student' },
+        { name: 'Trao đổi trên diễn đàn', role: 'Student' },
+        { name: 'AI giải thích biển báo thông qua hình ảnh', role: 'Student' },
+        { name: 'Lộ trình học cá nhân hóa', role: 'Student' },
     ];
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
@@ -139,9 +143,9 @@ export default function Membership() {
                         <button
                             className='btn'
                             onClick={() => Purchase()}
-                            disabled={loading || thisUser?.roleName == 'Student' || !user}
+                            disabled={loading || loadingFunction || thisUser?.roleName == 'Student' || !user}
                         >
-                            {loading ?
+                            {(loading || loadingFunction) ?
                                 'ĐANG XỬ LÝ...'
                                 : (thisUser?.roleName == 'Student' ?
                                     'ĐÃ ĐĂNG KÝ'

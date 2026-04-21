@@ -45,6 +45,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
 }
 
 .admin-header .header-search {
@@ -114,4 +115,23 @@
     background-color: var(--ins-error);
     border-radius: 50%;
     border: 2px solid var(--ins-bg);
+}
+
+.badge-dot {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: #ef4444; /* Màu đỏ rực */
+    border: 2px solid var(--ins-surface); /* Tạo viền để tách biệt với icon */
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }

@@ -133,7 +133,33 @@
     align-items: center;
     gap: 6px;
 }
-
+.ins-action-add{
+    background: #1e293b; 
+    color: white;
+    border: 1px solid #334155;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+    outline: none;
+    i {
+        font-size: 14px;
+    }
+    &:hover {
+        background: #334155;
+        border-color: #475569;
+        transform: translateY(-1px); /* Hiệu ứng nổi nhẹ khi hover */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    &:active {
+        transform: translateY(0); /* Nhấn xuống khi click */
+        background: #1e293b;
+    }
+}
 .ins-action-btn {
     width: 30px;
     height: 30px;
@@ -166,6 +192,7 @@
 .ins-action-btn.view:hover {
     color: #4ade80;
 }
+
 
 .ins-empty-state {
     text-align: center;

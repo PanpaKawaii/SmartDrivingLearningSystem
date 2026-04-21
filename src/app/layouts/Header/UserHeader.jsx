@@ -59,7 +59,7 @@ export default function UserHeader({
         if (!user?.token) return;
         try {
             // Gọi API lấy thông báo của user hiện tại
-            const res = await fetchData(`Notifications/user/${user.id}`, user.token);
+            const res = await fetchData(`Notifications/all?userId=${user.id}&sortBy=time`, user.token);
             setNotifications(Array.isArray(res) ? res : res?.items || []);
         } catch (error) {
             console.error('Error loading notifications', error);
