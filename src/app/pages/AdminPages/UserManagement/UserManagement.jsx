@@ -7,7 +7,6 @@ import EditUserModal from './EditUserModal';
 import DataTable from '../../../components/Shared/DataTable'; // Import DataTable
 import FilterBar from '../../../components/Shared/FilterBar'; // Import FilterBar
 import '../AdminPages.css'; // Sử dụng chung style với trang AdminPendingPosts
-import './UserManagement.css'; // Style riêng cho UserManagement
 export default function UserManagement() {
     const { user: authUser, logout, refreshNewToken } = useAuth();
     const navigate = useNavigate();
