@@ -209,7 +209,7 @@ export default function ControlledVideo({
                                 <ButtonList
                                     list={[
                                         {
-                                            name: 'report',
+                                            name: 'Báo cáo',
                                             onToggle: () => setOpenReport({
                                                 simulationId: selectedScenario?.id,
                                                 forumPostId: null,

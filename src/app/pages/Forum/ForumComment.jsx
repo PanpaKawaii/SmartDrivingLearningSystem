@@ -194,7 +194,7 @@ export default function ForumComment({
                                                     <ButtonList
                                                         list={[
                                                             (comment.userId != user?.id) && {
-                                                                name: 'report',
+                                                                name: 'Báo cáo',
                                                                 onToggle: () => setOpenReport({
                                                                     simulationId: null,
                                                                     forumPostId: null,
@@ -204,7 +204,7 @@ export default function ForumComment({
                                                                 disabled: false,
                                                             },
                                                             (comment.userId == user?.id) && {
-                                                                name: 'takedown',
+                                                                name: 'Gỡ',
                                                                 onToggle: () => TakeDownComment(comment.id),
                                                                 disabled: loading,
                                                             }
