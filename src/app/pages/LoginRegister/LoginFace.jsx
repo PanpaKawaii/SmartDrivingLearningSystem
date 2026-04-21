@@ -50,7 +50,6 @@ export default function LoginFace({
             const result = await postData(`auth/login?${loginQuery}`, LoginData, '');
             console.log('result', result);
 
-            // ==FIX==
             if (result?.user?.status == 0) {
                 console.error('Tài khoản này đã bị vô hiệu hóa');
                 setLoginError({ value: 'Tài khoản này đã bị vô hiệu hóa', name: 'Email, Password' });

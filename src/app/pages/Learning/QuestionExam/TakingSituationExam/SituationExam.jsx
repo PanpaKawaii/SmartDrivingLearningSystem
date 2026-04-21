@@ -135,7 +135,7 @@ export default function SituationExam() {
                 title={'BÀI THI MÔ PHỎNG'}
                 subtitle=''
                 titlePosition={'center'}
-                back={''}
+                back={!user && 'Quay lại'}
             />
             <div className='container'>
                 <div className='column-video'>
@@ -151,8 +151,17 @@ export default function SituationExam() {
                             <div className='heading-result'>
                                 <h3>CHI TIẾT BÀI LÀM</h3>
                                 {!user &&
-                                    <button className='btn' disabled={false} onClick={() => setViewResult(p => !p)}>
-                                        {viewResult ? 'Ẩn kết quả' : 'Xem kết quả'}
+                                    <button className='btn' onClick={() => setViewResult(p => !p)} disabled={myResults?.length != SIMULATIONSCENARIOs?.length}>
+                                        <span>
+                                            {myResults?.length != SIMULATIONSCENARIOs?.length ?
+                                                'Hoàn thành các kịch bản để xem kết quả'
+                                                : (viewResult ?
+                                                    'Ẩn kết quả'
+                                                    : 'Xem kết quả'
+                                                )
+                                            }
+                                        </span>
+                                        <i className='fa-solid fa-chevron-down'/>
                                     </button>
                                 }
                             </div>

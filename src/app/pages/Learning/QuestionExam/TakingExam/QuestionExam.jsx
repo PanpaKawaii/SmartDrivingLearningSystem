@@ -30,6 +30,7 @@ export default function QuestionExam() {
 
     const [selectedQuestionId, setSelectedQuestionId] = useState(null);
     const [myAnswers, setMyAnswers] = useState([]);
+    const [guestSession, setGuestSession] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -113,6 +114,8 @@ export default function QuestionExam() {
         });
     };
 
+    console.log('myAnswers', myAnswers);
+
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     console.log('selectedQuestion', selectedQuestion);
 
@@ -125,6 +128,7 @@ export default function QuestionExam() {
                 QuestionsAnswers={QUESTIONs}
                 selectedQuestion={selectedQuestion}
                 myAnswers={myAnswers}
+                guestSession={guestSession}
             />
             <Answer
                 examId={examId}
@@ -140,6 +144,7 @@ export default function QuestionExam() {
                 passScore={ThisExam?.passScore}
                 isFinish={isFinish}
                 setIsFinish={setIsFinish}
+                setGuestSession={setGuestSession}
             />
         </div>
     )

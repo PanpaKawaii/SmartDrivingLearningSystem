@@ -164,11 +164,15 @@ export default function ListExam() {
             <div className='container'>
                 <div className='filters'>
                     <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
-                        ĐỀ THI LÝ THUYẾT
+                        ĐỀ LÝ THUYẾT
                     </button>
                     <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
-                        ĐỀ THI MÔ PHỎNG
+                        ĐỀ MÔ PHỎNG
                     </button>
+                    {/* ==FIX== */}
+                    {/* <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
+                        ĐỀ CỦA TÔI
+                    </button> */}
                     <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
                     <button className={`btn ${ExamOrSituation == 'exam' ? 'exam-btn' : 'situation-btn'}`} onClick={() => setRefresh(p => p + 1)}>
                         <i className='fa-solid fa-arrow-rotate-left' />
@@ -193,7 +197,7 @@ export default function ListExam() {
                                         const isSelected = selectedId == exam.id;
                                         const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
 
-                                        return (
+                                        return !exam.isRandom && (
                                             <tr
                                                 key={exam.id}
                                                 onClick={() => setSelectedId(isSelected ? null : exam.id)}

@@ -20,6 +20,7 @@ export default function Answer({
     passScore = 0,
     isFinish = false,
     setIsFinish = () => { },
+    setGuestSession = () => { },
 }) {
     const { user, refreshNewToken } = useAuth();
 
@@ -135,9 +136,13 @@ export default function Answer({
 
         const token = user?.token || '';
         try {
-            const result = await postData('ExamSessions', ExamSessionData, token);
-            console.log('result', result);
-            navigate(`./../exam-result/${result?.id}`, { state: 'exam' });
+            if (user) {
+                const result = await postData('ExamSessions', ExamSessionData, token);
+                console.log('result', result);
+                navigate(`./../exam-result/${result?.id}`, { state: 'exam' });
+            } else {
+                setGuestSession(ExamSessionData);
+            }
 
             await sleep(1000);
         } catch (error) {
@@ -202,7 +207,7 @@ export default function Answer({
                     }}
                     disabled={loading}
                 >
-                    KẾT THÚC
+                    {isFinish ? 'VUI LÒNG ĐĂNG NHẬP ĐỂ LƯU BÀI LÀM' : 'KẾT THÚC'}
                 </button>
                 {/* <i className='fa-solid fa-xmark' style={{ color: 'red', fontSize: '20rem', textAlign: 'center', width: '100%' }} /> */}
                 {/* <div>

@@ -1,6 +1,6 @@
 .question-exam-container {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
     max-width: 1600px;
 }
