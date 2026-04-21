@@ -17,11 +17,11 @@ export default function ExamSessionDetail() {
     const location = useLocation();
 
     const examId = Params?.examId;
-    console.log('examId', examId);
+    // console.log('examId', examId);
     const sessionId = Params?.sessionId;
-    console.log('sessionId', sessionId);
+    // console.log('sessionId', sessionId);
     const ExamOrSituation = location.state;
-    console.log('ExamOrSituation', ExamOrSituation);
+    // console.log('ExamOrSituation', ExamOrSituation);
 
     const [ThisSession, setThisSession] = useState(null);
     const [refresh, setRefresh] = useState(0);
@@ -64,7 +64,7 @@ export default function ExamSessionDetail() {
         const isSelectedCorrect = correctAnswers.every(correct => myAnswers?.some(ans => ans.answer?.id == correct.id));
         return isSelectedCorrect;
     }).length || 0;
-    console.log('correctCount', correctCount);
+    // console.log('correctCount', correctCount);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>

@@ -7,7 +7,6 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import './ControlledVideo.css';
 
 export default function ControlledVideo({
-    myResults = [],
     selectedScenario = null,
     allowRestart = false,
     allowContinue = false,
@@ -210,7 +209,7 @@ export default function ControlledVideo({
                                 <ButtonList
                                     list={[
                                         {
-                                            name: 'report',
+                                            name: 'Báo cáo',
                                             onToggle: () => setOpenReport({
                                                 simulationId: selectedScenario?.id,
                                                 forumPostId: null,
@@ -237,30 +236,6 @@ export default function ControlledVideo({
                             </div>
                         </div>
                     </div>
-                    {myResults?.length > 0 &&
-                        <div className='my-results'>
-                            <h3>CHI TIẾT BÀI LÀM</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Kịch bản</th>
-                                        <th>Thời gian</th>
-                                        <th>Điểm</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {myResults.sort((a, b) => a.index - b.index)?.map((result, index) => (
-                                        <tr key={index}>
-                                            <td>{result.index}</td>
-                                            {/* <div>{result.simulationExamId}</div> */}
-                                            <td>{result.durationSecond}</td>
-                                            <td>{'?' || result.score}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    }
                 </>
                 :
                 <div

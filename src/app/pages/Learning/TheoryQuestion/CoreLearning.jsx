@@ -251,7 +251,7 @@ export default function CoreLearning({
                                             <ButtonList
                                                 list={[
                                                     {
-                                                        name: 'report',
+                                                        name: 'Báo cáo',
                                                         onToggle: () => setOpenReport({
                                                             simulationId: null,
                                                             forumPostId: null,
@@ -261,7 +261,7 @@ export default function CoreLearning({
                                                         disabled: false,
                                                     },
                                                     {
-                                                        name: MySavedQuestions?.includes(selectedQuestionId) ? 'unmark' : 'mark',
+                                                        name: MySavedQuestions?.includes(selectedQuestionId) ? 'Bỏ lưu' : 'Lưu',
                                                         onToggle: () => ToggleMarkQuestion(selectedQuestionId, mySAVEDQUESTIONs.find(sq => sq.questionId == selectedQuestionId) || null),
                                                         disabled: loading,
                                                     }

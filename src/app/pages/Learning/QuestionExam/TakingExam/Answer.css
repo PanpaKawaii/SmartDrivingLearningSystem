@@ -1,4 +1,6 @@
 .answer-container {
+    position: sticky;
+    top: 100px;
     font-size: 14px;
     min-width: 540px;
     height: fit-content;

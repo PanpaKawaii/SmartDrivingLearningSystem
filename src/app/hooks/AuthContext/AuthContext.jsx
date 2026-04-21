@@ -68,7 +68,6 @@ export const AuthProvider = ({ children }) => {
             const result = await postData(`auth/refresh?${refreshTokenQuery}`, {}, '');
             console.log('result', result);
 
-            // ==FIX==
             if (result?.user?.status == 0) {
                 console.error('Tài khoản này đã bị vô hiệu hóa');
                 return { message: 'Logout' };

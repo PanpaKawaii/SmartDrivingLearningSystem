@@ -31,6 +31,8 @@ export default function SituationExam() {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [done, setDone] = useState([]);
 
+    const [viewResult, setViewResult] = useState(false);
+
     useEffect(() => {
         const selectedScenario = SIMULATIONSCENARIOs.find(ss => ss.id == selectedScenarioId);
         setDone(p => selectedScenario ? [...p, selectedScenario?.simulationExamId] : p);
@@ -133,17 +135,58 @@ export default function SituationExam() {
                 title={'BÀI THI MÔ PHỎNG'}
                 subtitle=''
                 titlePosition={'center'}
-                back={''}
+                back={!user && 'Quay lại'}
             />
             <div className='container'>
-                <ControlledVideo
-                    myResults={myResults}
-                    selectedScenario={selectedScenario}
-                    allowRestart={false}
-                    allowContinue={true}
-                    baseScore={ThisSituationExam?.simulationExams?.find(se => se.simulation?.id == selectedScenario?.id)?.baseScore}
-                    additionalFunction={(propE) => { handleUpdateDurationScore(propE?.simulationExamId, propE?.durationSecond, propE?.score); }}
-                />
+                <div className='column-video'>
+                    <ControlledVideo
+                        selectedScenario={selectedScenario}
+                        allowRestart={false}
+                        allowContinue={true}
+                        baseScore={ThisSituationExam?.simulationExams?.find(se => se.simulation?.id == selectedScenario?.id)?.baseScore}
+                        additionalFunction={(propE) => { handleUpdateDurationScore(propE?.simulationExamId, propE?.durationSecond, propE?.score); }}
+                    />
+                    {myResults?.length > 0 &&
+                        <div className='my-results'>
+                            <div className='heading-result'>
+                                <h3>CHI TIẾT BÀI LÀM</h3>
+                                {!user &&
+                                    <button className='btn' onClick={() => setViewResult(p => !p)} disabled={myResults?.length != SIMULATIONSCENARIOs?.length}>
+                                        <span>
+                                            {myResults?.length != SIMULATIONSCENARIOs?.length ?
+                                                'Hoàn thành các kịch bản để xem kết quả'
+                                                : (viewResult ?
+                                                    'Ẩn kết quả'
+                                                    : 'Xem kết quả'
+                                                )
+                                            }
+                                        </span>
+                                        <i className='fa-solid fa-chevron-down'/>
+                                    </button>
+                                }
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Kịch bản</th>
+                                        <th>Thời gian</th>
+                                        <th>Điểm</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {myResults.sort((a, b) => a.index - b.index)?.map((result, index) => (
+                                        <tr key={index}>
+                                            {/* <div>{result.simulationExamId}</div> */}
+                                            <td>{result.index}</td>
+                                            <td>{result.durationSecond}</td>
+                                            <td>{viewResult ? result.score : '?'}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
                 <ListScenario
                     list={SIMULATIONSCENARIOs}
                     done={done}
@@ -155,9 +198,9 @@ export default function SituationExam() {
                         <button
                             className='btn btn-end'
                             onClick={() => handleSubmitExam()}
-                            disabled={loadingSubmit}
+                            disabled={loadingSubmit || !user}
                         >
-                            KẾT THÚC
+                            {user ? 'KẾT THÚC' : 'VUI LÒNG ĐĂNG NHẬP'}
                         </button>
                     }
                 />

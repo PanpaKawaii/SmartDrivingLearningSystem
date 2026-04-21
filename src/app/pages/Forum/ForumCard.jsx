@@ -20,6 +20,7 @@ export default function ForumCard({
     const [error, setError] = useState(null);
     const [open, setOpen] = useState(false);
     const [openReport, setOpenReport] = useState(null);
+    const [localReactType, setLocalReactType] = useState('');
 
     const TogglePostStatus = async (postId, action) => {
         setLoading(true);
@@ -75,12 +76,15 @@ export default function ForumCard({
         console.log(newReact?.id, oldReact?.reactType);
         if (oldReact == null) {
             console.log('new');
+            setLocalReactType(newReact?.id);
             ReactThePost(newReact?.id, oldReact?.id, 'new');
         } else if (newReact.force == true) {
             console.log('update');
+            setLocalReactType(newReact?.id);
             ReactThePost(newReact?.id, oldReact?.id, 'update');
         } else {
             console.log('delete');
+            setLocalReactType('');
             ReactThePost(newReact?.id, oldReact?.id, 'delete');
         }
         // setReaction(p => reaction.force ? reaction : (p != null ? null : reaction));
@@ -134,6 +138,9 @@ export default function ForumCard({
     const myReactionIcon = myReaction ? { ...myReaction, action: actions.find(a => a.id == myReaction.reactType) } : null;
     // console.log('myReactionIcon', myReactionIcon);
 
+    const LocalReaction = actions.find(a => a.id == localReactType);
+    // console.log('LocalReaction', LocalReaction);
+
     return (
         <div className={`forum-card-container ${post.userId == user?.id ? 'my-post' : ''}`}>
             <div className='user-information'>
@@ -159,7 +166,7 @@ export default function ForumCard({
                                     post.status == 1
                                     && post.userId != user?.id
                                 ) && {
-                                    name: 'report',
+                                    name: 'Báo cáo',
                                     onToggle: () => setOpenReport({
                                         simulationId: null,
                                         forumPostId: post.id,
@@ -172,14 +179,14 @@ export default function ForumCard({
                                     (post.status == 1 || post.status == 4)
                                     && post.userId == user?.id
                                 ) && {
-                                    name: post.status == 4 ? 'unhidden' : 'hidden',
+                                    name: post.status == 4 ? 'Bỏ ẩn' : 'Ẩn',
                                     onToggle: () => TogglePostStatus(post.id, 'hidden'),
                                     disabled: loading,
                                 },
                                 (
                                     post.userId == user?.id
                                 ) && {
-                                    name: 'delete',
+                                    name: 'Xóa',
                                     onToggle: () => TogglePostStatus(post.id, 'delete'),
                                     disabled: loading,
                                 }
@@ -244,14 +251,14 @@ export default function ForumCard({
                 >
                     <button
                         className='main-btn'
-                        style={{ backgroundColor: myReactionIcon ? myReactionIcon?.action?.color + '66' : '#ffffff20' }}
+                        style={{ backgroundColor: (myReactionIcon || LocalReaction) ? (LocalReaction?.color || myReactionIcon?.action?.color) + '66' : '#ffffff20' }}
                         onClick={() => handleClickReact({ id: 'Like', force: false }, myReactionIcon)}
                         disabled={!user || loading || parentLoading}
                     >
-                        {myReactionIcon ?
+                        {(myReactionIcon || LocalReaction) ?
                             <>
-                                <i className={myReactionIcon?.action?.icon} style={{ color: myReactionIcon?.action?.color, '--background': myReactionIcon?.action?.background }} />
-                                <span style={{ color: myReactionIcon?.action?.color }}>{myReactionIcon?.action?.id}</span>
+                                <i className={LocalReaction?.icon || myReactionIcon?.action?.icon} style={{ color: (LocalReaction?.color || myReactionIcon?.action?.color), '--background': (LocalReaction?.background || myReactionIcon?.action?.background) }} />
+                                <span style={{ color: (LocalReaction?.color || myReactionIcon?.action?.color) }}>{(LocalReaction?.id || myReactionIcon?.action?.id)}</span>
                             </>
                             :
                             <i className='fa-regular fa-thumbs-up' />
