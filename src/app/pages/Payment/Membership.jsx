@@ -17,6 +17,7 @@ export default function Membership() {
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [loadingFunction, setLoadingFunction] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -31,16 +32,17 @@ export default function Membership() {
                     console.log('ThisUserResponse', ThisUserResponse);
                     const SystemConfigResponse = await fetchData(`SystemConfigs/all`, token);
                     console.log('SystemConfigResponse', SystemConfigResponse);
-                    // const PaymentResponse = await fetchData(`Payment`, token);
-                    // console.log('PaymentResponse', PaymentResponse);
+                    const PaymentResponse = await fetchData(`payos/GetAll`, token);
+                    console.log('PaymentResponse', PaymentResponse);
 
-                    // const newOrderId = PaymentResponse?.length > 0 ? Math.max(...PaymentResponse.map(p => Number(p.orderId) || 0)) : 0;
+                    const newOrderId = (PaymentResponse?.length + 1) || 0;
+                    console.log('newOrderId', newOrderId);
 
                     const MembershipAmount = SystemConfigResponse?.find(sc => sc.name == 'Student Fee')?.value || 0;
 
                     setThisUser(ThisUserResponse);
                     setAmount(MembershipAmount);
-                    // setPaymentOrderId(newOrderId);
+                    setPaymentOrderId(newOrderId);
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -49,27 +51,32 @@ export default function Membership() {
                 setLoading(false);
             };
         })();
-    }, [user?.id]);
+    }, [refresh, user?.id]);
 
     const Purchase = async () => {
-        setError(null);
-        setLoading(true);
-        const token = user?.token || null;
-        try {
-            const PaymentData = {
-                orderId: paymentOrderId,
-                amount: Amount,
-            };
-            console.log('PaymentData:', PaymentData);
+        const PaymentData = {
+            orderId: paymentOrderId,
+            amount: Amount,
+        };
+        console.log('PaymentData:', PaymentData);
 
-            const resultPaymentData = await postData('payos/create', PaymentData, token);
+        setError(null);
+        setLoadingFunction(true);
+        const token = user?.token || '';
+        const userId = user?.id || 'no-user';
+        try {
+            const paymentQuery = new URLSearchParams({
+                userId: userId,
+            });
+            const resultPaymentData = await postData(`payos/create?${paymentQuery.toString()}`, PaymentData, token);
             console.log('resultPaymentData', resultPaymentData);
+
             window.location.href = resultPaymentData.paymentUrl;
         } catch (error) {
             console.error('Error', error);
             if (error.status == 401) refreshNewToken(user);
         } finally {
-            setLoading(false);
+            setLoadingFunction(false);
         };
     };
 
@@ -139,9 +146,9 @@ export default function Membership() {
                         <button
                             className='btn'
                             onClick={() => Purchase()}
-                            disabled={loading || thisUser?.roleName == 'Student' || !user}
+                            disabled={loading || loadingFunction || thisUser?.roleName == 'Student' || !user}
                         >
-                            {loading ?
+                            {(loading || loadingFunction) ?
                                 'ĐANG XỬ LÝ...'
                                 : (thisUser?.roleName == 'Student' ?
                                     'ĐÃ ĐĂNG KÝ'
