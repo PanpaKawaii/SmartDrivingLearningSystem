@@ -246,7 +246,7 @@ export default function UserProfile() {
                             </button>
                             <Link to='/membership'>
                                 <button className='sidebar-btn outline-btn mt-auto'>
-                                    <i className='fa-solid fa-lock'></i> Đăng ký thành viên
+                                    <i className='fa-solid fa-users'></i> Đăng ký thành viên
                                 </button>
                             </Link>
                         </div>

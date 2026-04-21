@@ -1,28 +1,10 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import StarsBackground from '../StarsBackground/StarsBackground';
-import TrafficLight from '../TrafficLight/TrafficLight';
 
 import './LoadingAnimation.css';
 
 export default function LoadingAnimation() {
-    // const [state, setState] = useState('success');
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         setState(prev => {
-    //             if (prev === 'success') return 'loading';
-    //             if (prev === 'loading') return 'error';
-    //             return 'success';
-    //         });
-    //     }, 700);
-    //     return () => clearInterval(interval);
-    // }, []);
-
     return (
         <div className="loading-container">
-            <div className='starsbackground'>
-                <StarsBackground />
-            </div>
             <div className="loading-background">
                 {[...Array(8)].map((_, i) => (
                     <motion.div
@@ -39,11 +21,6 @@ export default function LoadingAnimation() {
             </div>
 
             <div className="loading-content">
-                <div
-                    className='trafficlight'
-                >
-                    <TrafficLight text={'success'} faceText={''} setRefresh={() => { }} />
-                </div>
                 <motion.div
                     initial={{ scale: 0, rotateY: -180 }}
                     animate={{ scale: 1, rotateY: 0 }}
