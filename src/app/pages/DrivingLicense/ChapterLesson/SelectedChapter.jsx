@@ -28,8 +28,8 @@ export default function SelectedChapter({
 
                             {chapter.questionLessons.length == 0 ? (
                                 <EmptyNotification
-                                    name={'No Lessons Available'}
-                                    description={'Lessons for this chapter are coming soon.'}
+                                    name={'Không có bài học nào'}
+                                    description={'Các bài học của chương này sẽ được đăng tải sớm.'}
                                 />
                             ) : (
                                 <div className='lesson-grid'>

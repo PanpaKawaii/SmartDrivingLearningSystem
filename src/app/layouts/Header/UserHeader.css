@@ -74,6 +74,33 @@
                     border: 1px solid rgba(37, 99, 235, 0.4);
                     box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
                 }
+
+                &.highlight {
+                    position: relative;
+                    border: 2px solid transparent;
+                    background:
+                        /* linear-gradient(#0f172ad9, #0f172ad9) padding-box, */
+                        linear-gradient(45deg, #2563eb, #0891b2, #e43efa, #9008b2) padding-box,
+                        linear-gradient(135deg, #2563eb, #0891b2, #e43efa, #9008b2, #2563eb, #0891b2, #e43efa, #9008b2) border-box;
+
+                    background-size: 400% 400%;
+
+                    animation: borderAnimation 2s ease infinite;
+
+                    &::after {
+                        position: absolute;
+                        content: 'VIP';
+                        color: #becde2;
+                        background-image: linear-gradient(45deg, #2055c5, #0b7a96, #a226b3, #7c1197);
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        border-radius: 12px;
+                        text-align: center;
+                        align-content: center;
+                    }
+                }
             }
         }
 
@@ -227,25 +254,41 @@
 
                 &:hover {
                     color: var(--text-primary);
-                    background: rgba(30, 41, 59, 0.6);
+                    background: #1e293b99;
                 }
 
                 &.active {
-                    background: rgba(37, 99, 235, 0.2);
+                    background: #2563eb33;
                     color: #60a5fa;
-                    border: 1px solid rgba(37, 99, 235, 0.4);
-                    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+                    border: 1px solid #2563eb66;
+                    box-shadow: 0 0 20px #2563eb33;
                 }
             }
         }
     }
 }
 
+@keyframes borderAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 .header-right {
     display: flex;
     align-items: center;
-    gap: 5px; /* Khoảng cách giữa chuông và profile */
-    flex-shrink: 0; /* Không cho phép khu vực này bị co lại */
+    gap: 5px;
+    /* Khoảng cách giữa chuông và profile */
+    flex-shrink: 0;
+    /* Không cho phép khu vực này bị co lại */
 }
 
 .notification-wrapper {
@@ -267,19 +310,38 @@
 }
 
 .noti-bell-btn:hover {
-    color: #c7c4c4; /* Màu chủ đạo Greenlight */
+    color: #c7c4c4;
+    /* Màu chủ đạo Greenlight */
 }
 
 /* Chấm đỏ thông báo */
 .noti-bell-btn .red-dot {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 10px;
-    height: 10px;
-    background-color: #ff4d4f;
+    top: 10px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    
+    background-color: #ef4444;
     border-radius: 50%;
-    border: 2px solid white;
+    border: 1.5px solid #0f172a; 
+    box-shadow: 0 0 4px rgba(239, 68, 68, 0.6);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
 }
 
 /* Đảm bảo Dropdown hiển thị đúng vị trí */

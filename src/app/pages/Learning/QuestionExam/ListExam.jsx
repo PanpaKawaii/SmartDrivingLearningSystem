@@ -18,9 +18,9 @@ export default function ListExam() {
     const location = useLocation();
 
     const selectedIdState = location.state?.selectedId;
-    console.log('selectedIdState', selectedIdState);
+    // console.log('selectedIdState', selectedIdState);
     const ExamOrSituationState = location.state?.ExamOrSituation;
-    console.log('ExamOrSituationState', ExamOrSituationState);
+    // console.log('ExamOrSituationState', ExamOrSituationState);
 
     const [EXAMs, setEXAMs] = useState([]);
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
@@ -31,10 +31,14 @@ export default function ListExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [textInput, setTextInput] = useState('');
     const [selectedId, setSelectedId] = useState(selectedIdState || '');
     const [ExamOrSituation, setExamOrSituation] = useState(ExamOrSituationState || 'exam');
 
-    const [textInput, setTextInput] = useState('');
+    const [todayExam, setTodayExam] = useState([]);
+    const [todaySimulation, setTodaySimulation] = useState([]);
+    const [limitExam, setLimitExam] = useState(0);
+    const [limitSimulation, setLimitSimulation] = useState(0);
 
     const selectedExam = ExamOrSituation == 'exam' ?
         EXAMs.find(e => e.id == selectedId)
@@ -46,6 +50,31 @@ export default function ListExam() {
             setLoading(true);
             const token = user?.token || '';
             try {
+                if (user?.roleName != 'Student') {
+                    const Today = new Date().toLocaleDateString();
+
+                    const SystemConfigResponse = await fetchData(`SystemConfigs/all`, token);
+                    console.log('SystemConfigResponse', SystemConfigResponse);
+                    const LimitExam = SystemConfigResponse?.find(sc => sc.name == 'Exam limit')?.value || 0;
+                    console.log('LimitExam', LimitExam);
+                    setLimitExam(LimitExam);
+                    const LimitSimulation = SystemConfigResponse?.find(sc => sc.name == 'Simulation limit')?.value || 0;
+                    console.log('LimitSimulation', LimitSimulation);
+                    setLimitSimulation(LimitSimulation);
+
+                    const ExamSessionStorage = JSON.parse(localStorage.getItem('ExamSessionStorage') || '[]');
+                    console.log('ExamSessionStorage', ExamSessionStorage);
+                    const TodayExamSession = [...ExamSessionStorage?.filter(ps => ps == Today)];
+                    console.log('TodayExamSession', TodayExamSession);
+                    setTodayExam(TodayExamSession);
+
+                    const SimulationSessionStorage = JSON.parse(localStorage.getItem('SimulationSessionStorage') || '[]');
+                    console.log('SimulationSessionStorage', SimulationSessionStorage);
+                    const TodaySimulationSession = [...SimulationSessionStorage?.filter(ps => ps == Today)];
+                    console.log('TodaySimulationSession', TodaySimulationSession);
+                    setTodaySimulation(TodaySimulationSession);
+                }
+
                 const examQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '500',
@@ -112,14 +141,14 @@ export default function ListExam() {
         })();
     }, [refresh, user?.token]);
 
-    console.log('EXAMs', EXAMs);
-    console.log('SITUATIONEXAMs', SITUATIONEXAMs);
+    // console.log('EXAMs', EXAMs);
+    // console.log('SITUATIONEXAMs', SITUATIONEXAMs);
 
     const filteredExams = (ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs)?.filter(exam => {
         const matchTitleDescription = !textInput || exam.title?.toLowerCase().includes(textInput.toLowerCase()) || exam.description?.toLowerCase().includes(textInput.toLowerCase());
         return matchTitleDescription;
     });
-    console.log('filteredExams', filteredExams);
+    // console.log('filteredExams', filteredExams);
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
@@ -141,6 +170,9 @@ export default function ListExam() {
                         ĐỀ THI MÔ PHỎNG
                     </button>
                     <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
+                    <button className={`btn ${ExamOrSituation == 'exam' ? 'exam-btn' : 'situation-btn'}`} onClick={() => setRefresh(p => p + 1)}>
+                        <i className='fa-solid fa-arrow-rotate-left' />
+                    </button>
                 </div>
                 <div className='content'>
                     <div className='left'>
@@ -194,7 +226,13 @@ export default function ListExam() {
                     <div className='right' key={selectedId}>
                         {selectedExam ? (
                             <>
-                                <ExamDetail exam={selectedExam} type={ExamOrSituation} />
+                                <ExamDetail
+                                    roleName={user?.roleName}
+                                    exam={selectedExam}
+                                    type={ExamOrSituation}
+                                    today={ExamOrSituation == 'exam' ? todayExam : todaySimulation}
+                                    limit={ExamOrSituation == 'exam' ? limitExam : limitSimulation}
+                                />
                                 {ExamOrSituation == 'exam' ?
                                     <ExamSession
                                         examSessions={EXAMSESSIONs.filter((session) => session.examId == selectedId)?.sort((a, b) => new Date(b.createAt) - new Date(a.createAt))}

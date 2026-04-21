@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
 import './PaymentStatus.css';
 
 export default function PaymentStatus() {
-    const { user } = useAuth();
-
     const [message, setMessage] = useState('');
-    const [thisUser, setThisUser] = useState(null);
     const [refresh, setRefresh] = useState(0);
 
     useEffect(() => {
@@ -36,8 +32,6 @@ export default function PaymentStatus() {
                         <>
                             <div className='icon icon-fail'>
                                 <span>×</span>
-                                {/* <div className='div-1'></div>
-                                <div className='div-2'></div> */}
                             </div>
                             <div className='title title-fail'>{message}</div>
                         </>
@@ -46,7 +40,11 @@ export default function PaymentStatus() {
                     <div className='icon icon-loading'><i className='fa-solid fa-spinner' /></div>
                 }
                 <div className='buttons'>
-                    <Link to='/'><button className='btn-in-payment-status'>VỀ TRANG CHỦ</button></Link>
+                    {message == 'Thanh toán thành công' ?
+                        <Link to='/' state={{ openLogin: 'true' }}><button className='btn-in-payment-status'>ĐĂNG NHẬP LẠI</button></Link>
+                        :
+                        <Link to='/'><button className='btn-in-payment-status'>VỀ TRANG CHỦ</button></Link>
+                    }
                     {/* <div>Navigate</div>
                     <button className='btn-in-payment-status' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
                     <Link to='/payment-status/?message=Thanh%20toán%20thành%20công'><button className='btn-in-payment-status'>Thanh toán thành công</button></Link>

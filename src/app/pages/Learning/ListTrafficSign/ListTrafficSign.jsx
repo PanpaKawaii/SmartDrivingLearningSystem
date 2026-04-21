@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteData, fetchData, postData } from '../../../../mocks/CallingAPI';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
-import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
+import EmptyNotification from '../../../components/EmptyNotification/EmptyNotification';
+import Pagination from '../../../components/Pagination/Pagination';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 import './ListTrafficSign.css';
-import Pagination from '../../../components/Pagination/Pagination';
 
 export default function ListTrafficSign() {
     const { user, refreshNewToken } = useAuth();
@@ -54,6 +54,8 @@ export default function ListTrafficSign() {
             console.log('SignCategoryResponse', SignCategoryResponse);
             const TrafficSignItems = TrafficSignResponse?.items;
 
+            setTotalCount(TrafficSignResponse.totalCount);
+            setTotalPages(TrafficSignResponse.totalPages);
             setTRAFFICSIGNs(TrafficSignItems);
             setSIGNCATEGORIes(SignCategoryResponse);
 
@@ -64,8 +66,6 @@ export default function ListTrafficSign() {
             const SavedTrafficSignResponse = await fetchData(`SavedTrafficSigns/all?${savedTrafficSignQuery.toString()}`, token);
             console.log('SavedTrafficSignResponse', SavedTrafficSignResponse);
             setMySAVEDTRAFFICSIGNs(SavedTrafficSignResponse);
-            setTotalCount(TrafficSignResponse.totalCount);
-            setTotalPages(TrafficSignResponse.totalPages);
         } catch (error) {
             console.error('Error', error);
             setError(error);
@@ -149,30 +149,38 @@ export default function ListTrafficSign() {
                 ((error && error.status != 401) ?
                     <TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} />
                     :
-                    <div className='sign-grid'>
-                        {filteredTRAFFICSIGNs.map((sign, index) => (
-                            <div
-                                key={sign.id}
-                                className='sign-card'
-                                style={{ animationDelay: `${index * 0.1}s` }}
-                            >
-                                <Link to={`./${sign.id}`} className='image-link'>
-                                    <img src={sign.image || DefaultAvatar} alt={sign.name} />
-                                </Link>
-                                <div className='sign-information'>
-                                    <div className='sign-heading'>
-                                        <h2>{pageSize * (page - 1) + index + 1}. {sign.name}</h2>
-                                        <button className='btn' onClick={() => ToggleMarkTrafficSign(sign.id, mySAVEDTRAFFICSIGNs.find(sq => sq.trafficSignId == sign.id) || null)} disabled={!user || loading}>
-                                            <i className={`fa-${MySavedTrafficSigns.includes(sign.id) ? 'solid' : 'regular'} fa-bookmark`} />
-                                        </button>
+                    (filteredTRAFFICSIGNs?.length > 0 ?
+                        <div className='sign-grid'>
+                            {filteredTRAFFICSIGNs.map((sign, index) => (
+                                <div
+                                    key={sign.id}
+                                    className='sign-card'
+                                    style={{ animationDelay: `${index * 0.1}s` }}
+                                >
+                                    <Link to={`./${sign.id}`} className='image-link'>
+                                        <img src={sign.image || DefaultAvatar} alt={sign.name} />
+                                    </Link>
+                                    <div className='sign-information'>
+                                        <div className='sign-heading'>
+                                            <h2>{pageSize * (page - 1) + index + 1}. {sign.name}</h2>
+                                            <button className='btn' onClick={() => ToggleMarkTrafficSign(sign.id, mySAVEDTRAFFICSIGNs.find(sq => sq.trafficSignId == sign.id) || null)} disabled={!user || loading}>
+                                                <i className={`fa-${MySavedTrafficSigns.includes(sign.id) ? 'solid' : 'regular'} fa-bookmark`} />
+                                            </button>
+                                        </div>
+                                        <p>{sign.description}</p>
+                                        <div className='category'>{sign.signCategory?.name}</div>
+                                        <div className='code'>Code: {sign.code}</div>
                                     </div>
-                                    <p>{sign.description}</p>
-                                    <div className='category'>{sign.signCategory?.name}</div>
-                                    <div className='code'>Code: {sign.code}</div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                        :
+                        <EmptyNotification
+                            icon={'triangle-exclamation'}
+                            name={'Không tìm thấy biển báo'}
+                            description={''}
+                        />
+                    )
                 )
             }
             {/* <div className='flex'>

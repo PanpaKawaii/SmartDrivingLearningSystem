@@ -50,6 +50,7 @@ import AdminUserManagement from '../pages/AdminPages/UserManagement/UserManageme
 import AdminProfile from '../pages/AdminPages/Profile/Profile.jsx'
 import AdminSystemConfig from '../pages/AdminPages/SystemConfig/SystemConfig.jsx'
 import Categories from '../pages/AdminPages/Categories/Categories.jsx'
+import ScoringRules from '../pages/AdminPages/ScoringRules/ScoringRules.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -131,6 +132,7 @@ export default function MainRoutes() {
                     <Route path='profile' element={<AdminProfile />} />
                     <Route path='system-config' element={<AdminSystemConfig />} />
                     <Route path='categories' element={<Categories />} />
+                    <Route path='scoring-rules' element={<ScoringRules />} />
                 </Route>
 
                 {/* Instructor CMS Routes */}

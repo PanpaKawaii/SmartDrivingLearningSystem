@@ -32,10 +32,6 @@ export default function QuestionExam() {
     const [myAnswers, setMyAnswers] = useState([]);
 
     useEffect(() => {
-        if (user?.roleName != 'Student' && localStorage.getItem('Exam') == new Date().toLocaleDateString()) {
-            navigate('./../..');
-            return;
-        }
         (async () => {
             setError(null);
             setLoading(true);
@@ -59,7 +55,6 @@ export default function QuestionExam() {
                 setThisExam(ThisExamResponse);
                 setQUESTIONs(QuestionsAnswers);
                 setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
-                localStorage.setItem('Exam', new Date().toLocaleDateString());
             } catch (error) {
                 console.error('Error', error);
                 setError(error);

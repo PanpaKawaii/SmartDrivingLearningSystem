@@ -107,8 +107,8 @@ export default function DrivingLicense() {
 
             {DRIVINGLICENSEs?.length === 0 && !loading && (
                 <EmptyNotification
-                    name={'No Licenses Available'}
-                    description={'Check back soon for available license programs.'}
+                    name={'Không tìm thấy bằng lái xe'}
+                    description={'Vui lòng kiểm tra lại đường truyền.'}
                 />
             )}
         </div>

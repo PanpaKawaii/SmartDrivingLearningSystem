@@ -27,7 +27,6 @@ export default function Membership() {
             const userId = user?.id || '';
             try {
                 if (userId) {
-                    // ==FIX==
                     const ThisUserResponse = await fetchData(`User/${userId}`, token);
                     console.log('ThisUserResponse', ThisUserResponse);
                     const SystemConfigResponse = await fetchData(`SystemConfigs/all`, token);
