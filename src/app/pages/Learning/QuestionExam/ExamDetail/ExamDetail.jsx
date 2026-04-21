@@ -46,14 +46,15 @@ export default function ExamDetail({
                 }
                 <Link
                     key={exam.id}
-                    to={today?.length >= limit ? '' : (type == 'exam' ? `./${exam.id}/taking-exam` : (type == 'situation' ? `./${exam.id}/taking-situation-exam` : './'))}
+                    to={(today?.length >= limit && roleName != 'Student') ? '' : (type == 'exam' ? `./${exam.id}/taking-exam` : (type == 'situation' ? `./${exam.id}/taking-situation-exam` : './'))}
                     className='link question-exam-link'
                     state='exam'
                 >
                     <button
                         className='btn'
-                        disabled={today?.length >= limit}
+                        disabled={today?.length >= limit && roleName != 'Student'}
                         onClick={() => {
+                            if (roleName == 'Student') return;
                             const Today = new Date().toLocaleDateString();
                             localStorage.setItem(type == 'exam' ? 'ExamSessionStorage' : 'SimulationSessionStorage', JSON.stringify(
                                 [...(
@@ -65,7 +66,7 @@ export default function ExamDetail({
                             ));
                         }}
                     >
-                        {today?.length >= limit ? 'Vui lòng đăng ký thành viên' : 'Bắt đầu làm bài'}
+                        {(today?.length >= limit && roleName != 'Student') ? 'Vui lòng đăng ký thành viên' : 'Bắt đầu làm bài'}
                     </button>
                 </Link>
             </div>

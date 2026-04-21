@@ -4,5 +4,86 @@
         display: flex;
         justify-content: space-between;
         gap: 40px;
+
+        .column-video {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            .my-results {
+                margin: 40px 0;
+                padding: 20px;
+                color: #fff;
+                background: #0f172ab3;
+                border: 2px solid #374e6e80;
+                border-radius: 12px;
+                box-sizing: border-box;
+                transition: .15s;
+
+                &:hover {
+                    border-color: #3b82f666;
+                    box-shadow: 0 20px 50px #3b82f633;
+                }
+
+                .heading-result {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: start;
+                    gap: 20px;
+
+                    h3 {
+                        margin: 0 0 12px;
+                        color: #1795F1;
+                        font-size: 1.25rem;
+                    }
+
+                    .btn {
+                        padding: 0;
+                        color: #5dbbff;
+                        background-color: transparent;
+                        font-size: .875rem;
+                    }
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+
+                    tr {
+                        box-sizing: border-box;
+
+                        &:hover {
+
+                            th,
+                            td {
+                                background-color: #3b82f620;
+                                border-color: #3b82f666;
+                            }
+                        }
+                    }
+
+                    th,
+                    td {
+                        padding: 8px 20px;
+                        text-align: center;
+                        vertical-align: middle;
+                        border-top: 2px solid #374e6e80;
+                        border-bottom: 2px solid #374e6e80;
+                        transition: .15s;
+                    }
+
+                    th {
+                        color: #fff;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+
+                    th:nth-child(1) {
+                        max-width: 0px;
+                    }
+                }
+            }
+        }
     }
 }

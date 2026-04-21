@@ -61,7 +61,6 @@ export default function SimulationScenario() {
             />
             <div className='container'>
                 <ControlledVideo
-                    myResults={[]}
                     selectedScenario={selectedScenario}
                     allowRestart={true}
                     allowContinue={true}
