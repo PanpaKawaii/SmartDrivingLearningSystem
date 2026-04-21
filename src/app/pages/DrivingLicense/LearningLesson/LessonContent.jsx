@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { postData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import parse from 'html-react-parser';
+import DOMPurify from 'dompurify';
 
 import './LessonContent.css';
 
@@ -65,10 +67,9 @@ export default function LessonContent({
         <>
           <div className='lesson-content-detail'>
             <h3>{lesson?.name || 'Lesson'}</h3>
-            <div
-              className='lesson-content-body'
-              dangerouslySetInnerHTML={{ __html: lesson?.content }}
-            />
+            <div className='lesson-content-body'>
+              {parse(DOMPurify.sanitize(lesson?.content || ''))}
+            </div>
           </div>
 
           {isLocked && (
