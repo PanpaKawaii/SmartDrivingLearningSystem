@@ -1,7 +1,8 @@
 .admin-dashboard {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
+    padding-bottom: 20px; /* Tạo khoảng đệm nhỏ cuối trang thay vì để hở lớn */
 }
 
 .admin-dashboard .dashboard-greeting {
@@ -11,10 +12,10 @@
 }
 
 .admin-dashboard .dashboard-greeting h1 {
-    font-family: var(--ins-font-headline);
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--ins-on-surface);
+    margin: 0;
 }
 
 .admin-dashboard .dashboard-greeting p {
@@ -25,36 +26,29 @@
 .admin-dashboard .dashboard-stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
 }
 
 .admin-dashboard .dashboard-columns {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: 20px;
 }
 
 .admin-dashboard .dashboard-section {
     background-color: var(--ins-surface);
     border-radius: 12px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    padding: 20px;
+    height: fit-content; 
 }
 
 .admin-dashboard .dashboard-section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .admin-dashboard .dashboard-section-title {
-    font-family: var(--ins-font-headline);
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
-    color: var(--ins-on-surface);
 }
 
 .admin-dashboard .dashboard-section-meta {
@@ -109,20 +103,18 @@
 .admin-dashboard .signal-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .admin-dashboard .signal-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
     padding: 12px;
-    border-radius: 10px;
-    text-decoration: none;
+    border-radius: 8px;
     background-color: var(--ins-surface-low);
-    border: 1px solid rgba(95, 117, 165, 0.12);
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .admin-dashboard .signal-item:hover {
@@ -144,13 +136,8 @@
     flex-shrink: 0;
 }
 
-.admin-dashboard .signal-priority.high {
-    background-color: var(--ins-error);
-}
-
-.admin-dashboard .signal-priority.medium {
-    background-color: #f4c95d;
-}
+.admin-dashboard .signal-priority.high { background-color: var(--ins-error); }
+.admin-dashboard .signal-priority.medium { background-color: #f59e0b; }
 
 .admin-dashboard .signal-text {
     display: flex;
@@ -170,22 +157,37 @@
 }
 
 .admin-dashboard .signal-value {
-    min-width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    background-color: rgba(95, 117, 165, 0.2);
-    color: var(--ins-on-surface);
+    min-width: 36px;
+    height: 28px;
+    border-radius: 6px; /* Bo góc nhẹ nhìn hiện đại hơn */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-family: var(--ins-font-headline);
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 0 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Tạo độ nổi */
+}
+
+.admin-dashboard .signal-item:has(.high) .signal-value {
+    background-color: #302d6a;
+    color: #ffffff;
+}
+
+/* Nếu item là medium priority (Bài viết/Yêu cầu) -> Nền cam/vàng chữ đậm */
+.admin-dashboard .signal-item:has(.medium) .signal-value {
+    background-color: #302d6a;
+    color: #ffffff;
+}
+
+.admin-dashboard .signal-item:hover .signal-value {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }
 
 .admin-dashboard .dashboard-table-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    width: 100%;
 }
 
 .admin-dashboard .dashboard-logs-card {
@@ -266,7 +268,7 @@
 }
 
 .admin-dashboard .ins-data-table-wrapper {
-    min-width: 0;
+    margin-bottom: 0;
 }
 
 @media (max-width: 1200px) {
@@ -290,5 +292,101 @@
 
     .admin-dashboard .trend-bars {
         gap: 6px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .admin-dashboard .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+    .admin-dashboard .dashboard-columns { grid-template-columns: 1fr; }
+}
+
+/* Container bọc header */
+.dashboard-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Đổi thành center để cân đối hơn */
+    margin-bottom: 25px;
+    padding: 10px 0;
+}
+
+/* Nút Export phong cách Glassmorphism */
+.ins-btn-export {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05); /* Nền mờ nhẹ */
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px); /* Hiệu ứng làm mờ nền */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ins-btn-export i {
+    font-size: 1rem;
+    color: #4ade80; /* Màu xanh lá đặc trưng cho Excel/Báo cáo */
+    transition: transform 0.3s ease;
+}
+
+/* Hiệu ứng khi Hover */
+.ins-btn-export:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #302d6a; /* Đổi màu viền sang xanh lá khi hover */
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(74, 222, 128, 0.15); /* Đổ bóng màu xanh nhẹ */
+    transform: translateY(-2px);
+}
+
+.ins-btn-export:hover i {
+    transform: scale(1.2);
+    color: #ffffff; /* Icon chuyển trắng khi hover cùng text */
+}
+
+/* Hiệu ứng khi Click */
+.ins-btn-export:active {
+    transform: translateY(0);
+}
+
+/* Trạng thái Loading/Disabled */
+.ins-btn-export:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ins-btn-export:disabled i {
+    color: inherit;
+}
+
+/* Thêm hiệu ứng xoay icon nếu đang loading */
+.ins-btn-export.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-header-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .ins-btn-export {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
     }
 }

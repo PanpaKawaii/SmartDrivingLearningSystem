@@ -1,5 +1,5 @@
 const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-const apiRoboflow = import.meta.env.VITE_REACT_ROBOFLOW_API ;
+const apiRoboflow = import.meta.env.VITE_REACT_ROBOFLOW_API;
 if (import.meta.env.DEV) {
     console.log('API URL:', apiUrl);
     console.log('Roboflow API Key:', apiRoboflow);
@@ -253,5 +253,31 @@ export const fetchRoboflowData = async (imageUrl) => {
     }
 
     return await response.json();
+};
+
+
+// xuất file từ API (ví dụ: báo cáo Excel)
+export const fetchBlob = async (endpoint, token) => {
+    try {
+        const response = await fetch(`${apiUrl}${endpoint}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                // Không để Content-Type là json ở đây vì ta đang nhận file
+            },
+        });
+
+        if (!response.ok) {
+            const error = new Error(response.statusText);
+            error.status = response.status;
+            throw error;
+        }
+
+        // QUAN TRỌNG: Trả về blob thay vì json
+        return await response.blob();
+    } catch (error) {
+        console.error('Error fetching blob:', error);
+        throw error;
+    }
 };
 

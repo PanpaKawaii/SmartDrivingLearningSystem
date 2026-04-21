@@ -1,0 +1,171 @@
+/* Container chính */
+.manage-container {
+    padding: 24px;
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 80px);
+}
+
+/* Header của trang */
+.manage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.title-section h2 {
+    font-size: 24px;
+    color: #2d3436;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.title-section p {
+    color: #636e72;
+    font-size: 14px;
+}
+
+/* Nút thêm mới */
+.btn-add {
+    background-color: #00b894;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 184, 148, 0.2);
+}
+
+.btn-add:hover {
+    background-color: #00a887;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 184, 148, 0.3);
+}
+
+/* Table styling */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e1e4e8;
+}
+
+.manage-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.manage-table th {
+    background-color: #f1f2f6;
+    padding: 16px;
+    color: #2d3436;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.manage-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f1f2f6;
+    color: #2d3436;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.manage-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Hiển thị giá trị code */
+.value-code {
+    background-color: #dfe6e9;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    color: #d63031;
+}
+
+/* Status Badge */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.active {
+    background-color: #e3fcef;
+    color: #00b894;
+}
+
+.status-badge.inactive {
+    background-color: #ffeaa7;
+    color: #d35400;
+}
+
+/* Action Buttons */
+.action-btns {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-icon.edit:hover {
+    background-color: #0984e3;
+    color: white;
+    border-color: #0984e3;
+}
+
+.btn-icon.delete:hover {
+    background-color: #ff7675;
+    color: white;
+    border-color: #ff7675;
+}
+
+.btn-icon.restore:hover {
+    background-color: #55efc4;
+    color: white;
+    border-color: #55efc4;
+}
+
+/* Utility classes */
+.font-bold { font-weight: 700; }
+.text-center { text-align: center; }
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shadow-sm {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.loading-spinner {
+    padding: 40px;
+    text-align: center;
+    color: #636e72;
+    font-style: italic;
+}

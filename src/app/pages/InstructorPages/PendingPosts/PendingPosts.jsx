@@ -1,4 +1,5 @@
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
 import '../InstructorPages.css';
@@ -21,7 +22,7 @@ export default function PendingPosts() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
-    const [filterStatus, setFilterStatus] = useState('');
+    const [filters, setFilters] = useState({ status: '' });
     const [selectedActions, setSelectedActions] = useState({});
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
 
@@ -44,8 +45,8 @@ export default function PendingPosts() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-                if (filterStatus !== '') {
-                    query.set('status', filterStatus);
+                if (filters.status !== '') {
+                    query.set('status', filters.status);
                 }
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
                 // Filter out posts with status 4
@@ -66,11 +67,10 @@ export default function PendingPosts() {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, filterStatus]);
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, filters.status]);
 
-    const handleFilterStatus = (e) => {
-        const nextStatus = e.target.value;
-        setFilterStatus(nextStatus);
+    const handleFilterStatus = (val) => {
+        setFilters(prev => ({ ...prev, status: val }));
         setServerPagination(prev => ({ ...prev, page: 1 }));
     };
 
@@ -234,6 +234,24 @@ export default function PendingPosts() {
                 </div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
+            <FilterBar
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả trạng thái —',
+                        value: filters.status,
+                        options: [
+                            { id: '-1', name: 'Chờ duyệt' },
+                            { id: '1', name: 'Đã duyệt' },
+                            { id: '2', name: 'Đã xóa' },
+                            { id: '3', name: 'Đã từ chối' }
+                        ],
+                        onChange: handleFilterStatus
+                    }
+                ]}
+                onSearch={() => { setServerPagination(prev => ({ ...prev, page: 1 })); setRefresh(r => r + 1); }}
+                onReset={() => { setFilters({ status: '' }); setServerPagination(prev => ({ ...prev, page: 1 })); }}
+            />
+
             <DataTable
                 title={`Quản lý bài viết (${serverPagination.totalCount})`}
                 columns={columns}   
@@ -241,20 +259,13 @@ export default function PendingPosts() {
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
-                filters={[
-                    {
-                        id: 'status-filter',
-                        value: filterStatus,
-                        onChange: handleFilterStatus,
-                        options: [
-                            { id: '-1', name: 'Chờ duyệt' },
-                            { id: '1', name: 'Đã duyệt' },
-                            { id: '2', name: 'Đã xóa' },
-                            { id: '3', name: 'Đã từ chối' },
-                        ],
-                        placeholder: '— Tất cả trạng thái —',
-                    },
-                ]}
+                actions={
+                    <>
+                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                            <i className='fa-solid fa-rotate-right'></i> Làm mới
+                        </button>
+                    </>
+                }
             />
 
             {/* View Popup */}

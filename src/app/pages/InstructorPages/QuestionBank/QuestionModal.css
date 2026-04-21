@@ -1,0 +1,102 @@
+.ins-question-grid-main {
+    grid-template-columns: 1.2fr 1.8fr 2.5fr;
+}
+
+.ins-question-grid-secondary {
+    grid-template-columns: 1fr 1fr;
+}
+
+.ins-answer-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--ins-outline);
+    transition: all 0.2s ease;
+    background: var(--ins-surface-high);
+    color: var(--ins-on-surface);
+}
+
+.ins-answer-marker.correct {
+    background: color-mix(in srgb, var(--ins-success) 20%, var(--ins-surface-high));
+    color: var(--ins-success);
+    border-color: var(--ins-success);
+}
+
+.ins-answer-input {
+    border-color: var(--ins-outline);
+}
+.ins-answer-input.correct {
+    border-color: var(--ins-success);
+}
+
+.ins-tag-chip {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--ins-outline);
+    background: transparent;
+    color: var(--ins-on-surface);
+}
+
+.ins-tag-chip.selected {
+    border-color: var(--tag-color, var(--ins-primary));
+    background: color-mix(in srgb, var(--tag-color, var(--ins-primary)) 20%, transparent);
+    color: var(--tag-color, var(--ins-primary));
+}
+
+.ins-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ins-answers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.ins-answers-header .ins-form-label {
+    margin-bottom: 0;
+}
+
+.ins-answers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ins-answer-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    
+}
+
+.ins-answer-input-container {
+    flex: 1;
+}
+
+.ins-form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.ins-form-divider {
+    border: none;
+    border-top: 1px solid rgba(95, 117, 165, 0.2); 
+    margin: 0;
+}
+
+.ins-text-empty {
+    font-size: 13px;
+    color: var(--ins-on-surface-variant);
+}

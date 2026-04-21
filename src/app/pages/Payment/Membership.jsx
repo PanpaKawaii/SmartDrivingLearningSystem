@@ -81,24 +81,43 @@ export default function Membership() {
     };
 
     const features = [
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Guest', role: 'Guest' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
-        { name: 'Student', role: 'Student' },
+        { name: 'Học các bài học theo bằng lái', role: 'Guest' },
+        { name: 'Học câu hỏi lý thuyết', role: 'Guest' },
+        { name: 'Xem các bài đăng trên diễn đàn', role: 'Guest' },
+        { name: 'AI Chatbot', role: 'Guest' },
+        { name: 'Tập luyện theo tình huống mô phỏng', role: 'Student' },
+        { name: 'Luyện tập thi thử', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        { name: 'Trao đổi trên diễn đàn', role: 'Student' },
+        { name: 'AI giải thích biển báo thông qua hình ảnh', role: 'Student' },
+        { name: 'Lộ trình học cá nhân hóa', role: 'Student' },
     ];
 
+    const featuresStudent = [
+        { name: 'Học các bài học theo bằng lái', role: 'Guest' },
+        { name: 'Học câu hỏi lý thuyết', role: 'Guest' },
+        { name: 'Xem các bài đăng trên diễn đàn', role: 'Guest' },
+        { name: 'Tập luyện theo tình huống mô phỏng', role: 'Guest' },
+        { name: 'Luyện tập thi thử', role: 'Guest' },
+        { name: 'AI Chatbot', role: 'Guest' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        // { name: 'Student', role: 'Student' },
+        { name: 'Tham gia trao đổi trên diễn đàn', role: 'Student' },
+        { name: 'AI giải thích biển báo thông qua hình ảnh', role: 'Student' },
+        { name: 'Lộ trình học cá nhân hóa', role: 'Student' },
+    ];
+    console.log('aaaaaaaaaaaaaaa', Amount);
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (

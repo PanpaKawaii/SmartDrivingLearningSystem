@@ -7,27 +7,15 @@ export default function DataTable({
   columns,
   data,
   actions,
-  onSearch,
   pageSize = 10,
   loading = false,
   serverPagination = null,
   onPageChange,
-  filters = [],
   contextBadge = [],
-  searchValue,
-  onSearchValueChange,
 }) {
-  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  const searchInput = typeof searchValue === 'string' ? searchValue : search;
-
-  const filtered = data.filter((row) =>
-    columns.some((col) => {
-      const val = row[col.key];
-      return val && String(val).toLowerCase().includes(searchInput.toLowerCase());
-    }),
-  );
+  const filtered = data;
 
   const isServerPagination = Boolean(serverPagination);
   const currentPage = isServerPagination
@@ -56,22 +44,6 @@ export default function DataTable({
     (_, i) => paginationStart + i,
   );
 
-  const handleSearch = (e) => {
-    const val = e.target.value;
-    if (onSearchValueChange) {
-      onSearchValueChange(val);
-    } else {
-      setSearch(val);
-    }
-  };
-
-  const handleSearchSubmit = (e) => {
-    if (e.key === 'Enter') {
-      setPage(1);
-      if (onSearch) onSearch(searchInput);
-    }
-  };
-
   const goToPage = (nextPage) => {
     const clamped = Math.max(1, Math.min(totalPages, nextPage));
     if (isServerPagination) {
@@ -81,7 +53,7 @@ export default function DataTable({
     setPage(clamped);
   };
 
-  const hasFilters = filters.length > 0;
+
   const hasBadge = Array.isArray(contextBadge) && contextBadge.length > 0;
 
   return (
@@ -94,38 +66,6 @@ export default function DataTable({
           )}
         </div>
         <div className="ins-data-table-actions">
-          <div className="ins-data-table-search-filter-row">
-            <div className="ins-data-table-search">
-              <i className="fa-solid fa-magnifying-glass search-icon"></i>
-              <input
-                type="text"
-                placeholder="Tìm kiếm..."
-                value={searchInput}
-                onChange={handleSearch}
-                onKeyDown={handleSearchSubmit}
-              />
-            </div>
-            {hasFilters && (
-              <div className="ins-data-table-filter-bar-inline">
-                {filters.map((f, i) => (
-                  <select
-                    key={f.id || i}
-                    className="ins-filter-select"
-                    value={f.value}
-                    onChange={f.onChange}
-                    disabled={f.disabled}
-                  >
-                    <option value="">{f.placeholder || "— Tất cả —"}</option>
-                    {(f.options || []).map((opt) => (
-                      <option key={opt.id} value={opt.id}>
-                        {opt.name}
-                      </option>
-                    ))}
-                  </select>
-                ))}
-              </div>
-            )}
-          </div>
           {actions}
         </div>
       </div>

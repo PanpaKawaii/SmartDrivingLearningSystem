@@ -5,8 +5,8 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
 import EditUserModal from './EditUserModal';
 import DataTable from '../../../components/Shared/DataTable'; // Import DataTable
+import FilterBar from '../../../components/Shared/FilterBar'; // Import FilterBar
 import '../AdminPages.css'; // Sử dụng chung style với trang AdminPendingPosts
-
 export default function UserManagement() {
     const { user: authUser, logout, refreshNewToken } = useAuth();
     const navigate = useNavigate();
@@ -49,6 +49,13 @@ export default function UserManagement() {
         }
         setError('Lỗi kết nối hệ thống');
         return false;
+    };
+
+    // Hàm xử lý khi nhấn Lọc hoặc nhấn Enter
+    const handleFilterSubmit = (e) => {
+        if (e) e.preventDefault(); // Chặn load lại trang khi dùng thẻ <form>
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        setRefresh(r => r + 1);
     };
 
     useEffect(() => {
@@ -213,46 +220,28 @@ export default function UserManagement() {
                     <h1>Quản lý tài khoản</h1>
                     <p>Quản lý danh sách người dùng và phân quyền hệ thống.</p>
                 </div>
-                <button className='btn-primary' onClick={() => setCreating(true)}>
+                <button className='ins-action-add' onClick={() => setCreating(true)}>
                     <i className='fa-solid fa-plus' /> Thêm tài khoản
                 </button>
             </div>
 
             {error && <div className='ins-error-banner'>{error}</div>}
 
-            {/* Thanh Filter */}
-            <div className='ins-filter-bar' style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-                <input
-                    className='ins-input'
-                    placeholder='Tìm theo tên...'
-                    value={filters.name}
-                    onChange={(e) => setFilters({ ...filters, name: e.target.value })}
-                />
-                <input
-                    className='ins-input'
-                    placeholder='Tìm theo email...'
-                    value={filters.email}
-                    onChange={(e) => setFilters({ ...filters, email: e.target.value })}
-                />
-                <select
-                    className='ins-select'
-                    value={filters.roleId}
-                    onChange={(e) => setFilters({ ...filters, roleId: e.target.value })}
-                >
-                    <option value="">Tất cả vai trò</option>
-                    {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
-                </select>
-
-                <button className='ins-btn-search' onClick={() => { setServerPagination({ ...serverPagination, page: 1 }); setRefresh(r => r + 1); }}>
-                    <i className="fa-solid fa-magnifying-glass"></i> Lọc
-                </button>
-                <button className='ins-btn-reset' title="Reset filter" onClick={handleResetFilter}>
-                    <i className="fa-solid fa-xmark"></i>
-                </button>
-            </div>
+            {/* Thanh Filter (Tái sử dụng component FilterBar) */}
+            <FilterBar
+                searchOptions={[
+                    { placeholder: 'Tìm theo tên...', value: filters.name, onChange: (val) => setFilters({ ...filters, name: val }) },
+                    { placeholder: 'Tìm theo email...', value: filters.email, onChange: (val) => setFilters({ ...filters, email: val }) }
+                ]}
+                selectOptions={[
+                    { placeholder: 'Tất cả vai trò', value: filters.roleId, options: roles, onChange: (val) => setFilters({ ...filters, roleId: val }) }
+                ]}
+                onSearch={() => { setServerPagination({ ...serverPagination, page: 1 }); setRefresh(r => r + 1); }}
+                onReset={handleResetFilter}
+            />
 
             <DataTable
-                title={`Danh sách người dùng (${serverPagination.totalCount})`}
+                title={`Danh sách người dùng`}
                 columns={columns}
                 data={items}
                 loading={loading}
