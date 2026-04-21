@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DataTable from "../../../components/Shared/DataTable";
 import FilterBar from "../../../components/Shared/FilterBar";
+import ExamModal from "./ExamModal";
 import { fetchData, patchData } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
 import "../InstructorPages.css";
@@ -21,6 +22,8 @@ export default function ExamManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [refresh, setRefresh] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [editingExam, setEditingExam] = useState(null);
   const [serverPagination, setServerPagination] = useState({
     page: 1,
     pageSize: 10,
@@ -236,6 +239,10 @@ export default function ExamManagement() {
           <button
             className="ins-action-btn edit"
             title="Chỉnh sửa"
+            onClick={() => {
+              setEditingExam(row);
+              setShowModal(true);
+            }}
           >
             <i className="fa-solid fa-pen" />
           </button>
@@ -264,7 +271,10 @@ export default function ExamManagement() {
         <div style={{ display: "flex", gap: "12px" }}>
           <button
             className="ins-btn ins-btn-primary"
-            onClick={() => {}}
+            onClick={() => {
+              setEditingExam(null);
+              setShowModal(true);
+            }}
           >
             <i className="fa-solid fa-plus" /> Tạo đề thi
           </button>
@@ -331,6 +341,16 @@ export default function ExamManagement() {
             <i className="fa-solid fa-rotate-right" /> Làm mới
           </button>
         }
+      />
+
+      <ExamModal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setEditingExam(null);
+        }}
+        onSuccess={() => setRefresh((r) => r + 1)}
+        initialData={editingExam}
       />
     </div>
   );

@@ -1,0 +1,278 @@
+.ins-exam-modal-required {
+  color: var(--ins-error);
+}
+
+.ins-exam-modal-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.ins-exam-modal-random-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.ins-exam-modal-random-toggle {
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  background: rgba(95, 117, 165, 0.25);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.ins-exam-modal-random-toggle.is-on {
+  background: var(--ins-primary);
+}
+
+.ins-exam-modal-random-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ins-exam-modal-random-toggle.is-on .ins-exam-modal-random-thumb {
+  left: 24px;
+}
+
+.ins-exam-modal-random-text {
+  font-size: 0.85rem;
+  color: var(--ins-on-surface);
+}
+
+.ins-exam-modal-selected-section {
+  margin-top: 8px;
+}
+
+.ins-exam-modal-selected-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ins-exam-modal-selected-label {
+  margin: 0;
+}
+
+.ins-exam-modal-picker-toggle-btn {
+  padding: 6px 14px;
+  font-size: 0.82rem;
+}
+
+.ins-exam-modal-picker-panel {
+  border: 1px solid rgba(95, 117, 165, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: var(--ins-surface-low);
+}
+
+.ins-exam-modal-picker-search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ins-exam-modal-picker-search-input {
+  flex: 1;
+}
+
+.ins-exam-modal-picker-search-btn {
+  padding: 6px 14px;
+}
+
+.ins-exam-modal-picker-loading {
+  text-align: center;
+  padding: 24px;
+  color: var(--ins-on-surface);
+  opacity: 0.7;
+}
+
+.ins-exam-modal-picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.ins-exam-modal-picker-empty {
+  text-align: center;
+  color: var(--ins-on-surface);
+  opacity: 0.6;
+  padding: 20px;
+}
+
+.ins-exam-modal-picker-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--ins-surface);
+  border: 1px solid rgba(95, 117, 165, 0.12);
+  transition: all 0.15s;
+}
+
+.ins-exam-modal-picker-item.is-selected {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--ins-primary);
+}
+
+.ins-exam-modal-picker-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid rgba(95, 117, 165, 0.4);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+
+.ins-exam-modal-picker-checkbox.is-selected {
+  border-color: var(--ins-primary);
+  background: var(--ins-primary);
+}
+
+.ins-exam-modal-picker-check {
+  color: #fff;
+  font-size: 0.7rem;
+}
+
+.ins-exam-modal-picker-item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ins-exam-modal-picker-item-content {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ins-on-background);
+  line-height: 1.4;
+}
+
+.ins-exam-modal-picker-item-meta {
+  font-size: 0.78rem;
+  color: var(--ins-on-surface);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.ins-exam-modal-picker-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ins-exam-modal-picker-page-btn {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.ins-exam-modal-picker-page-indicator {
+  font-size: 0.82rem;
+  color: var(--ins-on-surface);
+  display: flex;
+  align-items: center;
+}
+
+.ins-exam-modal-picker-summary {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--ins-on-surface);
+  opacity: 0.6;
+  text-align: right;
+}
+
+.ins-exam-modal-selected-empty {
+  text-align: center;
+  padding: 24px;
+  border: 1px dashed rgba(95, 117, 165, 0.25);
+  border-radius: 10px;
+  color: var(--ins-on-surface);
+  opacity: 0.6;
+  font-size: 0.88rem;
+}
+
+.ins-exam-modal-selected-empty-icon {
+  margin-right: 8px;
+}
+
+.ins-exam-modal-selected-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.ins-exam-modal-selected-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 117, 165, 0.15);
+  background: var(--ins-surface-low);
+}
+
+.ins-exam-modal-selected-index {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ins-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.ins-exam-modal-selected-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ins-exam-modal-selected-content {
+  font-size: 0.88rem;
+  color: var(--ins-on-background);
+  line-height: 1.4;
+}
+
+.ins-exam-modal-selected-meta {
+  font-size: 0.75rem;
+  color: var(--ins-on-surface);
+  opacity: 0.65;
+  margin-top: 4px;
+}
+
+.ins-exam-modal-selected-remove {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .ins-exam-modal-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { fetchData } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
+import ExamModal from "./ExamModal";
 import "../InstructorPages.css";
 import "./ExamDetail.css";
 
@@ -116,7 +117,17 @@ function ExamDetail() {
 
   const handleGoBack = () => navigate("/instructor/exam-management");
 
-  const handleEditExam = () => {};
+  const [showModal, setShowModal] = useState(false);
+  const handleEditExam = () => setShowModal(true);
+
+  // Reload exam sau khi sửa thành công
+  const handleModalSuccess = async () => {
+    try {
+      const res = await fetchData(`Exams/${examId || exam?.id}`, token);
+      setExam(res);
+      setQuestionsMap({});
+    } catch { /* ignore */ }
+  };
 
   const renderDateTimeLines = (value) => {
     const { time, date } = formatDateTimeLines(value);
@@ -326,6 +337,13 @@ function ExamDetail() {
           </button>
         </div>
       </div>
+
+      <ExamModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSuccess={handleModalSuccess}
+        initialData={exam}
+      />
     </div>
   );
 }
