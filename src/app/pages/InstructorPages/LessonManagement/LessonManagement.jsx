@@ -17,6 +17,14 @@ const normalizeItems = (payload) => {
     if (Array.isArray(payload?.items)) return payload.items;
     return [];
 };
+
+const toPlainText = (html) => {
+    if (!html || typeof html !== 'string') return '';
+    if (typeof window === 'undefined') return html.replace(/<[^>]+>/g, ' ').trim();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
+};
+
 export default function LessonManagement() {
     const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
@@ -172,15 +180,11 @@ export default function LessonManagement() {
 
     const handleToggleStatus = async (id) => {
         try {
-            
-            setTableLoading(true);
             // Toggle: 1 (Public) <-> 0 (Hidden)
             await patchData(`QuestionLessons/${id}`, { }, token);
             setRefresh(r => r + 1);
         } catch (err) {
             setError('Lỗi cập nhật trạng thái');
-        } finally {
-            setTableLoading(false);
         }
     };
     
@@ -251,9 +255,18 @@ export default function LessonManagement() {
             const chapter = allChapters.find(t => t.id === val);
             return chapter?.name || '---';
         } },
-        { key: 'content', label: 'Nội dung', render: (val) => {
-           return <div dangerouslySetInnerHTML={{ __html: val }}/>;
-        }},
+        {
+            key: 'content',
+            label: 'Nội dung',
+            render: (val) => {
+                const plainText = toPlainText(val);
+                return (
+                    <div className='ins-lesson-content-preview' title={plainText}>
+                        {plainText || '---'}
+                    </div>
+                );
+            }
+        },
         { key: 'status', label: 'Trạng thái', width: '100px', render: (val) => {
                 let cls = 'active';
                 if (val === 0) cls = 'hidden';

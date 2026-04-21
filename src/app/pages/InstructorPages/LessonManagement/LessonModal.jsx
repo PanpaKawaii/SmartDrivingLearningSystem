@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Modal from '../../../components/Shared/Modal';
 import '../InstructorPages.css';
 import RichTextEditor from "../../../components/RichTextEditor/Lexical/RichTextEditor";
@@ -36,6 +36,7 @@ export default function LessonModal({
     const [editorInitialHtml, setEditorInitialHtml] = useState(lessonProp?.content || "");
     const token = user?.token || "";
     const persistedLessonId = useMemo(() => lessonProp?.id || lesson?.id || null, [lessonProp?.id, lesson?.id]);
+    const editorRef = useRef(null); // ref để gọi getCleanContent() trước submit
 
     // Đồng bộ initialHtml khi lessonProp thay đổi
     useEffect(() => {
@@ -53,7 +54,7 @@ export default function LessonModal({
                     ...lessonProp,
                     chapter: currentChapter ? currentChapter.id : (filteredChapters[0]?.id || '')
                 });
-                console.log('Updating lesson.id:', lesson.id);
+                console.log('Updating lesson:', lesson);
                 console.log('Updating persistedLessonId:', persistedLessonId);
             } else if (action === 'add') {
                 // Pre-fill chapter nếu đến từ Quick Navigate
@@ -64,6 +65,7 @@ export default function LessonModal({
                     const filteredChapters = listChapters.filter(ch => ch.drivingLicenseId === preLicenseId);
                     setChapters(filteredChapters);
                     setLesson({ ...defaultLesson, chapter: defaultChapterId });
+                    console.log('Pre-filling lesson:', lesson);
                 } else {
                     setLesson(defaultLesson);
                     setDrivingLicenseId('');
@@ -92,13 +94,18 @@ export default function LessonModal({
 
     const handleSubmit = async () => {
         setError('');
+        // Đợi upload ảnh trong editor xong, lấy content sạch (URL thay vì blob/base64)
+        const cleanContent = editorRef.current
+            ? await editorRef.current.getCleanContent()
+            : lesson.content || '';
+
         const normalizedIndex = Number(lesson.index);
         const normalizedPayload = {
             questionChapterId: lesson.chapter,
             index: normalizedIndex,
             name: lesson.name.trim(),
             description: lesson.description.trim(),
-            content: lesson.content || '',
+            content: cleanContent,
         };
 
         if (!normalizedPayload.name) {
@@ -151,7 +158,9 @@ export default function LessonModal({
                     </button>
                 </>
             }
-        >
+            message={error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
+            >
+            
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Tên bài học <span style={{ color: 'var(--ins-error)' }}>*</span></label>
                 <input
@@ -217,11 +226,6 @@ export default function LessonModal({
                 </div>
             </div>
 
-            {error && (
-                <div style={{ color: 'var(--ins-error)', marginTop: '-4px', marginBottom: '8px', fontSize: '0.9rem' }}>
-                    {error}
-                </div>
-            )}
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Mô tả <span style={{ color: 'var(--ins-error)' }}>*</span></label>
@@ -244,6 +248,8 @@ export default function LessonModal({
                     </div>
                 )} */}
                 <TinyMCEEditor
+                    ref={editorRef}
+                    key={`tinymce-${action}-${lessonProp?.id || 'new'}-${isOpen}`}
                     value={lesson.content}
                     onChange={content => setLesson(prev => ({ ...prev, content }))}
                     placeholder= 'Nhập nội dung bài học tại đây...'
