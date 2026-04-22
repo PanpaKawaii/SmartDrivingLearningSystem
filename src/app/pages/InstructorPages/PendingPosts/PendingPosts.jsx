@@ -49,8 +49,8 @@ export default function PendingPosts() {
                     query.set('status', filters.status);
                 }
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
-                // Filter out posts with status 4
-                const filteredItems = (res?.items || []).filter(item => item.status !== 4);
+
+                const filteredItems = (res?.items || []).filter(item => item.status !== 4 && item.status=== 5);
                 setItems(filteredItems);
                 setServerPagination(prev => ({
                     ...prev,
