@@ -214,7 +214,7 @@ function ExamDetail() {
             </DetailField>
 
             <DetailField label="Điểm đạt">
-              <span className="ins-exam-pass-score">{exam.passScore} điểm</span>
+              <span className="ins-exam-pass-score">{exam.passScore} %</span>
             </DetailField>
 
             <DetailField label="Số câu hỏi">
@@ -237,7 +237,7 @@ function ExamDetail() {
               <StatusChip
                 active={exam.status === 1}
                 activeText="Hoạt động"
-                inactiveText="Nháp"
+                inactiveText="Ngưng"
                 className="ins-metadata-badge"
               />
             </DetailField>
@@ -318,7 +318,7 @@ function ExamDetail() {
                     <StatusChip
                       active={eq.status === 1}
                       activeText="Hoạt động"
-                      inactiveText="Nháp"
+                      inactiveText="Ngưng"
                       className="ins-exam-question-status"
                     />
                   </div>

@@ -177,7 +177,7 @@ export default function PendingPosts() {
             render: (val) => {
                 let cls = 'pending';
                 if (val === 1) cls = 'approved';
-                else if (val === 2) cls = 'rejected';
+                else if (val === 2) cls = 'inactive';
                 else if (val === 3) cls = 'rejected';
                 return <span className={`ins-status-chip ${cls}`}><span className='chip-dot'></span>{STATUS_LABELS[String(val)] || '---'}</span>;
             },

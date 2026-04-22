@@ -388,7 +388,7 @@ export default function ExamModal({ isOpen, onClose, onSuccess, initialData }) {
 
           <div className="ins-form-group">
             <label className="ins-form-label">
-              Điểm đạt <span className="ins-exam-modal-required">*</span>
+              Điểm đạt (%) <span className="ins-exam-modal-required">*</span>
             </label>
             <input
               type="number"

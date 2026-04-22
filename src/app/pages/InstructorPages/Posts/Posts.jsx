@@ -10,7 +10,7 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 
 
 const STATUS_LABELS = {
-    '1': 'Public',
+    '1': 'Công khai',
     '4': 'Đã ẩn',
     '5': 'Đã ghim',
 };
