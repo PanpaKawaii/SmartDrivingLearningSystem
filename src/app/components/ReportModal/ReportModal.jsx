@@ -161,7 +161,8 @@ export default function ReportModal({
                 </div>
                 <button className='btn' onClick={() => setRefresh(p => p + 1)}>Refresh</button>
             </div>
-            <div className='upload-image'>
+            {/* ==FIX== */}
+            {/* <div className='upload-image'>
                 <div className='file-input'>
                     <input type='file' ref={fileInputRef} accept='png' onChange={handleUpload} />
                     <button className='btn' onClick={() => handleRemove()}>Gỡ</button>
@@ -171,7 +172,7 @@ export default function ReportModal({
                         <img src={imageUrl} alt='Uploaded' />
                     </div>
                 }
-            </div>
+            </div> */}
             {createStatus &&
                 <div className={`create-status ${createStatus}`}>
                     {createStatus == 'success' ? 'Báo cáo thành công! Tự động tắt popup.' : 'Báo cáo thất bại, vui lòng thử lại sau.'}
@@ -185,7 +186,7 @@ export default function ReportModal({
                     propContent={content}
                     setContent={setContent}
                 />
-                <button type='button' className='btn' onClick={() => handleSubmitReport(refContent.current.value, null)} disabled={loading || !title || !content || !category}>
+                <button type='button' className='btn' onClick={() => handleSubmitReport(refContent.current.value, null)} disabled={loading || !title || !content || !category || createStatus == 'success'}>
                     GỬI BÁO CÁO
                 </button>
             </form>
