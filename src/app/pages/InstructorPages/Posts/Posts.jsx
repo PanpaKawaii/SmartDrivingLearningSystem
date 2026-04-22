@@ -1,5 +1,5 @@
 import DataTable from '../../../components/Shared/DataTable.jsx';
-import { Post } from '../../../../mocks/DataSample.js';
+import FilterBar from '../../../components/Shared/FilterBar';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import ForumCard from '../../Forum/ForumCard';
 import PostModal from './PostModal';
@@ -27,6 +27,9 @@ export default function Posts() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
+    const [filters, setFilters] = useState({
+        status: '',
+    });
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
     // Modal state
     const [showPostModal, setShowPostModal] = useState(false);
@@ -51,6 +54,9 @@ export default function Posts() {
                     pageSize: serverPagination.pageSize,
                     userId: user?.id,
                 });
+                if (filters.status !== '') {
+                    query.set('status', filters.status);
+                }
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
                 setItems(normalizeItems(res));
                 setServerPagination(prev => ({
@@ -71,10 +77,25 @@ export default function Posts() {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
+    }, [
+        refresh,
+        user?.token,
+        user?.id,
+        serverPagination.page,
+        serverPagination.pageSize,
+        filters.status,
+    ]);
 
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
+    };
+    const handleFilterStatus = (val) => {
+        setFilters(prev => ({ ...prev, status: val }));
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+    const handleResetFilters = () => {
+        setFilters({ status: '' });
+        setServerPagination(prev => ({ ...prev, page: 1 }));
     };
     const handleOpenCreate = () => {
         setEditPost(null);
@@ -124,6 +145,17 @@ export default function Posts() {
         }
     };
     const selectedPost = items.find(item => item.id === selectedPostId);
+
+    const activeBadge = (() => {
+        const badge = [];
+        if (filters.status !== '') {
+            badge.push({
+                text: STATUS_LABELS[filters.status] || 'Trạng thái',
+                onClear: () => handleFilterStatus(''),
+            });
+        }
+        return badge;
+    })();
 
     const formatDateTimeLines = (value) => {
         if (!value) return { time: '', date: '' };
@@ -214,6 +246,29 @@ export default function Posts() {
                 </button>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
+            <FilterBar
+                // searchOptions={[
+                //     {
+                //         placeholder: 'Tìm kiếm tiêu đề bài viết...',
+                //         value: filters.search,
+                //         onChange: handleSearch,
+                //     },
+                // ]}
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả trạng thái —',
+                        value: filters.status,
+                        options: [
+                            { id: '1', name: 'Công khai' },
+                            { id: '4', name: 'Đã ẩn' },
+                            { id: '5', name: 'Đã ghim' },
+                        ],
+                        onChange: handleFilterStatus,
+                    },
+                ]}
+                onSearch={() => setServerPagination(prev => ({ ...prev, page: 1 }))}
+                onReset={handleResetFilters}
+            />
             <DataTable
                 title={`Danh sách bài viết (${serverPagination.totalCount})`}
                 columns={columns}
@@ -221,6 +276,7 @@ export default function Posts() {
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
+                contextBadge={activeBadge.length > 0 ? activeBadge : null}
                 actions={
                     <>
                     <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>

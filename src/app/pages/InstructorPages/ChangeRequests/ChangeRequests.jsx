@@ -40,7 +40,7 @@ const getEntityRoute = (report) => {
 };
 
 export default function ChangeRequests() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
     const [refresh, setRefresh] = useState(0);
     const [serverPagination, setServerPagination] = useState({ page: 1, pageSize: 10, totalPages: 1, totalCount: 0 });
@@ -72,8 +72,12 @@ export default function ChangeRequests() {
                     totalCount: res?.totalCount || prev.totalCount,
                     totalPages: res?.totalPages || 1,
                 }));
-            } catch (err) {
-                setError('Lỗi tải dữ liệu');
+            } catch (error) {
+                if (error.status === 401) {
+                    refreshNewToken(user);
+                } else {
+                    setError('Lỗi tải dữ liệu');
+                }
             } finally {
                 setLoading(false);
             }
@@ -119,16 +123,20 @@ export default function ChangeRequests() {
                     if (!route) return;
                     navigate(route);
                 }}><i className='fa-solid fa-eye'></i></button>
-                <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
-                    setSelectedReport(row);
-                    setModalMode('process');
-                    setActionType('approve');
-                }} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
-                <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
-                    setSelectedReport(row);
-                    setModalMode('process');
-                    setActionType('disapprove');
-                }} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
+                {row.status === -1 && (
+                    <>
+                        <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
+                            setSelectedReport(row);
+                            setModalMode('process');
+                            setActionType('approve');
+                        }} disabled={loading}><i className='fa-solid fa-check'></i></button>
+                        <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
+                            setSelectedReport(row);
+                            setModalMode('process');
+                            setActionType('disapprove');
+                        }} disabled={loading}><i className='fa-solid fa-xmark'></i></button>
+                    </>
+                )}
             </div>
         )},
     ];
@@ -190,6 +198,13 @@ export default function ChangeRequests() {
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
+                actions={
+                    <>
+                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                            <i className='fa-solid fa-rotate-right'></i> Làm mới
+                        </button>
+                    </>
+                }
             />
 
             <ReportFeedbackModal

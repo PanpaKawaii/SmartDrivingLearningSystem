@@ -6,7 +6,6 @@ import QuestionModal from "./QuestionModal";
 import { fetchData, patchData } from "../../../../mocks/CallingAPI";
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
 import "../InstructorPages.css";
-import { li } from "framer-motion/client";
 
 const normalizeItems = (payload) => {
   if (Array.isArray(payload)) return payload;
@@ -127,13 +126,12 @@ export default function QuestionBank() {
         if (filters.lessonId) {
           query.set("lessonId", filters.lessonId);
           res = await fetchData(`Questions?${query.toString()}`, token);
-        } else if (filters.chapterId) {
-          query.set("chapterId", filters.chapterId);
-          res = await fetchData(`Questions?${query.toString()}`, token);
-        } else if (filters.licenseId) {
-          const chapterIds = allChapters
-            .filter((c) => c.drivingLicenseId === filters.licenseId)
-            .map((c) => c.id);
+        } else if (filters.chapterId || filters.licenseId) {
+          const chapterIds = filters.chapterId
+            ? [filters.chapterId]
+            : allChapters
+                .filter((c) => c.drivingLicenseId === filters.licenseId)
+                .map((c) => c.id);
           const queryAll = new URLSearchParams({ page: "1", pageSize: "5000" });
           if (filters.search.trim())
             queryAll.set("content", filters.search.trim());
@@ -549,13 +547,13 @@ export default function QuestionBank() {
       </div>
 
       <FilterBar
-        searchOptions={[
-          {
-            placeholder: "Tìm kiếm câu hỏi...",
-            value: filters.search,
-            onChange: (val) => setFilters((prev) => ({ ...prev, search: val })),
-          },
-        ]}
+        // searchOptions={[
+        //   {
+        //     placeholder: "Tìm kiếm câu hỏi...",
+        //     value: filters.search,
+        //     onChange: (val) => setFilters((prev) => ({ ...prev, search: val })),
+        //   },
+        // ]}
         selectOptions={[
           {
             placeholder: "— Tất cả bằng lái —",
@@ -620,9 +618,9 @@ export default function QuestionBank() {
             >
               <i className="fa-solid fa-rotate-right"></i> Làm mới
             </button>
-            <button className="ins-btn ins-btn-secondary" onClick={() => {}}>
+            {/* <button className="ins-btn ins-btn-secondary" onClick={() => {}}>
               <i className="fa-solid fa-file-import"></i> Nhập Excel
-            </button>
+            </button> */}
           </>
         }
       />
