@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import { fetchData, patchData } from '../../../../mocks/CallingAPI.js';
@@ -35,6 +36,12 @@ const getEntityRoute = (report) => {
     return null;
 };
 
+const STATUS_OPTIONS = [
+    { id: '-1', name: 'Chờ duyệt' },
+    { id: '1', name: 'Đã duyệt' },
+    { id: '3', name: 'Đã bỏ qua' },
+];
+
 export default function ContentErrorReports() {
     const { user, refreshNewToken } = useAuth();
     const [refresh, setRefresh] = useState(0);
@@ -43,9 +50,35 @@ export default function ContentErrorReports() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const [reportItems, setReportItems] = useState([]);
+    const [reportCategories, setReportCategories] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [modalMode, setModalMode] = useState('view');
     const [actionType, setActionType] = useState('approve');
+    const [filters, setFilters] = useState({
+        status: '',
+        reportCategoryId: '',
+    });
+
+    useEffect(() => {
+        (async () => {
+            const token = user?.token || '';
+            if (!token) {
+                setReportCategories([]);
+                return;
+            }
+
+            try {
+                const response = await fetchData('ReportCategories/all?status=1', token);
+                setReportCategories(normalizeItems(response));
+            } catch (error) {
+                if (error.status === 401) {
+                    refreshNewToken(user);
+                } else {
+                    console.error('Lỗi tải danh mục báo cáo:', error);
+                }
+            }
+        })();
+    }, [user?.token, refreshNewToken, user]);
 
     useEffect(() => {
         (async () => {
@@ -57,6 +90,15 @@ export default function ContentErrorReports() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
+
+                if (filters.status !== '') {
+                    query.set('status', filters.status);
+                }
+
+                if (filters.reportCategoryId !== '') {
+                    query.set('reportCategoryId', filters.reportCategoryId);
+                }
+
                 const res = await fetchData(`Reports?${query.toString()}`, token);
                 const contentReports = normalizeItems(res).filter(
                     (report) => report?.forumPostId == null && report?.forumCommentId == null
@@ -79,7 +121,7 @@ export default function ContentErrorReports() {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, filters.status, filters.reportCategoryId]);
 
     const STATUS_LABELS = {
     '-1': 'Chờ duyệt',
@@ -190,12 +232,48 @@ export default function ContentErrorReports() {
         setServerPagination(prev => ({ ...prev, page }));
     };
 
+    const handleFilterStatus = (value) => {
+        setFilters(prev => ({ ...prev, status: value }));
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleFilterCategory = (value) => {
+        setFilters(prev => ({ ...prev, reportCategoryId: value }));
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleResetFilters = () => {
+        setFilters({ status: '', reportCategoryId: '' });
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
                 <div><h1>Báo cáo lỗi nội dung</h1><p>Danh sách lỗi nội dung được báo cáo từ người dùng.</p></div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
+            <FilterBar
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả danh mục —',
+                        value: filters.reportCategoryId,
+                        options: reportCategories,
+                        onChange: handleFilterCategory,
+                    },
+                    {
+                        placeholder: '— Tất cả trạng thái —',
+                        value: filters.status,
+                        options: STATUS_OPTIONS,
+                        onChange: handleFilterStatus,
+                    },
+                ]}
+                onSearch={() => {
+                    setServerPagination(prev => ({ ...prev, page: 1 }));
+                    setRefresh((current) => current + 1);
+                }}
+                onReset={handleResetFilters}
+            />
             <DataTable
                 title={`Báo cáo lỗi (${serverPagination.totalCount})`}
                 columns={columns}
