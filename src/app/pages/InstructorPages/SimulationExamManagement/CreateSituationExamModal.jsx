@@ -332,7 +332,7 @@ export default function CreateSituationExamModal({ isOpen, onClose, onSuccess })
                         </div>
                     </div>
 
-                    <div className='ins-form-group'>
+                    {/* <div className='ins-form-group'>
                         <label className='ins-form-label ins-form-checkbox-label'>
                             <input
                                 type='checkbox'
@@ -349,7 +349,7 @@ export default function CreateSituationExamModal({ isOpen, onClose, onSuccess })
                                 ngẫu nhiên các tình huống phù hợp mỗi lần thi.
                             </p>
                         )}
-                    </div>
+                    </div> */}
 
                     {selectedSims.length > 0 && (
                         <div className='sim-exam-selected-section'>
