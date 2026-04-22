@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import DefaultAvatar from '../../../assets/DefaultAvatar.png';
 import EditUserModal from './EditUserModal';
-import DataTable from '../../../components/Shared/DataTable'; // Import DataTable
-import FilterBar from '../../../components/Shared/FilterBar'; // Import FilterBar
+import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import '../AdminPages.css'; // Sử dụng chung style với trang AdminPendingPosts
 export default function UserManagement() {
     const { user: authUser, logout, refreshNewToken } = useAuth();

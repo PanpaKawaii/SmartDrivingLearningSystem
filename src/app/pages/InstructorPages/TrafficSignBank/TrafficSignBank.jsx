@@ -3,6 +3,7 @@ import { fetchData, patchData, deleteData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import TrafficSignModal from './TrafficSignModal';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar'; // Import FilterBar
 import '../InstructorPages.css';
 
 const normalizeItems = (payload) => {
@@ -15,14 +16,12 @@ export default function TrafficSignBank() {
     const { user, refreshNewToken } = useAuth();
     const token = user?.token || '';
 
-    // Data states
     const [data, setData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
 
-    // Pagination states
     const [serverPagination, setServerPagination] = useState({
         page: 1,
         pageSize: 10,
@@ -30,15 +29,23 @@ export default function TrafficSignBank() {
         totalCount: 0
     });
 
-    // Search states
-    const [searchTerm, setSearchTerm] = useState(''); // Giá trị đang gõ trong input
-    const [appliedSearch, setAppliedSearch] = useState(''); // Giá trị thực tế để gọi API
+    // Cập nhật State cho bộ lọc để khớp với backend API
+    const [filters, setFilters] = useState({
+        code: '',
+        name: '',
+        signCategoryId: ''
+    });
+    // State này dùng để trigger việc gọi API sau khi nhấn "Lọc"
+    const [appliedFilters, setAppliedFilters] = useState({
+        code: '',
+        name: '',
+        signCategoryId: ''
+    });
 
-    // Modal states
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSign, setSelectedSign] = useState(null);
 
-    // 1. Fetch Categories (Chỉ chạy một lần hoặc khi refresh)
+    // Fetch Categories
     useEffect(() => {
         (async () => {
             try {
@@ -50,7 +57,7 @@ export default function TrafficSignBank() {
         })();
     }, [token]);
 
-    // 2. Fetch Traffic Signs (Chạy khi chuyển trang, refresh, hoặc áp dụng search)
+    // Fetch Traffic Signs
     useEffect(() => {
         (async () => {
             setLoading(true);
@@ -59,14 +66,16 @@ export default function TrafficSignBank() {
                 const query = new URLSearchParams({
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
-                    // Giả sử API hỗ trợ search theo Name
-                    ...(appliedSearch && { Name: appliedSearch })
                 });
+
+                // Gắn các filter vào query nếu có giá trị
+                if (appliedFilters.code.trim()) query.set('code', appliedFilters.code.trim());
+                if (appliedFilters.name.trim()) query.set('name', appliedFilters.name.trim());
+                if (appliedFilters.signCategoryId) query.set('signCategoryId', appliedFilters.signCategoryId);
 
                 const signRes = await fetchData(`TrafficSigns?${query.toString()}`, token);
                 const signItems = normalizeItems(signRes);
 
-                // Map category name
                 const enrichedData = signItems.map(s => ({
                     ...s,
                     categoryName: categories.find(c => c.id === s.signCategoryId)?.name || 'Không xác định'
@@ -74,28 +83,32 @@ export default function TrafficSignBank() {
 
                 setData(enrichedData);
 
-                // Cập nhật thông tin phân trang từ server
                 setServerPagination(prev => ({
                     ...prev,
-                    page: signRes?.page || prev.page,
-                    pageSize: signRes?.pageSize || prev.pageSize,
                     totalCount: signRes?.totalCount || 0,
                     totalPages: signRes?.totalPages || 1,
                 }));
             } catch (err) {
-                setError('Lỗi tải dữ liệu biển báo. Vui lòng thử lại.');
+                setError('Lỗi tải dữ liệu biển báo.');
                 if (err.status === 401) refreshNewToken(user);
             } finally {
                 setLoading(false);
             }
         })();
-    }, [refresh, token, serverPagination.page, serverPagination.pageSize, appliedSearch, categories]);
+    }, [refresh, token, serverPagination.page, serverPagination.pageSize, appliedFilters, categories]);
 
-    // Xử lý tìm kiếm
-    const handleSearchSubmit = (e) => {
-        if (e) e.preventDefault();
-        setServerPagination(prev => ({ ...prev, page: 1 })); // Reset về trang 1 khi search
-        setAppliedSearch(searchTerm);
+    // Xử lý khi nhấn nút Lọc
+    const handleSearch = () => {
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+        setAppliedFilters(filters);
+    };
+
+    // Xử lý khi nhấn nút Xóa lọc (Reset)
+    const handleReset = () => {
+        const resetFilters = { code: '', name: '', signCategoryId: '' };
+        setFilters(resetFilters);
+        setAppliedFilters(resetFilters);
+        setServerPagination(prev => ({ ...prev, page: 1 }));
     };
 
     const handlePageChange = (page) => {
@@ -137,7 +150,7 @@ export default function TrafficSignBank() {
         { key: 'code', label: 'Mã', width: '90px' },
         { key: 'name', label: 'Tên biển báo' },
         {
-            key: 'categoryName', label: 'Loại', width: '150px',
+            key: 'categoryName', label: 'Loại', width: '180px',
             render: (val) => <span className='ins-status-chip active'>{val}</span>
         },
         {
@@ -182,24 +195,34 @@ export default function TrafficSignBank() {
                 </button>
             </div>
 
-            {/* Thanh tìm kiếm
-            <div className='ins-filter-bar' style={{ marginBottom: '20px' }}>
-                <form onSubmit={handleSearchSubmit} className='ins-search-wrapper' style={{ display: 'flex', gap: '8px', maxWidth: '400px' }}>
-                    <input
-                        type="text"
-                        className='ins-form-input'
-                        placeholder="Tìm kiếm theo tên biển báo..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <button type="submit" className='ins-btn ins-btn-secondary' title='Tìm kiếm'>
-                        <i className="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </form>
-            </div> */}
+            {/* Tích hợp FilterBar */}
+            <FilterBar
+                searchOptions={[
+                    {
+                        placeholder: 'Mã biển báo...',
+                        value: filters.code,
+                        onChange: (val) => setFilters(prev => ({ ...prev, code: val }))
+                    },
+                    {
+                        placeholder: 'Tên biển báo...',
+                        value: filters.name,
+                        onChange: (val) => setFilters(prev => ({ ...prev, name: val }))
+                    }
+                ]}
+                selectOptions={[
+                    {
+                        placeholder: 'Tất cả danh mục',
+                        value: filters.signCategoryId,
+                        options: categories, // Sử dụng danh sách categories đã fetch
+                        onChange: (val) => setFilters(prev => ({ ...prev, signCategoryId: val }))
+                    }
+                ]}
+                onSearch={handleSearch}
+                onReset={handleReset}
+            />
 
             <DataTable
-                title={`Danh sách biển báo`}
+                title={`Danh sách biển báo (${serverPagination.totalCount})`}
                 columns={columns}
                 data={data}
                 loading={loading}
