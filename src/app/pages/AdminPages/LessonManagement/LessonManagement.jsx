@@ -5,6 +5,8 @@ import MovingLabelInput from "../../../components/MovingLabelInput/MovingLabelIn
 import StyleLabelSelect from "../../../components/StyleLabelSelect/StyleLabelSelect";
 import EditLessonModal from "./EditLessonModal";
 import TrafficLight from "../../../components/TrafficLight/TrafficLight";
+import parse from 'html-react-parser';
+import DOMPurify from 'dompurify';
 import { useAuth } from "../../../hooks/AuthContext/AuthContext";
 import "./LessonManagement.css";
 export default function LessonManagement() {
@@ -306,9 +308,9 @@ export default function LessonManagement() {
                   <td>
                     {lesson.content ? (
                       <span
-                        className="lesson-content-ellipsis"
-                        dangerouslySetInnerHTML={{ __html: lesson.content }}
-                      />
+                      className="lesson-content-ellipsis">
+                        {parse(DOMPurify.sanitize(lesson.content || ''))}
+                      </span>
                     ) : (
                       <span>--</span>
                     )}

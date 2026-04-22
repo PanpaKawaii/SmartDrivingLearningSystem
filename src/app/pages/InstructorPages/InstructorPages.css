@@ -138,6 +138,18 @@
     gap: 6px;
 }
 
+.ins-lesson-content-preview {
+    max-width: 460px;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.45;
+    white-space: normal;
+}
+
 .ins-action-btn {
     width: 30px;
     height: 30px;

@@ -126,8 +126,8 @@ export default function LicenseModal({ isOpen, onClose, onSave, license: license
                     </button>
                 </>
             }
+            message={error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
         >
-            {error && <div className='ins-error-banner'><i className='fa-solid fa-triangle-exclamation' /> {error}</div>}
 
             {/* Tên bằng */}
             <div className='ins-form-group'>

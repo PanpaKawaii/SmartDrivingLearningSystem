@@ -1,14 +1,23 @@
 import { Editor } from '@tinymce/tinymce-react';
-import { useRef } from 'react';
+import { useRef, forwardRef, useImperativeHandle } from 'react';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
-import { uploadMedia, deleteMedia } from '../../../../mocks/CallingAPI';
+import { uploadMedia } from '../../../../mocks/CallingAPI';
     
 
-export default function TinyMCEEditor({ value = '', onChange, useImage = true, entityId, imageTarget, action, placeholder }){
+const TinyMCEEditor = forwardRef(function TinyMCEEditor({ value = '', onChange, useImage = true, entityId, imageTarget, action, placeholder }, ref) {
   const editorRef = useRef(null);
-  const prevContentRef = useRef(value);
   const { user } = useAuth?.() || {};
   const token = user?.token || '';
+
+  // Expose method: chờ upload xong rồi trả content sạch (URL thay vì blob/base64)
+  useImperativeHandle(ref, () => ({
+    getCleanContent: async () => {
+      const editor = editorRef.current;
+      if (!editor) return '';
+      await editor.uploadImages();
+      return editor.getContent();
+    }
+  }));
 
   const handleImageUpload = (blobInfo, progress) => new Promise(async (resolve, reject) => {
     try {
@@ -23,10 +32,13 @@ export default function TinyMCEEditor({ value = '', onChange, useImage = true, e
         return;
       }
       
-      const file = blobInfo.blob();
-      const files = [file];
-      
-      const res = await uploadMedia(files, entityId, imageTarget, token);
+      const blob = blobInfo.blob();
+      // Tạo File đúng chuẩn với filename — blob không có tên sẽ gây lỗi 500 ở BE
+      const ext = blob.type?.split('/')[1] || 'png';
+      const filename = blobInfo.filename() || `image_${Date.now()}.${ext}`;
+      const file = new File([blob], filename, { type: blob.type });
+
+      const res = await uploadMedia([file], entityId, imageTarget, token);
       console.log('Upload response:', res);
       if (Array.isArray(res) && res[0]?.url) {
         resolve(res[0].url); 
@@ -52,38 +64,9 @@ export default function TinyMCEEditor({ value = '', onChange, useImage = true, e
   const activeToolbar = 
     `fullscreen | undo redo | blocks fontfamily fontsizeinput forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | searchreplace | ltr rtl | bullist numlist outdent indent | accordion codesample ${mediaToolbar}table emoticons charmap | pagebreak nonbreaking insertdatetime | visualblocks visualchars | removeformat code help`;
 
-  // lấy url ảnh từ content
-  const extractImageUrls = html => {
-    if (!html) return [];
-    const urls = [];
-    const imgRegex = /<img [^>]*src=["']([^"'>]+)["'][^>]*>/g;
-    let match;
-    while ((match = imgRegex.exec(html))) {
-      urls.push(match[1]);
-    }
-    return urls;
-  };
-
-  // Khi content thay đổi, kiểm tra và xóa ảnh thừa
-  const handleEditorChange = async (newContent, editor) => {
+  // Sync content vào state (blob/base64 tạm thời được thay bằng URL khi getCleanContent() được gọi trước submit)
+  const handleEditorChange = (newContent) => {
     if (onChange) onChange(newContent);
-    if (!entityId) {
-      prevContentRef.current = newContent;
-      return;
-    }
-    try {
-      // Lấy danh sách ảnh cũ và mới
-      const oldUrls = extractImageUrls(prevContentRef.current);
-      const newUrls = extractImageUrls(newContent);
-      // xóa những ảnh đã bị xóa khỏi content
-      const removed = oldUrls.filter(url => !newUrls.includes(url));
-      if (removed.length > 0) {
-        for (const url of removed) {
-          try { await deleteMedia(url, imageTarget || 'LessonImage', token); } catch (e) { console.error('deleteMedia error', e); }
-        }
-      }
-    } catch (e) { console.error('Error auto-cleanup images:', e); }
-    prevContentRef.current = newContent;
   };
 
   return (
@@ -115,4 +98,6 @@ export default function TinyMCEEditor({ value = '', onChange, useImage = true, e
       onEditorChange={handleEditorChange}
     />
   );
-}
+});
+
+export default TinyMCEEditor;

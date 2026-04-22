@@ -234,16 +234,20 @@ export default function AdminCommunityReports() {
                     <button className='ins-action-btn view' title='Chi tiết' disabled={viewLoading} onClick={() => handleOpenReportEntity(row)}>
                         <i className='fa-solid fa-eye'></i>
                     </button>
-                    <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
-                        setSelectedReport(row);
-                        setModalMode('process');
-                        setActionType('approve');
-                    }} disabled={row.status === 1 || loading}><i className='fa-solid fa-check'></i></button>
-                    <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
-                        setSelectedReport(row);
-                        setModalMode('process');
-                        setActionType('disapprove');
-                    }} disabled={row.status === 3 || loading}><i className='fa-solid fa-xmark'></i></button>
+                    {row.status === -1 && (
+                        <>
+                            <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
+                                setSelectedReport(row);
+                                setModalMode('process');
+                                setActionType('approve');
+                            }} disabled={loading}><i className='fa-solid fa-check'></i></button>
+                            <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
+                                setSelectedReport(row);
+                                setModalMode('process');
+                                setActionType('disapprove');
+                            }} disabled={loading}><i className='fa-solid fa-xmark'></i></button>
+                        </>
+                    )}
                 </div>
             ),
         },

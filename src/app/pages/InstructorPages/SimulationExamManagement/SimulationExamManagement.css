@@ -7,7 +7,7 @@
 .sim-exam-create-grid,
 .sim-exam-detail-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 24px;
     min-height: 420px;
 }
@@ -19,6 +19,8 @@
     gap: 0;
     border-right: 1px solid var(--ins-outline-variant);
     padding-right: 24px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .sim-exam-create-right,
@@ -26,6 +28,8 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 /* ── Section label ── */
@@ -288,6 +292,7 @@
 
 .sim-scenario-detail-info {
     flex: 1;
+    min-width: 0;
 }
 
 .sim-scenario-detail-name {
@@ -295,6 +300,9 @@
     font-weight: 500;
     color: var(--ins-on-surface);
     margin: 0 0 3px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .sim-scenario-detail-meta {
@@ -308,6 +316,7 @@
 
 .sim-scenario-detail-score {
     flex-shrink: 0;
+    min-width: fit-content;
 }
 
 .sim-score-badge {
@@ -333,5 +342,195 @@
 
 .sim-empty-scenarios p {
     font-size: 14px;
+    margin: 0;
+}
+
+.sim-exam-picker-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid var(--ins-outline-variant);
+    border-radius: 10px;
+    padding: 12px;
+    background: var(--ins-surface-variant);
+}
+
+.sim-scenario-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    margin-bottom: 0;
+}
+
+.sim-scenario-search > i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ins-on-surface-variant);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.sim-scenario-search input {
+    flex: 1;
+    padding: 8px 12px 8px 32px;
+    border: 1px solid var(--ins-outline-variant);
+    border-radius: 8px;
+    background: var(--ins-surface);
+    color: var(--ins-on-surface);
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.sim-scenario-search input:focus {
+    border-color: var(--ins-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ins-primary) 15%, transparent);
+}
+
+.sim-exam-picker-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--ins-outline-variant);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--ins-surface);
+}
+
+.sim-exam-picker-item:hover {
+    border-color: var(--ins-primary);
+    background: color-mix(in srgb, var(--ins-primary) 5%, transparent);
+}
+
+.sim-exam-picker-item.selected {
+    border-color: var(--ins-primary);
+    background: color-mix(in srgb, var(--ins-primary) 10%, transparent);
+}
+
+.sim-exam-picker-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--ins-outline-variant);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 10px;
+    transition: all 0.15s ease;
+}
+
+.sim-exam-picker-checkbox.selected {
+    background: var(--ins-primary);
+    border-color: var(--ins-primary);
+    color: #fff;
+}
+
+.sim-exam-picker-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sim-exam-picker-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ins-on-surface);
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sim-exam-picker-meta {
+    font-size: 11px;
+    color: var(--ins-on-surface-variant);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.sim-exam-picker-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 4px;
+    border-top: 1px solid var(--ins-outline-variant);
+}
+
+.sim-exam-picker-summary {
+    font-size: 12px;
+    color: var(--ins-on-surface-variant);
+    text-align: center;
+    padding-top: 4px;
+    border-top: 1px solid var(--ins-outline-variant);
+}
+
+.sim-exam-selected-section {
+    margin-top: 12px;
+    border-top: 1px solid var(--ins-outline-variant);
+    padding-top: 12px;
+}
+
+.sim-exam-selected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.sim-exam-selected-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--ins-outline-variant);
+    border-radius: 8px;
+    background: var(--ins-surface);
+}
+
+.sim-exam-selected-index {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--ins-primary) 15%, transparent);
+    color: var(--ins-primary);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sim-exam-selected-main {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.sim-exam-selected-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ins-on-surface);
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sim-exam-selected-meta {
+    font-size: 11px;
+    color: var(--ins-on-surface-variant);
     margin: 0;
 }
