@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import FilterBar from '../../../components/Shared/FilterBar';
-import { fetchData, putData } from '../../../../mocks/CallingAPI';
+import { fetchData, patchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import ChapterModal from './ChapterModal';
 import '../InstructorPages.css';
@@ -125,9 +125,8 @@ export default function ChapterManagement() {
 
     const handleToggleStatus = async (id) => {
         try {
-            setLoading(true);
             // Toggle: 1 (Public) <-> 0 (Hidden)
-            await putData(`QuestionChapters/${id}`, { }, token);
+            await patchData(`QuestionChapters/${id}`, { }, token);
             setRefresh(r => r + 1);
         } catch (error) {
             if (error.status === 401) {
@@ -135,8 +134,6 @@ export default function ChapterManagement() {
             } else {
                 setError('Lỗi cập nhật trạng thái');
             }
-        } finally {
-            setLoading(false);
         }
     };
 

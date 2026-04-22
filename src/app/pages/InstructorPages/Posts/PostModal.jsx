@@ -142,6 +142,7 @@ export default function PostModal({ isOpen, onClose, onSave, post: postProp, act
                 forumTopicId: post.forumTopicId,
                 title: post.title.trim(),
                 content: post.content,
+                status: 4,
             };
             let res;
             if (action === 'edit' && postProp?.id) {
