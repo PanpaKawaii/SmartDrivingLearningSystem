@@ -126,8 +126,11 @@ export default function QuestionModal({
           answers:
             initialData.answers?.length > 0
               ? initialData.answers.map((a) => ({
+                  id: a.id,
+                  questionId: a.questionId,
                   content: a.content || a.text,
                   isCorrect: a.isCorrect ?? a.correct ?? false,
+                  status: a.status ?? 1,
                 }))
               : [
                   { content: "", isCorrect: true },
@@ -251,12 +254,49 @@ export default function QuestionModal({
       if (Number(formData.index) <= 0)
         return setError("Thứ tự (Index) bắt buộc nhập và phải lớn hơn 0");
       setSubmitting(true);
-      const payload = { ...formData };
-      payload.index = Number(formData.index);
+      const basePayload = {
+        questionLessonId: formData.questionLessonId,
+        questionTopicId: formData.questionTopicId,
+        questionCategoryId: formData.questionCategoryId,
+        content: formData.content,
+        image: formData.image,
+        explanation: formData.explanation,
+        type: formData.type,
+        index: Number(formData.index),
+      };
 
       if (isEdit) {
+        const questionId = initialData?.id;
+        const payload = {
+          ...basePayload,
+          status: initialData?.status ?? 1,
+          answers: formData.answers.map((a) => ({
+            ...(a?.id ? { id: a.id } : {}),
+            questionId: a?.questionId || questionId,
+            content: a.content,
+            isCorrect: !!a.isCorrect,
+            status: a?.status ?? 1,
+          })),
+          questionTags: formData.questionTags.map((t) => ({
+            ...(t?.id ? { id: t.id } : {}),
+            questionId: t?.questionId || questionId,
+            tagId: t.tagId,
+            status: t?.status ?? 1,
+          })),
+        };
+        console.log("Updating question with payload:", payload);
         await putData(`Questions/${initialData.id}`, payload, token);
       } else {
+        const payload = {
+          ...basePayload,
+          answers: formData.answers.map((a) => ({
+            content: a.content,
+            isCorrect: !!a.isCorrect,
+          })),
+          questionTags: formData.questionTags.map((t) => ({
+            tagId: t.tagId,
+          })),
+        };
         console.log("Creating question with payload:", payload);
         await postData("Questions", payload, token);
       }
