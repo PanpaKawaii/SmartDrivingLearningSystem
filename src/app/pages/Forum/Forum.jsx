@@ -135,7 +135,7 @@ export default function Forum() {
 
             {openCreatePost && user && (
                 <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Tạo bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
-                    <ForumCreatePost onClose={() => setOpenCreatePost(false)} setRefreshParent={setRefresh} />
+                    <ForumCreatePost onClose={() => setOpenCreatePost(false)} setRefreshParent={setRefresh} action={'create'} data={{}} />
                 </PopupContainer>
             )}
 

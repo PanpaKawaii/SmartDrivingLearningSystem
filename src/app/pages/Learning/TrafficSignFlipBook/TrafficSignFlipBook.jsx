@@ -175,7 +175,9 @@ export default function TrafficSignFlipBook() {
     return (
         <div className='traffic-sign-flip-book-container container'>
             {/* <input type='number' value={currentPage || 0} onChange={(e) => setCurrentPage(Math.max(Math.min(e.target.value, pages?.length), 0) || 0)} /> */}
-            <button className='btn' onClick={() => setCurrentPage(p => Math.max(p - 2, 0))}><i className='fa-solid fa-chevron-left' /></button>
+            <button className='btn' onClick={() => setCurrentPage(p => Math.max(p - 2, 0))}>
+                <i className='fa-solid fa-chevron-left' />
+            </button>
             <FlipBook
                 pages={pages}
                 width={book.width}
@@ -226,7 +228,9 @@ export default function TrafficSignFlipBook() {
                     </React.Fragment>
                 ))} */}
             </FlipBook>
-            <button className='btn' onClick={() => setCurrentPage(p => Math.min(p + 2, pages?.length))}><i className='fa-solid fa-chevron-right' /></button>
+            <button className='btn' onClick={() => setCurrentPage(p => Math.min(p + 2, pages?.length))}>
+                <i className='fa-solid fa-chevron-right' />
+            </button>
         </div>
     )
 }

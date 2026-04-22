@@ -38,14 +38,14 @@ export default function Learning() {
             type: 'Đa dạng câu hỏi',
             time: 'Tự học',
         },
-        {
-            name: 'Học biển báo theo dạng Flipbook',
-            link: 'learning/traffic-sign-flip-book',
-            icon: 'book',
-            description: 'Học 300+ biển báo dưới dạng sách lật sách',
-            type: 'Đa dạng nội dung',
-            time: 'Tự học',
-        },
+        // {
+        //     name: 'Học biển báo theo dạng Flipbook',
+        //     link: 'learning/traffic-sign-flip-book',
+        //     icon: 'book',
+        //     description: 'Học 300+ biển báo dưới dạng sách lật sách',
+        //     type: 'Đa dạng nội dung',
+        //     time: 'Tự học',
+        // },
         {
             name: 'Làm đề thi thử',
             link: 'learning/list-exam',

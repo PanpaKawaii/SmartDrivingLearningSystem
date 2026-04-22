@@ -5,6 +5,7 @@ import ButtonList from '../../components/ButtonList/ButtonList';
 import PopupContainer from '../../components/PopupContainer/PopupContainer';
 import ReportModal from '../../components/ReportModal/ReportModal';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
+import ForumCreatePost from './ForumCreatePost';
 
 import './ForumCard.css';
 
@@ -21,6 +22,7 @@ export default function ForumCard({
     const [open, setOpen] = useState(false);
     const [openReport, setOpenReport] = useState(null);
     const [localReactType, setLocalReactType] = useState('');
+    const [openCreatePost, setOpenCreatePost] = useState(false);
 
     const TogglePostStatus = async (postId, action) => {
         setLoading(true);
@@ -186,6 +188,15 @@ export default function ForumCard({
                                 (
                                     post.userId == user?.id
                                 ) && {
+                                    name: 'Chỉnh sửa',
+                                    onToggle: () => {
+                                        setOpenCreatePost(true);
+                                    },
+                                    disabled: false,
+                                },
+                                (
+                                    post.userId == user?.id
+                                ) && {
                                     name: 'Xóa',
                                     onToggle: () => TogglePostStatus(post.id, 'delete'),
                                     disabled: loading,
@@ -298,6 +309,25 @@ export default function ForumCard({
                     <ReportModal data={openReport} onClose={() => setOpenReport(null)} />
                 </PopupContainer>
             }
+
+            {openCreatePost && user && (
+                <PopupContainer onClose={() => setOpenCreatePost(false)} titleName={'Chỉnh sửa bài viết'} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <ForumCreatePost
+                        onClose={() => setOpenCreatePost(false)}
+                        setRefreshParent={setRefresh}
+                        action={'update'}
+                        data={{
+                            id: post?.id,
+                            name: post?.name,
+                            title: post?.title,
+                            topic: post?.forumTopicId,
+                            content: post?.content,
+                            viewCount: post?.viewCount,
+                            status: post?.status
+                        }}
+                    />
+                </PopupContainer>
+            )}
         </div>
     )
 }

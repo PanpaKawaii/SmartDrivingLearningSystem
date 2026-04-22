@@ -64,7 +64,7 @@ export default function LoginFace({
             else if (result.user.roleName == 'Admin') navigate('/admin');
         } catch (error) {
             console.error('Login failed:', error);
-            setLoginError({ value: 'Đăng nhập thất bại', name: 'Email, Password' });
+            setLoginError({ value: error?.data?.detail || 'Đăng nhập thất bại', name: 'Email, Password' });
         } finally {
             setLoading(false);
         };
