@@ -187,25 +187,25 @@ export default function ExamManagement() {
     },
     {
       key: "passScore",
-      label: "Điểm đạt",
+      label: "Điểm đạt (%)",
       width: "100px",
       render: (val) => (
         <span style={{ fontWeight: 600, color: "var(--ins-primary)" }}>
-          {val} điểm
+          {val} %
         </span>
       ),
     },
-    {
-      key: "isRandom",
-      label: "Ngẫu nhiên",
-      width: "115px",
-      render: (val) => (
-        <span className={`ins-status-chip ${val ? "approved" : "pending"}`}>
-          <span className="chip-dot" />
-          {val ? "Có" : "Không"}
-        </span>
-      ),
-    },
+    // {
+    //   key: "isRandom",
+    //   label: "Ngẫu nhiên",
+    //   width: "115px",
+    //   render: (val) => (
+    //     <span className={`ins-status-chip ${val ? "approved" : "pending"}`}>
+    //       <span className="chip-dot" />
+    //       {val ? "Có" : "Không"}
+    //     </span>
+    //   ),
+    // },
     {
       key: "status",
       label: "Trạng thái",
@@ -215,7 +215,7 @@ export default function ExamManagement() {
           className={`ins-status-chip ${val === 1 ? "approved" : "pending"}`}
         >
           <span className="chip-dot" />
-          {val === 1 ? "Hoạt động" : "Nháp"}
+          {val === 1 ? "Hoạt động" : "Ngưng"}
         </span>
       ),
     },
@@ -248,7 +248,7 @@ export default function ExamManagement() {
           </button>
           <button
             className={`ins-action-btn ${row.status === 1 ? "delete" : "view"}`}
-            title={row.status === 1 ? "Đặt thành Nháp" : "Kích hoạt"}
+            title={row.status === 1 ? "Đặt thành Ngưng" : "Kích hoạt"}
             onClick={() => handleToggleStatus(row.id)}
           >
             <i
@@ -295,7 +295,7 @@ export default function ExamManagement() {
             value: filters.status,
             options: [
               { id: "1", name: "Hoạt động" },
-              { id: "0", name: "Nháp" },
+              { id: "0", name: "Ngưng" },
             ],
             onChange: (val) => {
               setFilters((prev) => ({ ...prev, status: val }));
