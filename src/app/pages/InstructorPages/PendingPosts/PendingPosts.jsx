@@ -50,7 +50,7 @@ export default function PendingPosts() {
                 }
                 const res = await fetchData(`ForumPosts?${query.toString()}`, token);
 
-                const filteredItems = (res?.items || []).filter(item => item.status !== 4 && item.status=== 5);
+                const filteredItems = (res?.items || []).filter(item => item.status !== 4 && item.status !== 5);
                 setItems(filteredItems);
                 setServerPagination(prev => ({
                     ...prev,
