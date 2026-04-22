@@ -200,7 +200,7 @@ export default function ForumCard({
                 <p>{post.content}</p>
                 <div className='list-post-images'>
                     {post.postImages?.map(pi => (
-                        <img key={pi.id} src={pi.imageUrl || DefaultAvatar} alt={`Post ${post.id} Image ${pi.id}`} />
+                        <img key={pi.id} src={pi.url || DefaultAvatar} alt={`Post ${post.id} Image ${pi.id}`} />
                     ))}
                 </div>
             </div>

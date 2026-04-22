@@ -98,10 +98,10 @@ export default function LoginFace({
                 </div>
                 <div className='form-check'>
                     <div className='checkbox-container'>
-                        <label>
+                        {/* <label>
                             <input type='checkbox' checked={remember} onChange={handleRemember} />
                             Lưu đăng nhập
-                        </label>
+                        </label> */}
                     </div>
                     <Link to='forget-password' state={{ openLogin: 'false' }} className='forget-link'>Quên mật khẩu?</Link>
                 </div>

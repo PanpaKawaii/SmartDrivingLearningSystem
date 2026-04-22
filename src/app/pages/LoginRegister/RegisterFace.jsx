@@ -276,8 +276,9 @@ export default function RegisterFace({
                                 const otp = inputsRef.current.map((input) => input.value).join('');
                                 CheckOTP(email, otp);
                             }}
+                            disabled={loading}
                         >
-                            Xác nhận
+                            {loading ? 'Đang xác nhận...' : 'Xác nhận'}
                         </button>
                     </div>
                 </div>
