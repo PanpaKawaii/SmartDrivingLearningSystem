@@ -7,7 +7,7 @@
     .user-information {
         margin: 0 0 8px;
         display: flex;
-        justify-content: start;
+        justify-content: start !important;
         align-items: start;
         gap: 12px;
 

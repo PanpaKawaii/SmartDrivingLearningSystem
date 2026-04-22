@@ -69,9 +69,9 @@ export default function Forum() {
 
     const filteredFORUMPOSTs = FORUMPOSTs.filter(fp => {
         let matchStatus = false;
-        if (selectedStatus == '') matchStatus = fp.status == '1';
-        else if (selectedStatus == '-2') matchStatus = fp.postReacts?.some(r => r.userId == user?.id) && fp.status == '1';
-        else if (selectedStatus == '1') matchStatus = fp.userId == user?.id && fp.status == '1';
+        if (selectedStatus == '') matchStatus = fp.status == 1;
+        else if (selectedStatus == '-2') matchStatus = fp.postReacts?.some(r => r.userId == user?.id) && fp.status == 1;
+        else if (selectedStatus == '1') matchStatus = fp.userId == user?.id && fp.status == 1;
         else matchStatus = fp.userId == user?.id && selectedStatus == fp.status;
 
         const matchTopic = !selectedTopicId || fp.forumTopicId == selectedTopicId;
@@ -79,7 +79,7 @@ export default function Forum() {
         return matchStatus && matchTopic;
     }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
-    const pinPosts = FORUMPOSTs.filter(pp => pp.status == 5)?.sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
+    const pinPosts = FORUMPOSTs.filter(pp => pp.status == 5 && (selectedStatus == '' || selectedStatus == 5))?.sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
     console.log('pinPosts', pinPosts);
     const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
     console.log('selectedPost', selectedPost);
@@ -99,9 +99,6 @@ export default function Forum() {
                                 Tạo bài viết
                             </button>
                         </div>
-                        <button className='btn refresh-btn' onClick={() => setRefresh(p => p + 1)} disabled={loading}>
-                            <i className='fa-solid fa-arrow-rotate-right' />
-                        </button>
                         <div className='result'>
                             {filteredFORUMPOSTs?.length + pinPosts?.length}
                         </div>
@@ -123,6 +120,9 @@ export default function Forum() {
                                 ))}
                             </select>
                         </div>
+                        <button className='btn refresh-btn' onClick={() => setRefresh(p => p + 1)} disabled={loading}>
+                            <i className='fa-solid fa-arrow-rotate-right' />
+                        </button>
                     </div>
                     {[...pinPosts, ...filteredFORUMPOSTs].map((post, i) => (
                         <React.Fragment key={i}>
