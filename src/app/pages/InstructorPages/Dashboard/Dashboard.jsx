@@ -72,14 +72,14 @@ export default function Dashboard() {
                             trend='Tổng cộng'
                             trendDir='none'
                         />
-                        <StatsCard
+                        {/* <StatsCard
                             icon='fa-solid fa-code-pull-request'
                             iconColor='blue'
                             value={summary?.contentChangeRequestCount || 0}
                             label='Yêu cầu thay đổi'
                             trend='Cần xử lý'
                             trendDir='none'
-                        />
+                        /> */}
                         <StatsCard
                             icon='fa-solid fa-bug'
                             iconColor='red'
@@ -134,7 +134,7 @@ export default function Dashboard() {
                         {/* CỘT 2: YÊU CẦU THAY ĐỔI TỪ API */}
                         <div className='dashboard-section'>
                             <div className='dashboard-section-header'>
-                                <h3 className='dashboard-section-title'>Yêu cầu thay đổi chờ duyệt</h3>
+                                <h3 className='dashboard-section-title'>Báo cáo đang chờ duyệt</h3>
                                 <Link to='/instructor/change-requests' className='dashboard-section-link'>Xem tất cả →</Link>
                             </div>
                             <div className='dashboard-table-card'>

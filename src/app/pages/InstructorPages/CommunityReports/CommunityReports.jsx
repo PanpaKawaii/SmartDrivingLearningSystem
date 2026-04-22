@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
+import FilterBar from '../../../components/Shared/FilterBar';
 import ReportFeedbackModal from '../../../components/ReportFeedbackModal/ReportFeedbackModal.jsx';
 import PopupContainer from '../../../components/PopupContainer/PopupContainer';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
@@ -40,6 +41,12 @@ const getReportTargetLabel = (report) => {
     return '---';
 };
 
+const STATUS_OPTIONS = [
+    { id: '-1', name: 'Chờ duyệt' },
+    { id: '1', name: 'Đã duyệt' },
+    { id: '3', name: 'Đã bỏ qua' },
+];
+
 export default function CommunityReports() {
     const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
@@ -48,12 +55,38 @@ export default function CommunityReports() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [reportItems, setReportItems] = useState([]);
+    const [reportCategories, setReportCategories] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [modalMode, setModalMode] = useState('view');
     const [actionType, setActionType] = useState('approve');
     const [viewPost, setViewPost] = useState(null);
     const [highlightCommentId, setHighlightCommentId] = useState(null);
     const [viewLoading, setViewLoading] = useState(false);
+    const [filters, setFilters] = useState({
+        status: '',
+        reportCategoryId: ''
+    });
+
+    useEffect(() => {
+        (async () => {
+            const token = user?.token || '';
+            if (!token) {
+                setReportCategories([]);
+                return;
+            }
+
+            try {
+                const response = await fetchData('ReportCategories/all?status=1', token);
+                setReportCategories(normalizeItems(response));
+            } catch (error) {
+                if (error.status === 401) {
+                    refreshNewToken(user);
+                } else {
+                    console.error('Lỗi tải danh mục báo cáo:', error);
+                }
+            }
+        })();
+    }, [user?.token, refreshNewToken, user]);
 
     useEffect(() => {
         (async () => {
@@ -67,6 +100,14 @@ export default function CommunityReports() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
+
+                if (filters.status !== '') {
+                    query.set('status', filters.status);
+                }
+
+                if (filters.reportCategoryId !== '') {
+                    query.set('reportCategoryId', filters.reportCategoryId);
+                }
 
                 const res = await fetchData(`Reports?${query.toString()}`, token);
                 console.log('Fetched reports data:', res);
@@ -90,7 +131,7 @@ export default function CommunityReports() {
                 setLoading(false);
             }
         })();
-    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize]);
+    }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, filters.status, filters.reportCategoryId]);
 
     const STATUS_LABELS = {
         '-1': 'Chờ duyệt',
@@ -184,6 +225,22 @@ export default function CommunityReports() {
     const handlePageChange = (page) => {
         setServerPagination(prev => ({ ...prev, page }));
     };
+
+    const handleFilterStatus = (value) => {
+        setFilters(prev => ({ ...prev, status: value }));
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleFilterCategory = (value) => {
+        setFilters(prev => ({ ...prev, reportCategoryId: value }));
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handleResetFilters = () => {
+        setFilters({ status: '', reportCategoryId: '' });
+        setServerPagination(prev => ({ ...prev, page: 1 }));
+    };
+
     const columns = [
         { key: '', label: 'STT', width: '60px', render: (_, __, rIdx, page, pageSize) => (page - 1) * pageSize + rIdx + 1 },
         { key: 'title', label: 'Tiêu đề báo cáo' },
@@ -265,6 +322,27 @@ export default function CommunityReports() {
                 <div><h1>Báo cáo cộng đồng</h1><p>Danh sách báo cáo vi phạm từ cộng đồng.</p></div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
+            <FilterBar
+                selectOptions={[
+                    {
+                        placeholder: '— Tất cả danh mục —',
+                        value: filters.reportCategoryId,
+                        options: reportCategories,
+                        onChange: handleFilterCategory,
+                    },
+                    {
+                        placeholder: '— Tất cả trạng thái —',
+                        value: filters.status,
+                        options: STATUS_OPTIONS,
+                        onChange: handleFilterStatus,
+                    },
+                ]}
+                onSearch={() => {
+                    setServerPagination(prev => ({ ...prev, page: 1 }));
+                    setRefresh((current) => current + 1);
+                }}
+                onReset={handleResetFilters}
+            />
             <DataTable
                 title={`Báo cáo cộng đồng (${serverPagination.totalCount})`}
                 columns={columns}

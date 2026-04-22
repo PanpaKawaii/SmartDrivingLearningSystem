@@ -136,9 +136,9 @@ export default function InstructorHeader() {
                     )}
                 </div>
 
-                <button className='header-icon-btn' title='Cài đặt'>
+                {/* <button className='header-icon-btn' title='Cài đặt'>
                     <i className='fa-solid fa-gear'></i>
-                </button>
+                </button> */}
             </div>
 
             {isDetailOpen && selectedNoti &&
