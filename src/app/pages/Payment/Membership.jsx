@@ -11,7 +11,6 @@ import './Membership.css';
 export default function Membership() {
     const { user, refreshNewToken } = useAuth();
 
-    const [thisUser, setThisUser] = useState(null);
     const [paymentOrderId, setPaymentOrderId] = useState(0);
     const [Amount, setAmount] = useState(99000);
     const [refresh, setRefresh] = useState(0);
@@ -27,8 +26,6 @@ export default function Membership() {
             const userId = user?.id || '';
             try {
                 if (userId) {
-                    const ThisUserResponse = await fetchData(`User/${userId}`, token);
-                    console.log('ThisUserResponse', ThisUserResponse);
                     const SystemConfigResponse = await fetchData(`SystemConfigs/all`, token);
                     console.log('SystemConfigResponse', SystemConfigResponse);
                     const PaymentResponse = await fetchData(`payos/GetAll`, token);
@@ -39,7 +36,6 @@ export default function Membership() {
 
                     const MembershipAmount = SystemConfigResponse?.find(sc => sc.name == 'Student Fee')?.value || 0;
 
-                    setThisUser(ThisUserResponse);
                     setAmount(MembershipAmount);
                     setPaymentOrderId(newOrderId);
                 }
@@ -142,11 +138,11 @@ export default function Membership() {
                         <button
                             className='btn'
                             onClick={() => Purchase()}
-                            disabled={loading || loadingFunction || thisUser?.roleName == 'Student' || !user}
+                            disabled={loading || loadingFunction || user?.roleName == 'Student' || !user}
                         >
                             {(loading || loadingFunction) ?
                                 'ĐANG XỬ LÝ...'
-                                : (thisUser?.roleName == 'Student' ?
+                                : (user?.roleName == 'Student' ?
                                     'ĐÃ ĐĂNG KÝ'
                                     : (!user ?
                                         'VUI LÒNG ĐĂNG NHẬP'

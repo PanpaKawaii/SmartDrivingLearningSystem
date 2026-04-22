@@ -79,11 +79,7 @@ export default function Forum() {
         return matchStatus && matchTopic;
     }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
     console.log('filteredFORUMPOSTs', filteredFORUMPOSTs);
-    const pinPosts = FORUMPOSTs.filter(pp => {
-        let matchStatus = false;
-        if (selectedStatus == '') matchStatus = pp.status == '5';
-        return matchStatus;
-    }).sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
+    const pinPosts = FORUMPOSTs.filter(pp => pp.status == 5)?.sort((a, b) => new Date(b.updateAt) - new Date(a.updateAt));
     console.log('pinPosts', pinPosts);
     const selectedPost = filteredFORUMPOSTs.find(f => f.id == selectedPostId);
     console.log('selectedPost', selectedPost);

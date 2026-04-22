@@ -285,10 +285,8 @@
 .header-right {
     display: flex;
     align-items: center;
-    gap: 5px;
-    /* Khoảng cách giữa chuông và profile */
+    gap: 12px;
     flex-shrink: 0;
-    /* Không cho phép khu vực này bị co lại */
 }
 
 .notification-wrapper {

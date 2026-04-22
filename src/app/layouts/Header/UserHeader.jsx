@@ -171,11 +171,11 @@ export default function UserHeader({
                             {/* USER PROFILE */}
                             <div className='user-profile-link' onClick={() => setShowProfileList(p => !p)}>
                                 <div className='avatar'>
-                                    <img src={thisUser?.avatar || user?.avatar || DefaultAvatar} alt={user?.name} />
+                                    <img src={user?.avatar || DefaultAvatar} alt={user?.name} />
                                 </div>
                                 <div className='name-role'>
-                                    <div className='name'>{thisUser?.name || user?.name}</div>
-                                    <div className='role'>{thisUser?.roleName || user?.roleName}</div>
+                                    <div className='name'>{user?.name}</div>
+                                    <div className='role'>{user?.roleName}</div>
                                 </div>
 
                                 {showProfileList && (
