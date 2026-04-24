@@ -261,7 +261,7 @@ export default function SituationExamDetailModal({ isOpen, exam, onClose, onSucc
                                     </select>
                                 </div>
                             </div>
-                            <div className='ins-form-group'>
+                            {/* <div className='ins-form-group'>
                                 <label className='ins-form-label ins-form-checkbox-label'>
                                     <input
                                         type='checkbox'
@@ -270,9 +270,9 @@ export default function SituationExamDetailModal({ isOpen, exam, onClose, onSucc
                                         onChange={handleChange}
                                         className='ins-form-checkbox'
                                     />
-                                    {/* <span>Chọn ngẫu nhiên (isRandom)</span> */}
+                                    <span>Chọn ngẫu nhiên (isRandom)</span>
                                 </label>
-                            </div>
+                            </div> */}
                         </>
                     ) : (
                         <>
