@@ -29,34 +29,37 @@ export default function MyReport() {
 
     useEffect(() => {
         fetchDataReport(inputContent);
-    }, [refresh, user?.token, page, selectedCategoryId]);
+    }, [refresh, user?.token, page, selectedCategoryId, selectedStatus]);
 
     const fetchDataReport = async (content) => {
         setError(null);
         setLoading(true);
         const token = user?.token || '';
-        const userId = user?.id || 'no-user';
+        const userId = user?.id || '';
         try {
-            const reportQuery = new URLSearchParams({
-                content: content,
-                page: page,
-                pageSize: pageSize,
-                reportCategoryId: selectedCategoryId,
-                userId: userId,
-            });
-            const reportCategoryQuery = new URLSearchParams({
-                status: 1,
-            });
-            const ReportResponse = await fetchData(`Reports?${reportQuery.toString()}`, token);
-            const ReportCategoryResponse = await fetchData(`ReportCategories/all?${reportCategoryQuery.toString()}`, token);
-            console.log('ReportResponse', ReportResponse);
-            console.log('ReportCategoryResponse', ReportCategoryResponse);
-            const ReportItems = ReportResponse?.items;
+            if (userId) {
+                const reportQuery = new URLSearchParams({
+                    content: content,
+                    page: page,
+                    pageSize: pageSize,
+                    reportCategoryId: selectedCategoryId,
+                    userId: userId,
+                    status: selectedStatus,
+                });
+                const reportCategoryQuery = new URLSearchParams({
+                    status: 1,
+                });
+                const ReportResponse = await fetchData(`Reports?${reportQuery.toString()}`, token);
+                const ReportCategoryResponse = await fetchData(`ReportCategories/all?${reportCategoryQuery.toString()}`, token);
+                console.log('ReportResponse', ReportResponse);
+                console.log('ReportCategoryResponse', ReportCategoryResponse);
+                const ReportItems = ReportResponse?.items;
 
-            setTotalCount(ReportResponse.totalCount);
-            setTotalPages(ReportResponse.totalPages);
-            setREPORTs(ReportItems);
-            setREPORTCATEGORIes(ReportCategoryResponse);
+                setTotalCount(ReportResponse.totalCount);
+                setTotalPages(ReportResponse.totalPages);
+                setREPORTs(ReportItems);
+                setREPORTCATEGORIes(ReportCategoryResponse);
+            }
         } catch (error) {
             console.error('Error', error);
             setError(error);
@@ -91,8 +94,8 @@ export default function MyReport() {
                 <div className='result'>{selectedStatus ? filteredREPORTs?.length : totalCount}</div>
                 <input type='text' value={inputContent} onChange={handleChange} placeholder='Tìm theo nội dung...' />
                 <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-                    <option value=''>Tất cả</option>
-                    <option value='3'>Đã giải quyết</option>
+                    <option value={''}>Tất cả</option>
+                    <option value={3}>Đã giải quyết</option>
                 </select>
                 <select value={selectedCategoryId} onChange={(e) => setSelectedCategoryId(e.target.value)}>
                     <option value=''>Tất cả</option>

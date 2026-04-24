@@ -34,6 +34,7 @@ export default function ListExam() {
     const [textInput, setTextInput] = useState('');
     const [selectedId, setSelectedId] = useState(selectedIdState || '');
     const [ExamOrSituation, setExamOrSituation] = useState(ExamOrSituationState || 'exam');
+    const [isMine, setIsMine] = useState(false);
 
     const [todayExam, setTodayExam] = useState([]);
     const [todaySimulation, setTodaySimulation] = useState([]);
@@ -162,21 +163,28 @@ export default function ListExam() {
                 back={'Quay lại'}
             />
             <div className='container'>
-                <div className='filters'>
-                    <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
-                        ĐỀ LÝ THUYẾT
-                    </button>
-                    <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
-                        ĐỀ MÔ PHỎNG
-                    </button>
-                    {/* ==FIX== */}
-                    {/* <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
-                        ĐỀ CỦA TÔI
-                    </button> */}
-                    <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
-                    <button className={`btn ${ExamOrSituation == 'exam' ? 'exam-btn' : 'situation-btn'}`} onClick={() => setRefresh(p => p + 1)}>
-                        <i className='fa-solid fa-arrow-rotate-left' />
-                    </button>
+                <div className='exam-heading'>
+                    <div className='filters'>
+                        <button className={`btn exam-btn ${ExamOrSituation == 'exam' ? '' : 'off'}`} onClick={() => setExamOrSituation('exam')}>
+                            ĐỀ LÝ THUYẾT
+                        </button>
+                        <button className={`btn situation-btn ${ExamOrSituation == 'situation' ? '' : 'off'}`} onClick={() => setExamOrSituation('situation')}>
+                            ĐỀ MÔ PHỎNG
+                        </button>
+                        <input type='text' className={`input-${ExamOrSituation}`} placeholder='Tìm kiếm đề thi...' value={textInput} onChange={(e) => setTextInput(e.target.value)} />
+                        <button className={`btn ${ExamOrSituation == 'exam' ? 'exam-btn' : 'situation-btn'}`} onClick={() => setRefresh(p => p + 1)}>
+                            <i className='fa-solid fa-arrow-rotate-left' />
+                        </button>
+                    </div>
+                    <div className='mine'>
+                        {/* ==FIX== */}
+                        <button className={`btn ${isMine ? (ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn') : 'off'}`} onClick={() => setIsMine(p => !p)}>
+                            ĐỀ CỦA TÔI
+                        </button>
+                        <button className={`btn ${ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn'}`} onClick={() => setIsMine(p => !p)}>
+                            TẠO BỘ ĐỀ
+                        </button>
+                    </div>
                 </div>
                 <div className='content'>
                     <div className='left'>

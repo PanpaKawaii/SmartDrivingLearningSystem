@@ -1,48 +1,55 @@
 .list-exam-container {
     .container {
-        .filters {
-            margin: 0 0 8px;
-            padding: 8px;
-            width: fit-content;
+        .exam-heading {
             display: flex;
-            gap: 12px;
-            background-color: #374e6e40;
-            border: 1px solid #374e6e80;
-            border-radius: 8px;
+            justify-content: space-between;
+            gap: 20px;
 
             .exam-btn {
-                color: #fff;
                 background: linear-gradient(90deg, #2563eb, #0891b2);
             }
 
             .situation-btn {
-                color: #fff;
                 background: linear-gradient(135deg, #e43efa, #9008b2);
             }
 
             .btn {
+                color: #fff;
+
                 &.off {
                     background: #374e6e;
                     box-sizing: border-box;
                 }
             }
 
-            input {
-                color: var(--text-primary);
-                background: transparent;
-                border: 2px solid var(--gray-2);
+            .filters,
+            .mine {
+                margin: 0 0 8px;
+                padding: 8px;
+                width: fit-content;
+                display: flex;
+                gap: 12px;
+                background-color: #374e6e40;
+                border: 1px solid #374e6e80;
+                border-radius: 8px;
 
-                &.input-exam {
-                    &:focus {
-                        border-color: #3b82f6;
-                        box-shadow: 0 0 0 4px #3b82f660;
+                input {
+                    color: var(--text-primary);
+                    background: transparent;
+                    border: 2px solid var(--gray-2);
+
+                    &.input-exam {
+                        &:focus {
+                            border-color: #3b82f6;
+                            box-shadow: 0 0 0 4px #3b82f660;
+                        }
                     }
-                }
 
-                &.input-situation {
-                    &:focus {
-                        border-color: #e43efa;
-                        box-shadow: 0 0 0 4px #e43efa60;
+                    &.input-situation {
+                        &:focus {
+                            border-color: #e43efa;
+                            box-shadow: 0 0 0 4px #e43efa60;
+                        }
                     }
                 }
             }
