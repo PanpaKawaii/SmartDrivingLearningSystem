@@ -6,9 +6,16 @@
 }
 
 .reset-password-popup {
+    position: relative;
     width: 100%;
     max-width: 400px; /* Giới hạn chiều rộng cố định */
     box-sizing: border-box;
+
+    .close-btn-pos {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 }
 
 .error-message {

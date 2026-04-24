@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Thêm navigate để xử lý logout
-import { useAuth } from '../../hooks/AuthContext/AuthContext';
-import DefaultAvatar from '../../assets/DefaultAvatar.png';
-import StarsBackground from '../../components/StarsBackground/StarsBackground';
-import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import { fetchData, putData, uploadMedia } from '../../../mocks/CallingAPI';
+import DefaultAvatar from '../../assets/DefaultAvatar.png';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
+import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
-import ProfileView from './ProfileView';
-import ProfileEdit from './ProfileEdit';
-import LearningProgress from './LearningProgress';
 import ChangePasswordModal from './ChangePasswordModal';
+import LearningProgress from './LearningProgress';
+import MyReport from './MyReport';
+import ProfileEdit from './ProfileEdit';
+import ProfileView from './ProfileView';
 
 import './UserProfile.css';
 
@@ -246,9 +247,12 @@ export default function UserProfile() {
                             </button>
                             <Link to='/membership'>
                                 <button className='sidebar-btn outline-btn mt-auto'>
-                                    <i className='fa-solid fa-users'></i> Đăng ký thành viên
+                                    <i className='fa-solid fa-star'></i> Đăng ký thành viên
                                 </button>
                             </Link>
+                            <button className={`sidebar-btn ${activeTab === 'report' ? 'primary-btn glow' : 'outline-btn'}`} onClick={() => setActiveTab('report')}>
+                                <i className='fa-solid fa-flag'></i> Báo cáo của tôi
+                            </button>
                         </div>
                     </div>
 
@@ -285,6 +289,7 @@ export default function UserProfile() {
                             </>
                         )}
                         {activeTab === 'progress' && <LearningProgress stats={formData} />}
+                        {activeTab === 'report' && <MyReport />}
                     </div>
                 </div>
             </div>
