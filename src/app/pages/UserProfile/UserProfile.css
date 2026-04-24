@@ -3,7 +3,7 @@
     --glass-bg: rgb(15 23 42 / 50%);
     /* --glass-border: 1px solid #ffffff0d;
     --card-border: 1px solid #1e293b; */
-    --glass-border: none; 
+    --glass-border: none;
     --card-border: none;
     --text-muted: #94a3b8;
     --primary-grad: linear-gradient(135deg, #2563eb, #06b6d4);
@@ -23,12 +23,7 @@
         margin: auto;
         position: relative;
         z-index: 10;
-        animation: slideInUp .6s ease forwards;
-    }
-
-    @keyframes slideInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+        animation: slideInUpUser .6s ease forwards;
     }
 
     .profile-container {
@@ -38,7 +33,8 @@
         align-items: start;
 
         /* Shared Card Style */
-        .profile-sidebar, .profile-main {
+        .profile-sidebar,
+        .profile-main {
             background: var(--glass-bg);
             border-radius: 14px;
             padding: 2rem;
@@ -69,7 +65,8 @@
                     position: relative;
                     width: 110px;
                     height: 110px;
-                    overflow: visible; /* QUAN TRỌNG: Để nút upload không bị cắt mất */
+                    overflow: visible;
+                    /* QUAN TRỌNG: Để nút upload không bị cắt mất */
                     z-index: 15;
 
                     img {
@@ -182,14 +179,19 @@
                         border: none;
                         color: white;
 
-                        &.glow { box-shadow: var(--primary-glow); }
+                        &.glow {
+                            box-shadow: var(--primary-glow);
+                        }
+
                         &:hover {
                             transform: translateY(-2px);
                             box-shadow: var(--primary-glow-hover);
                         }
                     }
 
-                    &.mt-auto { margin-top: auto; }
+                    &.mt-auto {
+                        margin-top: auto;
+                    }
                 }
             }
         }
@@ -208,9 +210,18 @@
                     display: flex;
                     align-items: center;
                     gap: 0.8rem;
-                    
-                    i { font-size: 1.5rem; color: #60a5fa; }
-                    h2 { font-size: 1.6rem; font-weight: 600; color: white; margin: 0; }
+
+                    i {
+                        font-size: 1.5rem;
+                        color: #60a5fa;
+                    }
+
+                    h2 {
+                        font-size: 1.6rem;
+                        font-weight: 600;
+                        color: white;
+                        margin: 0;
+                    }
                 }
 
                 .edit-mode-btn {
@@ -232,11 +243,12 @@
             }
 
             .profile-content {
+
                 /* Edit Form */
                 .profile-form {
                     display: flex;
                     flex-direction: column;
-                    gap: 0.5rem; 
+                    gap: 0.5rem;
 
                     .full-width-input {
                         width: 100%;
@@ -252,7 +264,9 @@
                         flex-direction: column;
                         flex: 1;
 
-                        &.half { width: 50%; }
+                        &.half {
+                            width: 50%;
+                        }
 
                         .default-label {
                             font-size: 0.9rem;
@@ -389,7 +403,9 @@
                             flex-direction: column;
                             gap: 0.4rem;
 
-                            &.full-width { grid-column: span 2; }
+                            &.full-width {
+                                grid-column: span 2;
+                            }
 
                             .detail-label {
                                 font-size: 0.85rem;
@@ -541,8 +557,14 @@
 
                                     i {
                                         font-size: 1.2rem;
-                                        &.theory-icon { color: #60a5fa; }
-                                        &.simulation-icon { color: #f43f5e; }
+
+                                        &.theory-icon {
+                                            color: #60a5fa;
+                                        }
+
+                                        &.simulation-icon {
+                                            color: #f43f5e;
+                                        }
                                     }
 
                                     h4 {
@@ -562,7 +584,10 @@
 
                             .progress-bar-container {
                                 margin-bottom: 0.5rem;
-                                .bar { background: #1e293b; }
+
+                                .bar {
+                                    background: #1e293b;
+                                }
                             }
 
                             .progress-note {
@@ -652,6 +677,18 @@
     }
 }
 
+@keyframes slideInUpUser {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .user-profile-page {
@@ -659,13 +696,13 @@
 
         .profile-container {
             grid-template-columns: 1fr;
-            
+
             .profile-sidebar {
                 flex-direction: row;
                 flex-wrap: wrap;
                 align-items: center;
                 justify-content: space-between;
-                
+
                 .avatar-section {
                     flex-direction: row;
                     align-items: center;
@@ -679,7 +716,7 @@
                     flex-direction: row;
                     gap: 1.5rem;
                 }
-                
+
                 .sidebar-actions {
                     flex-direction: row;
                     width: 100%;
@@ -697,19 +734,31 @@
 
                 .profile-content {
                     .profile-form {
-                        .form-row, .readonly-grid {
+
+                        .form-row,
+                        .readonly-grid {
                             flex-direction: column;
                             gap: 1.5rem;
                         }
-                        .form-group.half { width: 100%; }
-                        
-                        .form-readonly-group .readonly-grid { grid-template-columns: 1fr; }
+
+                        .form-group.half {
+                            width: 100%;
+                        }
+
+                        .form-readonly-group .readonly-grid {
+                            grid-template-columns: 1fr;
+                        }
                     }
+
                     .profile-view-details {
                         .detail-grid {
                             grid-template-columns: 1fr;
-                            .detail-item.full-width { grid-column: span 1; }
+
+                            .detail-item.full-width {
+                                grid-column: span 1;
+                            }
                         }
+
                         .system-meta-info {
                             flex-direction: column;
                             gap: 1.2rem;
@@ -718,7 +767,9 @@
                 }
 
                 .progress-dashboard {
-                    .stats-grid { grid-template-columns: 1fr; }
+                    .stats-grid {
+                        grid-template-columns: 1fr;
+                    }
                 }
             }
         }
@@ -746,7 +797,8 @@
 }
 
 .license-owned-item i {
-    color: #4ade80; /* Màu xanh lá cho icon bằng lái đã có */
+    color: #4ade80;
+    /* Màu xanh lá cho icon bằng lái đã có */
 }
 
 .license-badge.learning {
@@ -792,7 +844,8 @@
 }
 
 .license-checkbox-item input {
-    display: none; /* Ẩn checkbox mặc định */
+    display: none;
+    /* Ẩn checkbox mặc định */
 }
 
 .license-checkbox-item span {
@@ -812,17 +865,19 @@
     gap: 12px;
     z-index: 1000;
     color: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
 }
 
 .feedback-popup.success {
-    background: rgba(34, 197, 94, 0.9); /* Xanh lá */
+    background: rgba(34, 197, 94, 0.9);
+    /* Xanh lá */
     border-left: 5px solid #166534;
 }
 
 .feedback-popup.error {
-    background: rgba(239, 68, 68, 0.9); /* Đỏ */
+    background: rgba(239, 68, 68, 0.9);
+    /* Đỏ */
     border-left: 5px solid #991b1b;
 }
 
@@ -832,8 +887,15 @@
 }
 
 @keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* Loading Button */
@@ -879,14 +941,22 @@ button:disabled {
 }
 
 @keyframes zoomIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Tùy chỉnh riêng cho popup reset trong trường hợp CSS LoginFace có width cố định */
 .reset-password-popup {
     min-width: 400px;
-    background: transparent; /* Để dùng màu của modal-content-animation */
+    background: transparent;
+    /* Để dùng màu của modal-content-animation */
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
