@@ -87,6 +87,83 @@
             background: #0f172acc;
             border: 1px solid #3b82f666;
             transition: .3s;
+            cursor: pointer;
+
+            opacity: 0;
+            animation: slideInUp .6s ease forwards;
+
+            &:hover {
+                box-shadow: 0 20px 50px #3b82f640;
+            }
+
+            .report-information {
+                flex: 1;
+
+                .report-heading {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: start;
+                    gap: 20px;
+
+                    h2 {
+                        color: #fff;
+                        margin: 0 0 4px;
+                    }
+
+                    .resolve-category {
+                        display: flex;
+                        gap: 20px;
+
+                        .resolve,
+                        .category {
+                            width: fit-content;
+                            padding: 4px 8px;
+                            color: #fff;
+                            border: 1px solid #3b82f666;
+                            border-radius: 999px;
+                            font-size: .75rem;
+                        }
+
+                        .resolve {
+                            background-color: #3b82f640;
+                        }
+                    }
+                }
+
+                p {
+                    font-size: .875rem;
+                    color: var(--text-primary);
+                    margin: 0 0 16px;
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+
+    .report-resolve-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: 0 20px 20px;
+
+        h2 {
+            font-size: 1.25rem;
+            margin: 20px 0 8px;
+        }
+
+        .list-resolve {
+            gap: 12px;
+        }
+
+        .report-card,
+        .resolve-card {
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+            border-radius: 12px;
+            background: #0f172acc;
+            border: 1px solid #3b82f666;
+            transition: .3s;
 
             opacity: 0;
             animation: slideInUp .6s ease forwards;
@@ -110,7 +187,9 @@
                     }
 
                     .category {
+                        width: fit-content;
                         padding: 4px 8px;
+                        color: #fff;
                         border: 1px solid #3b82f666;
                         border-radius: 999px;
                         font-size: .75rem;
@@ -125,20 +204,6 @@
                     word-break: break-word;
                 }
             }
-        }
-    }
-}
-
-@media (max-width:992px) {
-    .my-report-container {
-        .list-report-header {
-            h1 {
-                font-size: 2.4rem;
-            }
-        }
-
-        .report-grid {
-            grid-template-columns: 1fr;
         }
     }
 }

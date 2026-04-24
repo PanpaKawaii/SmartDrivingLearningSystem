@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { fetchData } from '../../../mocks/CallingAPI';
 import EmptyNotification from '../../components/EmptyNotification/EmptyNotification';
 import Pagination from '../../components/Pagination/Pagination';
+import PopupContainer from '../../components/PopupContainer/PopupContainer';
 import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 
@@ -23,6 +24,8 @@ export default function MyReport() {
     const [pageSize, setPageSize] = useState(5);
     const [totalCount, setTotalCount] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+
+    const [selectedReportId, setSelectedReportId] = useState(null);
 
     useEffect(() => {
         fetchDataReport(inputContent);
@@ -79,6 +82,9 @@ export default function MyReport() {
     });
     console.log('filteredREPORTs', filteredREPORTs);
 
+    const selectedReport = REPORTs.find(f => f.id == selectedReportId);
+    console.log('selectedReport', selectedReport);
+
     return (
         <div className='my-report-container'>
             <div className='control-heading'>
@@ -112,10 +118,13 @@ export default function MyReport() {
                                     className='report-card'
                                     style={{ animationDelay: `${index * 0.1}s` }}
                                 >
-                                    <div className='report-information'>
+                                    <div className='report-information' onClick={() => setSelectedReportId(report.id)}>
                                         <div className='report-heading'>
                                             <h3>{pageSize * (page - 1) + index + 1}. {report.title}</h3>
-                                            <div className='category'>{report.reportCategory?.name}</div>
+                                            <div className='resolve-category'>
+                                                {report.resolves?.length > 0 && <div className='resolve'>Đã giải quyết</div>}
+                                                <div className='category'>{report.reportCategory?.name}</div>
+                                            </div>
                                         </div>
                                         <p>{report.content}</p>
                                         {/* <div>{report.status}</div> */}
@@ -137,6 +146,47 @@ export default function MyReport() {
                 totalPages={totalPages}
                 onPageChange={setPage}
             />
+
+            {selectedReport && (
+                <PopupContainer onClose={() => setSelectedReportId('')} titleName={`Báo cáo của tôi${selectedReport.resolves?.length > 0 ? ' (Đã giải quyết)' : ''}`} modalStyle={{}} innerStyle={{ width: 700 }}>
+                    <div className='report-resolve-wrapper'>
+                        <h2>Báo cáo</h2>
+                        <div className='report-card'>
+                            <div className='report-information'>
+                                <div className='report-heading'>
+                                    <h3>{selectedReport.title}</h3>
+                                    <div className='category'>{selectedReport.reportCategory?.name}</div>
+                                </div>
+                                <p>{selectedReport.content}</p>
+                            </div>
+                        </div>
+                        {selectedReport.resolves?.length > 0 &&
+                            <>
+                                <h2>Giải quyết</h2>
+                                <div className='list-resolve'>
+                                    {selectedReport.resolves?.map((resolve, index) => {
+                                        return index == 0 && (
+                                            <div
+                                                key={resolve.id}
+                                                className='report-card'
+                                                style={{ animationDelay: `${index * 0.1}s` }}
+                                            >
+                                                <div className='report-information'>
+                                                    <div className='report-heading'>
+                                                        {/* <h3>{index + 1}. {resolve.title}</h3> */}
+                                                        <h3>{resolve.title}</h3>
+                                                    </div>
+                                                    <p>{resolve.content}</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </>
+                        }
+                    </div>
+                </PopupContainer>
+            )}
         </div>
     )
 }
