@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteData, fetchData, postData, putData } from '../../../../mocks/CallingAPI';
 import ButtonList from '../../../components/ButtonList/ButtonList';
@@ -38,7 +38,18 @@ export default function CoreLearning({
     const [error, setError] = useState(null);
     const [openReport, setOpenReport] = useState(null);
 
+    const dataRef = useRef();
+
     useEffect(() => {
+        const shuffleArray = (arr) => {
+            const newArr = [...arr];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr || [];
+        };
+
         (async () => {
             setError(null);
             setLoading(true);
@@ -58,14 +69,14 @@ export default function CoreLearning({
                     return {
                         ...q,
                         index: i + 1,
+                        answers: shuffleArray(q.answers),
                         correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
                         tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
-                setQUESTIONs(QuestionsAnswers);
-                setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
+                setQUESTIONs(disableAfterAnswer ? shuffleArray(QuestionsAnswers) : QuestionsAnswers);
 
                 const savedQuestionQuery = new URLSearchParams({
                     userId: userId,
@@ -74,6 +85,18 @@ export default function CoreLearning({
                 const SavedQuestionResponse = await fetchData(`SavedQuestions/all?${savedQuestionQuery.toString()}`, token);
                 console.log('SavedQuestionResponse', SavedQuestionResponse);
                 setMySAVEDQUESTIONs(SavedQuestionResponse);
+
+                if (user && !disableAfterAnswer) {
+                    const learningProgressQuery = new URLSearchParams({
+                        userId: userId,
+                        status: 1,
+                    });
+                    const LearningProgressResponse = await fetchData(`LearningProgresses/all?${learningProgressQuery.toString()}`, token);
+                    console.log('LearningProgressResponse', LearningProgressResponse);
+                    setSelectedQuestionId(p => p ? p : (LearningProgressResponse?.length > 0 ? LearningProgressResponse?.[LearningProgressResponse?.length - 1]?.questionId : ''));
+                } else {
+                    setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
+                }
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -83,6 +106,35 @@ export default function CoreLearning({
             };
         })();
     }, [refresh, user?.token]);
+
+    useEffect(() => {
+        if (user && !disableAfterAnswer) {
+            dataRef.current = selectedQuestionId;
+        }
+    }, [selectedQuestionId]);
+
+    useEffect(() => {
+        return () => {
+            console.log('RETURN');
+            if (user && !disableAfterAnswer) {
+                console.log('YES');
+                const LearningProgressData = {
+                    questionId: dataRef.current,
+                };
+                console.log('LearningProgressData:', LearningProgressData);
+                const token = user?.token || '';
+                try {
+                    const result = postData('LearningProgresses', LearningProgressData, token);
+                    console.log('result', result);
+                } catch (error) {
+                    console.error('Error', error);
+                    // setError(error);
+                } finally {
+                    // setLoading(false);
+                };
+            }
+        };
+    }, []);
 
     const selectedQuestion = QUESTIONs.find(q => q.id == selectedQuestionId);
     // console.log('selectedQuestion', selectedQuestion);
