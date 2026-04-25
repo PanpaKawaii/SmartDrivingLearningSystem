@@ -132,12 +132,33 @@ export default function ReportModal({
         CreateReport(Content);
     };
 
+    const getDisplayName = () => {
+        if (data.name) return data.name;
+        if (data.content) return data.content;
+        if (data.title) return data.title;
+
+        return data.simulationId || data.forumPostId || data.forumCommentId || data.questionId || "";
+    };
+
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='report-modal-container'>
             <div className='report-information'>
-                <input type='text' className='input-read-only' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly />
+                {/* <input type='text' className='input-read-only' value={data.simulationId || data.forumPostId || data.forumCommentId || data.questionId} readOnly /> */}
+                {/* Phần hiển thị ID/Tên đối tượng bị báo cáo */}
+                <label style={{ fontSize: '12px', color: '#666', marginBottom: '5px', display: 'block' }}>
+                    Đối tượng báo cáo:
+                </label>
+                <input
+                    type='text'
+                    className='input-read-only'
+                    // Hiển thị tên thông qua hàm helper
+                    value={getDisplayName()}
+                    readOnly
+                    // Tooltip vẫn hiện ID khi di chuột vào
+                    title={`ID: ${data.simulationId || data.forumPostId || data.forumCommentId || data.questionId}`}
+                />
             </div>
             <div className='report-information'>
                 <div className='form-group'>

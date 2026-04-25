@@ -257,6 +257,7 @@ export default function CoreLearning({
                                                             forumPostId: null,
                                                             forumCommentId: null,
                                                             questionId: selectedQuestion?.id,
+                                                            content: selectedQuestion?.content
                                                         }),
                                                         disabled: false,
                                                     },
