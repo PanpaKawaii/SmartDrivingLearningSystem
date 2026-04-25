@@ -33,12 +33,14 @@ export default function ExamDetail({
                         <div className='value'>{((exam.duration / 60) || 0).toFixed(0)} phút</div>
                     </div>
                 </div>
-                {type == 'exam' &&
-                    <div className='note'>
-                        <h3>Lưu ý</h3>
+                <div className='note'>
+                    <h3>Lưu ý</h3>
+                    {type == 'exam' ?
                         <p>Bài thi sẽ tự động nộp khi hết thời gian. Hãy quản lý thời gian hợp lý!</p>
-                    </div>
-                }
+                        :
+                        <p>Sau khi đổi kịch bản sẽ không thể quay lại kịch bản trước đó nữa. Hãy cân nhắc trước khi chọn kịch bản!</p>
+                    }
+                </div>
                 {roleName != 'Student' &&
                     <div className={`limit ${today?.length >= limit ? 'limited' : ''}`}>
                         Giới hạn dùng thử trong ngày: {limit - (today?.length || 0)}/{limit}

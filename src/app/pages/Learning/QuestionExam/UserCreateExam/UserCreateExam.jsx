@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchData } from '../../../../../mocks/CallingAPI';
+import { fetchData, postData } from '../../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
 import MovingLabelInput from '../../../../components/MovingLabelInput/MovingLabelInput';
 import StyleLabelSelect from '../../../../components/StyleLabelSelect/StyleLabelSelect';
@@ -27,6 +27,7 @@ export default function UserCreateExam() {
     const [randomExam, setRandomExam] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
+    const [saveStatus, setSaveStatus] = useState('');
 
     const [title, setTitle] = useState('Đề thi lý thuyết');
     const [description, setDescription] = useState('Đề thi lý thuyết');
@@ -150,6 +151,7 @@ export default function UserCreateExam() {
 
     const createRandomQuestionExam = () => {
         setIsExamSaved(false);
+        setSaveStatus('');
 
         const counts = selectedChapters?.map(c => ({
             ...c,
@@ -319,6 +321,16 @@ export default function UserCreateExam() {
                 <div className={`total-percent ${totalPercent === 100 ? 'valid' : 'invalid'}`}>
                     Tổng: <span>{totalPercent}%</span>
                 </div>
+
+                {saveStatus &&
+                    <div className={`message ${saveStatus == 'success' ? 'success-message' : 'fail-message'}`}>
+                        {saveStatus == 'success' ?
+                            'Lưu đề thành công!'
+                            :
+                            'Lưu đề thất bại!'
+                        }
+                    </div>
+                }
 
                 <div className='btns'>
                     <button className='btn create-btn' onClick={createRandomQuestionExam} disabled={totalPercent !== 100}>

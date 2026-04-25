@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchData } from '../../../../../mocks/CallingAPI';
+import { fetchData, postData } from '../../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
 import MovingLabelInput from '../../../../components/MovingLabelInput/MovingLabelInput';
 import TrafficLight from '../../../../components/TrafficLight/TrafficLight';
@@ -25,6 +25,7 @@ export default function UserCreateSituationExam() {
     const [randomExam, setRandomExam] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
+    const [saveStatus, setSaveStatus] = useState('');
 
     const [title, setTitle] = useState('Đề thi mô phỏng');
     const [description, setDescription] = useState('Đề thi mô phỏng');
@@ -100,25 +101,37 @@ export default function UserCreateSituationExam() {
 
     const totalPercent = selectedChapters.reduce((sum, c) => sum + (c.percent || 0), 0);
 
-    // ==FIX==
     const handleSaveCustomizedExam = async () => {
         console.log('handleSaveCustomizedExam');
         console.log('randomExam', randomExam);
 
-        // const SituationExamData = {
-        //     situationExamId: examId,
-        //     simulationSessionDetails: fillUpMyResults,
-        // };
-        // console.log('SituationExamData:', SituationExamData);
+        const simulationExams = randomExam.map(re => {
+            return {
+                simulationId: re.id,
+                baseScore: 5,
+            }
+        });
+        console.log('simulationExams:', simulationExams);
+
+        const SituationExamData = {
+            title: title,
+            description: description,
+            passScore: passScore,
+            isRandom: true,
+            simulationExams: simulationExams,
+        };
+        console.log('SituationExamData:', SituationExamData);
 
         setLoading(true);
         const token = user?.token || '';
         try {
-            // const result = await postData('SituationExams', SituationExamData, token);
-            // console.log('result', result);
-            await sleep(2000);
+            const result = await postData('SituationExams', SituationExamData, token);
+            console.log('result', result);
+            // await sleep(2000);
             setIsExamSaved(true);
+            setSaveStatus('success');
         } catch (error) {
+            setSaveStatus('fail');
             console.error('Error', error);
             setError(error);
             if (error.status == 401) refreshNewToken(user);
@@ -138,6 +151,7 @@ export default function UserCreateSituationExam() {
 
     const createRandomQuestionExam = () => {
         setIsExamSaved(false);
+        setSaveStatus('');
 
         const counts = selectedChapters?.map(c => ({
             ...c,
@@ -274,6 +288,16 @@ export default function UserCreateSituationExam() {
                 <div className={`total-percent ${totalPercent === 100 ? 'valid' : 'invalid'}`}>
                     Tổng: <span>{totalPercent}%</span>
                 </div>
+
+                {saveStatus &&
+                    <div className={`message ${saveStatus == 'success' ? 'success-message' : 'fail-message'}`}>
+                        {saveStatus == 'success' ?
+                            'Lưu đề thành công!'
+                            :
+                            'Lưu đề thất bại!'
+                        }
+                    </div>
+                }
 
                 <div className='btns'>
                     <button className='btn create-btn' onClick={createRandomQuestionExam} disabled={totalPercent !== 100}>
