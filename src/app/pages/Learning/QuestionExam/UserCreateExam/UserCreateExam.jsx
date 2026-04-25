@@ -11,6 +11,8 @@ import './UserCreateExam.css';
 export default function UserCreateExam() {
     const { user, refreshNewToken } = useAuth();
 
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -24,6 +26,7 @@ export default function UserCreateExam() {
     ]);
     const [randomExam, setRandomExam] = useState(null);
     const [showResult, setShowResult] = useState(false);
+    const [isExamSaved, setIsExamSaved] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -125,22 +128,35 @@ export default function UserCreateExam() {
 
     const totalPercent = selectedChapters.reduce((sum, c) => sum + (c.percent || 0), 0);
 
+    // ==FIX==
     const handleSaveCustomizedExam = async () => {
         console.log('handleSaveCustomizedExam');
+        console.log('randomExam', randomExam);
+    };
+
+    const shuffleArray = (arr) => {
+        const newArr = [...arr];
+        for (let i = newArr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        }
+        return newArr || [];
     };
 
     const createRandomQuestionExam = () => {
+        setIsExamSaved(false);
+
         const counts = selectedChapters?.map(c => ({
             ...c,
             raw: (totalQuestions * c.percent) / 100,
             count: Math.floor((totalQuestions * c.percent) / 100)
         }));
-        // console.log('counts.count', counts[0].count);
+        // console.log('counts.count', counts);
 
         let remaining = totalQuestions - counts.reduce((sum, c) => sum + c.count, 0);
         // console.log('remaining', remaining);
 
-        counts.filter(f => f.count != f.raw)?.forEach(c => {
+        counts.sort((a, b) => (a.count - a.raw) - (b.count - b.raw))?.filter(f => f.count != f.raw)?.forEach(c => {
             if (remaining > 0) {
                 c.count += 1;
                 remaining--;
@@ -158,7 +174,7 @@ export default function UserCreateExam() {
         });
         // console.log('output', output);
 
-        setRandomExam(output);
+        setRandomExam(shuffleArray(output));
     };
 
     console.log('randomExam', randomExam);
@@ -268,7 +284,7 @@ export default function UserCreateExam() {
                         <i className={`fa-solid fa-${randomExam ? 'arrow-rotate-left' : 'arrow-right'}`} />
                     </button>
                     {randomExam &&
-                        <button className='btn submit-btn' onClick={handleSaveCustomizedExam}>
+                        <button className='btn submit-btn' onClick={handleSaveCustomizedExam} disabled={loading || isExamSaved}>
                             XÁC NHẬN LƯU ĐỀ THI
                         </button>
                     }
@@ -302,11 +318,13 @@ export default function UserCreateExam() {
                                         <h3>Câu hỏi {qIndex + 1}</h3>
                                         <div className='chapter'>{question.questionLesson?.questionChapter?.name}</div>
                                         {/* ==FIX== */}
-                                        <div className='tags'>
-                                            {question?.tags?.map((tag, index) => (
-                                                <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
-                                            ))}
-                                        </div>
+                                        {question?.tags?.length > 0 &&
+                                            <div className='tags'>
+                                                {question?.tags?.map((tag, index) => (
+                                                    <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
+                                                ))}
+                                            </div>
+                                        }
                                     </div>
                                     <p>{question.content}</p>
                                     <div className='list-answer'>

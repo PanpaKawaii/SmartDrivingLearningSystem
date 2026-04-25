@@ -11,6 +11,8 @@ import './UserCreateSituationExam.css';
 export default function UserCreateSituationExam() {
     const { user, refreshNewToken } = useAuth();
 
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     const [SIMULATIONCHAPTERs, setSIMULATIONCHAPTERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -22,6 +24,7 @@ export default function UserCreateSituationExam() {
     ]);
     const [randomExam, setRandomExam] = useState(null);
     const [showResult, setShowResult] = useState(false);
+    const [isExamSaved, setIsExamSaved] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -93,22 +96,56 @@ export default function UserCreateSituationExam() {
 
     const totalPercent = selectedChapters.reduce((sum, c) => sum + (c.percent || 0), 0);
 
+    // ==FIX==
     const handleSaveCustomizedExam = async () => {
         console.log('handleSaveCustomizedExam');
+        console.log('randomExam', randomExam);
+
+        // const SituationExamData = {
+        //     situationExamId: examId,
+        //     simulationSessionDetails: fillUpMyResults,
+        // };
+        // console.log('SituationExamData:', SituationExamData);
+
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            // const result = await postData('SituationExams', SituationExamData, token);
+            // console.log('result', result);
+            await sleep(2000);
+            setIsExamSaved(true);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+            if (error.status == 401) refreshNewToken(user);
+        } finally {
+            setLoading(false);
+        };
+    };
+
+    const shuffleArray = (arr) => {
+        const newArr = [...arr];
+        for (let i = newArr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        }
+        return newArr || [];
     };
 
     const createRandomQuestionExam = () => {
+        setIsExamSaved(false);
+
         const counts = selectedChapters?.map(c => ({
             ...c,
             raw: (totalScenarios * c.percent) / 100,
             count: Math.floor((totalScenarios * c.percent) / 100)
         }));
-        // console.log('counts.count', counts[0].count);
+        // console.log('counts.count', counts);
 
         let remaining = totalScenarios - counts.reduce((sum, c) => sum + c.count, 0);
         // console.log('remaining', remaining);
 
-        counts.filter(f => f.count != f.raw)?.forEach(c => {
+        counts.sort((a, b) => (a.count - a.raw) - (b.count - b.raw))?.filter(f => f.count != f.raw)?.forEach(c => {
             if (remaining > 0) {
                 c.count += 1;
                 remaining--;
@@ -124,9 +161,9 @@ export default function UserCreateSituationExam() {
             const shuffled = [...chapter.items].sort(() => Math.random() - 0.5);
             return shuffled.slice(0, c.count);
         });
-        console.log('output', output);
+        // console.log('output', output);
 
-        setRandomExam(output);
+        setRandomExam(shuffleArray(output));
     };
 
     console.log('randomExam', randomExam);
@@ -184,8 +221,8 @@ export default function UserCreateSituationExam() {
                             </div>
 
                             {/* <span>
-                                    {getQuestionCount(item.percent)} câu
-                                </span> */}
+                                {getQuestionCount(item.percent)} câu
+                            </span> */}
 
                             {selectedChapters.length > 1 && (
                                 <button className='btn' onClick={() => setSelectedChapters(p => p.filter((_, i) => i !== index))}>
@@ -214,7 +251,7 @@ export default function UserCreateSituationExam() {
                         <i className={`fa-solid fa-${randomExam ? 'arrow-rotate-left' : 'arrow-right'}`} />
                     </button>
                     {randomExam &&
-                        <button className='btn submit-btn' onClick={handleSaveCustomizedExam}>
+                        <button className='btn submit-btn' onClick={handleSaveCustomizedExam} disabled={loading || isExamSaved}>
                             XÁC NHẬN LƯU ĐỀ THI
                         </button>
                     }

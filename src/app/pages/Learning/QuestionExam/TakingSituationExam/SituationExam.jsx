@@ -100,16 +100,16 @@ export default function SituationExam() {
         });
         console.log('fillUpMyResults', fillUpMyResults);
 
-        const SimulationSessionsData = {
+        const SimulationSessionData = {
             situationExamId: examId,
             simulationSessionDetails: fillUpMyResults,
         };
-        console.log('SimulationSessionsData:', SimulationSessionsData);
+        console.log('SimulationSessionData:', SimulationSessionData);
 
         setLoadingSubmit(true);
         const token = user?.token || '';
         try {
-            const result = await postData('SimulationSessions', SimulationSessionsData, token);
+            const result = await postData('SimulationSessions', SimulationSessionData, token);
             console.log('result', result);
             navigate(`./../situation-exam-result/${result?.id}`, { state: 'situation' });
 

@@ -188,12 +188,11 @@ export default function ListExam() {
                                         const isSelected = selectedId == exam.id;
                                         const numberLength = (ExamOrSituation == 'exam' ? exam.examQuestions?.length : exam.simulationExams?.length) || 0;
 
-                                        return !exam.isRandom && (
+                                        return (
                                             <tr
                                                 key={exam.id}
                                                 onClick={() => setSelectedId(isSelected ? null : exam.id)}
                                                 className={`${isSelected ? 'active' : ''}`}
-                                                style={{ animationDelay: `${index * 0.05}s` }}
                                             >
                                                 <td>{index + 1}</td>
                                                 <td className='td-row'>
@@ -252,43 +251,6 @@ export default function ListExam() {
                 </div>
             </div>
 
-            {/* <div className='list'>
-                {EXAMs.map((exam, index) => (
-                    <Link
-                        key={exam.id}
-                        to={`${exam.id}`}
-                        className='link question-exam-link'
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                        state='exam'
-                    >
-                        <div className='exam'>
-                            <div>{exam.title}</div>
-                            <div>{exam.description}</div>
-                            <div>{exam.duration}s</div>
-                            <div>{exam.passScore}</div>
-                            <div>{exam.isRandom ? 'Random' : ''}</div>
-                        </div>
-                    </Link>
-                ))}
-                {SITUATIONEXAMs.map((exam, index) => (
-                    <Link
-                        key={exam.id}
-                        to={`${exam.id}`}
-                        className='link situation-exam-link'
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                        state='situation'
-                    >
-                        <div className='exam'>
-                            <div>{exam.title}</div>
-                            <div>{exam.description}</div>
-                            <div>{exam.duration}s</div>
-                            <div>{exam.passScore}</div>
-                            <div>{exam.isRandom ? 'Random' : ''}</div>
-                        </div>
-                    </Link>
-                ))}
-            </div> */}
-
             {openCreate &&
                 <PopupContainer
                     onClose={() => setOpenCreate('')}
@@ -298,7 +260,8 @@ export default function ListExam() {
                 >
                     {openCreate == 'exam' ?
                         <UserCreateExam />
-                        : <UserCreateSituationExam />
+                        :
+                        <UserCreateSituationExam />
                     }
                 </PopupContainer>
             }
