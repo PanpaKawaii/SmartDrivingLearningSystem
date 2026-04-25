@@ -148,6 +148,48 @@ const normalizeMediaUploadResponse = (payload) => {
     return [];
 };
 
+const extractUploadedVideoUrl = (payload) => {
+    if (!payload) return '';
+
+    if (typeof payload === 'string') {
+        return payload;
+    }
+
+    if (typeof payload?.url === 'string') {
+        return payload.url;
+    }
+
+    if (typeof payload?.videoUrl === 'string') {
+        return payload.videoUrl;
+    }
+
+    if (typeof payload?.fileUrl === 'string') {
+        return payload.fileUrl;
+    }
+
+    if (Array.isArray(payload)) {
+        const first = payload[0];
+        if (typeof first === 'string') return first;
+        if (typeof first?.url === 'string') return first.url;
+        if (typeof first?.videoUrl === 'string') return first.videoUrl;
+        if (typeof first?.fileUrl === 'string') return first.fileUrl;
+    }
+
+    if (Array.isArray(payload?.data)) {
+        return extractUploadedVideoUrl(payload.data);
+    }
+
+    if (Array.isArray(payload?.items)) {
+        return extractUploadedVideoUrl(payload.items);
+    }
+
+    if (payload?.data && typeof payload.data === 'object') {
+        return extractUploadedVideoUrl(payload.data);
+    }
+
+    return '';
+};
+
 export const uploadMedia = async (files, entityId, imageTarget, token) => {
     try {
         if (!Array.isArray(files) || files.length === 0) {
@@ -186,6 +228,57 @@ export const uploadMedia = async (files, entityId, imageTarget, token) => {
         return normalizeMediaUploadResponse(payload);
     } catch (error) {
         console.error('Error uploading media:', error);
+        throw error;
+    }
+};
+
+export const uploadVideo = async (file, token) => {
+    try {
+        if (!file) {
+            throw new Error('Video file is required');
+        }
+
+        const fieldCandidates = ['file', 'video', 'File', 'Files'];
+        let lastError = null;
+
+        for (const fieldName of fieldCandidates) {
+            const formData = new FormData();
+            formData.append(fieldName, file);
+
+            const response = await fetch(`${apiUrl}media/video`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const error = new Error(response.statusText || 'Video upload failed');
+                error.status = response.status;
+                error.data = await response.json().catch(() => null);
+                lastError = error;
+
+                if (response.status === 400 || response.status === 415 || response.status === 422) {
+                    continue;
+                }
+
+                throw error;
+            }
+
+            const payload = await response.json().catch(() => ({}));
+            const uploadedUrl = extractUploadedVideoUrl(payload);
+
+            if (!uploadedUrl) {
+                throw new Error('Uploaded video URL not found in response');
+            }
+
+            return uploadedUrl;
+        }
+
+        throw lastError || new Error('Video upload failed');
+    } catch (error) {
+        console.error('Error uploading video:', error);
         throw error;
     }
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../../components/Shared/Modal';
-import { fetchData, postData, putData } from '../../../../mocks/CallingAPI';
+import { fetchData, postData, putData, uploadVideo } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext';
 import '../InstructorPages.css';
 
@@ -26,6 +26,7 @@ export default function SimulationScenarioModal({ isOpen, onClose, onSuccess, it
     const [options, setOptions] = useState({ chapters: [], categories: [], levels: [] });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
+    const [selectedVideoFile, setSelectedVideoFile] = useState(null);
 
     // Load options cho các dropdown
     useEffect(() => {
@@ -63,6 +64,7 @@ export default function SimulationScenarioModal({ isOpen, onClose, onSuccess, it
         } else {
             setFormData({ ...defaultScenario });
         }
+        setSelectedVideoFile(null);
         setError('');
     }, [isOpen, action, item]);
 
@@ -74,12 +76,18 @@ export default function SimulationScenarioModal({ isOpen, onClose, onSuccess, it
         }));
     };
 
+    const handleVideoFileChange = (e) => {
+        const file = e.target?.files?.[0] || null;
+        setSelectedVideoFile(file);
+        setError('');
+    };
+
     const handleSubmit = async () => {
         // --- VALIDATION LOGIC ---
 
         // 1. Kiểm tra trống các trường bắt buộc
         if (!formData.name.trim()) { setError('Tên kịch bản không được để trống.'); return; }
-        if (!formData.video.trim()) { setError('Vui lòng nhập URL video.'); return; }
+        if (!selectedVideoFile && !formData.video.trim()) { setError('Vui lòng chọn file video hoặc nhập URL video.'); return; }
         if (!formData.simulationChapterId) { setError('Vui lòng chọn chương.'); return; }
         if (!formData.simulationCategoryId) { setError('Vui lòng chọn thể loại.'); return; }
         if (!formData.simulationDifficultyLevelId) { setError('Vui lòng chọn độ khó.'); return; }
@@ -113,9 +121,21 @@ export default function SimulationScenarioModal({ isOpen, onClose, onSuccess, it
         setSaving(true);
         setError('');
         try {
+            let finalVideoUrl = formData.video?.trim() || '';
+
+            if (selectedVideoFile) {
+                finalVideoUrl = await uploadVideo(selectedVideoFile, token);
+            }
+
+            if (!finalVideoUrl) {
+                setError('Không lấy được URL video sau khi upload.');
+                return;
+            }
+
             // Chuẩn bị dữ liệu để gửi (đảm bảo kiểu số)
             const payload = {
                 ...formData,
+                video: finalVideoUrl,
                 totalTime: parseFloat(formData.totalTime),
                 startPoint: parseFloat(formData.startPoint),
                 endPoint: parseFloat(formData.endPoint),
@@ -167,9 +187,24 @@ export default function SimulationScenarioModal({ isOpen, onClose, onSuccess, it
                     />
                 </div>
 
-                {/* Video URL */}
+                {/* Video upload */}
                 <div className='ins-form-group'>
-                    <label className='ins-form-label'>Video URL <span className="ins-required">*</span></label>
+                    <label className='ins-form-label'>Tải video <span className="ins-required">*</span></label>
+                    <input
+                        className='ins-form-input'
+                        type='file'
+                        accept='video/*'
+                        onChange={handleVideoFileChange}
+                    />
+                    {selectedVideoFile && (
+                        <small style={{ color: '#4b5563' }}>Đã chọn: {selectedVideoFile.name}</small>
+                    )}
+                </div>
+            </div>
+
+            <div className='ins-form-row'>
+                <div className='ins-form-group'>
+                    <label className='ins-form-label'>Video URL (tuỳ chọn nếu đã upload file)</label>
                     <input
                         className='ins-form-input'
                         type='text'
@@ -178,6 +213,11 @@ export default function SimulationScenarioModal({ isOpen, onClose, onSuccess, it
                         onChange={handleChange}
                         placeholder='https://...'
                     />
+                    {!!formData.video && (
+                        <small style={{ color: '#4b5563', display: 'block', marginTop: '6px' }}>
+                            URL hiện tại sẽ được giữ nguyên nếu không chọn file mới.
+                        </small>
+                    )}
                 </div>
             </div>
 
