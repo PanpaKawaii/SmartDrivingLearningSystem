@@ -1,0 +1,55 @@
+.user-create-situation-exam-container {
+    .btn {
+        color: #fff;
+        background: linear-gradient(90deg, #e43efa, #9008b2);
+    }
+
+    .result-content {
+        .list-scenario {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: .15s ease;
+
+            &.not-show {
+                filter: blur(8px);
+            }
+
+            .scenario-item {
+                padding: 12px 20px;
+                background: #e63bf620;
+                border: 2px solid #902f99;
+                border-radius: 12px;
+
+                .title-heading {
+                    margin: 0 0 4px;
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 20px;
+
+                    h3 {
+                        margin: 0;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                    }
+
+                    .chapter {
+                        width: fit-content;
+                        height: fit-content;
+                        padding: 4px 8px;
+                        color: #fff;
+                        border: 1px solid #e63bf666;
+                        border-radius: 999px;
+                        font-size: .75rem;
+                    }
+                }
+
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}

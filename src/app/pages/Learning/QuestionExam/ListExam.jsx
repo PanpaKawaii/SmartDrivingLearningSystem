@@ -10,6 +10,7 @@ import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import ExamDetail from './ExamDetail/ExamDetail.jsx';
 import ExamSession from './ExamDetail/ExamSession.jsx';
 import UserCreateExam from './UserCreateExam/UserCreateExam.jsx';
+import UserCreateSituationExam from './UserCreateExam/UserCreateSituationExam.jsx';
 
 import './ListExam.css';
 
@@ -160,7 +161,6 @@ export default function ListExam() {
                         </button>
                     </div>
                     <div className='mine'>
-                        {/* ==FIX== */}
                         <button className={`btn ${isMine ? (ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn') : 'off'}`} onClick={() => setIsMine(p => !p)}>
                             ĐỀ CỦA TÔI
                         </button>
@@ -296,7 +296,10 @@ export default function ListExam() {
                     modalStyle={{}}
                     innerStyle={{ width: 'fit-content', minWidth: 640, scrollbarWidth: 'none' }}
                 >
-                    <UserCreateExam />
+                    {openCreate == 'exam' ?
+                        <UserCreateExam />
+                        : <UserCreateSituationExam />
+                    }
                 </PopupContainer>
             }
         </div >

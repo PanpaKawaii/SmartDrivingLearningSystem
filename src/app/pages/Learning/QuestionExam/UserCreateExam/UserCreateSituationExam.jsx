@@ -2,23 +2,21 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchData } from '../../../../../mocks/CallingAPI';
 import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
 import MovingLabelInput from '../../../../components/MovingLabelInput/MovingLabelInput';
-import StyleLabelSelect from '../../../../components/StyleLabelSelect/StyleLabelSelect';
 import TrafficLight from '../../../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../../../hooks/AuthContext/AuthContext';
 
 import './UserCreateExam.css';
+import './UserCreateSituationExam.css';
 
-export default function UserCreateExam() {
+export default function UserCreateSituationExam() {
     const { user, refreshNewToken } = useAuth();
 
-    const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
+    const [SIMULATIONCHAPTERs, setSIMULATIONCHAPTERs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [totalQuestions, setTotalQuestions] = useState(0);
-    const [totalParalysis, setTotalParalysis] = useState(0);
-    const [selectedLicenseId, setSelectedLicenseId] = useState('');
+    const [totalScenarios, setTotalScenarios] = useState(0);
     const [selectedChapters, setSelectedChapters] = useState([
         { chapterId: '', percent: 0 },
     ]);
@@ -31,46 +29,24 @@ export default function UserCreateExam() {
             setLoading(true);
             const token = user?.token || '';
             try {
-                const drivingLicenseQuery = new URLSearchParams({
-                    status: 1,
-                });
-                const questionQuery = new URLSearchParams({
+                const simulationScenarioQuery = new URLSearchParams({
                     page: '1',
-                    pageSize: '1000',
+                    pageSize: '500',
                     status: 1,
                 });
-                const tagQuery = new URLSearchParams({
-                    status: 1,
-                });
-                const DrivingLicenseResponse = await fetchData(`DrivingLicenses/all?${drivingLicenseQuery.toString()}`, token);
-                const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
-                const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
-                console.log('DrivingLicenseResponse', DrivingLicenseResponse);
-                console.log('QuestionResponse', QuestionResponse);
-                console.log('TagResponse', TagResponse);
-                const QuestionItems = QuestionResponse?.items;
-
-                const QuestionsAnswers = QuestionItems.map((q, i) => {
-                    return {
-                        ...q,
-                        index: i + 1,
-                        correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
-                        tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
-                    };
-                });
-                console.log('QuestionsAnswers', QuestionsAnswers);
+                const SimulationScenarioResponse = await fetchData(`SimulationScenarios?${simulationScenarioQuery.toString()}`, token);
+                console.log('SimulationScenarioResponse', SimulationScenarioResponse);
+                const SimulationScenarioItems = SimulationScenarioResponse?.items;
 
                 const groupedChapters = Object.values(
-                    QuestionsAnswers.reduce((acc, item) => {
-                        const id = item?.questionLesson?.questionChapterId;
-                        const dlId = item?.questionLesson?.questionChapter?.drivingLicenseId;
-                        const name = item?.questionLesson?.questionChapter?.name;
+                    SimulationScenarioItems.reduce((acc, item) => {
+                        const id = item?.simulationChapterId;
+                        const name = item?.simulationChapter?.name;
 
                         if (!id) return acc;
 
                         (acc[id] ||= {
                             id: id,
-                            drivingLicenseId: dlId,
                             name: name,
                             items: []
                         }).items.push(item);
@@ -80,13 +56,7 @@ export default function UserCreateExam() {
                 );
                 console.log('groupedChapters', groupedChapters);
 
-                const DrivingLicenses = DrivingLicenseResponse.map(dl => ({
-                    ...dl,
-                    chapters: groupedChapters.filter(gc => gc.drivingLicenseId == dl.id),
-                }));
-                console.log('DrivingLicenses', DrivingLicenses);
-
-                setDRIVINGLICENSEs(DrivingLicenses);
+                setSIMULATIONCHAPTERs(groupedChapters);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -103,8 +73,6 @@ export default function UserCreateExam() {
         [selectedChapters]
     );
     // console.log('selectedChapters', selectedChapters);
-    const selectedLicense = DRIVINGLICENSEs.find(dl => dl.id == selectedLicenseId);
-    // console.log('selectedLicense', selectedLicense);
 
     const handleChapterChange = (index, chapterId) => {
         const next = [...selectedChapters];
@@ -119,8 +87,8 @@ export default function UserCreateExam() {
     };
 
     const getQuestionCount = (percent) => {
-        if (!totalQuestions || !percent) return 0;
-        return Math.round((totalQuestions * percent) / 100);
+        if (!totalScenarios || !percent) return 0;
+        return Math.round((totalScenarios * percent) / 100);
     };
 
     const totalPercent = selectedChapters.reduce((sum, c) => sum + (c.percent || 0), 0);
@@ -132,12 +100,12 @@ export default function UserCreateExam() {
     const createRandomQuestionExam = () => {
         const counts = selectedChapters?.map(c => ({
             ...c,
-            raw: (totalQuestions * c.percent) / 100,
-            count: Math.floor((totalQuestions * c.percent) / 100)
+            raw: (totalScenarios * c.percent) / 100,
+            count: Math.floor((totalScenarios * c.percent) / 100)
         }));
         // console.log('counts.count', counts[0].count);
 
-        let remaining = totalQuestions - counts.reduce((sum, c) => sum + c.count, 0);
+        let remaining = totalScenarios - counts.reduce((sum, c) => sum + c.count, 0);
         // console.log('remaining', remaining);
 
         counts.filter(f => f.count != f.raw)?.forEach(c => {
@@ -149,14 +117,14 @@ export default function UserCreateExam() {
         // console.log('counts.forEach', counts);
 
         const output = counts.flatMap(c => {
-            const chapter = selectedLicense?.chapters?.find(r => r.id === c.chapterId);
+            const chapter = SIMULATIONCHAPTERs?.find(r => r.id === c.chapterId);
             console.log('chapter', chapter);
             if (!chapter) return [];
 
             const shuffled = [...chapter.items].sort(() => Math.random() - 0.5);
             return shuffled.slice(0, c.count);
         });
-        // console.log('output', output);
+        console.log('output', output);
 
         setRandomExam(output);
     };
@@ -166,37 +134,15 @@ export default function UserCreateExam() {
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
-        <div className='user-create-exam-container'>
+        <div className='user-create-situation-exam-container'>
             <div className='create-content'>
                 <div className='totalquestions-selectlicense'>
                     <div className='form-group'>
-                        <StyleLabelSelect
-                            id={`select-license`}
-                            list={DRIVINGLICENSEs}
-                            value={selectedLicenseId}
-                            onValueChange={(propE) => {
-                                setSelectedChapters([{ chapterId: '', percent: 0 }]);
-                                setSelectedLicenseId(propE);
-                            }}
-                            label={'Loại bằng'}
-                            labelStyle={'left'}
-                        />
-                    </div>
-                    <div className='form-group'>
                         <MovingLabelInput
                             type={'text'}
-                            value={totalQuestions ?? ''}
-                            onValueChange={(propE) => setTotalQuestions(Number(propE) || 0)}
-                            label={'Tổng số câu hỏi'}
-                            labelStyle={'left moving'}
-                        />
-                    </div>
-                    <div className='form-group'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={totalParalysis ?? ''}
-                            onValueChange={(propE) => setTotalParalysis(Number(propE) || 0)}
-                            label={'Tổng số câu liệt'}
+                            value={totalScenarios ?? ''}
+                            onValueChange={(propE) => setTotalScenarios(Number(propE) || 0)}
+                            label={'Tổng số kịch bản'}
                             labelStyle={'left moving'}
                         />
                     </div>
@@ -212,7 +158,7 @@ export default function UserCreateExam() {
                                     onChange={(e) => handleChapterChange(index, e.target.value)}
                                 >
                                     <option value=''>-- Chọn chương --</option>
-                                    {DRIVINGLICENSEs.find(dl => dl.id == selectedLicenseId)?.chapters?.map(ch => (
+                                    {SIMULATIONCHAPTERs?.map(ch => (
                                         <option
                                             key={ch.id}
                                             value={ch.id}
@@ -238,8 +184,8 @@ export default function UserCreateExam() {
                             </div>
 
                             {/* <span>
-                                {getQuestionCount(item.percent)} câu
-                            </span> */}
+                                    {getQuestionCount(item.percent)} câu
+                                </span> */}
 
                             {selectedChapters.length > 1 && (
                                 <button className='btn' onClick={() => setSelectedChapters(p => p.filter((_, i) => i !== index))}>
@@ -281,7 +227,7 @@ export default function UserCreateExam() {
                     <div className='result-content'>
                         <div className='result-heading'>
                             <button className='btn' onClick={() => setShowResult(p => !p)}>
-                                {showResult ? 'Ẩn' : 'Xem'} kết quả ({randomExam.length} câu hỏi)
+                                {showResult ? 'Ẩn' : 'Xem'} kết quả ({randomExam.length} kịch bản)
                             </button>
                             <button className='btn delete-btn'
                                 onClick={() => {
@@ -292,33 +238,17 @@ export default function UserCreateExam() {
                                 Xóa kết quả
                             </button>
                         </div>
-                        <div className={`list-question ${showResult ? '' : 'not-show'}`}>
-                            {randomExam?.map((question, qIndex) => (
+                        <div className={`list-scenario ${showResult ? '' : 'not-show'}`}>
+                            {randomExam?.map((scenario, qIndex) => (
                                 <div
                                     key={qIndex}
-                                    className='question-item'
+                                    className='scenario-item'
                                 >
                                     <div className='title-heading'>
-                                        <h3>Câu hỏi {qIndex + 1}</h3>
-                                        <div className='chapter'>{question.questionLesson?.questionChapter?.name}</div>
-                                        {/* ==FIX== */}
-                                        <div className='tags'>
-                                            {question?.tags?.map((tag, index) => (
-                                                <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
-                                            ))}
-                                        </div>
+                                        <h3>Kịch bản {qIndex + 1}</h3>
+                                        <div className='chapter'>{scenario.simulationChapter?.name}</div>
                                     </div>
-                                    <p>{question.content}</p>
-                                    <div className='list-answer'>
-                                        {question.answers?.map((answer) => (
-                                            <div
-                                                key={answer.id}
-                                                className={`answer-item ${answer.isCorrect ? 'correct-answer' : ''}`}
-                                            >
-                                                {answer.content}
-                                            </div>
-                                        ))}
-                                    </div>
+                                    <p>{scenario.name}</p>
                                 </div>
                             ))}
                         </div>
