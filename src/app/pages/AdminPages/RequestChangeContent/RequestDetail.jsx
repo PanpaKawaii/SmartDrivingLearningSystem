@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData, putData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../../app/hooks/AuthContext/AuthContext';
-import RequestChangeModal from './RequestChangeModal'; // Import modal để dùng chung logic edit
+import RequestChangeModal from './RequestChangeModal';
 import '../../InstructorPages/InstructorPages.css';
 
 const RequestDetail = () => {
@@ -25,26 +25,31 @@ const RequestDetail = () => {
         setTimeout(() => setNotification({ message: '', type: '' }), 3000);
     };
 
-    const fetchReportDetail = async () => {
+    const fetchReportDetail = useCallback(async () => {
         if (!token) return;
         setLoading(true);
         try {
             const res = await fetchData(`Reports/${id}`, token);
             setReport(res);
+            setError('');
         } catch (err) {
             if (err.status === 401) {
-                refreshNewToken(user);
+                try {
+                    await refreshNewToken(user);
+                } catch (reErr) {
+                    setError('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.');
+                }
             } else {
                 setError('Lỗi khi tải chi tiết yêu cầu.');
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, token, user, refreshNewToken]);
 
     useEffect(() => {
         fetchReportDetail();
-    }, [id, token]);
+    }, [fetchReportDetail]);
 
     const handleUpdateSubmit = async (formData) => {
         setIsSaving(true);
@@ -60,13 +65,23 @@ const RequestDetail = () => {
                 image: formData.image || null,
                 status: formData.status
             };
+
             await putData(`Reports/${formData.id}`, updatePayload, token);
             showNotify("Cập nhật yêu cầu thành công!");
             setIsEditModalOpen(false);
-            fetchReportDetail(); // Tải lại dữ liệu sau khi sửa thành công
-        } catch (error) {
-            console.error("Update error:", error);
-            showNotify(error.response?.data?.title || "Lỗi khi cập nhật", "error");
+            fetchReportDetail();
+        } catch (err) {
+            if (err.status === 401) {
+                try {
+                    await refreshNewToken(user);
+                    showNotify("Phiên làm việc đã được làm mới, vui lòng thử lại", "info");
+                } catch (reErr) {
+                    showNotify("Lỗi xác thực, vui lòng đăng nhập lại", "error");
+                }
+            } else {
+                console.error("Update error:", err);
+                showNotify(err.response?.data?.title || "Lỗi khi cập nhật", "error");
+            }
         } finally {
             setIsSaving(false);
         }
@@ -111,7 +126,7 @@ const RequestDetail = () => {
     return (
         <div className='ins-page'>
             {notification.message && (
-                <div className={`sr-toast ${notification.type}`}>
+                <div className={`sr-toast ${notification.type}`} style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 9999 }}>
                     <i className={notification.type === 'error' ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-circle-check'}></i>
                     {notification.message}
                 </div>
@@ -181,7 +196,7 @@ const RequestDetail = () => {
                         <button
                             className='ins-btn ins-btn-secondary btn-sm'
                             style={{ marginTop: '10px' }}
-                            onClick={() => navigate(`/admin/questions/detail/${report.questionId}`)}
+                            onClick={() => navigate(`/admin/change-requests/question/${report.questionId}`)}
                         >
                             Xem chi tiết câu hỏi
                         </button>
@@ -200,7 +215,7 @@ const RequestDetail = () => {
                                     </div>
                                     <div className='ins-answer-text'>
                                         <div style={{ fontWeight: '600', marginBottom: '4px' }}>{resolve.title}</div>
-                                        <div style={{ fontSize: '0.95rem', color: '#555' }}>{resolve.content}</div>
+                                        <div style={{ fontSize: '0.95rem', color: '#ffffff' }}>{resolve.content}</div>
                                         <div style={{ fontSize: '0.8rem', color: '#999', marginTop: '8px' }}>
                                             Thời gian: {new Date(resolve.createAt).toLocaleString('vi-VN')}
                                         </div>
@@ -220,7 +235,6 @@ const RequestDetail = () => {
                         Quay lại danh sách
                     </button>
 
-                    {/* Chỉ cho phép sửa nếu đang chờ duyệt (-1) */}
                     {report.status === -1 && (
                         <button className='ins-btn ins-btn-primary' onClick={() => setIsEditModalOpen(true)}>
                             <i className="fa-solid fa-pen-to-square"></i> Chỉnh sửa yêu cầu
@@ -229,7 +243,6 @@ const RequestDetail = () => {
                 </div>
             </div>
 
-            {/* Modal chỉnh sửa - Sử dụng chung với trang danh sách */}
             {isEditModalOpen && (
                 <RequestChangeModal
                     isOpen={isEditModalOpen}
