@@ -28,6 +28,11 @@ export default function UserCreateExam() {
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
 
+    const [title, setTitle] = useState('Đề thi lý thuyết');
+    const [description, setDescription] = useState('Đề thi lý thuyết');
+    const [duration, setDuration] = useState(1800);
+    const [passScore, setPassScore] = useState(70);
+
     useEffect(() => {
         (async () => {
             setError(null);
@@ -184,37 +189,79 @@ export default function UserCreateExam() {
     return (
         <div className='user-create-exam-container'>
             <div className='create-content'>
-                <div className='totalquestions-selectlicense'>
-                    <div className='form-group'>
-                        <StyleLabelSelect
-                            id={`select-license`}
-                            list={DRIVINGLICENSEs}
-                            value={selectedLicenseId}
-                            onValueChange={(propE) => {
-                                setSelectedChapters([{ chapterId: '', percent: 0 }]);
-                                setSelectedLicenseId(propE);
-                            }}
-                            label={'Loại bằng'}
-                            labelStyle={'left'}
-                        />
+                <div className='input-select-wrapper'>
+                    <div className='row-input-select'>
+                        <div className='form-group'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={title}
+                                onValueChange={(propE) => setTitle(propE)}
+                                label={'Tiêu đề'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
+                        <div className='form-group form-flex-2'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={description}
+                                onValueChange={(propE) => setDescription(propE)}
+                                label={'Mô tả'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
                     </div>
-                    <div className='form-group'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={totalQuestions ?? ''}
-                            onValueChange={(propE) => setTotalQuestions(Number(propE) || 0)}
-                            label={'Tổng số câu hỏi'}
-                            labelStyle={'left moving'}
-                        />
+                    <div className='row-input-select'>
+                        <div className='form-group'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={totalQuestions ?? ''}
+                                onValueChange={(propE) => setTotalQuestions(Number(propE) || 0)}
+                                label={'Tổng số câu hỏi'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
+                        <div className='form-group'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={passScore ?? ''}
+                                onValueChange={(propE) => setPassScore(Number(propE) || 0)}
+                                label={'Điều kiện đậu (%)'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
                     </div>
-                    <div className='form-group'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={totalParalysis ?? ''}
-                            onValueChange={(propE) => setTotalParalysis(Number(propE) || 0)}
-                            label={'Tổng số câu liệt'}
-                            labelStyle={'left moving'}
-                        />
+                    <div className='row-input-select'>
+                        <div className='form-group form-flex-2'>
+                            <StyleLabelSelect
+                                id={`select-license`}
+                                list={DRIVINGLICENSEs}
+                                value={selectedLicenseId}
+                                onValueChange={(propE) => {
+                                    setSelectedChapters([{ chapterId: '', percent: 0 }]);
+                                    setSelectedLicenseId(propE);
+                                }}
+                                label={'Loại bằng'}
+                                labelStyle={'left'}
+                            />
+                        </div>
+                        <div className='form-group form-flex-2'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={totalParalysis ?? ''}
+                                onValueChange={(propE) => setTotalParalysis(Number(propE) || 0)}
+                                label={'Tổng số câu liệt'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
+                        <div className='form-group form-flex-3'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={duration ?? ''}
+                                onValueChange={(propE) => setDuration(Number(propE) || 0)}
+                                label={'Thời gian giới hạn (Giây)'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
                     </div>
                 </div>
 

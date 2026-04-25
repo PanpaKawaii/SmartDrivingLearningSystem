@@ -26,6 +26,10 @@ export default function UserCreateSituationExam() {
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
 
+    const [title, setTitle] = useState('Đề thi mô phỏng');
+    const [description, setDescription] = useState('Đề thi mô phỏng');
+    const [passScore, setPassScore] = useState(70);
+
     useEffect(() => {
         (async () => {
             setError(null);
@@ -173,15 +177,46 @@ export default function UserCreateSituationExam() {
     return (
         <div className='user-create-situation-exam-container'>
             <div className='create-content'>
-                <div className='totalquestions-selectlicense'>
-                    <div className='form-group'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={totalScenarios ?? ''}
-                            onValueChange={(propE) => setTotalScenarios(Number(propE) || 0)}
-                            label={'Tổng số kịch bản'}
-                            labelStyle={'left moving'}
-                        />
+                <div className='input-select-wrapper'>
+                    <div className='row-input-select'>
+                        <div className='form-group'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={title}
+                                onValueChange={(propE) => setTitle(propE)}
+                                label={'Tiêu đề'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
+                        <div className='form-group form-flex-2'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={description}
+                                onValueChange={(propE) => setDescription(propE)}
+                                label={'Mô tả'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
+                    </div>
+                    <div className='row-input-select'>
+                        <div className='form-group'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={totalScenarios ?? ''}
+                                onValueChange={(propE) => setTotalScenarios(Number(propE) || 0)}
+                                label={'Tổng số kịch bản'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
+                        <div className='form-group'>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={passScore ?? ''}
+                                onValueChange={(propE) => setPassScore(Number(propE) || 0)}
+                                label={'Điều kiện đậu (%)'}
+                                labelStyle={'left moving'}
+                            />
+                        </div>
                     </div>
                 </div>
 
