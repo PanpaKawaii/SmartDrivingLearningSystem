@@ -40,7 +40,7 @@ export default function LearningLesson() {
                 const questionQuery = new URLSearchParams({
                     page: '1',
                     pageSize: '1000',
-                    questionLessonId: questionLessonId,
+                    lessonId: questionLessonId,
                     status: 1,
                 });
                 const ThisQuestionLessonResponse = await fetchData(`QuestionLessons/${questionLessonId}`, token);

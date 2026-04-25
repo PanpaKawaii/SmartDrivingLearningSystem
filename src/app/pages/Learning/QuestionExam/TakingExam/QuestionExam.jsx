@@ -33,6 +33,15 @@ export default function QuestionExam() {
     const [guestSession, setGuestSession] = useState(null);
 
     useEffect(() => {
+        const shuffleArray = (arr) => {
+            const newArr = [...arr];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr || [];
+        };
+
         (async () => {
             setError(null);
             setLoading(true);
@@ -48,13 +57,14 @@ export default function QuestionExam() {
                     return {
                         ...q,
                         index: i + 1,
+                        answers: shuffleArray(q.answers),
                         correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
 
                 setThisExam(ThisExamResponse);
-                setQUESTIONs(QuestionsAnswers);
+                setQUESTIONs(shuffleArray(QuestionsAnswers));
                 setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
             } catch (error) {
                 console.error('Error', error);
@@ -140,7 +150,7 @@ export default function QuestionExam() {
                 startTime={startTime}
                 endTime={endTime}
                 setEndTime={setEndTime}
-                duration={ThisExam?.duration}
+                duration={ThisExam?.duration * 10000}
                 passScore={ThisExam?.passScore}
                 isFinish={isFinish}
                 setIsFinish={setIsFinish}

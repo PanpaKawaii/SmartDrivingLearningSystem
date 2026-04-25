@@ -81,13 +81,14 @@ export default function ChapterLesson() {
                 setThisDrivingLicense(ThisDrivingLicenseResponse);
             } catch (error) {
                 console.error('Error', error);
-                setError(error);
                 if (error.status == 401) {
                     const refreshResult = await refreshNewToken(user);
-                    if (refreshResult?.message == 'Logout') {
+                    if (refreshResult?.message === 'Logout') {
                         logout();
-                        navigate('./', { state: { openLogin: 'true' } });
+                        navigate('/', { state: { openLogin: 'true' } });
                     }
+                } else {
+                    setError(error);
                 }
             } finally {
                 setLoading(false);
