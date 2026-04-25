@@ -99,7 +99,7 @@ export default function ContentErrorReports() {
                     query.set('reportCategoryId', filters.reportCategoryId);
                 }
 
-                const res = await fetchData(`Reports?${query.toString()}`, token);
+                const res = await fetchData(`Reports?${query.toString()}&reportCategoryIds=4f16b1bb-7adf-4008-bd94-e8746f95208f`, token);
                 const contentReports = normalizeItems(res).filter(
                     (report) => report?.forumPostId == null && report?.forumCommentId == null
                 );
@@ -124,9 +124,9 @@ export default function ContentErrorReports() {
     }, [refresh, user?.token, serverPagination.page, serverPagination.pageSize, filters.status, filters.reportCategoryId]);
 
     const STATUS_LABELS = {
-    '-1': 'Chờ duyệt',
-    '1': 'Đã duyệt',
-    '3': 'Đã bỏ qua',
+        '-1': 'Chờ duyệt',
+        '1': 'Đã duyệt',
+        '3': 'Đã bỏ qua',
     };
 
     const columns = [
@@ -135,15 +135,17 @@ export default function ContentErrorReports() {
         { key: 'content', label: 'Nội dung' },
         { key: 'user', label: 'Người báo', width: '140px', render: (val, row) => row?.user?.name || '---' },
         { key: 'reportCategory', label: 'Danh mục', width: '140px', render: (val, row) => row?.reportCategory?.name || '---' },
-        { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
-            const { time, date } = formatDateTimeLines(val);
-            return (
-                <div style={{ lineHeight: '1.2' }}>
-                    <div>{time}</div>
-                    <div>{date}</div>
-                </div>
-            );
-        } },
+        {
+            key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
+                const { time, date } = formatDateTimeLines(val);
+                return (
+                    <div style={{ lineHeight: '1.2' }}>
+                        <div>{time}</div>
+                        <div>{date}</div>
+                    </div>
+                );
+            }
+        },
         {
             key: 'status',
             label: 'Trạng thái',
@@ -156,35 +158,37 @@ export default function ContentErrorReports() {
             },
         },
 
-        { key: 'actions', label: 'Thao tác', width: '140px', render: (_, row) => (
-            <div className='ins-action-cell'>
-                <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
-                    setSelectedReport(row);
-                    setModalMode('view');
-                    setActionType('approve');
-                }}>
-                    <i className='fa-solid fa-eye'></i>
-                </button>
-                {row.status === -1 && (
-                    <>
-                        <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
-                            setSelectedReport(row);
-                            setModalMode('process');
-                            setActionType('approve');
-                        }} disabled={loading}>
-                            <i className='fa-solid fa-check'></i>
-                        </button>
-                        <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
-                            setSelectedReport(row);
-                            setModalMode('process');
-                            setActionType('disapprove');
-                        }} disabled={loading}>
-                            <i className='fa-solid fa-xmark'></i>
-                        </button>
-                    </>
-                )}
-            </div>
-        )},
+        {
+            key: 'actions', label: 'Thao tác', width: '140px', render: (_, row) => (
+                <div className='ins-action-cell'>
+                    <button className='ins-action-btn view' title='Chi tiết' onClick={() => {
+                        setSelectedReport(row);
+                        setModalMode('view');
+                        setActionType('approve');
+                    }}>
+                        <i className='fa-solid fa-eye'></i>
+                    </button>
+                    {row.status === -1 && (
+                        <>
+                            <button className='ins-action-btn edit' title='Duyệt' onClick={() => {
+                                setSelectedReport(row);
+                                setModalMode('process');
+                                setActionType('approve');
+                            }} disabled={loading}>
+                                <i className='fa-solid fa-check'></i>
+                            </button>
+                            <button className='ins-action-btn delete' title='Bỏ qua' onClick={() => {
+                                setSelectedReport(row);
+                                setModalMode('process');
+                                setActionType('disapprove');
+                            }} disabled={loading}>
+                                <i className='fa-solid fa-xmark'></i>
+                            </button>
+                        </>
+                    )}
+                </div>
+            )
+        },
     ];
 
     const handleCloseModal = () => {
@@ -283,7 +287,7 @@ export default function ContentErrorReports() {
                 onPageChange={handlePageChange}
                 actions={
                     <>
-                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                        <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
                             <i className='fa-solid fa-rotate-right'></i> Làm mới
                         </button>
                     </>

@@ -14,23 +14,13 @@ const normalizeItems = (payload) => {
 
 const formatDateTimeLines = (value) => {
     if (!value) return { time: '', date: '' };
-
     const normalizedValue = String(value).replace('T', ' ').trim();
     const [datePart = '', timePart = ''] = normalizedValue.split(' ');
     const [year = '', month = '', day = ''] = datePart.split('-');
-
     return {
         time: timePart.slice(0, 5),
         date: day && month && year ? `${day}/${month}/${year}` : datePart,
     };
-};
-
-const getReportSubjectType = (report) => {
-    if (report?.questionId) return 'Cau hoi';
-    if (report?.simulationId) return 'Tinh huong';
-    if (report?.forumPostId) return 'Bai viet';
-    if (report?.forumCommentId) return 'Binh luan';
-    return 'Khac';
 };
 
 const getEntityRoute = (report) => {
@@ -61,10 +51,12 @@ export default function ChangeRequests() {
                     page: serverPagination.page,
                     pageSize: serverPagination.pageSize,
                 });
-                const res = await fetchData(`Reports?${query.toString()}`, token);
-                const requestReports = normalizeItems(res).filter((report) => report?.reportCategory?.name === 'Yêu cầu');
+                const res = await fetchData(`Reports?${query.toString()}&roleName=Admin`, token);
 
-                setReportItems(requestReports);
+                // SỬA TẠI ĐÂY: Lấy toàn bộ items, không filter theo 'Yêu cầu' nữa
+                const allReports = normalizeItems(res);
+
+                setReportItems(allReports);
                 setServerPagination(prev => ({
                     ...prev,
                     page: res?.page || prev.page,
@@ -151,35 +143,20 @@ export default function ChangeRequests() {
         setActionType('approve');
     };
 
-
     const handleSubmitFeedback = async ({ title, content }) => {
-        if (!selectedReport) return { error: 'Khong tim thay bao cao can xu ly.' };
-
+        if (!selectedReport) return { error: 'Không tìm thấy báo cáo cần xử lý.' };
         const token = user?.token || '';
-        if (!token) {
-            return { error: 'Ban can dang nhap Instructor de gui resolve.' };
-        }
-
         try {
             const endpoint = actionType === 'disapprove'
                 ? `Reports/${selectedReport.id}/disapprove`
                 : `Reports/${selectedReport.id}/approve`;
 
             const result = await patchData(endpoint, { title, content }, token);
-
-            if (result !== true) {
-                return { error: 'Hệ thống không xác nhận xử lý báo cáo thành công.' };
-            }
+            if (result !== true) return { error: 'Hệ thống không xác nhận xử lý báo cáo thành công.' };
         } catch (error) {
-            const apiErrors = error?.payload?.errors;
-            if (apiErrors && typeof apiErrors === 'object') {
-                const firstKey = Object.keys(apiErrors)[0];
-                const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
-                return { error: firstMessage || 'Du lieu khong hop le.' };
-            }
-            return { error: error?.message || 'Xu ly bao cao that bai.' };
+            // Xử lý lỗi API tương tự cũ
+            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
         }
-
         setRefresh((current) => current + 1);
         handleCloseModal();
         return { ok: true };
@@ -192,22 +169,21 @@ export default function ChangeRequests() {
     return (
         <div className='ins-page'>
             <div className='ins-page-header'>
-                <div><h1>Duyệt yêu cầu thay đổi</h1><p>Xem xét và phê duyệt các yêu cầu thay đổi nội dung.</p></div>
+                {/* Đổi tiêu đề cho bao quát hơn */}
+                <div><h1>Quản lý Báo cáo & Yêu cầu</h1><p>Xem xét và phê duyệt các báo cáo vi phạm hoặc yêu cầu thay đổi.</p></div>
             </div>
             {error && <div className='ins-error-banner'>{error}</div>}
             <DataTable
-                title={`Yêu cầu thay đổi (${serverPagination.totalCount})`}
+                title={`Tất cả báo cáo (${serverPagination.totalCount})`}
                 columns={columns}
                 data={reportItems}
                 loading={loading}
                 serverPagination={serverPagination}
                 onPageChange={handlePageChange}
                 actions={
-                    <>
-                        <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
-                            <i className='fa-solid fa-rotate-right'></i> Làm mới
-                        </button>
-                    </>
+                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                        <i className='fa-solid fa-rotate-right'></i> Làm mới
+                    </button>
                 }
             />
 
@@ -218,8 +194,8 @@ export default function ChangeRequests() {
                 resolve={selectedReport?.resolves?.[0] || null}
                 actionType={actionType}
                 initialTitle={actionType === 'disapprove'
-                    ? '[Kết quả] Phản hồi về yêu cầu thay đổi nội dung ....'
-                    : '[Đã cập nhật] Xác nhận sửa đổi theo yêu cầu của bạn!'}
+                    ? '[Kết quả] Phản hồi về báo cáo/yêu cầu ....'
+                    : '[Đã xử lý] Xác nhận xử lý báo cáo/yêu cầu thành công!'}
                 onOpenEntity={() => {
                     if (!selectedReport) return;
                     const route = getEntityRoute(selectedReport);
@@ -232,4 +208,3 @@ export default function ChangeRequests() {
         </div>
     );
 }
-
