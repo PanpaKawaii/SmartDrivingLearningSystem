@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../../app/hooks/AuthContext/AuthContext';
-// Sử dụng chung CSS với hệ thống Admin hoặc Instructor tùy cấu trúc dự án của bạn
 import '../../InstructorPages/InstructorPages.css';
 
 // --- Constants Tag ID tương tự trang danh sách ---

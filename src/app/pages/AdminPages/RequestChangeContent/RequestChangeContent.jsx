@@ -246,13 +246,27 @@ export default function RequestChangeContent() {
                 }
             },
             {
-                key: 'actions', label: 'Thao tác', width: '100px', render: (_, row) => (
+                key: 'actions',
+                label: 'Thao tác',
+                width: '100px',
+                render: (_, row) => (
                     <div className='ins-action-cell'>
-                        <button className='ins-action-btn view' title="Xem chi tiết" onClick={() => { setSelectedItem(row); setModalMode('view'); }}>
+                        {/* Sửa nút Xem chi tiết để navigate thay vì setModal */}
+                        <button
+                            className='ins-action-btn view'
+                            title="Xem chi tiết"
+                            onClick={() => navigate(`/admin/change-requests/request-detail/${row.id}`)}
+                        >
                             <i className='fa-solid fa-eye'></i>
                         </button>
+
+                        {/* Giữ lại nút sửa nếu trạng thái là chờ duyệt */}
                         {row.status === -1 && (
-                            <button className='ins-action-btn edit' title="Chỉnh sửa" onClick={() => { setSelectedItem(row); setModalMode('edit'); }}>
+                            <button
+                                className='ins-action-btn edit'
+                                title="Chỉnh sửa"
+                                onClick={() => { setSelectedItem(row); setModalMode('edit'); }}
+                            >
                                 <i className='fa-solid fa-pen'></i>
                             </button>
                         )}
