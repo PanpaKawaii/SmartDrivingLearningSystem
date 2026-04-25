@@ -5,7 +5,7 @@ import { questions, simulationScenarios } from '../../../mocks/DataSample.js';
 const STATUS_LABELS = {
     '-1': 'Pending',
     '0': 'Inactive/SoftDelete',
-    '1': 'Binh thuong',
+    '1': 'Bình thường',
     '2': 'Delete',
     '3': 'Reject/Disapprove',
 };
@@ -50,11 +50,11 @@ const toMetaRows = (entityType, data) => {
 };
 
 const toEntityTitle = (entityType, entityId) => {
-    if (entityType === 'question') return `Cau hoi #${entityId}`;
-    if (entityType === 'simulation') return `Tinh huong mo phong #${entityId}`;
-    if (entityType === 'forumpost') return `Bai viet #${entityId}`;
-    if (entityType === 'forumcomment') return `Binh luan #${entityId}`;
-    return `Doi tuong #${entityId}`;
+    if (entityType === 'question') return `Câu hỏi #${entityId}`;
+    if (entityType === 'simulation') return `Tình huống mô phỏng #${entityId}`;
+    if (entityType === 'forumpost') return `Bài viết #${entityId}`;
+    if (entityType === 'forumcomment') return `Bình luận #${entityId}`;
+    return `Đối tượng #${entityId}`;
 };
 
 export default function EntityDetails({ entityType, entityId }) {
@@ -73,15 +73,15 @@ export default function EntityDetails({ entityType, entityId }) {
                 if (entityType === 'question') {
                     const question = questions.find((item) => Number(item.id) === Number(entityId));
                     if (!question) {
-                        throw new Error('Khong tim thay cau hoi');
+                        throw new Error('Không tìm thấy câu hỏi');
                     }
 
                     const normalized = normalizeFieldPayload('question', question);
 
                     if (active) {
                         setEntity({
-                            title: `Cau hoi #${entityId}`,
-                            content: normalized.content || 'Khong co noi dung',
+                            title: `Câu hỏi #${entityId}`,
+                            content: normalized.content || 'Không có nội dung',
                             meta: toMetaRows('question', normalized),
                         });
                     }
@@ -91,15 +91,15 @@ export default function EntityDetails({ entityType, entityId }) {
                 if (entityType === 'simulation') {
                     const simulation = simulationScenarios.find((item) => Number(item.id) === Number(entityId));
                     if (!simulation) {
-                        throw new Error('Khong tim thay tinh huong mo phong');
+                        throw new Error('Không tìm thấy tình huống mô phỏng');
                     }
 
                     const normalized = normalizeFieldPayload('simulation', simulation);
 
                     if (active) {
                         setEntity({
-                            title: normalized.name || `Tinh huong mo phong #${entityId}`,
-                            content: normalized.description || 'Khong co mo ta',
+                            title: normalized.name || `Tình huống mô phỏng #${entityId}`,
+                            content: normalized.description || 'Không có mô tả',
                             meta: toMetaRows('simulation', normalized),
                         });
                     }
@@ -112,8 +112,8 @@ export default function EntityDetails({ entityType, entityId }) {
 
                     if (active) {
                         setEntity({
-                            title: normalized.title || `Bai viet #${entityId}`,
-                            content: normalized.content || 'Khong co noi dung',
+                            title: normalized.title || `Bài viết #${entityId}`,
+                            content: normalized.content || 'Không có nội dung',
                             meta: toMetaRows('forumpost', normalized),
                         });
                     }
@@ -126,18 +126,18 @@ export default function EntityDetails({ entityType, entityId }) {
 
                     if (active) {
                         setEntity({
-                            title: `Binh luan #${entityId}`,
-                            content: normalized.content || 'Khong co noi dung',
+                            title: `Bình luận #${entityId}`,
+                            content: normalized.content || 'Không có nội dung',
                             meta: toMetaRows('forum-comment', normalized),
                         });
                     }
                     return;
                 }
 
-                throw new Error('Loai doi tuong khong hop le');
+                throw new Error('Loại đối tượng không hợp lệ');
             } catch (loadError) {
                 if (active) {
-                    setError(loadError.message || 'Khong the tai chi tiet doi tuong');
+                    setError(loadError.message || 'Không thể tải chi tiết đối tượng');
                     setEntity(null);
                 }
             } finally {
@@ -153,7 +153,7 @@ export default function EntityDetails({ entityType, entityId }) {
     }, [entityType, entityId]);
 
     if (loading) {
-        return <div className='ins-form-static'>Dang tai chi tiet doi tuong...</div>;
+        return <div className='ins-form-static'>Đang tải chi tiết đối tượng...</div>;
     }
 
     if (error) {
@@ -165,7 +165,7 @@ export default function EntityDetails({ entityType, entityId }) {
     }
 
     if (!entity) {
-        return <div className='ins-form-static'>Khong co du lieu doi tuong.</div>;
+        return <div className='ins-form-static'>Không có dữ liệu đối tượng.</div>;
     }
 
     return (

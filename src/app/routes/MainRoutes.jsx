@@ -51,6 +51,9 @@ import AdminProfile from '../pages/AdminPages/Profile/Profile.jsx'
 import AdminSystemConfig from '../pages/AdminPages/SystemConfig/SystemConfig.jsx'
 import Categories from '../pages/AdminPages/Categories/Categories.jsx'
 import ScoringRules from '../pages/AdminPages/ScoringRules/ScoringRules.jsx'
+import RequestChangeContent from '../pages/AdminPages/RequestChangeContent/RequestChangeContent.jsx'
+import QuestionDetail from '../pages/AdminPages/RequestChangeContent/QuestionDetail.jsx'
+import RequestDetail from '../pages/AdminPages/RequestChangeContent/RequestDetail.jsx'
 
 import BoxChat from '../components/BoxChat/BoxChat.jsx'
 
@@ -133,6 +136,9 @@ export default function MainRoutes() {
                     <Route path='system-config' element={<AdminSystemConfig />} />
                     <Route path='categories' element={<Categories />} />
                     <Route path='scoring-rules' element={<ScoringRules />} />
+                    <Route path='change-requests' element={<RequestChangeContent />} />
+                    <Route path='change-requests/detail/:id' element={<QuestionDetail />} />
+                    <Route path='change-requests/request-detail/:id' element={<RequestDetail />} />
                 </Route>
 
                 {/* Instructor CMS Routes */}

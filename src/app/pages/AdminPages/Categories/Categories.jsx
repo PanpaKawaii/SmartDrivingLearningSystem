@@ -154,7 +154,7 @@ export default function Categories() {
 
             <div className='ins-page-header'>
                 <div>
-                    <h1>Cấu hình hệ thống</h1>
+                    <h1>Danh mục nội dung</h1>
                     <p>Quản lý các danh mục và tag hệ thống.</p>
                 </div>
                 <button className='btn-add-category' onClick={() => {

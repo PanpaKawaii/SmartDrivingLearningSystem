@@ -41,12 +41,12 @@ export default function ReportFeedbackModal({
         }
 
         if (title.trim().length < 5) {
-            setError('Tieu de phan hoi phai co it nhat 5 ky tu');
+            setError('Tiêu đề phản hồi phải có ít nhất 5 ký tự');
             return;
         }
 
         if (content.trim().length < 10) {
-            setError('Noi dung phan hoi phai co it nhat 10 ky tu');
+            setError('Nội dung phản hồi phải có ít nhất 10 ký tự');
             return;
         }
 
@@ -68,12 +68,12 @@ export default function ReportFeedbackModal({
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={isViewMode ? 'Chi tiet bao cao' : actionType === 'disapprove' ? 'Bo qua bao cao' : 'Duyet bao cao'}
+            title={isViewMode ? 'Chi tiết báo cáo' : actionType === 'disapprove' ? 'Bỏ qua báo cáo' : 'Duyệt báo cáo'}
             wide
             footer={
                 <>
                     <button className='ins-btn ins-btn-secondary' onClick={onClose} disabled={submitting}>
-                        {isViewMode ? 'Dong' : 'Huy'}
+                        {isViewMode ? 'Đóng' : 'Hủy'}
                     </button>
                     {isViewMode && showReportedContentButton && hasEntityNavigation && (
                         <button className='ins-btn ins-btn-primary' onClick={onOpenEntity}>
@@ -82,7 +82,7 @@ export default function ReportFeedbackModal({
                     )}
                     {!isViewMode && (
                         <button className='ins-btn ins-btn-primary' onClick={handleSubmit} disabled={!isValid || submitting}>
-                            {submitting ? 'Dang gui...' : actionType === 'disapprove' ? 'Bo qua' : 'Duyet'}
+                            {submitting ? 'Đang gửi...' : actionType === 'disapprove' ? 'Bỏ qua' : 'Duyệt'}
                         </button>
                     )}
                 </>
@@ -91,7 +91,7 @@ export default function ReportFeedbackModal({
 
             <div className='ins-form-group'>
                 <label className='ins-form-label'>Loại báo cáo</label>
-                <div className='ins-form-static'>{report?.reportCategory?.name ||'---'}</div>
+                <div className='ins-form-static'>{report?.reportCategory?.name || '---'}</div>
             </div>
 
             <div className='ins-form-group'>
@@ -143,7 +143,7 @@ export default function ReportFeedbackModal({
             {!isViewMode && (
                 <>
                     <div className='ins-form-group'>
-                        <label className='ins-form-label'>Tieu de phan hoi</label>
+                        <label className='ins-form-label'>Tiêu đề phản hồi</label>
                         <input
                             className='ins-form-input'
                             value={title}
@@ -151,11 +151,11 @@ export default function ReportFeedbackModal({
                                 setTitle(e.target.value);
                                 setError('');
                             }}
-                            placeholder='Nhap tieu de phan hoi...'
+                            placeholder='Nhập tiêu đề phản hồi...'
                             disabled={submitting}
                         />
-                        <div style={{ 
-                            fontSize: '0.8rem', 
+                        <div style={{
+                            fontSize: '0.8rem',
                             color: title.trim().length >= 5 ? 'var(--ins-on-surface-variant)' : 'var(--ins-error)',
                             marginTop: '4px'
                         }}>
@@ -163,7 +163,7 @@ export default function ReportFeedbackModal({
                         </div>
                     </div>
                     <div className='ins-form-group'>
-                        <label className='ins-form-label'>Noi dung phan hoi</label>
+                        <label className='ins-form-label'>Nội dung phản hồi</label>
                         <textarea
                             className='ins-form-textarea'
                             value={content}
@@ -171,11 +171,11 @@ export default function ReportFeedbackModal({
                                 setContent(e.target.value);
                                 setError('');
                             }}
-                            placeholder='Nhap phan hoi cho nguoi bao cao...'
+                            placeholder='Nhập phản hồi cho người báo cáo...'
                             disabled={submitting}
                         ></textarea>
-                        <div style={{ 
-                            fontSize: '0.8rem', 
+                        <div style={{
+                            fontSize: '0.8rem',
                             color: content.trim().length >= 10 ? 'var(--ins-on-surface-variant)' : 'var(--ins-error)',
                             marginTop: '4px'
                         }}>
