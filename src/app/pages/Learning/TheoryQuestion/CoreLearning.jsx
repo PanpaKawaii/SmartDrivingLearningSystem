@@ -93,7 +93,11 @@ export default function CoreLearning({
                     });
                     const LearningProgressResponse = await fetchData(`LearningProgresses/all?${learningProgressQuery.toString()}`, token);
                     console.log('LearningProgressResponse', LearningProgressResponse);
-                    setSelectedQuestionId(p => p ? p : (LearningProgressResponse?.length > 0 ? LearningProgressResponse?.[LearningProgressResponse?.length - 1]?.questionId : ''));
+                    setSelectedQuestionId(p => p ? p : (
+                        LearningProgressResponse?.length > 0 ?
+                            LearningProgressResponse?.[LearningProgressResponse?.length - 1]?.questionId
+                            : QuestionsAnswers?.[0]?.id
+                    ));
                 } else {
                     setSelectedQuestionId(p => p ? p : QuestionsAnswers?.[0]?.id);
                 }

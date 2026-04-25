@@ -8,9 +8,10 @@ import TrafficLight from '../../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import ExamDetail from './ExamDetail/ExamDetail.jsx';
 import ExamSession from './ExamDetail/ExamSession.jsx';
-// import UserCreateExam from './UserCreateExam.jsx';
+import UserCreateExam from './UserCreateExam.jsx';
 
 import './ListExam.css';
+import PopupContainer from '../../../components/PopupContainer/PopupContainer.jsx';
 
 export default function ListExam() {
     const { user, refreshNewToken } = useAuth();
@@ -26,7 +27,6 @@ export default function ListExam() {
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
     const [EXAMSESSIONs, setEXAMSESSIONs] = useState([]);
     const [SIMULATIONSESSIONs, setSIMULATIONSESSIONs] = useState([]);
-    const [DRIVINGLICENSEs, setDRIVINGLICENSEs] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,6 +40,8 @@ export default function ListExam() {
     const [todaySimulation, setTodaySimulation] = useState([]);
     const [limitExam, setLimitExam] = useState(0);
     const [limitSimulation, setLimitSimulation] = useState(0);
+
+    const [openCreate, setOpenCreate] = useState('');
 
     const selectedExam = ExamOrSituation == 'exam' ?
         EXAMs.find(e => e.id == selectedId)
@@ -81,30 +83,12 @@ export default function ListExam() {
                     pageSize: '500',
                     status: 1,
                 });
-                const drivingLicenseQuery = new URLSearchParams({
-                    status: 1,
-                });
-                const questionChapterQuery = new URLSearchParams({
-                    page: '1',
-                    pageSize: '500',
-                    status: 1,
-                });
                 const ExamResponse = await fetchData(`Exams?${examQuery.toString()}`, token);
                 const SituationExamResponse = await fetchData(`SituationExams?${examQuery.toString()}`, token);
-                const DrivingLicenseResponse = await fetchData(`DrivingLicenses/all?${drivingLicenseQuery.toString()}`, token);
-                const QuestionChapterResponse = await fetchData(`QuestionChapters?${questionChapterQuery.toString()}`, token);
                 console.log('ExamResponse', ExamResponse);
                 console.log('SituationExamResponse', SituationExamResponse);
-                console.log('DrivingLicenseResponse', DrivingLicenseResponse);
-                console.log('QuestionChapterResponse', QuestionChapterResponse);
                 const ExamItems = ExamResponse?.items;
                 const SituationExamItems = SituationExamResponse?.items;
-                const QuestionChapterItems = QuestionChapterResponse?.items;
-
-                const DrivingLicenses = DrivingLicenseResponse.map(dl => ({
-                    ...dl,
-                    chapters: QuestionChapterItems.filter(qc => qc.drivingLicenseId == dl.id),
-                }));
 
                 if (user) {
                     const examSessionQuery = new URLSearchParams({
@@ -131,7 +115,6 @@ export default function ListExam() {
 
                 setEXAMs(ExamItems);
                 setSITUATIONEXAMs(SituationExamItems);
-                setDRIVINGLICENSEs(DrivingLicenses);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -181,7 +164,7 @@ export default function ListExam() {
                         <button className={`btn ${isMine ? (ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn') : 'off'}`} onClick={() => setIsMine(p => !p)}>
                             ĐỀ CỦA TÔI
                         </button>
-                        <button className={`btn ${ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn'}`} onClick={() => setIsMine(p => !p)}>
+                        <button className={`btn ${ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn'}`} onClick={() => setOpenCreate(ExamOrSituation)}>
                             TẠO BỘ ĐỀ
                         </button>
                     </div>
@@ -306,7 +289,16 @@ export default function ListExam() {
                 ))}
             </div> */}
 
-            {/* <UserCreateExam DRIVINGLICENSEs={DRIVINGLICENSEs} /> */}
+            {openCreate &&
+                <PopupContainer
+                    onClose={() => setOpenCreate('')}
+                    titleName={`Tạo đề thi ${openCreate == 'exam' ? 'lý thuyết' : 'mô phỏng'}`}
+                    modalStyle={{}}
+                    innerStyle={{ width: 'fit-content', minWidth: 700, scrollbarWidth: 'none' }}
+                >
+                    <UserCreateExam />
+                </PopupContainer>
+            }
         </div >
     )
 }
