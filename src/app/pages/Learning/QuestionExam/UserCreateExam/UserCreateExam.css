@@ -4,7 +4,8 @@
     .create-content,
     .result-content {
         padding: 20px;
-        width: 600px;
+        width: 640px;
+        box-sizing: border-box;
         max-height: 70vh;
         overflow-y: scroll;
     }
@@ -20,7 +21,9 @@
         background: linear-gradient(90deg, #2563eb, #0891b2);
 
         &.create-btn {
+            width: 100%;
             display: flex;
+            justify-content: center;
             align-items: center;
             gap: 12px;
         }
@@ -35,11 +38,7 @@
             gap: 20px;
 
             .form-group {
-                flex: 3;
-
-                &.form-group-input {
-                    flex: 1;
-                }
+                flex: 1;
             }
         }
 
@@ -143,17 +142,27 @@
             display: flex;
             justify-content: space-between;
             gap: 20px;
+
+            .delete-btn {
+                background: #ca3333;
+            }
         }
 
         .list-question {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            transition: .15s ease;
+
+            &.not-show {
+                filter: blur(8px);
+            }
 
             .question-item {
-                padding: 20px;
-                border-radius: 12px;
+                padding: 12px 20px;
+                background: #3b82f620;
                 border: 2px solid #2f5099;
+                border-radius: 12px;
 
                 h3 {
                     margin: 0 0 4px;
@@ -173,19 +182,18 @@
                     gap: 8px;
 
                     .answer-item {
-                        padding: 12px;
+                        padding: 6px 12px;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         gap: 20px;
-                        color: var(--text-secondary);
+                        color: #fff;
                         border: 2px solid #2f5099;
                         border-radius: 8px;
                         overflow-wrap: break-word;
                         word-break: break-word;
 
                         &.correct-answer {
-                            color: #fff;
                             border-color: #22c55e;
                         }
                     }

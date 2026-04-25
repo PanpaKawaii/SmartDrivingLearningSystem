@@ -3,15 +3,15 @@ import { useLocation } from 'react-router-dom';
 import { fetchData } from '../../../../mocks/CallingAPI.js';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground.jsx';
 import HeadingComponent from '../../../components/HeadingComponent/HeadingComponent.jsx';
+import PopupContainer from '../../../components/PopupContainer/PopupContainer.jsx';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground.jsx';
 import TrafficLight from '../../../components/TrafficLight/TrafficLight.jsx';
 import { useAuth } from '../../../hooks/AuthContext/AuthContext.jsx';
 import ExamDetail from './ExamDetail/ExamDetail.jsx';
 import ExamSession from './ExamDetail/ExamSession.jsx';
-import UserCreateExam from './UserCreateExam.jsx';
+import UserCreateExam from './UserCreateExam/UserCreateExam.jsx';
 
 import './ListExam.css';
-import PopupContainer from '../../../components/PopupContainer/PopupContainer.jsx';
 
 export default function ListExam() {
     const { user, refreshNewToken } = useAuth();
@@ -294,7 +294,7 @@ export default function ListExam() {
                     onClose={() => setOpenCreate('')}
                     titleName={`Tạo đề thi ${openCreate == 'exam' ? 'lý thuyết' : 'mô phỏng'}`}
                     modalStyle={{}}
-                    innerStyle={{ width: 'fit-content', minWidth: 700, scrollbarWidth: 'none' }}
+                    innerStyle={{ width: 'fit-content', minWidth: 640, scrollbarWidth: 'none' }}
                 >
                     <UserCreateExam />
                 </PopupContainer>

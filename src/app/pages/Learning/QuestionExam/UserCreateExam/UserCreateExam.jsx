@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchData } from '../../../../mocks/CallingAPI';
-import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
-import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
-import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect';
-import TrafficLight from '../../../components/TrafficLight/TrafficLight';
-import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import { fetchData } from '../../../../../mocks/CallingAPI';
+import CloudsBackground from '../../../../components/CloudsBackground/CloudsBackground';
+import MovingLabelInput from '../../../../components/MovingLabelInput/MovingLabelInput';
+import StyleLabelSelect from '../../../../components/StyleLabelSelect/StyleLabelSelect';
+import TrafficLight from '../../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../../hooks/AuthContext/AuthContext';
 
 import './UserCreateExam.css';
 
@@ -17,6 +17,7 @@ export default function UserCreateExam() {
     const [error, setError] = useState(null);
 
     const [totalQuestions, setTotalQuestions] = useState(0);
+    const [totalParalysis, setTotalParalysis] = useState(0);
     const [selectedLicenseId, setSelectedLicenseId] = useState('');
     const [selectedChapters, setSelectedChapters] = useState([
         { chapterId: '', percent: 0 },
@@ -38,10 +39,15 @@ export default function UserCreateExam() {
                     pageSize: '1000',
                     status: 1,
                 });
+                const tagQuery = new URLSearchParams({
+                    // status: 1,
+                });
                 const DrivingLicenseResponse = await fetchData(`DrivingLicenses/all?${drivingLicenseQuery.toString()}`, token);
                 const QuestionResponse = await fetchData(`Questions?${questionQuery.toString()}`, token);
+                const TagResponse = await fetchData(`Tags/all?${tagQuery.toString()}`, token);
                 console.log('DrivingLicenseResponse', DrivingLicenseResponse);
                 console.log('QuestionResponse', QuestionResponse);
+                console.log('TagResponse', TagResponse);
                 const QuestionItems = QuestionResponse?.items;
 
                 const QuestionsAnswers = QuestionItems.map((q, i) => {
@@ -49,6 +55,7 @@ export default function UserCreateExam() {
                         ...q,
                         index: i + 1,
                         correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
+                        tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };
                 });
                 console.log('QuestionsAnswers', QuestionsAnswers);
@@ -95,8 +102,9 @@ export default function UserCreateExam() {
         () => selectedChapters.map(c => c.chapterId).filter(Boolean),
         [selectedChapters]
     );
-
+    // console.log('selectedChapters', selectedChapters);
     const selectedLicense = DRIVINGLICENSEs.find(dl => dl.id == selectedLicenseId);
+    // console.log('selectedLicense', selectedLicense);
 
     const handleChapterChange = (index, chapterId) => {
         const next = [...selectedChapters];
@@ -117,29 +125,24 @@ export default function UserCreateExam() {
 
     const totalPercent = selectedChapters.reduce((sum, c) => sum + (c.percent || 0), 0);
 
-    console.log('selectedChapters', selectedChapters);
-    console.log('selectedLicense', selectedLicense);
-
     const createRandomQuestionExam = () => {
         const counts = selectedChapters?.map(c => ({
             ...c,
             raw: (totalQuestions * c.percent) / 100,
             count: Math.floor((totalQuestions * c.percent) / 100)
         }));
-        console.log('counts.count', counts[0].count);
+        // console.log('counts.count', counts[0].count);
 
         let remaining = totalQuestions - counts.reduce((sum, c) => sum + c.count, 0);
-        console.log('remaining', remaining);
+        // console.log('remaining', remaining);
 
-        // ==FIX==
-        // phân bổ phần dư
-        // counts.forEach(c => {
-        //     if (remaining > 0) {
-        //         c.count += 1;
-        //         remaining--;
-        //     }
-        // });
-        console.log('counts.forEach', counts);
+        counts.forEach(c => {
+            if (remaining > 0) {
+                c.count += 1;
+                remaining--;
+            }
+        });
+        // console.log('counts.forEach', counts);
 
         const output = counts.flatMap(c => {
             const chapter = selectedLicense?.chapters?.find(r => r.id === c.chapterId);
@@ -149,8 +152,8 @@ export default function UserCreateExam() {
             const shuffled = [...chapter.items].sort(() => Math.random() - 0.5);
             return shuffled.slice(0, c.count);
         });
+        // console.log('output', output);
 
-        console.log('output', output);
         setRandomExam(output);
     };
 
@@ -162,15 +165,6 @@ export default function UserCreateExam() {
         <div className='user-create-exam-container'>
             <div className='create-content'>
                 <div className='totalquestions-selectlicense'>
-                    <div className='form-group form-group-input'>
-                        <MovingLabelInput
-                            type={'text'}
-                            value={totalQuestions || ''}
-                            onValueChange={(propE) => setTotalQuestions(Number(propE))}
-                            label={'Tổng số câu hỏi'}
-                            labelStyle={'left moving'}
-                        />
-                    </div>
                     <div className='form-group'>
                         <StyleLabelSelect
                             id={`select-license`}
@@ -182,6 +176,24 @@ export default function UserCreateExam() {
                             }}
                             label={'Loại bằng'}
                             labelStyle={'left'}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <MovingLabelInput
+                            type={'text'}
+                            value={totalQuestions ?? ''}
+                            onValueChange={(propE) => setTotalQuestions(Number(propE) || 0)}
+                            label={'Tổng số câu hỏi'}
+                            labelStyle={'left moving'}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <MovingLabelInput
+                            type={'text'}
+                            value={totalParalysis ?? ''}
+                            onValueChange={(propE) => setTotalParalysis(Number(propE) || 0)}
+                            label={'Tổng số câu liệt'}
+                            labelStyle={'left moving'}
                         />
                     </div>
                 </div>
@@ -215,7 +227,6 @@ export default function UserCreateExam() {
                                     type='number'
                                     min={0}
                                     max={100}
-                                    placeholder='%'
                                     value={item.percent}
                                     onChange={(e) => handlePercentChange(index, e.target.value)}
                                 />
@@ -258,31 +269,43 @@ export default function UserCreateExam() {
                     <div className='line'></div>
                     <div className='result-content'>
                         <div className='result-heading'>
-                            <button className='btn' onClick={() => setShowResult(p => !p)}>{showResult ? 'Ẩn' : 'Xem'} kết quả ({randomExam.length} câu hỏi)</button>
-                            <button className='btn' onClick={() => setRandomExam(null)}>Xóa kết quả</button>
+                            <button className='btn' onClick={() => setShowResult(p => !p)}>
+                                {showResult ? 'Ẩn' : 'Xem'} kết quả ({randomExam.length} câu hỏi)
+                            </button>
+                            <button className='btn delete-btn'
+                                onClick={() => {
+                                    setShowResult(false);
+                                    setRandomExam(null);
+                                }}
+                            >
+                                Xóa kết quả
+                            </button>
                         </div>
-                        <div className='list-question'>
-                            {randomExam?.map((question, qIndex) => {
-                                return showResult && (
-                                    <div
-                                        key={qIndex}
-                                        className='question-item'
-                                    >
-                                        <h3>Câu hỏi {qIndex + 1}</h3>
-                                        <p>{question.content}</p>
-                                        <div className='list-answer'>
-                                            {question.answers?.map((answer) => (
-                                                <div
-                                                    key={answer.id}
-                                                    className={`answer-item ${answer.isCorrect ? 'correct-answer' : ''}`}
-                                                >
-                                                    {answer.content}
-                                                </div>
-                                            ))}
-                                        </div>
+                        <div className={`list-question ${showResult ? '' : 'not-show'}`}>
+                            {randomExam?.map((question, qIndex) => (
+                                <div
+                                    key={qIndex}
+                                    className='question-item'
+                                >
+                                    <h3>Câu hỏi {qIndex + 1}</h3>
+                                    <div className='tags'>
+                                        {question?.tags?.map((tag, index) => (
+                                            <div key={index} className='tag' style={{ backgroundColor: tag.colorCode || '#ccc' }}>{tag.name}</div>
+                                        ))}
                                     </div>
-                                )
-                            })}
+                                    <p>{question.content}</p>
+                                    <div className='list-answer'>
+                                        {question.answers?.map((answer) => (
+                                            <div
+                                                key={answer.id}
+                                                className={`answer-item ${answer.isCorrect ? 'correct-answer' : ''}`}
+                                            >
+                                                {answer.content}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </>
