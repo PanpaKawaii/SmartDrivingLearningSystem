@@ -109,7 +109,7 @@ export default function CommunityReports() {
                     query.set('reportCategoryId', filters.reportCategoryId);
                 }
 
-                const res = await fetchData(`Reports?${query.toString()}`, token);
+                const res = await fetchData(`Reports?${query.toString()}&reportCategoryIds=337093eb-b4c4-4efb-83a5-72a0f1e3ee14&reportCategoryIds=9cf4bdbe-1b3e-4f1a-9ebf-320ad4769dad`, token);
                 console.log('Fetched reports data:', res);
                 const communityReports = normalizeItems(res).filter((report) => Boolean(report?.forumPostId || report?.forumCommentId));
 
@@ -249,7 +249,7 @@ export default function CommunityReports() {
             key: 'targetType',
             label: 'Thể loại',
             width: '120px',
-            render: (_, row) =>  {
+            render: (_, row) => {
                 const label = getReportTargetLabel(row);
                 let colorClass = '';
                 if (label === 'Bài viết') colorClass = 'post-label';
@@ -263,15 +263,17 @@ export default function CommunityReports() {
         },
         { key: 'user', label: 'Người báo', width: '140px', render: (val, row) => row?.user?.name || '---' },
         { key: 'reportCategory', label: 'Danh mục', width: '140px', render: (val, row) => row?.reportCategory?.name || '---' },
-        { key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
-            const { time, date } = formatDateTimeLines(val);
-            return (
-                <div style={{ lineHeight: '1.2' }}>
-                    <div>{time}</div>
-                    <div>{date}</div>
-                </div>
-            );
-        } },
+        {
+            key: 'createAt', label: 'Ngày', width: '130px', render: (val) => {
+                const { time, date } = formatDateTimeLines(val);
+                return (
+                    <div style={{ lineHeight: '1.2' }}>
+                        <div>{time}</div>
+                        <div>{date}</div>
+                    </div>
+                );
+            }
+        },
         {
             key: 'status',
             label: 'Trạng thái',
@@ -352,7 +354,7 @@ export default function CommunityReports() {
                 onPageChange={handlePageChange}
                 actions={
                     <>
-                    <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
+                        <button className='ins-btn ins-btn-secondary' onClick={() => setRefresh((r) => r + 1)} disabled={loading}>
                             <i className='fa-solid fa-rotate-right'></i> Làm mới
                         </button>
                     </>
@@ -366,7 +368,7 @@ export default function CommunityReports() {
                     modalStyle={{}}
                     innerStyle={{ width: 700 }}
                 >
-                    <ForumCard post={viewPost} setSelectedPostId={() => {}} setRefresh={setRefresh} parentLoading={viewLoading} />
+                    <ForumCard post={viewPost} setSelectedPostId={() => { }} setRefresh={setRefresh} parentLoading={viewLoading} />
                     {highlightCommentId && (
                         <ForumComment
                             post={viewPost}
