@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { fetchData } from '../../../../mocks/CallingAPI';
+import { fetchData, postData } from '../../../../mocks/CallingAPI';
 import { useAuth } from '../../../../app/hooks/AuthContext/AuthContext';
+import RequestChangeModal from './RequestChangeModal';
 import '../../InstructorPages/InstructorPages.css';
 
-// --- Constants Tag ID tương tự trang danh sách ---
 const TAG_IDS = {
     NEW_CREATED: "763a5be4-963a-487d-a3b4-6a826026c94e",
     NEW_UPDATED: "8317546b-0cc6-43e9-a917-0ae9d090ec16",
@@ -17,7 +17,6 @@ const getQuestionType = (question) => {
     return correctCount > 1 ? 'MULTI' : 'SINGLE';
 };
 
-// Cập nhật logic kiểm tra Điểm Liệt theo Tag ID
 const checkIsDiemLiet = (question) => {
     const hasTagDiemLiet = question?.questionTags?.some(tag => tag.tagId === TAG_IDS.DIEM_LIET);
     return hasTagDiemLiet || Boolean(question?.isDiemLiet ?? question?.isDanger ?? false);
@@ -26,55 +25,90 @@ const checkIsDiemLiet = (question) => {
 function QuestionDetail() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id } = useParams(); // Ưu tiên lấy từ URL :id
+    const { id } = useParams();
     const { user, refreshNewToken } = useAuth();
-    const token = user?.token || '';
 
     const [question, setQuestion] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [license, setLicense] = useState(null);
 
-    // Đường dẫn gốc cho Admin (Bạn có thể điều chỉnh lại cho đúng Route của bạn)
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [notification, setNotification] = useState({ message: '', type: '' });
+
     const ADMIN_BASE_PATH = '/admin/change-requests';
 
-    useEffect(() => {
-        const fetchQuestionDetail = async () => {
-            setLoading(true);
-            try {
-                let qData = null;
+    const showNotify = (message, type = 'success') => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification({ message: '', type: '' }), 3000);
+    };
 
-                // Ưu tiên fetch mới bằng endpoint Admin để có dữ liệu Tag đầy đủ Name
-                if (id) {
-                    // SỬA TẠI ĐÂY: Dùng endpoint admin
-                    qData = await fetchData(`Questions/admin/${id}`, token);
-                } else if (location.state && location.state.question) {
-                    qData = location.state.question;
-                }
+    const fetchQuestionDetail = useCallback(async () => {
+        if (!user?.token) return;
+        setLoading(true);
+        try {
+            let qData = null;
 
-                if (qData) {
-                    setQuestion(qData);
-                    const licenseId = qData?.drivingLicenseId || qData?.questionLesson?.questionChapter?.drivingLicenseId;
-                    if (licenseId) {
-                        const licenseRes = await fetchData(`drivingLicenses/${licenseId}`, token);
-                        setLicense(licenseRes);
-                    }
-                } else {
-                    setError('Không tìm thấy mã câu hỏi.');
-                }
-            } catch (err) {
-                if (err.status === 401) {
-                    refreshNewToken(user);
-                } else {
-                    setError('Lỗi khi tải chi tiết câu hỏi.');
-                }
-            } finally {
-                setLoading(false);
+            if (id) {
+                qData = await fetchData(`Questions/admin/${id}`, user.token);
+            } else if (location.state && location.state.question) {
+                qData = location.state.question;
             }
-        };
 
+            if (qData) {
+                setQuestion(qData);
+                const licenseId = qData?.drivingLicenseId || qData?.questionLesson?.questionChapter?.drivingLicenseId;
+                if (licenseId) {
+                    const licenseRes = await fetchData(`drivingLicenses/${licenseId}`, user.token);
+                    setLicense(licenseRes);
+                }
+                setError(''); // Xóa lỗi nếu fetch thành công
+            } else {
+                setError('Không tìm thấy mã câu hỏi.');
+            }
+        } catch (err) {
+            // Xử lý Refresh Token tại đây
+            if (err.status === 401) {
+                try {
+                    await refreshNewToken(user);
+                } catch (refreshErr) {
+                    setError('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.');
+                }
+            } else {
+                setError('Lỗi khi tải chi tiết câu hỏi.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, [id, user, location.state, refreshNewToken]);
+
+    useEffect(() => {
         fetchQuestionDetail();
-    }, [id, token]);
+    }, [fetchQuestionDetail]);
+
+    const handleSubmitRequest = async (formData) => {
+        setIsSaving(true);
+        try {
+            await postData('Reports', { ...formData, userId: user.id }, user.token);
+            showNotify("Gửi yêu cầu thay đổi thành công!");
+            setIsModalOpen(false);
+        } catch (err) {
+            if (err.status === 401) {
+                try {
+                    await refreshNewToken(user);
+                    showNotify("Phiên làm việc đã được làm mới, vui lòng bấm Gửi lại lần nữa", "info");
+                } catch (refreshErr) {
+                    showNotify("Lỗi xác thực, vui lòng đăng nhập lại", "error");
+                }
+            } else {
+                console.error("Submit error:", err);
+                showNotify(err.response?.data?.title || "Đã có lỗi xảy ra", "error");
+            }
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -104,7 +138,6 @@ function QuestionDetail() {
         );
     }
 
-    // Logic xử lý Suffix cho nội dung câu hỏi dựa trên Tag
     const tags = question.questionTags || [];
     let contentSuffix = "";
     if (tags.some(t => t.tagId === TAG_IDS.NEW_CREATED)) contentSuffix = " (Câu hỏi mới tạo)";
@@ -113,14 +146,28 @@ function QuestionDetail() {
     const isDiemLiet = checkIsDiemLiet(question);
     const qType = getQuestionType(question);
 
+    const reportData = {
+        questionId: question.id,
+        questionContent: question.content,
+        title: `[Góp ý] ${question.content?.substring(0, 50)}...`,
+        content: '',
+        status: 0
+    };
+
     return (
         <div className='ins-page'>
+            {notification.message && (
+                <div className={`sr-toast ${notification.type}`} style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 9999 }}>
+                    <i className={notification.type === 'error' ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-circle-check'}></i>
+                    {notification.message}
+                </div>
+            )}
+
             <div className='ins-page-header'>
                 <div>
                     <h1>Quản trị: Chi tiết câu hỏi</h1>
                     <p>Mã câu hỏi: <strong>{question.id}</strong></p>
                 </div>
-
                 <button className='ins-btn ins-btn-secondary' onClick={() => navigate(ADMIN_BASE_PATH)}>
                     <i className='fa-solid fa-arrow-left'></i> Quay lại danh sách
                 </button>
@@ -212,12 +259,22 @@ function QuestionDetail() {
                     <button className='ins-btn ins-btn-secondary' onClick={() => navigate(ADMIN_BASE_PATH)}>
                         Quay lại trang quản lý
                     </button>
-                    {/* Admin có thể có thêm nút duyệt nhanh hoặc vô hiệu hóa ở đây */}
-                    <button className='ins-btn ins-btn-primary' onClick={() => navigate(`/admin/questions/edit/${question.id}`)}>
-                        <i className="fa-solid fa-pen-to-square"></i> Hiệu chỉnh câu hỏi
+                    <button className='ins-btn ins-btn-primary' onClick={() => setIsModalOpen(true)}>
+                        <i className="fa-solid fa-plus"></i> Tạo yêu cầu thay đổi
                     </button>
                 </div>
             </div>
+
+            {isModalOpen && (
+                <RequestChangeModal
+                    isOpen={isModalOpen}
+                    mode="create"
+                    report={reportData}
+                    onClose={() => setIsModalOpen(false)}
+                    onSubmit={handleSubmitRequest}
+                    isSaving={isSaving}
+                />
+            )}
         </div>
     );
 }

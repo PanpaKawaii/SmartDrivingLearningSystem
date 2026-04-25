@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataTable from '../../../components/Shared/DataTable';
 import RequestChangeModal from './RequestChangeModal';
@@ -33,7 +33,7 @@ const TAB_CONFIG = {
 };
 
 export default function RequestChangeContent() {
-    const { user } = useAuth();
+    const { user, refreshNewToken } = useAuth();
     const navigate = useNavigate();
     const [notification, setNotification] = useState({ message: '', type: '' });
     const [isSaving, setIsSaving] = useState(false);
@@ -54,56 +54,64 @@ export default function RequestChangeContent() {
         setTimeout(() => setNotification({ message: '', type: '' }), 3000);
     };
 
-    useEffect(() => {
-        const loadData = async () => {
-            if (!user?.token) return;
-            setLoading(true);
-            try {
-                if (activeTab === 'QUESTIONS') {
-                    // Cập nhật URL dynamic theo phân trang
-                    const url = `Questions?sortBy=latest&page=${currentPage}&pageSize=${pageSize}`;
-                    const response = await fetchData(url, user.token);
+    const loadData = useCallback(async () => {
+        if (!user?.token) return;
+        setLoading(true);
+        try {
+            let response;
+            if (activeTab === 'QUESTIONS') {
+                const url = `Questions?sortBy=latest&page=${currentPage}&pageSize=${pageSize}`;
+                response = await fetchData(url, user.token);
 
-                    const items = Array.isArray(response) ? response : (response?.items || []);
-                    setTotalItems(response?.totalCount || items.length);
+                const items = Array.isArray(response) ? response : (response?.items || []);
+                setTotalItems(response?.totalCount || items.length);
 
-                    const mapped = items.map((q) => {
-                        let contentSuffix = "";
-                        const tags = q.questionTags || [];
-                        if (tags.some(t => t.tagId === TAG_IDS.NEW_CREATED)) {
-                            contentSuffix = " (Câu hỏi mới tạo)";
-                        } else if (tags.some(t => t.tagId === TAG_IDS.NEW_UPDATED)) {
-                            contentSuffix = " (Câu hỏi mới cập nhật)";
-                        }
+                const mapped = items.map((q) => {
+                    let contentSuffix = "";
+                    const tags = q.questionTags || [];
+                    if (tags.some(t => t.tagId === TAG_IDS.NEW_CREATED)) contentSuffix = " (Câu hỏi mới tạo)";
+                    else if (tags.some(t => t.tagId === TAG_IDS.NEW_UPDATED)) contentSuffix = " (Câu hỏi mới cập nhật)";
 
-                        return {
-                            id: q.id,
-                            content: (q.content || "—") + contentSuffix,
-                            category: q?.questionCategory?.name || "—",
-                            topicName: q?.questionTopic?.name || "—",
-                            status: q.status ?? 1,
-                            isDiemLiet: isDiemLietQuestion(q),
-                            type: getQuestionType(q),
-                            answersCount: q.answers?.length || 0,
-                            rawQuestion: q
-                        };
-                    });
-                    setData(mapped);
-                } else {
-                    const response = await fetchData(`Reports?userId=${user.id}`, user.token);
-                    const items = Array.isArray(response) ? response : (response?.items || []);
-                    setData(items);
-                    setTotalItems(items.length);
+                    return {
+                        id: q.id,
+                        content: (q.content || "—") + contentSuffix,
+                        category: q?.questionCategory?.name || "—",
+                        topicName: q?.questionTopic?.name || "—",
+                        status: q.status ?? 1,
+                        isDiemLiet: isDiemLietQuestion(q),
+                        type: getQuestionType(q),
+                        answersCount: q.answers?.length || 0,
+                        rawQuestion: q
+                    };
+                });
+                setData(mapped);
+            } else {
+                response = await fetchData(`Reports?userId=${user.id}`, user.token);
+                const items = Array.isArray(response) ? response : (response?.items || []);
+                setData(items);
+                setTotalItems(items.length);
+            }
+        } catch (error) {
+            // XỬ LÝ REFRESH TOKEN TẠI ĐÂY
+            if (error.status === 401) {
+                try {
+                    await refreshNewToken(user);
+                    // Sau khi refresh thành công, useEffect sẽ tự chạy lại do `user` thay đổi
+                } catch (refreshError) {
+                    showNotify("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại", "error");
                 }
-            } catch (error) {
+            } else {
                 console.error("Fetch error:", error);
                 setData([]);
-            } finally {
-                setLoading(false);
             }
-        };
+        } finally {
+            setLoading(false);
+        }
+    }, [activeTab, user, currentPage, pageSize, refreshNewToken]);
+
+    useEffect(() => {
         loadData();
-    }, [activeTab, user, refreshKey, currentPage, pageSize]);
+    }, [loadData, refreshKey]);
 
     const handleOpenCreateRequest = (row) => {
         setSelectedItem({
@@ -122,34 +130,37 @@ export default function RequestChangeContent() {
     };
 
     const handleSubmit = async (formData) => {
-        setIsSaving(true); // Vô hiệu hóa nút và hiện loading
+        setIsSaving(true);
         try {
             if (modalMode === 'create') {
                 await postData('Reports', { ...formData, userId: user.id }, user.token);
                 showNotify("Gửi yêu cầu thành công!");
             } else {
-                // Payload đã lọc cho Update
                 const updatePayload = {
                     simulationId: formData.simulationId || null,
-                    forumPostId: formData.forumPostId || null,
-                    forumCommentId: formData.forumCommentId || null,
-                    questionId: formData.questionId || null,
                     reportCategoryId: formData.reportCategoryId,
                     title: formData.title,
                     content: formData.content,
-                    image: formData.image || null,
                     status: formData.status
                 };
                 await putData(`Reports/${formData.id}`, updatePayload, user.token);
                 showNotify("Cập nhật yêu cầu thành công!");
             }
             setRefreshKey(prev => prev + 1);
-            setSelectedItem(null); // Đóng modal khi thành công
+            setSelectedItem(null);
         } catch (error) {
-            console.error("Submit error:", error);
-            showNotify(error.response?.data?.title || "Đã có lỗi xảy ra", "error");
+            if (error.status === 401) {
+                try {
+                    await refreshNewToken(user);
+                    showNotify("Vui lòng thử lại thao tác", "info");
+                } catch (err) {
+                    showNotify("Lỗi xác thực", "error");
+                }
+            } else {
+                showNotify(error.response?.data?.title || "Đã có lỗi xảy ra", "error");
+            }
         } finally {
-            setIsSaving(false); // Mở khóa nút bấm
+            setIsSaving(false);
         }
     };
 
@@ -206,14 +217,14 @@ export default function RequestChangeContent() {
             {
                 key: 'actions',
                 label: 'Thao tác',
-                width: "160px",
+                width: "180px",
                 render: (_, row) => (
                     <div className="ins-action-cell">
                         <button className='ins-action-btn view' title="Xem chi tiết" onClick={() => handleViewDetail(row)}>
                             <i className="fa-solid fa-eye"></i>
                         </button>
                         <button className='ins-btn ins-btn-primary btn-sm' onClick={() => handleOpenCreateRequest(row)}>
-                            <i className="fa-solid fa-plus"></i> Báo lỗi
+                            <i className="fa-solid fa-plus"></i> Yêu cầu
                         </button>
                     </div>
                 )
