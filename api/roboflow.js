@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
     try {
         const response = await fetch(
-            'https://serverless.roboflow.com/sub-wtikx/workflows/text-recognition-3',
+            'https://serverless.roboflow.com/sub-wtikx/workflows/text-recognition',
             {
                 method: 'POST',
                 headers: {

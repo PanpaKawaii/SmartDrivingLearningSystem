@@ -72,14 +72,14 @@ export default function Dashboard() {
                             trend='Tổng cộng'
                             trendDir='none'
                         />
-                        {/* <StatsCard
+                        <StatsCard
                             icon='fa-solid fa-code-pull-request'
                             iconColor='blue'
                             value={summary?.contentChangeRequestCount || 0}
                             label='Yêu cầu thay đổi'
                             trend='Cần xử lý'
                             trendDir='none'
-                        /> */}
+                        />
                         <StatsCard
                             icon='fa-solid fa-bug'
                             iconColor='red'

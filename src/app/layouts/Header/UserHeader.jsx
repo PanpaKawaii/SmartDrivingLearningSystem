@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { fetchData, patchData } from '../../../mocks/CallingAPI';
 import DefaultAvatar from '../../assets/DefaultAvatar.png';
@@ -6,6 +6,7 @@ import GREENLIGHT_LOGO from '../../assets/GREENLIGHT_LOGO.png';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import NotificationDropdown from '../../pages/Notification/NotificationDropdown';
 // import LOGO from '../../assets/Logo.png';
+import NotificationDetailModal from '../../pages/Notification/NotificationDetailModal';
 
 import './UserHeader.css';
 
@@ -24,6 +25,8 @@ export default function UserHeader({
     // State cho Notification
     const [notifications, setNotifications] = useState([]);
     const [showNoti, setShowNoti] = useState(false);
+    const [selectedNotiDetail, setSelectedNotiDetail] = useState(null);
+    const dropdownRef = useRef(null);
 
     // Kiểm tra xem có thông báo nào chưa đọc (status === 2) không
     const hasUnread = notifications.some(noti => noti.status === 2);
@@ -55,65 +58,71 @@ export default function UserHeader({
         // { name: 'EXCEL', icon: 'file-excel', iconType: 'solid', path: '/read-excel-data' },
     ];
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowNoti(false);
+                setShowProfileList(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     const loadNotifications = async () => {
-        if (!user?.token) return;
+        if (!user?.token || !user?.id) return;
         try {
             // Gọi API lấy thông báo của user hiện tại
             const res = await fetchData(`Notifications/all?userId=${user.id}&sortBy=time`, user.token);
-            setNotifications(Array.isArray(res) ? res : res?.items || []);
+            const dataItems = res.items || res;
+            if (Array.isArray(dataItems)) {
+                // Lọc bỏ status = 0 nếu cần giống Admin
+                setNotifications(dataItems.filter(n => n.status !== 0));
+            }
         } catch (error) {
             console.error('Error loading notifications', error);
         }
     };
 
     const handleSelectNoti = async (notiId) => {
+        const token = user?.token || '';
+
         try {
-            // Cập nhật status thành đã đọc (giả sử 1 là đã đọc)
-            await patchData(`Notifications/${notiId}`, { status: 1 }, user.token);
-            // Reload lại danh sách
-            loadNotifications();
+            const detail = await fetchData(`Notifications/${notiId}`, token);
+
+            if (detail) {
+                setSelectedNotiDetail(detail);
+                setShowNoti(false);
+
+                const targetNoti = notifications.find(n => n.id === notiId);
+
+                // Nếu là thông báo chưa đọc (status = 2) thì cập nhật thành đã đọc (status = 1)
+                if (targetNoti && targetNoti.status === 2) {
+                    await patchData(`Notifications/${notiId}`, { status: 1 }, token);
+
+                    setNotifications(prev =>
+                        prev.map(n => n.id === notiId ? { ...n, status: 1 } : n)
+                    );
+                }
+            }
         } catch (error) {
             console.error('Error updating notification', error);
+            if (error?.status === 401) refreshNewToken(user);
         }
     };
 
     useEffect(() => {
-        const UserSession = localStorage.getItem('user');
-        if (!UserSession) {
-            console.log('/');
-            navigate('/');
-        } else if (user?.roleName == 'Guest') {
-            console.log('Guest');
-        } else if (user?.roleName == 'Student') {
-            console.log('Student');
-        } else if (user?.roleName == 'Instructor') {
-            console.log('Instructor');
-            navigate('/instructor');
-        } else if (user?.roleName == 'Admin') {
-            console.log('Admin');
-            navigate('/admin');
-        }
-
-        (async () => {
-            const token = user?.token || '';
-            const userId = user?.id || '';
-            try {
-                if (userId) {
-                    const result = await fetchData(`User/${userId}`, token);
-                    console.log('result', result);
-
+        if (user?.id) {
+            (async () => {
+                try {
+                    const result = await fetchData(`User/${user.id}`, user.token);
                     setThisUser(result);
-
-                    // Load thông báo khi có user
                     loadNotifications();
+                } catch (error) {
+                    if (error.status === 401) refreshNewToken(user);
                 }
-            } catch (error) {
-                console.error('Error', error);
-                if (error.status == 401) refreshNewToken(user);
-            } finally {
-                // setLoading(false);
-            };
-        })();
+            })();
+        }
     }, [user?.id]);
 
     return (
@@ -202,6 +211,14 @@ export default function UserHeader({
                 </div>
             </div>
 
+            {/* Modal hiển thị chi tiết thông báo */}
+            {selectedNotiDetail && (
+                <NotificationDetailModal
+                    data={selectedNotiDetail}
+                    onClose={() => setSelectedNotiDetail(null)}
+                />
+            )}
+
             {mobileMenuOpen && (
                 <div className='mobile-menu'>
                     {menuItems.map((item, index) => {
@@ -224,5 +241,5 @@ export default function UserHeader({
                 </div>
             )}
         </nav>
-    )
+    );
 }
