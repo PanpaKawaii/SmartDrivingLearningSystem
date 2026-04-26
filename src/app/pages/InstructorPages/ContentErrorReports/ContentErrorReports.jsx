@@ -198,11 +198,11 @@ export default function ContentErrorReports() {
     };
 
     const handleSubmitFeedback = async ({ title, content }) => {
-        if (!selectedReport) return { error: 'Khong tim thay bao cao can xu ly.' };
+        if (!selectedReport) return { error: 'Không tìm thấy báo cáo cần xử lý.' };
 
         const token = user?.token || '';
         if (!token) {
-            return { error: 'Ban can dang nhap Instructor de gui resolve.' };
+            return { error: 'Bạn cần đăng nhập Instructor để thực hiện thao tác này.' };
         }
 
         try {
@@ -212,22 +212,32 @@ export default function ContentErrorReports() {
 
             const result = await patchData(endpoint, { title, content }, token);
 
-            if (result !== true) {
-                return { error: 'He thong khong xac nhan xu ly bao cao thanh cong.' };
+            if (result && result.error) {
+                return { error: result.error };
             }
+
+            setRefresh((current) => current + 1);
+            handleCloseModal();
+            return { ok: true };
+
         } catch (error) {
+            console.error("Lỗi khi xử lý báo cáo nội dung:", error);
+
+            if (error.status === 401 || error.response?.status === 401) {
+                refreshNewToken(user);
+                return { error: 'Phiên làm việc hết hạn, đang làm mới dữ liệu...' };
+            }
+
+            // Xử lý lỗi Validate từ API (như cấu trúc bạn đã viết)
             const apiErrors = error?.payload?.errors;
             if (apiErrors && typeof apiErrors === 'object') {
                 const firstKey = Object.keys(apiErrors)[0];
                 const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
-                return { error: firstMessage || 'Du lieu khong hop le.' };
+                return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
             }
-            return { error: error?.message || 'Xu ly bao cao that bai.' };
-        }
 
-        handleCloseModal();
-        setRefresh((current) => current + 1);
-        return { ok: true };
+            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
+        }
     };
 
 

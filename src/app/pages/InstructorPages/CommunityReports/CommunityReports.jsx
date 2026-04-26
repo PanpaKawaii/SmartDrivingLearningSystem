@@ -190,7 +190,7 @@ export default function CommunityReports() {
 
     const handleSubmitFeedback = async ({ title, content }) => {
         console.log('Submitting feedback with title:', title, 'and content:', content);
-        if (!selectedReport) return { error: 'Khong tim thay bao cao can xu ly.' };
+        if (!selectedReport) return { error: 'Không tìm thấy báo cáo cần xử lý.' };
 
         const token = user?.token || '';
         if (!token) {
@@ -202,24 +202,33 @@ export default function CommunityReports() {
                 ? `Reports/${selectedReport.id}/disapprove`
                 : `Reports/${selectedReport.id}/approve`;
 
-            await patchData(endpoint, { title, content }, token);
-        } catch (error) {
-            if (error.status === 401) {
-                refreshNewToken(user);
-            } else {
-                const apiErrors = error?.payload?.errors;
-                if (apiErrors && typeof apiErrors === 'object') {
-                    const firstKey = Object.keys(apiErrors)[0];
-                    const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
-                    return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
-                }
-                return { error: error?.message || 'Xử lý báo cáo thất bại.' };
-            }
-        }
+            const result = await patchData(endpoint, { title, content }, token);
 
-        setRefresh((current) => current + 1);
-        handleCloseModal();
-        return { ok: true };
+            if (result && result.error) {
+                return { error: result.error };
+            }
+
+            setRefresh((current) => current + 1);
+            handleCloseModal();
+            return { ok: true };
+
+        } catch (error) {
+            console.error("Lỗi khi xử lý báo cáo cộng đồng:", error);
+
+            if (error.status === 401 || error.response?.status === 401) {
+                refreshNewToken(user);
+                return { error: 'Phiên làm việc hết hạn, đang làm mới dữ liệu...' };
+            }
+
+            const apiErrors = error?.payload?.errors;
+            if (apiErrors && typeof apiErrors === 'object') {
+                const firstKey = Object.keys(apiErrors)[0];
+                const firstMessage = Array.isArray(apiErrors[firstKey]) ? apiErrors[firstKey][0] : null;
+                return { error: firstMessage || 'Dữ liệu không hợp lệ.' };
+            }
+
+            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
+        }
     };
 
     const handlePageChange = (page) => {
