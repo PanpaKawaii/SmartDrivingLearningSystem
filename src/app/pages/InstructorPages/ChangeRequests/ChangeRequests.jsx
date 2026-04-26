@@ -146,20 +146,29 @@ export default function ChangeRequests() {
     const handleSubmitFeedback = async ({ title, content }) => {
         if (!selectedReport) return { error: 'Không tìm thấy báo cáo cần xử lý.' };
         const token = user?.token || '';
+
         try {
             const endpoint = actionType === 'disapprove'
                 ? `Reports/${selectedReport.id}/disapprove`
                 : `Reports/${selectedReport.id}/approve`;
 
             const result = await patchData(endpoint, { title, content }, token);
-            if (result !== true) return { error: 'Hệ thống không xác nhận xử lý báo cáo thành công.' };
+
+            if (result && result.error) {
+                return { error: result.error };
+            }
+
+            setRefresh((current) => current + 1);
+            handleCloseModal();
+            return { ok: true };
+
         } catch (error) {
-            // Xử lý lỗi API tương tự cũ
-            return { error: error?.message || 'Xử lý báo cáo thất bại.' };
+            if (error.status === 401) {
+                refreshNewToken(user);
+                return { error: 'Phiên hết hạn, đang thử lại...' };
+            }
+            return { error: error?.message || 'Lỗi xử lý' };
         }
-        setRefresh((current) => current + 1);
-        handleCloseModal();
-        return { ok: true };
     };
 
     const handlePageChange = (page) => {

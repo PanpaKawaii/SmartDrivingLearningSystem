@@ -55,11 +55,13 @@ export default function ReportFeedbackModal({
 
         try {
             const result = await onSubmit({ title: title.trim(), content: content.trim() });
-            console.log('Submit result:', result);
+
             if (result?.error) {
                 setError(result.error);
+                setSubmitting(false); // Quan trọng: chỉ set lại false khi có lỗi để user sửa
             }
-        } finally {
+        } catch (err) {
+            setError("Có lỗi xảy ra ngoài dự kiến.");
             setSubmitting(false);
         }
     };
@@ -70,6 +72,7 @@ export default function ReportFeedbackModal({
             onClose={onClose}
             title={isViewMode ? 'Chi tiết báo cáo' : actionType === 'disapprove' ? 'Bỏ qua báo cáo' : 'Duyệt báo cáo'}
             wide
+            translate="no"
             footer={
                 <>
                     <button className='ins-btn ins-btn-secondary' onClick={onClose} disabled={submitting}>
