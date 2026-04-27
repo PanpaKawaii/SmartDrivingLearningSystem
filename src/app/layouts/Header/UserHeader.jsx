@@ -112,17 +112,43 @@ export default function UserHeader({
     };
 
     useEffect(() => {
-        if (user?.id) {
-            (async () => {
-                try {
-                    const result = await fetchData(`User/${user.id}`, user.token);
-                    setThisUser(result);
-                    loadNotifications();
-                } catch (error) {
-                    if (error.status === 401) refreshNewToken(user);
-                }
-            })();
+        const UserSession = localStorage.getItem('user');
+        if (!UserSession) {
+            console.log('/');
+            navigate('/');
+        } else if (user?.roleName == 'Guest') {
+            console.log('Guest');
+        } else if (user?.roleName == 'Student') {
+            console.log('Student');
+        } else if (user?.roleName == 'Instructor') {
+            console.log('Instructor');
+            navigate('/instructor');
+        } else if (user?.roleName == 'Admin') {
+            console.log('Admin');
+            navigate('/admin');
         }
+
+        (async () => {
+            const token = user?.token || '';
+            const userId = user?.id || '';
+            try {
+                if (userId) {
+                    const result = await fetchData(`User/${userId}`, token);
+                    console.log('result', result);
+
+                    setThisUser(result);
+
+                    loadNotifications();
+
+
+                }
+            } catch (error) {
+                console.error('Error', error);
+                if (error.status == 401) refreshNewToken(user);
+            } finally {
+                // setLoading(false);
+            };
+        })();
     }, [user?.id]);
 
     return (
