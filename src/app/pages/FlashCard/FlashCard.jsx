@@ -19,6 +19,7 @@ export default function FlashCard({
                 setSelectedQuestionId={setSelectedQuestionId}
                 myAnswers={[]}
                 column={4}
+                showSaved={true}
             />
             <FlipCard
                 list={list}

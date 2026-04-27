@@ -150,7 +150,7 @@ export default function QuestionExam() {
                 startTime={startTime}
                 endTime={endTime}
                 setEndTime={setEndTime}
-                duration={ThisExam?.duration * 10000}
+                duration={ThisExam?.duration}
                 passScore={ThisExam?.passScore}
                 isFinish={isFinish}
                 setIsFinish={setIsFinish}

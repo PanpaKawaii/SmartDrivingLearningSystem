@@ -103,14 +103,14 @@
             }
 
             i {
-                margin-left: -8px;
+                margin-left: -6.5px;
                 padding: 2px;
                 font-size: 1.2rem;
                 background-clip: text;
                 background: var(--background);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                filter: drop-shadow(0 0 4px #00000080);
+                filter: drop-shadow(0 0 1px #0f172ab3);
                 position: relative;
 
                 &.fa-circle::after {

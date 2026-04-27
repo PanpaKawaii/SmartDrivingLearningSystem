@@ -18,7 +18,7 @@ export default function UserCreateSituationExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [totalScenarios, setTotalScenarios] = useState(0);
+    const [totalScenarios, setTotalScenarios] = useState(1);
     const [selectedChapters, setSelectedChapters] = useState([
         { chapterId: '', percent: 0 },
     ]);
@@ -26,7 +26,6 @@ export default function UserCreateSituationExam() {
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
     const [generateSuccess, setGenerateSuccess] = useState('');
-    const [generateError, setGenerateError] = useState({ value: '', name: '' });
 
     const [title, setTitle] = useState('Đề thi mô phỏng');
     const [description, setDescription] = useState('Đề thi mô phỏng');

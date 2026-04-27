@@ -18,7 +18,7 @@ export default function UserCreateExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [totalQuestions, setTotalQuestions] = useState(0);
+    const [totalQuestions, setTotalQuestions] = useState(1);
     const [totalParalysis, setTotalParalysis] = useState(0);
     const [selectedLicenseId, setSelectedLicenseId] = useState('');
     const [selectedChapters, setSelectedChapters] = useState([
@@ -28,7 +28,6 @@ export default function UserCreateExam() {
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
     const [generateSuccess, setGenerateSuccess] = useState('');
-    const [generateError, setGenerateError] = useState({ value: '', name: '' });
 
     const [title, setTitle] = useState('Đề thi lý thuyết');
     const [description, setDescription] = useState('Đề thi lý thuyết');
