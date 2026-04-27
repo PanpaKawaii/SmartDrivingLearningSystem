@@ -25,7 +25,8 @@ export default function UserCreateSituationExam() {
     const [randomExam, setRandomExam] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
-    const [saveStatus, setSaveStatus] = useState('');
+    const [generateSuccess, setGenerateSuccess] = useState('');
+    const [generateError, setGenerateError] = useState({ value: '', name: '' });
 
     const [title, setTitle] = useState('Đề thi mô phỏng');
     const [description, setDescription] = useState('Đề thi mô phỏng');
@@ -102,8 +103,16 @@ export default function UserCreateSituationExam() {
     const totalPercent = selectedChapters.reduce((sum, c) => sum + (c.percent || 0), 0);
 
     const handleSaveCustomizedExam = async () => {
-        console.log('handleSaveCustomizedExam');
         console.log('randomExam', randomExam);
+
+        // const Validate = CheckValidation(Email, Name, Phone, Gender, Password, Confirm, Accept);
+        // console.log('Validate: ', Validate);
+        // if (Validate.value != 'OK') {
+        //     console.log('Validation is false');
+        //     setRegisterError(Validate);
+        //     setRegisterSuccess('');
+        //     return;
+        // }
 
         const simulationExams = randomExam.map(re => {
             return {
@@ -129,9 +138,9 @@ export default function UserCreateSituationExam() {
             console.log('result', result);
             // await sleep(2000);
             setIsExamSaved(true);
-            setSaveStatus('success');
+            setGenerateSuccess('success');
         } catch (error) {
-            setSaveStatus('fail');
+            setGenerateSuccess('fail');
             console.error('Error', error);
             setError(error);
             if (error.status == 401) refreshNewToken(user);
@@ -151,7 +160,7 @@ export default function UserCreateSituationExam() {
 
     const createRandomQuestionExam = () => {
         setIsExamSaved(false);
-        setSaveStatus('');
+        setGenerateSuccess('');
 
         const counts = selectedChapters?.map(c => ({
             ...c,
@@ -264,7 +273,7 @@ export default function UserCreateSituationExam() {
                                     min={0}
                                     max={100}
                                     value={item.percent}
-                                    onChange={(e) => handlePercentChange(index, e.target.value)}
+                                    onChange={(e) => handlePercentChange(index, Math.max(0, Math.min(100, e.target.value)))}
                                 />
                                 <label>%</label>
                             </div>
@@ -289,9 +298,9 @@ export default function UserCreateSituationExam() {
                     Tổng: <span>{totalPercent}%</span>
                 </div>
 
-                {saveStatus &&
-                    <div className={`message ${saveStatus == 'success' ? 'success-message' : 'fail-message'}`}>
-                        {saveStatus == 'success' ?
+                {generateSuccess &&
+                    <div className={`message ${generateSuccess == 'success' ? 'success-message' : 'fail-message'}`}>
+                        {generateSuccess == 'success' ?
                             'Lưu đề thành công!'
                             :
                             'Lưu đề thất bại!'
@@ -300,11 +309,12 @@ export default function UserCreateSituationExam() {
                 }
 
                 <div className='btns'>
-                    <button className='btn create-btn' onClick={createRandomQuestionExam} disabled={totalPercent !== 100}>
+                    <button className='btn create-btn' onClick={createRandomQuestionExam} disabled={totalPercent !== 100 || selectedChapters?.some(sc => sc.chapterId == '')}>
                         <span>
                             {randomExam ?
                                 'TẠO LẠI ĐỀ'
-                                : 'BẮT ĐẦU TẠO ĐỀ'
+                                :
+                                'BẮT ĐẦU TẠO ĐỀ'
                             }
                         </span>
                         <i className={`fa-solid fa-${randomExam ? 'arrow-rotate-left' : 'arrow-right'}`} />

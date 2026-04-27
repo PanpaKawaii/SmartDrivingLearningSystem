@@ -26,6 +26,8 @@ export default function ListExam() {
 
     const [EXAMs, setEXAMs] = useState([]);
     const [SITUATIONEXAMs, setSITUATIONEXAMs] = useState([]);
+    const [MYEXAMs, setMYEXAMs] = useState([]);
+    const [MYSITUATIONEXAMs, setMYSITUATIONEXAMs] = useState([]);
     const [EXAMSESSIONs, setEXAMSESSIONs] = useState([]);
     const [SIMULATIONSESSIONs, setSIMULATIONSESSIONs] = useState([]);
     const [refresh, setRefresh] = useState(0);
@@ -90,6 +92,25 @@ export default function ListExam() {
                 console.log('SituationExamResponse', SituationExamResponse);
                 const ExamItems = ExamResponse?.items;
                 const SituationExamItems = SituationExamResponse?.items;
+                setEXAMs(ExamItems);
+                setSITUATIONEXAMs(SituationExamItems);
+
+                if (user && user?.roleName == 'Student') {
+                    const myExamQuery = new URLSearchParams({
+                        page: '1',
+                        pageSize: '500',
+                        userId: user?.id,
+                        status: 2,
+                    });
+                    const MyExamResponse = await fetchData(`Exams?${myExamQuery.toString()}`, token);
+                    const MySituationExamResponse = await fetchData(`SituationExams?${myExamQuery.toString()}`, token);
+                    console.log('MyExamResponse', MyExamResponse);
+                    console.log('MySituationExamResponse', MySituationExamResponse);
+                    const MyExamItems = MyExamResponse?.items;
+                    const MySituationExamItems = MySituationExamResponse?.items;
+                    setMYEXAMs(MyExamItems);
+                    setMYSITUATIONEXAMs(MySituationExamItems);
+                }
 
                 if (user) {
                     const examSessionQuery = new URLSearchParams({
@@ -114,8 +135,6 @@ export default function ListExam() {
                     setSIMULATIONSESSIONs(SimulationSessionItems);
                 }
 
-                setEXAMs(ExamItems);
-                setSITUATIONEXAMs(SituationExamItems);
             } catch (error) {
                 console.error('Error', error);
                 setError(error);
@@ -160,14 +179,16 @@ export default function ListExam() {
                             <i className='fa-solid fa-arrow-rotate-left' />
                         </button>
                     </div>
-                    <div className='mine'>
-                        <button className={`btn ${isMine ? (ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn') : 'off'}`} onClick={() => setIsMine(p => !p)}>
-                            ĐỀ CỦA TÔI
-                        </button>
-                        <button className={`btn ${ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn'}`} onClick={() => setOpenCreate(ExamOrSituation)}>
-                            TẠO BỘ ĐỀ
-                        </button>
-                    </div>
+                    {user && user?.roleName == 'Student' &&
+                        <div className='mine'>
+                            <button className={`btn ${isMine ? (ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn') : 'off'}`} onClick={() => setIsMine(p => !p)}>
+                                ĐỀ CỦA TÔI
+                            </button>
+                            <button className={`btn ${ExamOrSituation == 'exam' ? 'exam exam-btn' : 'situation situation-btn'}`} onClick={() => setOpenCreate(ExamOrSituation)}>
+                                TẠO BỘ ĐỀ
+                            </button>
+                        </div>
+                    }
                 </div>
                 <div className='content'>
                     <div className='left'>
