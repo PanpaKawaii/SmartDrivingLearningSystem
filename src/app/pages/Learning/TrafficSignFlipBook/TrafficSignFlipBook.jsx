@@ -103,7 +103,7 @@ export default function TrafficSignFlipBook() {
         },
         {
             contentHTML: <>
-                <div className='page-item'>
+                <div className='page-item near-first-page'>
                 </div>
             </>
         }
@@ -112,7 +112,7 @@ export default function TrafficSignFlipBook() {
     const lastPages = [
         {
             contentHTML: <>
-                <div className='page-item'>
+                <div className='page-item near-last-page'>
                 </div>
             </>
         },

@@ -28,10 +28,16 @@ export default function FlipBookWrapper({
         <>
             <div className='action-controls'>
                 <div className='btns'>
-                    <button className='btn' onClick={() => setCurrentPage(0)}>
+                    <button className='btn' onClick={() => {
+                        setCurrentPage(0);
+                        setInputPage(0);
+                    }}>
                         <i className='fa-solid fa-angles-left' />
                     </button>
-                    <button className='btn' onClick={() => setCurrentPage(p => Math.max(p - 2, 0))}>
+                    <button className='btn' onClick={() => {
+                        setCurrentPage(p => Math.max(p - 2, 0));
+                        setInputPage(p => Math.max(p - 2, 0));
+                    }}>
                         <i className='fa-solid fa-chevron-left' />
                     </button>
                 </div>
@@ -46,10 +52,16 @@ export default function FlipBookWrapper({
                 </div>
                 {/* <input type='number' value={currentPage || 0} onChange={(e) => setCurrentPage(Math.max(Math.min(e.target.value, pages?.length), 0) || 0)} /> */}
                 <div className='btns'>
-                    <button className='btn' onClick={() => setCurrentPage(p => Math.min(p + 2, pages?.length))}>
+                    <button className='btn' onClick={() => {
+                        setCurrentPage(p => Math.min(p + 2, pages?.length));
+                        setInputPage(p => Math.min(p + 2, pages?.length));
+                    }}>
                         <i className='fa-solid fa-chevron-right' />
                     </button>
-                    <button className='btn' onClick={() => setCurrentPage(pages?.length)}>
+                    <button className='btn' onClick={() => {
+                        setCurrentPage(pages?.length);
+                        setInputPage(pages?.length);
+                    }}>
                         <i className='fa-solid fa-angles-right' />
                     </button>
                 </div>

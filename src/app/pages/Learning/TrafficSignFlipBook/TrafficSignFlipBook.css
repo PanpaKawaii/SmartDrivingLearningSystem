@@ -69,6 +69,11 @@
                 }
             }
 
+            &.near-first-page,
+            &.near-last-page {
+                background-color: #fff6e2;
+            }
+
             .list-signs {
                 padding: 28px 0 0;
                 display: flex;
