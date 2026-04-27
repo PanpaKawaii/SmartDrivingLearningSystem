@@ -1,4 +1,3 @@
-
 import './Page.css';
 
 export default function Page(props) {

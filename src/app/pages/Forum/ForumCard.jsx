@@ -65,6 +65,7 @@ export default function ForumCard({
 
             setRefresh(p => p + 1);
         } catch (error) {
+            if (note !== 'delete') setLocalReactType('');
             console.error('Error', error);
             setError(error);
             if (error.status == 401) refreshNewToken(user);
