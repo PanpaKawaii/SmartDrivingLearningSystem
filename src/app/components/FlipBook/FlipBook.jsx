@@ -7,7 +7,7 @@ const generateSmoothGradient = () => {
     let stops = [];
 
     for (let i = 0; i <= segments; i++) {
-        const color = Math.random() > 0.5 ? '#977859' : '#CCB79B';
+        const color = Math.random() > 0.5 ? '#977859' : '#CCA373';
         const position = i; // %
 
         stops.push(`${color} ${position}%`);
@@ -67,6 +67,15 @@ export default function FlipBook(props) {
                     style={{
                         width: props.space * Math.max(props.currentPage - 1, props.pages.length - props.currentPage - 1),
                         height: props.height,
+                        background: `
+                        linear-gradient(
+                            to bottom,
+                            #5E3320 0% 19%, #8a6037 19.5% 20.5%,
+                            #5E3320 21% 39%, #8a6037 39.5% 40.5%,
+                            #5E3320 41% 59%, #8a6037 59.5% 60.5%,
+                            #5E3320 61% 79%, #8a6037 79.5% 80.5%,
+                            #5E3320 81% 100%
+                        )`,
                         transform: `
                             rotateY(-90deg)
                             translateX(${-props.space * Math.max((props.pages.length + props.currentPage + 1) / 2, (props.currentPage * 1.5 + 0.5))}px)

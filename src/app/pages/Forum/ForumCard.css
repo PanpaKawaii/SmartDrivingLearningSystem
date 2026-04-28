@@ -53,8 +53,9 @@
             display: flex;
             gap: 20px;
 
-            .fa-bookmark {
+            .fa-thumbtack {
                 color: #FFC800;
+                transform: rotateZ(45deg);
             }
         }
     }

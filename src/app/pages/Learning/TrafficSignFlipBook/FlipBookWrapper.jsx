@@ -50,7 +50,6 @@ export default function FlipBookWrapper({
                         labelStyle={'left moving'}
                     />
                 </div>
-                {/* <input type='number' value={currentPage || 0} onChange={(e) => setCurrentPage(Math.max(Math.min(e.target.value, pages?.length), 0) || 0)} /> */}
                 <div className='btns'>
                     <button className='btn' onClick={() => {
                         setCurrentPage(p => Math.min(p + 2, pages?.length));
@@ -86,7 +85,7 @@ export default function FlipBookWrapper({
                                 color={'#FAEBC9'}
                                 // color={`hsl(${(360 / pages.length) * i}, 97%, 70%)`}
                                 opacity={((i >= (currentPage % 2 == 0 ? currentPage : currentPage + 1) - 6 && i <= (currentPage % 2 == 0 ? currentPage : currentPage + 1) + 2) || i <= 1 || i >= pages.length - 2) ? 1 : 0}
-                            // opacity={0.5}
+                                // opacity={0.5}
                             >
                                 {p.contentHTML}
                             </Page>

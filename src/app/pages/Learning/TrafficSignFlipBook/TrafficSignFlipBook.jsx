@@ -125,7 +125,6 @@ export default function TrafficSignFlipBook() {
     ];
 
     const pages = [...firstPages, ...list, ...lastPages];
-    // const pages = [...firstPages];
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
     if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>

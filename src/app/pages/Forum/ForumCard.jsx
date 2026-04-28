@@ -159,7 +159,7 @@ export default function ForumCard({
                 <div className='pin-ellipsis'>
                     {post.status == 5 &&
                         <div>
-                            <i className='fa-solid fa-bookmark' />
+                            <i className='fa-solid fa-thumbtack' />
                         </div>
                     }
                     {user &&
