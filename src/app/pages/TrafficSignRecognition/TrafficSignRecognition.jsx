@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { uploadMedia, fetchRoboflowData } from '../../../mocks/CallingAPI';
 import StarsBackground from '../../components/StarsBackground/StarsBackground';
 import CloudsBackground from '../../components/CloudsBackground/CloudsBackground';
@@ -7,12 +8,14 @@ import TrafficLight from '../../components/TrafficLight/TrafficLight';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
 import DetectionResults from './components/DetectionResults/DetectionResults';
 import UploadSection from './components/UploadSection/UploadSection';
+import PopupContainer from '../../components/PopupContainer/PopupContainer';
 
 
 import './TrafficSignRecognition.css';
 
 export default function TrafficSignRecognition() {
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const [previewUrl, setPreviewUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -20,6 +23,7 @@ export default function TrafficSignRecognition() {
     const [responseRoboflow, setResponseRoboflow] = useState(null);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(0);
+    const [showLoginPopup, setShowLoginPopup] = useState(false);
 
     const handleImageChange = ({ file, preview }) => {
         if (!file) {
@@ -58,7 +62,13 @@ export default function TrafficSignRecognition() {
                 setResponseRoboflow(data);
             } catch (err) {
                 console.error('Recognition error:', err);
-                setError(err.message || 'Đã có lỗi xảy ra khi nhận diện');
+                // Xử lý lỗi 401 (Unauthorized)
+                if (err.status === 401 || err.message?.includes('Unauthorized')) {
+                    setShowLoginPopup(true);
+                    setError(null);
+                } else {
+                    setError(err.message || 'Đã có lỗi xảy ra khi nhận diện');
+                }
             } finally {
                 setLoading(false);
             }
@@ -157,6 +167,63 @@ export default function TrafficSignRecognition() {
                     </p>
                 </div>
             </div>
+
+            {showLoginPopup && (
+                <PopupContainer
+                    titleName='Yêu cầu đăng nhập'
+                    onClose={() => setShowLoginPopup(false)}
+                >
+                    <div style={{ padding: '20px', textAlign: 'center' }}>
+                        <div style={{ marginBottom: '20px', fontSize: '48px', color: '#faad14' }}>
+                            <i className='fa-solid fa-lock' />
+                        </div>
+                        <p style={{ fontSize: '16px', marginBottom: '15px', color: '#333' }}>
+                            Bạn cần phải <strong>đăng nhập</strong> để sử dụng tính năng nhận diện biển báo.
+                        </p>
+                        <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
+                            Vui lòng đăng nhập vào tài khoản của bạn để tiếp tục.
+                        </p>
+                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <button
+                                onClick={() => {
+                                    setShowLoginPopup(false);
+                                    navigate('/', { state: { openLogin: 'true' } });
+                                }}
+                                style={{
+                                    padding: '10px 24px',
+                                    backgroundColor: '#1890ff',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '14px',
+                                    fontWeight: 600
+                                }}
+                                onMouseOver={(e) => e.target.style.backgroundColor = '#0050b3'}
+                                onMouseOut={(e) => e.target.style.backgroundColor = '#1890ff'}
+                            >
+                                Đăng nhập ngay
+                            </button>
+                            <button
+                                onClick={() => setShowLoginPopup(false)}
+                                style={{
+                                    padding: '10px 24px',
+                                    backgroundColor: '#f5f5f5',
+                                    color: '#333',
+                                    border: '1px solid #d9d9d9',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '14px'
+                                }}
+                                onMouseOver={(e) => e.target.style.backgroundColor = '#e6e6e6'}
+                                onMouseOut={(e) => e.target.style.backgroundColor = '#f5f5f5'}
+                            >
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </PopupContainer>
+            )}
         </div>
     );
 }
