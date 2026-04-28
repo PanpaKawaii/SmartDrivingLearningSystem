@@ -89,6 +89,8 @@ export default function Membership() {
         { name: 'Trao đổi trên diễn đàn', role: 'Student' },
         { name: 'AI giải thích biển báo thông qua hình ảnh', role: 'Student' },
         { name: 'Lộ trình học cá nhân hóa', role: 'Student' },
+        { name: 'Tạo đề thi lý thuyết random cho bản thân', role: 'Student' },
+        { name: 'Tạo đề thi mô phỏng random cho bản thân', role: 'Student' },
     ];
 
     if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
