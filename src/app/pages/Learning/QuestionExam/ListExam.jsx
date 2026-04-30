@@ -47,8 +47,8 @@ export default function ListExam() {
     const [openCreate, setOpenCreate] = useState('');
 
     const selectedExam = ExamOrSituation == 'exam' ?
-        EXAMs.find(e => e.id == selectedId)
-        : SITUATIONEXAMs.find(e => e.id == selectedId);
+        (isMine ? MYEXAMs : EXAMs).find(e => e.id == selectedId)
+        : (isMine ? MYSITUATIONEXAMs : SITUATIONEXAMs).find(e => e.id == selectedId);
 
     useEffect(() => {
         (async () => {
@@ -148,7 +148,7 @@ export default function ListExam() {
     // console.log('EXAMs', EXAMs);
     // console.log('SITUATIONEXAMs', SITUATIONEXAMs);
 
-    const filteredExams = (ExamOrSituation == 'exam' ? EXAMs : SITUATIONEXAMs)?.filter(exam => {
+    const filteredExams = (ExamOrSituation == 'exam' ? (isMine ? MYEXAMs : EXAMs) : (isMine ? MYSITUATIONEXAMs : SITUATIONEXAMs))?.filter(exam => {
         const matchTitleDescription = !textInput || exam.title?.toLowerCase().includes(textInput.toLowerCase()) || exam.description?.toLowerCase().includes(textInput.toLowerCase());
         return matchTitleDescription;
     });
@@ -228,7 +228,12 @@ export default function ListExam() {
                                                     </div>
                                                 </td>
                                                 <td>{numberLength}</td>
-                                                <td>{((exam.duration / 60) || 0).toFixed(0)} phút</td>
+                                                <td>
+                                                    {exam.duration < 60 ?
+                                                        `${(exam.duration || 0).toFixed(0)} giây`
+                                                        : `${((exam.duration / 60) || 0).toFixed(0)} phút`
+                                                    }
+                                                </td>
                                                 <td>{exam.passScore}%</td>
                                                 <td><i className='fa-solid fa-chevron-right' /></td>
                                             </tr>

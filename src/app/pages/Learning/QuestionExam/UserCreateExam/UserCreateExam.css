@@ -41,6 +41,26 @@
                     &.form-flex-3 {
                         flex: 3;
                     }
+
+                    &.no-value {
+                        .moving-label-input-container {
+                            label {
+                                color: #ef4444;
+                            }
+                        }
+
+                        .style-label-select-container {
+                            select {
+                                color: #ef4444;
+                                border-color: #ef4444;
+                            }
+
+                            label {
+                                color: #ef4444;
+                                box-shadow: inset 1.8px 1.8px 0px #ef4444;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -105,6 +125,16 @@
                         width: fit-content;
                         color: var(--text-secondary);
                         font-weight: bold;
+                    }
+
+                    &.no-value {
+
+                        select,
+                        input,
+                        label {
+                            color: #ef4444;
+                            border-color: #ef4444;
+                        }
                     }
                 }
             }

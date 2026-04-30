@@ -284,6 +284,7 @@ export default function CoreLearning({
                     setSelectedQuestionId={setSelectedQuestionId}
                     myAnswers={myAnswers}
                     column={grid}
+                    showSaved={!disableAfterAnswer}
                 />
                 {selectedQuestion && (
                     <div className='question-card'>

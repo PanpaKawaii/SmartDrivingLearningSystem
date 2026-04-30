@@ -9,6 +9,7 @@ export default function ListGridButton({
     setSelectedQuestionId = () => { },
     myAnswers = [],
     column = 1,
+    showSaved = false,
 }) {
     const [toggle, setToggle] = useState(0);
 
@@ -42,10 +43,12 @@ export default function ListGridButton({
 
     return (
         <div className='list-grid-button-container' style={{ '--column': column }}>
-            <div className='toggle-btns'>
-                <button className={`btn ${toggle == 0 ? '' : 'off'}`} onClick={() => setToggle(0)}>ALL</button>
-                <button className={`btn ${toggle == 1 ? '' : 'off'}`} onClick={() => setToggle(1)}>SAVED</button>
-            </div>
+            {showSaved &&
+                <div className='toggle-btns'>
+                    <button className={`btn ${toggle == 0 ? '' : 'off'}`} onClick={() => setToggle(0)}>Tất cả</button>
+                    <button className={`btn ${toggle == 1 ? '' : 'off'}`} onClick={() => setToggle(1)}>Đã lưu</button>
+                </div>
+            }
             <div className='list-grid'>
                 {list.map((question, bIndex) => {
                     return (toggle == 0 || toggle == 1 && mark.includes(question.id)) && (

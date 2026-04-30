@@ -1,236 +1,137 @@
-import React, { useState } from 'react';
-import FlipBook from '../../../components/FlipBook/FlipBook';
-import Page from '../../../components/FlipBook/Page';
+import { useEffect, useState } from 'react';
+import { fetchData } from '../../../../mocks/CallingAPI';
+import DefaultAvatar from '../../../assets/DefaultAvatar.png';
+import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
+import SimpleBackground from '../../../components/SimpleBackground/SimpleBackground';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
+import { useAuth } from '../../../hooks/AuthContext/AuthContext';
+import FlipBookWrapper from './FlipBookWrapper';
 
 import './TrafficSignFlipBook.css';
 
 export default function TrafficSignFlipBook() {
-    const [currentPage, setCurrentPage] = useState(0);
+    const { user, refreshNewToken } = useAuth();
 
-    const pages = [
-        { index1: 1, index2: 1, title: 'BOOK', content: 'Made by Trieu', },
-        { index1: 1, index2: 1, title: '', content: '', },
-        // { index1: 1, index2: 1, title: 'Hello', content: 'Nice to meet you!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        { index1: 1, index2: 2, title: 'Chapter 1', content: 'This is content of chapter 1!', },
-        { index1: 1, index2: 2, title: 'Chapter 2', content: 'This is content of chapter 2!', },
-        { index1: 1, index2: 2, title: 'Chapter 3', content: 'This is content of chapter 3!', },
-        { index1: 1, index2: 2, title: 'Chapter 4', content: 'This is content of chapter 4!', },
-        { index1: 1, index2: 2, title: 'Chapter 5', content: 'This is content of chapter 5!', },
-        { index1: 1, index2: 2, title: 'Chapter 6', content: 'This is content of chapter 6!', },
-        { index1: 1, index2: 2, title: 'Chapter 7', content: 'This is content of chapter 7!', },
-        { index1: 1, index2: 2, title: 'Chapter 8', content: 'This is content of chapter 8!', },
-        { index1: 1, index2: 2, title: 'Chapter 9', content: 'This is content of chapter 9!', },
-        { index1: 1, index2: 2, title: 'Chapter 10', content: 'This is content of chapter 10!', },
-        // { index1: 1, index2: 2, title: 'End', content: 'See you again!', },
-        { index1: 1, index2: 2, title: '', content: '', },
-        { index1: 1, index2: 2, title: 'THANK YOU', content: 'Thanks for reading!', },
-    ];
+    const [TRAFFICSIGNs, setTRAFFICSIGNs] = useState([]);
+    const [SIGNCATEGORIes, setSIGNCATEGORIes] = useState([]);
+    const [refresh, setRefresh] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const book = {
-        width: 500,
-        height: 600,
-        space: 1,
+    useEffect(() => {
+        fetchDataTrafficSign();
+    }, [refresh, user?.token]);
+
+    const fetchDataTrafficSign = async () => {
+        setError(null);
+        setLoading(true);
+        const token = user?.token || '';
+        try {
+            const trafficSignQuery = new URLSearchParams({
+                page: 1,
+                pageSize: 1000,
+                status: 1,
+            });
+            const signCategoryQuery = new URLSearchParams({
+                status: 1,
+            });
+            const TrafficSignResponse = await fetchData(`TrafficSigns?${trafficSignQuery.toString()}`, token);
+            const SignCategoryResponse = await fetchData(`SignCategories/all?${signCategoryQuery.toString()}`, token);
+            console.log('TrafficSignResponse', TrafficSignResponse);
+            console.log('SignCategoryResponse', SignCategoryResponse);
+            const TrafficSignItems = TrafficSignResponse?.items;
+
+            setTRAFFICSIGNs(TrafficSignItems);
+            setSIGNCATEGORIes(SignCategoryResponse);
+        } catch (error) {
+            console.error('Error', error);
+            setError(error);
+            if (error.status == 401) refreshNewToken(user);
+        } finally {
+            setLoading(false);
+        }
     };
 
+    const list = [...Array(Math.ceil(TRAFFICSIGNs.length / 4))].map((_, i) => {
+        return {
+            contentHTML: <>
+                <div
+                    key={i}
+                    className='page-item'
+                >
+                    <div className='list-signs'>
+                        {[...Array(4)].map((_, j) => {
+                            const sign = TRAFFICSIGNs?.[i * 4 + j] || null;
+                            return sign && (
+                                <div
+                                    key={j}
+                                    className='sign-card'
+                                >
+                                    <div className='sign-image'>
+                                        <img src={sign.image || DefaultAvatar} alt={sign.name} />
+                                    </div>
+                                    <div className='sign-information'>
+                                        <h2>{i * 4 + j + 1}. {sign.name}</h2>
+                                        <p><span>- Mô tả: </span>{sign.description}</p>
+                                        <p><span>- Phân loại: </span>{sign.signCategory?.name}</p>
+                                        <p><span>- Mã: </span>{sign.code}</p>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className={`page-number ${i % 2 == 0 ? 'page-odd' : 'page-even'}`}>{i + 2}</div>
+                </div>
+            </>,
+        }
+    });
+
+    const firstPages = [
+        {
+            contentHTML: <>
+                <div className='page-item first-page'>
+                    <div className='first-page-content'>
+                        <h1>
+                            TỪ ĐIỂN
+                        </h1>
+                        <p>
+                            Các loại biển báo
+                        </p>
+                    </div>
+                </div>
+            </>
+        },
+        {
+            contentHTML: <>
+                <div className='page-item near-first-page'>
+                </div>
+            </>
+        }
+    ];
+
+    const lastPages = [
+        {
+            contentHTML: <>
+                <div className='page-item near-last-page'>
+                </div>
+            </>
+        },
+        {
+            contentHTML: <>
+                <div className='page-item last-page'>
+                </div>
+            </>
+        }
+    ];
+
+    const pages = [...firstPages, ...list, ...lastPages];
+
+    if (loading) return <div><CloudsBackground /><TrafficLight text={'loading'} setRefresh={() => { }} /></div>
+    if (error) return <div><CloudsBackground /><TrafficLight text={'error'} status={error?.status} setRefresh={setRefresh} /></div>
     return (
         <div className='traffic-sign-flip-book-container container'>
-            {/* <input type='number' value={currentPage || 0} onChange={(e) => setCurrentPage(Math.max(Math.min(e.target.value, pages?.length), 0) || 0)} /> */}
-            <button className='btn' onClick={() => setCurrentPage(p => Math.max(p - 2, 0))}>
-                <i className='fa-solid fa-chevron-left' />
-            </button>
-            <FlipBook
-                pages={pages}
-                width={book.width}
-                height={book.height}
-                space={book.space}
-                currentPage={currentPage}
-            >
-                {pages.map((p, i) =>
-                    <React.Fragment key={i}>
-                        <Page
-                            pages={pages}
-                            width={book.width}
-                            height={book.height}
-                            space={book.space}
-                            currentPage={currentPage}
-                            index={i + 1}
-                            color={`hsl(${(360 / pages.length) * i}, 97%, 70%)`}
-                            opacity={((i >= currentPage - 6 && i <= currentPage + 2) || i <= 1 || i >= pages.length - 2) ? 1 : 0}
-                            // opacity={1}
-                        >
-                            <div>
-                                <h1>{p.title}</h1>
-                                <p>{p.content}</p>
-                                <div>{p.title ? `Page: ${i + 1}` : ''}</div>
-                            </div>
-                        </Page>
-                    </React.Fragment>
-                )}
-                {/* {pages.map((p, i) => (
-                    <React.Fragment key={i}>
-                        <Page
-                            pages={pages}
-                            width={book.width}
-                            height={book.height}
-                            space={book.space}
-                            currentPage={0}
-                            index={i + 1}
-                            color={`hsla(${(360 / pages.length) * i}, 97%, 70%, 0.3)`}
-                            // opacity={((i >= currentPage - 3 && i <= currentPage + 2) || i <= 1 || i >= pages.length - 2) ? 1 : 0}
-                            opacity={1}
-                        >
-                            <div>
-                                <h1>{p.title}</h1>
-                                <p>{p.content}</p>
-                                <div>{p.title ? `Page: ${i + 1}` : ''}</div>
-                            </div>
-                        </Page>
-                    </React.Fragment>
-                ))} */}
-            </FlipBook>
-            <button className='btn' onClick={() => setCurrentPage(p => Math.min(p + 2, pages?.length))}>
-                <i className='fa-solid fa-chevron-right' />
-            </button>
+            <SimpleBackground />
+            <FlipBookWrapper pages={pages} />
         </div>
     )
 }

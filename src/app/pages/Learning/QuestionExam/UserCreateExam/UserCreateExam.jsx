@@ -18,7 +18,7 @@ export default function UserCreateExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [totalQuestions, setTotalQuestions] = useState(0);
+    const [totalQuestions, setTotalQuestions] = useState(1);
     const [totalParalysis, setTotalParalysis] = useState(0);
     const [selectedLicenseId, setSelectedLicenseId] = useState('');
     const [selectedChapters, setSelectedChapters] = useState([
@@ -28,7 +28,6 @@ export default function UserCreateExam() {
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
     const [generateSuccess, setGenerateSuccess] = useState('');
-    const [generateError, setGenerateError] = useState({ value: '', name: '' });
 
     const [title, setTitle] = useState('Đề thi lý thuyết');
     const [description, setDescription] = useState('Đề thi lý thuyết');
@@ -138,15 +137,6 @@ export default function UserCreateExam() {
     const handleSaveCustomizedExam = async () => {
         console.log('randomExam', randomExam);
 
-        // const Validate = CheckValidation(Email, Name, Phone, Gender, Password, Confirm, Accept);
-        // console.log('Validate: ', Validate);
-        // if (Validate.value != 'OK') {
-        //     console.log('Validation is false');
-        //     setRegisterError(Validate);
-        //     setRegisterSuccess('');
-        //     return;
-        // }
-
         const examQuestions = randomExam.map(re => {
             return {
                 questionId: re.id,
@@ -235,7 +225,7 @@ export default function UserCreateExam() {
             <div className='create-content'>
                 <div className='input-select-wrapper'>
                     <div className='row-input-select'>
-                        <div className='form-group'>
+                        <div className={`form-group ${title ? '' : 'no-value'}`}>
                             <MovingLabelInput
                                 type={'text'}
                                 value={title}
@@ -244,7 +234,7 @@ export default function UserCreateExam() {
                                 labelStyle={'left moving'}
                             />
                         </div>
-                        <div className='form-group form-flex-2'>
+                        <div className={`form-group form-flex-2 ${description ? '' : 'no-value'}`}>
                             <MovingLabelInput
                                 type={'text'}
                                 value={description}
@@ -258,8 +248,8 @@ export default function UserCreateExam() {
                         <div className='form-group'>
                             <MovingLabelInput
                                 type={'text'}
-                                value={totalQuestions ?? ''}
-                                onValueChange={(propE) => setTotalQuestions(Number(propE) || 0)}
+                                value={totalQuestions ?? 0}
+                                onValueChange={(propE) => setTotalQuestions(Math.max(1, Math.min(600, Number(propE))) || 0)}
                                 label={'Tổng số câu hỏi'}
                                 labelStyle={'left moving'}
                             />
@@ -267,15 +257,15 @@ export default function UserCreateExam() {
                         <div className='form-group'>
                             <MovingLabelInput
                                 type={'text'}
-                                value={passScore ?? ''}
-                                onValueChange={(propE) => setPassScore(Number(propE) || 0)}
+                                value={passScore ?? 0}
+                                onValueChange={(propE) => setPassScore(Math.max(0, Math.min(100, Number(propE))) || 0)}
                                 label={'Điều kiện đậu (%)'}
                                 labelStyle={'left moving'}
                             />
                         </div>
                     </div>
                     <div className='row-input-select'>
-                        <div className='form-group form-flex-2'>
+                        <div className={`form-group form-flex-2 ${selectedLicenseId ? '' : 'no-value'}`}>
                             <StyleLabelSelect
                                 id={`select-license`}
                                 list={DRIVINGLICENSEs}
@@ -291,8 +281,8 @@ export default function UserCreateExam() {
                         <div className='form-group form-flex-2'>
                             <MovingLabelInput
                                 type={'text'}
-                                value={totalParalysis ?? ''}
-                                onValueChange={(propE) => setTotalParalysis(Number(propE) || 0)}
+                                value={totalParalysis ?? 0}
+                                onValueChange={(propE) => setTotalParalysis(Math.max(0, Math.min(totalQuestions, Number(propE))) || 0)}
                                 label={'Tổng số câu liệt'}
                                 labelStyle={'left moving'}
                             />
@@ -300,8 +290,8 @@ export default function UserCreateExam() {
                         <div className='form-group form-flex-3'>
                             <MovingLabelInput
                                 type={'text'}
-                                value={duration ?? ''}
-                                onValueChange={(propE) => setDuration(Number(propE) || 0)}
+                                value={duration ?? 0}
+                                onValueChange={(propE) => setDuration(Math.max(1, Math.min(3600, Number(propE))) || 0)}
                                 label={'Thời gian giới hạn (Giây)'}
                                 labelStyle={'left moving'}
                             />
@@ -313,7 +303,7 @@ export default function UserCreateExam() {
                     <h2>Chọn danh sách chương</h2>
                     {selectedChapters.map((item, index) => (
                         <div key={index} className='chapter-item'>
-                            <div className='form-group'>
+                            <div className={`form-group ${item.chapterId == '' ? 'no-value' : ''}`}>
                                 <select
                                     value={item.chapterId}
                                     onChange={(e) => handleChapterChange(index, e.target.value)}
@@ -333,7 +323,7 @@ export default function UserCreateExam() {
                                     ))}
                                 </select>
                             </div>
-                            <div className='form-group form-group-input'>
+                            <div className={`form-group form-group-input ${item.percent == 0 ? 'no-value' : ''}`}>
                                 <input
                                     type='number'
                                     min={0}
@@ -375,7 +365,14 @@ export default function UserCreateExam() {
                 }
 
                 <div className='btns'>
-                    <button className='btn create-btn' onClick={createRandomQuestionExam} disabled={totalPercent !== 100 || selectedChapters?.some(sc => sc.chapterId == '')}>
+                    <button
+                        className='btn create-btn'
+                        onClick={createRandomQuestionExam}
+                        disabled={
+                            totalPercent !== 100
+                            || selectedChapters?.some(sc => sc.chapterId == '' || sc.percent == 0)
+                        }
+                    >
                         <span>
                             {randomExam ?
                                 'TẠO LẠI ĐỀ'

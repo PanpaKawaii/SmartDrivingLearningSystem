@@ -1,4 +1,3 @@
-
 import './Page.css';
 
 export default function Page(props) {
@@ -15,6 +14,7 @@ export default function Page(props) {
                 opacity: props.opacity,
                 zIndex: -props.index,
                 backgroundColor: props.color,
+                boxShadow: `inset ${position == 'right' ? '-' : ''}4px 0 40px 4px #977859bb`,
                 // backgroundColor: (props.index >= props.currentPage - 2 && props.index <= props.currentPage + 3) ? 'lime' : 'gray',
                 // transform: `
                 //     rotateY(${isFlipped ? (position == 'left' ? -180 : 0) : (position == 'right' ? 180 : 0)}deg)

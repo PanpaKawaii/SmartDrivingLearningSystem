@@ -1,12 +1,28 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import './FlipBook.css';
+
+const generateSmoothGradient = () => {
+    const segments = 100;
+    let stops = [];
+
+    for (let i = 0; i <= segments; i++) {
+        const color = Math.random() > 0.5 ? '#977859' : '#CCA373';
+        const position = i; // %
+
+        stops.push(`${color} ${position}%`);
+    }
+
+    return `linear-gradient(to bottom, ${stops.join(',')})`;
+};
 
 export default function FlipBook(props) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
     const rotation = useRef({ x: 0, y: 0 });
+
+    const [background] = useState(() => generateSmoothGradient());
 
     const applyRotation = () => {
         const { x, y } = rotation.current;
@@ -51,6 +67,15 @@ export default function FlipBook(props) {
                     style={{
                         width: props.space * Math.max(props.currentPage - 1, props.pages.length - props.currentPage - 1),
                         height: props.height,
+                        background: `
+                        linear-gradient(
+                            to bottom,
+                            #5E3320 0% 19%, #8a6037 19.5% 20.5%,
+                            #5E3320 21% 39%, #8a6037 39.5% 40.5%,
+                            #5E3320 41% 59%, #8a6037 59.5% 60.5%,
+                            #5E3320 61% 79%, #8a6037 79.5% 80.5%,
+                            #5E3320 81% 100%
+                        )`,
                         transform: `
                             rotateY(-90deg)
                             translateX(${-props.space * Math.max((props.pages.length + props.currentPage + 1) / 2, (props.currentPage * 1.5 + 0.5))}px)
@@ -63,6 +88,7 @@ export default function FlipBook(props) {
                     style={{
                         width: props.width,
                         height: props.space * Math.max(0, props.pages.length - props.currentPage - 1),
+                        background: background.replace('to bottom', 'to top'),
                         // transform: `
                         //     rotateX(90deg)
                         //     rotateZ(90deg)
@@ -85,6 +111,7 @@ export default function FlipBook(props) {
                     style={{
                         width: props.width,
                         height: props.space * Math.max(0, props.pages.length - props.currentPage - 1),
+                        background: background,
                         transform: `
                             rotateX(-90deg)
                             translateZ(${props.height / 2}px)
@@ -100,6 +127,7 @@ export default function FlipBook(props) {
                     style={{
                         width: props.space * Math.max(0, props.pages.length - props.currentPage - 1),
                         height: props.height,
+                        background: background.replace('to bottom', 'to right'),
                         transform: `
                             translateZ(${-props.space * Math.max((props.pages.length + props.currentPage + 1), (props.currentPage * 2 + 2)) / 2}px)
                             rotateY(${props.currentPage == props.pages.length ? -90 : 90}deg)
@@ -113,6 +141,7 @@ export default function FlipBook(props) {
                     style={{
                         width: props.width,
                         height: props.space * Math.max(0, props.currentPage - 1),
+                        background: background,
                         // transform: `
                         //     rotateX(90deg)
                         //     rotateZ(90deg)
@@ -135,6 +164,7 @@ export default function FlipBook(props) {
                     style={{
                         width: props.width,
                         height: props.space * Math.max(0, props.currentPage - 1),
+                        background: background.replace('to bottom', 'to top'),
                         transform: `
                             rotateX(-90deg)
                             translateZ(${props.height / 2}px)
@@ -150,6 +180,7 @@ export default function FlipBook(props) {
                     style={{
                         width: props.space * Math.max(0, props.currentPage - 1),
                         height: props.height,
+                        background: background.replace('to bottom', 'to right'),
                         transform: `
                             translateZ(${-props.space * Math.max(1, (props.currentPage) * 1.5 + 0.5)}px)
                             rotateY(${props.currentPage == 0 ? 90 : -90}deg)

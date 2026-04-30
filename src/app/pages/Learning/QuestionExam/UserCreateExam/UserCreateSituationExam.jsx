@@ -18,7 +18,7 @@ export default function UserCreateSituationExam() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [totalScenarios, setTotalScenarios] = useState(0);
+    const [totalScenarios, setTotalScenarios] = useState(1);
     const [selectedChapters, setSelectedChapters] = useState([
         { chapterId: '', percent: 0 },
     ]);
@@ -26,7 +26,6 @@ export default function UserCreateSituationExam() {
     const [showResult, setShowResult] = useState(false);
     const [isExamSaved, setIsExamSaved] = useState(false);
     const [generateSuccess, setGenerateSuccess] = useState('');
-    const [generateError, setGenerateError] = useState({ value: '', name: '' });
 
     const [title, setTitle] = useState('Đề thi mô phỏng');
     const [description, setDescription] = useState('Đề thi mô phỏng');
@@ -104,15 +103,6 @@ export default function UserCreateSituationExam() {
 
     const handleSaveCustomizedExam = async () => {
         console.log('randomExam', randomExam);
-
-        // const Validate = CheckValidation(Email, Name, Phone, Gender, Password, Confirm, Accept);
-        // console.log('Validate: ', Validate);
-        // if (Validate.value != 'OK') {
-        //     console.log('Validation is false');
-        //     setRegisterError(Validate);
-        //     setRegisterSuccess('');
-        //     return;
-        // }
 
         const simulationExams = randomExam.map(re => {
             return {
@@ -202,7 +192,7 @@ export default function UserCreateSituationExam() {
             <div className='create-content'>
                 <div className='input-select-wrapper'>
                     <div className='row-input-select'>
-                        <div className='form-group'>
+                        <div className={`form-group ${title ? '' : 'no-value'}`}>
                             <MovingLabelInput
                                 type={'text'}
                                 value={title}
@@ -211,7 +201,7 @@ export default function UserCreateSituationExam() {
                                 labelStyle={'left moving'}
                             />
                         </div>
-                        <div className='form-group form-flex-2'>
+                        <div className={`form-group form-flex-2 ${description ? '' : 'no-value'}`}>
                             <MovingLabelInput
                                 type={'text'}
                                 value={description}
@@ -225,8 +215,8 @@ export default function UserCreateSituationExam() {
                         <div className='form-group'>
                             <MovingLabelInput
                                 type={'text'}
-                                value={totalScenarios ?? ''}
-                                onValueChange={(propE) => setTotalScenarios(Number(propE) || 0)}
+                                value={totalScenarios ?? 0}
+                                onValueChange={(propE) => setTotalScenarios(Math.max(1, Math.min(120, Number(propE))) || 0)}
                                 label={'Tổng số kịch bản'}
                                 labelStyle={'left moving'}
                             />
@@ -234,8 +224,8 @@ export default function UserCreateSituationExam() {
                         <div className='form-group'>
                             <MovingLabelInput
                                 type={'text'}
-                                value={passScore ?? ''}
-                                onValueChange={(propE) => setPassScore(Number(propE) || 0)}
+                                value={passScore ?? 0}
+                                onValueChange={(propE) => setPassScore(Math.max(0, Math.min(100, Number(propE))) || 0)}
                                 label={'Điều kiện đậu (%)'}
                                 labelStyle={'left moving'}
                             />
@@ -247,7 +237,7 @@ export default function UserCreateSituationExam() {
                     <h2>Chọn danh sách chương</h2>
                     {selectedChapters.map((item, index) => (
                         <div key={index} className='chapter-item'>
-                            <div className='form-group'>
+                            <div className={`form-group ${item.chapterId == '' ? 'no-value' : ''}`}>
                                 <select
                                     value={item.chapterId}
                                     onChange={(e) => handleChapterChange(index, e.target.value)}
@@ -267,7 +257,7 @@ export default function UserCreateSituationExam() {
                                     ))}
                                 </select>
                             </div>
-                            <div className='form-group form-group-input'>
+                            <div className={`form-group form-group-input ${item.percent == 0 ? 'no-value' : ''}`}>
                                 <input
                                     type='number'
                                     min={0}
@@ -309,7 +299,14 @@ export default function UserCreateSituationExam() {
                 }
 
                 <div className='btns'>
-                    <button className='btn create-btn' onClick={createRandomQuestionExam} disabled={totalPercent !== 100 || selectedChapters?.some(sc => sc.chapterId == '')}>
+                    <button
+                        className='btn create-btn'
+                        onClick={createRandomQuestionExam}
+                        disabled={
+                            totalPercent !== 100
+                            || selectedChapters?.some(sc => sc.chapterId == '' || sc.percent == 0)
+                        }
+                    >
                         <span>
                             {randomExam ?
                                 'TẠO LẠI ĐỀ'

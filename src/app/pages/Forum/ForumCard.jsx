@@ -65,6 +65,7 @@ export default function ForumCard({
 
             setRefresh(p => p + 1);
         } catch (error) {
+            if (note !== 'delete') setLocalReactType('');
             console.error('Error', error);
             setError(error);
             if (error.status == 401) refreshNewToken(user);
@@ -158,7 +159,7 @@ export default function ForumCard({
                 <div className='pin-ellipsis'>
                     {post.status == 5 &&
                         <div>
-                            <i className='fa-solid fa-bookmark' />
+                            <i className='fa-solid fa-thumbtack' />
                         </div>
                     }
                     {user &&
