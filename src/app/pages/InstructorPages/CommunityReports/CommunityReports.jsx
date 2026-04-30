@@ -109,7 +109,7 @@ export default function CommunityReports() {
                     query.set('reportCategoryId', filters.reportCategoryId);
                 }
 
-                const res = await fetchData(`Reports?${query.toString()}&reportCategoryIds=337093eb-b4c4-4efb-83a5-72a0f1e3ee14&reportCategoryIds=9cf4bdbe-1b3e-4f1a-9ebf-320ad4769dad`, token);
+                const res = await fetchData(`Reports?${query.toString()}&hasForumPost=true&hasForumComment=true`, token);
                 console.log('Fetched reports data:', res);
                 const communityReports = normalizeItems(res).filter((report) => Boolean(report?.forumPostId || report?.forumCommentId));
 
