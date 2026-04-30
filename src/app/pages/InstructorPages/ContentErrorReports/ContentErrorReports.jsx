@@ -99,7 +99,7 @@ export default function ContentErrorReports() {
                     query.set('reportCategoryId', filters.reportCategoryId);
                 }
 
-                const res = await fetchData(`Reports?${query.toString()}&reportCategoryIds=4f16b1bb-7adf-4008-bd94-e8746f95208f`, token);
+                const res = await fetchData(`Reports?${query.toString()}&hasSimulation=true&hasQuestion=true`, token);
                 const contentReports = normalizeItems(res).filter(
                     (report) => report?.forumPostId == null && report?.forumCommentId == null
                 );
