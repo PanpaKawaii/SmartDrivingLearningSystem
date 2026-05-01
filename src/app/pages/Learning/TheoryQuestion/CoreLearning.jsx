@@ -329,6 +329,7 @@ export default function CoreLearning({
                                     </div>
                                 </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
+                                {/* ==FIX== Question Image */}
                             </div>
                             <div className='grid-answer'>
                                 {selectedQuestion?.answers?.map((answer, aIndex) => (
