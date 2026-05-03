@@ -57,7 +57,7 @@ export default function QuestionExam() {
                     return {
                         ...q,
                         index: i + 1,
-                        answers: shuffleArray(q.answers),
+                        // answers: shuffleArray(q.answers),
                         correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
                     };
                 });

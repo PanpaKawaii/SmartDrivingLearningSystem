@@ -38,7 +38,7 @@ export default function Cube({
                     className='object'
                 >
                     {/* {faces.map((face, index) => { */}
-                    {[...Array(32)].map((_, index) => {
+                    {[...Array(48)].map((_, index) => {
                         const face = { ...faces?.[index] };
                         const styleObj = face.id ? {} : { opacity: 0, transform: 'translate(0px) rotateZ(0deg) scale(0)' };
 

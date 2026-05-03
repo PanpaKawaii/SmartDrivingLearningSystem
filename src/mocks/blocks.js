@@ -1,4 +1,4 @@
-export const block1 = [
+export const Tetrahedron = [
     {
         "id": "2b158164-d176-4625-9057-4225f6610420",
         "shape": "75,0 140,112.5 10.05,112.5",
@@ -143,7 +143,7 @@ export const block1 = [
     }
 ]
 
-export const block2 = [
+export const Hexahedron = [
     {
         "id": "577f1287-8457-4a05-9556-6a4518bddc83",
         "shape": "0,0 80,0 80,80 0,80",
@@ -344,7 +344,7 @@ export const block2 = [
     }
 ]
 
-export const block3 = [
+export const Octahedron = [
     {
         "id": "71c36f76-1ecc-4d15-8e07-13b1ec7ab642",
         "shape": "60,0 112,90 8.1,90",
@@ -643,7 +643,7 @@ export const block3 = [
     }
 ]
 
-export const block4 = [
+export const Dodecahedron = [
     {
         "id": "2e55fd13-961c-4686-ba79-4c4af23def5e",
         "shape": "40,0 78.042,27.639 63.512,72.361 16.488,72.361 1.958,27.639",
@@ -1078,7 +1078,7 @@ export const block4 = [
     }
 ]
 
-export const block5 = [
+export const Icosahedron = [
     {
         "id": "e5bab913-548b-4709-9836-d69ee8510c29",
         "shape": "40,0 74.667,60 5.36,60",
@@ -1821,7 +1821,7 @@ export const block5 = [
     }
 ]
 
-export const block6 = [
+export const SoccerBall = [
     {
         "id": "8cd8457a-dd26-497a-9b8c-9cc55cf6779c",
         "shape": "25,3.734 45.226,18.428 37.5,42.205 12.5,42.205 4.775,18.428",
@@ -3191,6 +3191,1791 @@ export const ask_ai = [
                 "id": "a75f7525-12bd-4423-b41e-ee46051c49cb",
                 "type": "translateZ",
                 "value": "13",
+                "visible": 1
+            }
+        ]
+    }
+]
+
+export const Sphere = [
+    {
+        "id": "a62c8374-19cd-4513-9dcc-43a9b20e24fa",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "883b6b8f-45d9-4770-8316-a23a352e5338",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "9b2c086a-401f-46e4-9457-66046b024752",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "7d07dcb0-8845-479f-a7bf-9e88ab2cdca3",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "ce1c2b26-702d-4bc9-8ed9-c0a5ab3d95f1",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "6cd63849-729c-49bb-949e-2ed85575fd2e",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "225",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "c51af89c-2cfd-4d89-abe7-71742fbeeda1",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "270",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "fc3bcaa7-9c36-422a-9e86-5f43d7b5ff82",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 25 38.398 L 25 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "315",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "15",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "985a747a-18c0-4321-bedb-33fb999060ae",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "2732409c-fb3c-45a9-a660-824547cf353e",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "0acdebd9-dc5f-4e72-93fa-2b18868c8314",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "57332440-9d85-4285-8589-318e3153c468",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "d586c411-0a8e-452e-94f6-39363833072e",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "7fdfcbc9-611c-4622-b02e-60374e0db627",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "225",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "17d7914b-1585-4e30-b28d-525178111873",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "270",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "2e3f351e-bacc-45a6-be73-c5d20da8d8ee",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "315",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "51bf3399-643b-493f-9514-aea083525f10",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "648d3114-e3ec-41bb-8653-0e68e748a0e1",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "0a58e72e-7e85-4f52-bd88-c9273819174d",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "9996b738-b1a3-4827-942b-c2b65e30c0cf",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "5075c2ad-506f-4a9a-8fff-187c3a7f0144",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "6cfd508c-f96e-4272-8499-3c2cf97d2c7e",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "225",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "b7f11ce7-55b6-4757-9a9a-f0b04e486b29",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "270",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "950d5c5d-8633-4a28-87a3-581421080faf",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 18,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "315",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "75",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "e7afc380-e5b8-468e-ab17-d9e3dbec2594",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "d3064d24-a4d5-45a4-8c71-8d0d63e0b0df",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "b78bfd74-f2b2-4e0a-9aef-5eae0e020564",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "658bd75b-5c1b-44bd-b0fd-3f701c834c9b",
+        "shape": "M 3.5588 11.6025 L 46.4413 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "AI",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 18,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7b",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "f0f7ee32-b0c0-4f06-a27e-fc9b74af359d",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "02f46226-7be8-4a0b-ad03-f1f68f74ff72",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "225",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "08f8fc2d-2b80-4179-aa9d-3de0cc73589a",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "270",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "8416bbd6-8b8d-4d1f-8c29-87e9d0383fd6",
+        "shape": "M 6.4315 11.6025 L 43.5688 11.6025 L 46.4413 38.398 L 3.5588 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "315",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "105",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "fb3ddb2a-0f89-4db8-8267-ac67811535e5",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "0af51688-94aa-4e31-895f-73a557212309",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "d58956d7-e68f-484e-b693-0324a2751108",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "996a874e-74e9-4858-acbe-e392701f1680",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "fe52998a-1fde-4b44-a465-fdf2ef74da22",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "04ac9058-ace5-4f1e-a89e-f7b156e28517",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "225",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "1dd2fa56-6a76-49f0-b4fa-47d5dbc890e8",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "270",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "d20aa7b0-e023-4326-863f-8dea80618818",
+        "shape": "M 14.2795 11.6025 L 35.7208 11.6025 L 43.5688 38.398 L 6.4315 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "315",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "5b385cb5-c74b-48f7-b728-02b9ca7a276a",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "db61c1aa-f90c-4124-b15a-e15527a6f93d",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "45",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "601419f2-16eb-4a88-a237-04dde0bb20b1",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "90",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "6fa90c0d-bd83-4a71-80c2-8711a0b55fb4",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "135",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "f86e28b0-1cc0-4749-a463-42f2eb54630f",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "fb230adf-c160-4870-b62c-a8a36ec4fd44",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "225",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "71cbaca7-fb57-40fa-b24a-1f3cafbfc81b",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "270",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "809e5fe9-61f1-45b4-8921-8c5fcc506840",
+        "shape": "M 25 11.6025 L 25 11.6025 L 35.7208 38.398 L 14.2795 38.398 Z",
+        "name": "",
+        "width": 50,
+        "height": 50,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 2,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "affb5783-23ea-46a3-a74e-246e9aa5791c",
+                "type": "rotateZ",
+                "value": "315",
+                "visible": 1
+            },
+            {
+                "id": "0bc2fcbe-971f-4c18-9ca2-c2c8322c3921",
+                "type": "rotateX",
+                "value": "165",
+                "visible": 1
+            },
+            {
+                "id": "0a85d32c-7550-4905-9843-abbda1852c7a",
+                "type": "translateZ",
+                "value": "52",
                 "visible": 1
             }
         ]

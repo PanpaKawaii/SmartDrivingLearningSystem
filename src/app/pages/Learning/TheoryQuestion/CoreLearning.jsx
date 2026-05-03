@@ -70,7 +70,7 @@ export default function CoreLearning({
                     return {
                         ...q,
                         index: i + 1,
-                        answers: shuffleArray(q.answers),
+                        // answers: shuffleArray(q.answers),
                         correctAnswer: q.answers?.filter(a => a.isCorrect)?.length,
                         tags: TagResponse.filter(t => q.questionTags?.some(qt => qt.tagId == t.id)),
                     };

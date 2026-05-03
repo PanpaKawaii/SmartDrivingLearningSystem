@@ -207,7 +207,7 @@ export default function Answer({
                     }}
                     disabled={loading}
                 >
-                    {isFinish ? 'VUI LÒNG ĐĂNG NHẬP ĐỂ LƯU BÀI LÀM' : 'KẾT THÚC'}
+                    {(isFinish && !user) ? 'VUI LÒNG ĐĂNG NHẬP ĐỂ LƯU BÀI LÀM' : 'KẾT THÚC'}
                 </button>
                 {/* <i className='fa-solid fa-xmark' style={{ color: 'red', fontSize: '20rem', textAlign: 'center', width: '100%' }} /> */}
                 {/* <div>
