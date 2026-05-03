@@ -251,9 +251,10 @@ CREATE TABLE [SimulationScenario] (
 -- SITUATION MODULE
 -- =====================================================
 
--- 8.SituationExam OK
+-- 8.SituationExam AF
 CREATE TABLE [SituationExam] (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    userId      UNIQUEIDENTIFIER NOT NULL,
     title       NVARCHAR(255) NOT NULL,
     description NVARCHAR(255),
     duration    INT,
@@ -262,6 +263,7 @@ CREATE TABLE [SituationExam] (
     createAt    DATETIME2 DEFAULT GETDATE(),
     updateAt    DATETIME2 DEFAULT GETDATE(),
     status      INT DEFAULT 1,
+    FOREIGN KEY (userId) REFERENCES [User](id),
 );
 
 -- 9.SimulationExam AF
