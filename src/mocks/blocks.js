@@ -1821,6 +1821,1109 @@ export const Icosahedron = [
     }
 ]
 
+export const Star = [
+    {
+        "id": "3aa891c6-9d87-4450-91c8-7549a28d659d",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "a6353f3d-f077-4d17-b150-ad2db8a9df2d",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "72",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "371b203f-cc3d-4f3b-9f16-0d0a5ec19741",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "144",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "e98d6816-e50a-40c9-a0c2-12e9b44b23d5",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "216",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "fae60436-5f4b-46ed-b31c-8e8a7f82ed68",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "288",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "13f0b0e3-ddaf-4114-a7af-83b591b99953",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "22ffe13d-684b-4d91-a38c-5be33de95584",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "72",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "569f118a-991c-4020-bf98-8d9056adce10",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "144",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "b4625f39-b471-4f54-b0d4-651254ea520d",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "216",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "2b5f09ed-4567-4765-b923-fee7c1ec4c0f",
+        "shape": "M 50 0 L 50 100 L 17.672 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "288",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "-20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "3a732025-3ce1-4c3e-8061-93d76b16cc09",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "ed6a3d3c-1f2e-45f6-b267-775d4a1e66ad",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "72",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "2a23e2ef-7fd8-4291-9ccc-9d5179484392",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "144",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "15b686ef-3980-464b-961a-44180eaff75e",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "216",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "7f5a7639-512b-4050-bd13-83fe3685cfcc",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#68FCFF80",
+        "nameColor": "#328080FF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "288",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "f112feba-ec14-4f8e-babd-e98c4652412a",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "0",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "dd8ef26c-1b93-4149-ac30-5f33822c8687",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "72",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "459f237b-b9d5-428d-b1c6-4426a77c7d07",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "144",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "c0b935d4-7d9b-4a6b-983b-cdb1db577ffd",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "216",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    },
+    {
+        "id": "35237e35-d225-4094-afee-73c8f3211a8b",
+        "shape": "M 50 0 L 50 100 L 82.328 55.504 Z",
+        "name": "",
+        "width": 100,
+        "height": 100,
+        "glow": 4,
+        "nameSize": 12,
+        "borderWidth": 1,
+        "color": "#184BB420",
+        "nameColor": "#68FCFFFF",
+        "borderColor": "#68FCFFFF",
+        "visible": 1,
+        "nameVisible": 1,
+        "borderVisible": 1,
+        "glowVisible": 1,
+        "steps": [
+            {
+                "id": "8c635425-f08e-424b-89f9-dd1cd141991a",
+                "type": "rotateY",
+                "value": "180",
+                "visible": 1
+            },
+            {
+                "id": "e0adeaa7-df3f-4059-a9f5-e77338c633ec",
+                "type": "translateZ",
+                "value": "-230",
+                "visible": 1
+            },
+            {
+                "id": "a931afef-1e5c-470e-b734-6a68511062a1",
+                "type": "rotateZ",
+                "value": "288",
+                "visible": 1
+            },
+            {
+                "id": "e3ae80ef-bb2f-4512-a143-e60a61e19458",
+                "type": "rotateX",
+                "value": "11.54",
+                "visible": 1
+            },
+            {
+                "id": "a9cbff6d-716e-4c67-855c-5905c0a850f6",
+                "type": "translateZ",
+                "value": "244.95",
+                "visible": 1
+            },
+            {
+                "id": "6dfc1093-b518-441a-9d00-8586f944dbc0",
+                "type": "rotateY",
+                "value": "20.5",
+                "visible": 1
+            }
+        ]
+    }
+]
+
 export const SoccerBall = [
     {
         "id": "8cd8457a-dd26-497a-9b8c-9cc55cf6779c",

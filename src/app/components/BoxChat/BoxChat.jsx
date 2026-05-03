@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Tetrahedron, Hexahedron, Octahedron, Dodecahedron, Icosahedron, SoccerBall, Sphere } from '../../../mocks/blocks.js';
+import { Tetrahedron, Hexahedron, Octahedron, Dodecahedron, Icosahedron, Star, SoccerBall, Sphere } from '../../../mocks/blocks.js';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import Cube from '../Cube/Cube.jsx';
@@ -109,7 +109,7 @@ export default function BoxChat() {
         chatStyle = StyleHeight;
     };
 
-    const blocks = [Tetrahedron, Hexahedron, Octahedron, Dodecahedron, Icosahedron, SoccerBall, Sphere];
+    const blocks = [Tetrahedron, Hexahedron, Octahedron, Dodecahedron, Icosahedron, Star, SoccerBall, Sphere];
     const changeBlock = () => {
         setBlockIndex((prev) => (prev + 1) % blocks.length);
     };
