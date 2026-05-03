@@ -88,28 +88,36 @@ export default function DetectionResults({ rawOutput }) {
     }
 
     const formatMarkdownList = (text) => {
+        if (!text) return <div />;
+
         let html = text;
-        // Make bold 
+
+        // Headings: convert markdown heading markers to HTML headings
+        html = html.replace(/^###\s*(.*)$/gm, '<h3 class="md-h3">$1</h3>');
+        html = html.replace(/^##\s*(.*)$/gm, '<h2 class="md-h2">$1</h2>');
+        html = html.replace(/^#\s*(.*)$/gm, '<h1 class="md-h1">$1</h1>');
+
+        // Bold
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        
-        // Split by lines to handle lists correctly
-        const lines = html.split('\n');
-        const formattedLines = lines.map(line => {
-            const listMatch = line.match(/^\s*\*\s+(.*)$/);
-            if (listMatch) {
-                return `<li class="formatted-li">${listMatch[1]}</li>`;
-            }
-            return line;
+
+        // List items using '-' or '*' normalize to <li>
+        html = html.replace(/^\s*[-\*]\s+(.*)$/gm, '<li class="formatted-li">$1</li>');
+
+        // Wrap consecutive <li> items into <ul>
+        html = html.replace(/(<li[\s\S]*?<\/li>)(?:\s*<li[\s\S]*?<\/li>)+/g, (match) => {
+            // collect all li items
+            const items = match.match(/<li[\s\S]*?<\/li>/g) || [];
+            return `<ul class="formatted-ul">${items.join('')}</ul>`;
         });
-        
-        html = formattedLines.join('<br />');
-        
-        // Clean up <br /> around <li> tags
-        html = html.replace(/<br \/><li/g, '<li').replace(/li><br \/>/g, 'li>');
-        // Clean up consecutive <br />
+
+        // Replace remaining newlines with <br /> for plain paragraphs
+        html = html.replace(/\n+/g, '<br />');
+
+        // Collapse multiple <br />
         html = html.replace(/(<br \/>){3,}/g, '<br /><br />');
-        
-        return <div>{parse(DOMPurify.sanitize(html || ''))}</div>;
+
+        const clean = DOMPurify.sanitize(html || '');
+        return <div>{parse(clean)}</div>;
     };
 
     return (

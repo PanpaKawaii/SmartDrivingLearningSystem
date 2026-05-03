@@ -31,6 +31,14 @@ const postToRoboflow = async (payload) => {
 
         const data = await parseResponseBody(response);
 
+        if (!response.ok) {
+            console.error('[Roboflow] upstream error', {
+                attempt,
+                status: response.status,
+                data,
+            });
+        }
+
         if (response.ok) {
             return { response, data };
         }
@@ -52,9 +60,14 @@ export default async function handler(req, res) {
     }
 
     try {
+        console.log('[roboflow] handler received request', { body: req.body });
         const { response, data } = await postToRoboflow(req.body);
 
         if (!response.ok) {
+            console.error('[roboflow] upstream returned non-ok', {
+                status: response.status,
+                upstreamResponse: data,
+            });
             return res.status(response.status).json({
                 error: 'Roboflow workflow request failed',
                 upstreamStatus: response.status,
@@ -64,6 +77,7 @@ export default async function handler(req, res) {
 
         return res.status(200).json(data);
     } catch (error) {
+        console.error('[roboflow] handler error', error);
         return res.status(500).json({ error: error.message });
     }
 }

@@ -7,9 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/roboflow': {
-        target: 'https://serverless.roboflow.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/roboflow/, '')
+          target: 'https://serverless.roboflow.com/sub-wtikx/workflows/text-recognition',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/roboflow/, '')
       }
     }
   }

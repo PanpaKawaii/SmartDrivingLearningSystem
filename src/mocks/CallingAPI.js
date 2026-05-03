@@ -332,20 +332,29 @@ export const fetchRoboflowData = async (imageUrl) => {
             }
         })
     });
+    // Read body once as text, then parse — avoids "body stream already read" errors
+    const bodyText = await response.text().catch(() => null);
 
     if (!response.ok) {
         let errorDetail = `Status: ${response.status}`;
-        try {
-            const errorBody = await response.json();
-            errorDetail += ` | ${JSON.stringify(errorBody)}`;
-        } catch {
-            const errorText = await response.text();
-            errorDetail += ` | ${errorText}`;
+        if (bodyText) {
+            try {
+                const parsed = JSON.parse(bodyText);
+                errorDetail += ` | ${JSON.stringify(parsed)}`;
+            } catch {
+                errorDetail += ` | ${bodyText}`;
+            }
         }
         throw new Error(`Roboflow API error: ${errorDetail}`);
     }
 
-    return await response.json();
+    if (!bodyText) return null;
+
+    try {
+        return JSON.parse(bodyText);
+    } catch (err) {
+        throw new Error(`Roboflow response parse error: ${err.message}`);
+    }
 };
 
 
