@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteData, fetchData, postData, putData } from '../../../../mocks/CallingAPI';
+import DefaultAvatar from '../../../assets/DefaultAvatar.png';
 import ButtonList from '../../../components/ButtonList/ButtonList';
 import CloudsBackground from '../../../components/CloudsBackground/CloudsBackground';
 import Explanation from '../../../components/Explanation/Explanation';
@@ -329,7 +330,9 @@ export default function CoreLearning({
                                     </div>
                                 </div>
                                 <div className='index-content'>{selectedQuestion?.content}</div>
-                                {/* ==FIX== Question Image */}
+                            </div>
+                            <div className='image'>
+                                {selectedQuestion?.image && <img src={selectedQuestion?.image || DefaultAvatar} alt='Ảnh minh họa câu hỏi' />}
                             </div>
                             <div className='grid-answer'>
                                 {selectedQuestion?.answers?.map((answer, aIndex) => (
